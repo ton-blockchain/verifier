@@ -1,0 +1,14 @@
+.FilesDropzone {
+  background-color: #F7F9FB;
+  text-align: center;
+  height: 148px;
+  border: 1px dashed #E3E8EA;
+  color: #728A96;
+  border-radius: 20px;
+  line-height: 148px;
+  cursor: pointer;
+}
+
+.FilesDropzone:hover {
+  border: 1px dashed #9da3a5;
+}

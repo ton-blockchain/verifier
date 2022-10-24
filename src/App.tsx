@@ -28,7 +28,7 @@ function App() {
             {proofData && proofData.hasOnchainProof && <ContractProofInfo />}
           </div>
         )}
-        {!proofData?.hasOnchainProof && (
+        {proofData && !proofData.hasOnchainProof && (
           <>
             <Spacer space={40} />
             <AddSources />

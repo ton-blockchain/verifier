@@ -10,6 +10,9 @@
   },
   "dependencies": {
     "@aws-crypto/sha256-js": "^2.0.2",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/material": "^5.10.10",
     "@orbs-network/ton-gateway": "^1.3.0",
     "@tanstack/react-query": "^4.13.0",
     "@ton-community/contract-verifier-sdk": "github:shaharyakir/contract-verifier-sdk",
@@ -18,9 +21,11 @@
     "javascript-time-ago": "^2.5.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
     "react-router-dom": "^6.4.2",
     "ton": "^12.1.5",
-    "tvm-disassembler": "^1.2.1"
+    "tvm-disassembler": "^1.2.1",
+    "zustand": "^4.1.3"
   },
   "devDependencies": {
     "@types/bn.js": "^5.1.1",
