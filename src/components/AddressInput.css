@@ -4,5 +4,8 @@
   width: 100%;
   padding: 0 20px;
   box-sizing: border-box;
-  font-size: 24px;
+  font-size: 16px;
+  font-family: 'Mulish'; 
+  /* TODO DENIS why font-family needs to be defined again */
+  /* TODO DENIS define font-families with fallback */
 }
