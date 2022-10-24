@@ -1,0 +1,14 @@
+.InfoPiece {
+  display: flex;
+  gap: 10px;
+}
+
+.InfoPiece-Label {
+  font-weight: 700;
+  min-width: 100px;
+  /* TODO denis table-like behavior */
+}
+
+.InfoPiece-Data {
+ color: #728A96; 
+}
