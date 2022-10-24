@@ -5,32 +5,43 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useFileStore } from "./AddSources";
+import { useFileStore } from "../lib/useFileStore";
 
 export function FileTable() {
-  const { files } = useFileStore();
+  const { files, setInclueInCommand, setDirectory } = useFileStore();
   return (
     <TableContainer>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Order</TableCell>
+            <TableCell>Directory</TableCell>
+            <TableCell>File</TableCell>
+            <TableCell>Include in command</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {files.map((file) => {
+          {files.map((file, i) => {
             return (
-              <>
-                <TableCell>{file.name}</TableCell>
-                <TableCell>{file.size}</TableCell>
+              <TableRow>
+                <TableCell>{i + 1}</TableCell>
                 <TableCell>
-                  <Switch />
+                  <input
+                    onChange={(e) => {
+                      setDirectory(file.fileObj.name, e.target.value);
+                    }}
+                  />
                 </TableCell>
-              </>
+                <TableCell>{file.fileObj.name}</TableCell>
+                <TableCell>
+                  <Switch
+                    checked={file.includeInCommand}
+                    onChange={(e) => {
+                      setInclueInCommand(file.fileObj.name, e.target.checked);
+                    }}
+                  />
+                </TableCell>
+              </TableRow>
             );
           })}
         </TableBody>

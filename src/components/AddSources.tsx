@@ -4,17 +4,12 @@ import { useDropzone } from "react-dropzone";
 
 import { FileTable } from "./FileTable";
 
-import create from "zustand";
-export const useFileStore = create<{
-  files: any[];
-  addFiles: (files: any[]) => void;
-}>((set) => ({
-  files: [],
-  addFiles: (files) => set((state) => ({ files: [...state.files, ...files] })),
-}));
+import Button from "./Button";
+import { useFileStore } from "../lib/useFileStore";
+
 
 function FileUploader() {
-  const { addFiles } = useFileStore();
+  const { addFiles, hasFiles } = useFileStore();
 
   const onDrop = (acceptedFiles: any) => {
     addFiles(acceptedFiles);
@@ -28,9 +23,16 @@ function FileUploader() {
 
   return (
     <>
-      <div className="FilesDropzone" {...getRootProps()}>
-        Drop ".fc" files here
-      </div>
+      {!hasFiles() && (
+        <div className="FilesDropzone" {...getRootProps()}>
+          Drop ".fc" files here
+        </div>
+      )}
+      {hasFiles() && (
+        <div {...getRootProps()}>
+          <Button text="Upload source" />
+        </div>
+      )}
 
       <input
         {...getInputProps()}
@@ -46,19 +48,18 @@ function FileUploader() {
         accept=".fc,.func"
         // ref={inputRef}
         // @ts-ignore
-        webkitdirectory={true}
       />
     </>
   );
 }
 
 function AddSources() {
-  const { files } = useFileStore();
+  const { hasFiles } = useFileStore();
   return (
     <Container>
       <h3 style={{ textAlign: "center" }}>Add sources</h3>
       <FileUploader />
-      <FileTable />
+      {hasFiles() && <FileTable />}
     </Container>
   );
 }
