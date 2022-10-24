@@ -6,6 +6,7 @@ import TopBar from "./components/TopBar";
 import ContractProofInfo from "./components/ContractProofInfo";
 import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
+import AddSources from "./components/AddSources";
 
 function App() {
   const { isLoading, data: proofData } = useLoadContractProof();
@@ -26,6 +27,12 @@ function App() {
             <ContractInfo />
             {proofData && proofData.hasOnchainProof && <ContractProofInfo />}
           </div>
+        )}
+        {!proofData?.hasOnchainProof && (
+          <>
+            <Spacer space={40} />
+            <AddSources />
+          </>
         )}
         <Spacer space={40} />
         {proofData && <ContractSourceCode />}

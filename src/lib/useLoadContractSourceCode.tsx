@@ -10,7 +10,6 @@ export function useLoadContractSourceCode() {
     if (!data?.files) return;
     if (isInitialized) return;
     setInitialized(true);
-    console.log("alkjshjdjklasd");
     ContractVerifierUI.loadSourcesData(data as SourcesData, {
       containerSelector: "#myVerifierContainer",
       fileListSelector: "#myVerifierFiles",
@@ -18,4 +17,6 @@ export function useLoadContractSourceCode() {
       theme: "light", // TODO denis
     });
   }, [data?.files]);
+
+  return { hasOnchainProof: data?.hasOnchainProof };
 }
