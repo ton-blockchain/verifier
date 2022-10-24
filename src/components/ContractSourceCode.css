@@ -1,0 +1,20 @@
+#myVerifierFiles {
+  border-right: 1px solid #f7f9fb;
+}
+
+#myVerifierContent code {
+  background-color: #fff;
+  font-size: 16px;
+}
+
+#myVerifierFiles .contract-verifier-file.active {
+  border-right: 2px solid #0088cc;
+}
+
+.myVerificationProof {
+  background-color: #f7f9fb;
+  border: 1px solid #728a9619;
+  border-radius: 20px;
+  width: 400px;
+  padding: 20px 10px;
+}
