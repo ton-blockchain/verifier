@@ -6,7 +6,11 @@ import { FileTable } from "./FileTable";
 
 import Button from "./Button";
 import { useFileStore } from "../lib/useFileStore";
-
+import CompilerSettings from "./CompilerSettings";
+import Spacer from "./Spacer";
+import { useMutation } from "@tanstack/react-query";
+import { useSubmitSources } from "../lib/useSubmitSources";
+import { CompileOutput } from "./CompileOutput";
 
 function FileUploader() {
   const { addFiles, hasFiles } = useFileStore();
@@ -55,11 +59,25 @@ function FileUploader() {
 
 function AddSources() {
   const { hasFiles } = useFileStore();
+  const { mutate, data, error, isLoading } = useSubmitSources();
+
   return (
     <Container>
       <h3 style={{ textAlign: "center" }}>Add sources</h3>
       <FileUploader />
+      <Spacer space={20} />
       {hasFiles() && <FileTable />}
+      {hasFiles() && <CompilerSettings />}
+      <Spacer space={20} />
+      <Button
+        disabled={!hasFiles()}
+        onClick={() => {
+          mutate(null);
+        }}
+        text={isLoading ? "Submitting..." : `Submit`}
+      />
+      <Spacer space={15} />
+      {(data || error) && <CompileOutput />}
     </Container>
   );
 }

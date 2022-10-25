@@ -20,6 +20,7 @@ type Actions = {
   addFiles: (files: File[]) => void;
   setInclueInCommand: (name: string, include: boolean) => void;
   setDirectory: (name: string, folder: string) => void;
+  removeFile: (name: string) => void;
 };
 
 export const useFileStore = create(
@@ -51,6 +52,11 @@ export const useFileStore = create(
     setDirectory: (name: string, folder: string) => {
       set((state) => {
         state.files.find((f) => f.fileObj.name === name)!.folder = folder;
+      });
+    },
+    removeFile: (name: string) => {
+      set((state) => {
+        state.files = state.files.filter((f) => f.fileObj.name !== name);
       });
     },
   }))

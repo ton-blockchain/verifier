@@ -3,4 +3,11 @@
   background-color: #0088CC;
   border-radius: 8px;
   padding: 10px 20px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.Button-disabled {
+  background-color: #CCCCCC;
+  cursor: not-allowed;
 }
