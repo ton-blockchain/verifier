@@ -8,6 +8,14 @@ export function CompileOutput() {
   return (
     <div>
       <h3>Result</h3>
+      {["similar"].includes(
+        submitSourcesData?.compileResult?.result ?? ""
+      ) && (
+        <div>
+          Hashes match
+        </div>
+      )}
+
       {["not_similar"].includes(
         submitSourcesData?.compileResult?.result ?? ""
       ) && (
@@ -35,6 +43,7 @@ export function CompileOutput() {
             padding: 16,
             borderRadius: 20,
             overflow: "auto",
+            maxHeight: 300,
           }}
         >
           <code>{submitSourcesData.compileResult.error}</code>

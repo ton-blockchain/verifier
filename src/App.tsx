@@ -7,6 +7,7 @@ import ContractProofInfo from "./components/ContractProofInfo";
 import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
 import AddSources from "./components/AddSources";
+import SubmitContractSteps from "./components/SubmitContractSteps";
 
 function App() {
   const { isLoading, data: proofData } = useLoadContractProof();
@@ -31,7 +32,7 @@ function App() {
         {proofData && !proofData.hasOnchainProof && (
           <>
             <Spacer space={40} />
-            <AddSources />
+            <SubmitContractSteps />
           </>
         )}
         <Spacer space={40} />

@@ -31,6 +31,8 @@ export function useLoadContractProof() {
   >(
     [contractAddress, "proof"],
     async () => {
+      return { hasOnchainProof: false }; // TODO temp
+
       const ipfslink = await ContractVerifier.getSourcesJsonUrl(
         contractInfo!.hash,
         {
