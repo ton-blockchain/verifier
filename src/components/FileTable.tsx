@@ -33,7 +33,7 @@ export function FileTable() {
           {files.map((file, i) => {
             const fileName = file.fileObj.name;
             return (
-              <TableRow>
+              <TableRow key={fileName}>
                 <TableCell>{i + 1}</TableCell>
                 <TableCell>
                   <input

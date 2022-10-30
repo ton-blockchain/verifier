@@ -11,10 +11,8 @@ import { useLoadContractInfo } from "./useLoadContractInfo";
 import "@ton-community/contract-verifier-sdk";
 import { SourcesData } from "@ton-community/contract-verifier-sdk";
 
-const VERIFIER_ID = "orbs.com" ?? import.meta.env.VERIFIER_ID;
-const SOURCES_REGISTRY_CONTRACT =
-  "EQANJEwItCel0Pwle7fHaL1FRYC2dZyyzKCOqK2yjrMcxN-g" ??
-  import.meta.env.SOURCES_REGISTRY;
+const VERIFIER_ID = import.meta.env.VITE_VERIFIER_ID;
+const SOURCES_REGISTRY_CONTRACT = import.meta.env.SOURCES_REGISTRY;
 
 export const toSha256Buffer = (s: string) => {
   const sha = new Sha256();
@@ -31,7 +29,7 @@ export function useLoadContractProof() {
   >(
     [contractAddress, "proof"],
     async () => {
-      return { hasOnchainProof: false }; // TODO temp
+      // return { hasOnchainProof: false }; // TODO temp
 
       const ipfslink = await ContractVerifier.getSourcesJsonUrl(
         contractInfo!.hash,

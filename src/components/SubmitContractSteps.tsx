@@ -7,6 +7,8 @@ import {
 import AddSources from "./AddSources";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { useState, useEffect } from "react";
+import Button from "./Button";
+import PublishProof from "./PublishProof";
 
 function SubmitContractSteps() {
   const { data } = useSubmitSources();
@@ -60,7 +62,7 @@ function SubmitContractSteps() {
           <Typography>Publish</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Here we publish the thing</Typography>
+          <PublishProof />
         </AccordionDetails>
       </Accordion>
     </>
