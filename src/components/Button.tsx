@@ -1,21 +1,54 @@
 import "./Button.css";
+import { Button as MUIButton, ButtonProps } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { fontWeight } from "@mui/system";
 
-function Button({
-  text,
-  onClick,
-  disabled,
-}: {
-  text: string;
-  onClick?: () => void;
-  disabled?: boolean;
-}) {
+const StyledButton = styled(MUIButton)({
+  borderRadius: 40,
+  fontFamily: "inherit",
+  fontWeight: 700,
+  textTransform: "none",
+  // color: "fff",
+  // boxShadow: "none",
+  // textTransform: "none",
+  // fontSize: 16,
+  // border: "1px solid",
+  // lineHeight: 1.5,
+  // // backgroundColor: "#0063cc",
+  // // borderColor: "#0063cc",
+  // "&:hover": {
+  //   backgroundColor: "#0069d9",
+  //   borderColor: "#0062cc",
+  //   boxShadow: "none",
+  // },
+  // "&:active": {
+  //   boxShadow: "none",
+  //   backgroundColor: "#0062cc",
+  //   borderColor: "#005cbf",
+  // },
+  "&:disabled": {
+    backgroundColor: "#e0e0e0",
+  },
+});
+
+function Button(
+  props: {
+    text: string;
+  } & ButtonProps
+) {
   return (
-    <div
-      className={`Button ${disabled ? "Button-disabled" : ""}`}
-      onClick={disabled ? undefined : onClick}
+    <StyledButton
+      disableElevation
+      disableRipple
+      disableFocusRipple
+      disableTouchRipple
+      variant="contained"
+      disabled={props.disabled}
+      onClick={props.disabled ? undefined : props.onClick}
+      {...props}
     >
-      {text}
-    </div>
+      {props.text}
+    </StyledButton>
   );
 }
 

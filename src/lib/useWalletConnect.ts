@@ -1,4 +1,5 @@
 import BN from "bn.js";
+import { useState } from "react";
 import { Address, Cell } from "ton";
 import {
   TonhubConnector,
@@ -6,11 +7,28 @@ import {
   TonhubSessionAwaited,
   TonhubWalletConfig,
 } from "ton-x";
+import create from "zustand";
+import { disconnect } from 'process';
 const connector = new TonhubConnector({});
 
-let session = JSON.parse(localStorage.getItem("tonhubSession") ?? "null");
+const useSessionStore = create<{
+  session: any;
+  setSession: (session: any) => void;
+  disconnect: () => void;
+}>((set) => ({
+  session: JSON.parse(localStorage.getItem("tonhubSession") ?? "null"),
+  setSession: (session: any) => {
+    localStorage.setItem("tonhubSession", JSON.stringify(session));
+    set({ session });
+  },
+  disconnect: () => {
+    localStorage.removeItem("tonhubSession");
+    set({ session: null });
+  },
+}));
 
 export function useWalletConnect() {
+  const { session, setSession, disconnect } = useSessionStore();
 
   return {
     connect: async (onLinkReady: (link: string) => void) => {
@@ -57,7 +75,7 @@ export function useWalletConnect() {
         if (correctConfig) {
           const toPersit = { ...createdSession, walletConfig };
           localStorage.setItem("tonhubSession", JSON.stringify(toPersit));
-          session = toPersit;
+          setSession(toPersit);
         }
 
         // ...
@@ -79,5 +97,6 @@ export function useWalletConnect() {
       });
     },
     walletAddress: session?.walletConfig.address,
+    disconnect,
   };
 }

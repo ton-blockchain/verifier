@@ -9,4 +9,5 @@
   display: flex;
   margin-left: auto;
   gap: 10px;
+  align-items: center;
 }
