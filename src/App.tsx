@@ -16,8 +16,9 @@ function App() {
     <div>
       <div className="BackgroundOverlay"></div>
       <div className="App">
-        <a href="/EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ">TEMP</a>
-        <a href="/EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR">TEMP2</a>
+        <a href="/EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ">Verified</a>
+        <a href="/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz">Verified2</a>
+        <a href="/EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR">Unverified</a>
         <TopBar />
         <h2 style={{ textAlign: "center" }}>Smart Contract Verifier</h2>
         <AddressInput />
