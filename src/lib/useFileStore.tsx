@@ -2,7 +2,7 @@ import create from "zustand";
 
 import { immer } from "zustand/middleware/immer";
 
-type FileToUpload = {
+export type FileToUpload = {
   fileObj: File;
   includeInCommand: boolean;
   folder: string;
@@ -21,6 +21,7 @@ type Actions = {
   setInclueInCommand: (name: string, include: boolean) => void;
   setDirectory: (name: string, folder: string) => void;
   removeFile: (name: string) => void;
+  reorderFiles: (fileBeingReplaced: string, fileToReplaceWith: string) => void;
 };
 
 export const useFileStore = create(
@@ -35,11 +36,19 @@ export const useFileStore = create(
     addFiles: (files) => {
       set((state) => {
         state.files.push(
-          ...files.map((f) => ({
-            fileObj: f,
-            includeInCommand: true,
-            folder: "",
-          }))
+          ...files
+            .filter(
+              (f) =>
+                f.name.match(/.*\.(fc|func)/) &&
+                !state.files.find(
+                  (existingF) => existingF.fileObj.name === f.name
+                )
+            )
+            .map((f) => ({
+              fileObj: f,
+              includeInCommand: true,
+              folder: "",
+            }))
         );
       });
     },
@@ -57,6 +66,19 @@ export const useFileStore = create(
     removeFile: (name: string) => {
       set((state) => {
         state.files = state.files.filter((f) => f.fileObj.name !== name);
+      });
+    },
+    reorderFiles: (fileBeingReplaced: string, fileToReplaceWith: string) => {
+      set((state) => {
+        const files = state.files;
+        const oldIndex = files.findIndex(
+          (f) => f.fileObj.name === fileBeingReplaced
+        );
+        const newIndex = files.findIndex(
+          (f) => f.fileObj.name === fileToReplaceWith
+        );
+        const [removed] = files.splice(oldIndex, 1);
+        files.splice(newIndex, 0, removed);
       });
     },
   }))
