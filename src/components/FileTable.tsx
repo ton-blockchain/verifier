@@ -55,9 +55,9 @@ function Cells({
           <DragHandleIcon sx={{ opacity: 0.5 }} />
         </div>
       </TableCell>
-      {/* <TableCell>
+      <TableCell>
         {pos}
-      </TableCell> */}
+      </TableCell>
       <TableCell>
         <input
           onChange={(e) => {
@@ -136,7 +136,7 @@ export function FileTable() {
           <TableHead>
             <TableRow>
               <TableCell></TableCell>
-              {/* <TableCell>Order</TableCell> */}
+              <TableCell>Order</TableCell>
               <TableCell>Directory</TableCell>
               <TableCell>File</TableCell>
               <TableCell>Include in command</TableCell>
