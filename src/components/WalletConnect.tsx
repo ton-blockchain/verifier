@@ -1,9 +1,9 @@
-import { Menu, MenuItem, Modal } from "@mui/material";
+import { Box, Menu, MenuItem, Modal } from "@mui/material";
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import { useWalletConnect } from "../lib/useWalletConnect";
 import Button from "./Button";
-import { KeyboardArrowDown } from "@mui/icons-material";
+import { KeyboardArrowDown, Close } from "@mui/icons-material";
 import React from "react";
 
 function WalletConnect() {
@@ -56,7 +56,31 @@ function WalletConnect() {
           setQRLink(null);
         }}
       >
-        <QRCode value={qrLink!} />
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: 4,
+            color: "#000",
+          }}
+        >
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setQRLink(null);
+            }}
+          >
+            <Close sx={{ position: "absolute", right: 16, top: 16 }} />
+          </div>
+          <div style={{ textAlign: "center" }}>Connect with Tonhub</div>
+          <br />
+          <QRCode value={qrLink!} />
+        </Box>
       </Modal>
     </>
   );
