@@ -2,6 +2,7 @@
   display: flex;
   gap: 10px;
   font-weight: 700;
+  color: white;
 }
 
 .TopBar-Right {

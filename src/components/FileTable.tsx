@@ -13,6 +13,8 @@ import {
   restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 
+import { Delete } from "@mui/icons-material";
+
 /*
 TODO denis - 
 1. add remove file icon on hover
@@ -34,30 +36,37 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { useHover } from "../lib/useHover";
 
 function Cells({
   file,
   pos,
+  isHover,
 }: {
   file: FileToUpload;
   pos: number;
   isDragging: boolean;
+  isHover: boolean;
 }) {
   const fileName = file.fileObj.name;
   const { attributes, listeners } = useSortable({ id: fileName });
+  const { isHover: isRemoveCellHover, hoverRef } = useHover();
 
   const { setInclueInCommand, setDirectory, removeFile } = useFileStore();
 
   return (
     <>
       <TableCell {...attributes} {...listeners}>
-        <div style={{ cursor: "pointer" }}>
+        <div
+          style={{
+            cursor: "pointer",
+            visibility: isHover ? "visible" : "hidden",
+          }}
+        >
           <DragHandleIcon sx={{ opacity: 0.5 }} />
         </div>
       </TableCell>
-      <TableCell>
-        {pos}
-      </TableCell>
+      <TableCell>{pos}</TableCell>
       <TableCell>
         <input
           onChange={(e) => {
@@ -74,12 +83,16 @@ function Cells({
           }}
         />
       </TableCell>
-      <TableCell>
-        <Button
+      <TableCell ref={hoverRef}>
+        <Delete
+          sx={{
+            visibility: isRemoveCellHover ? "visible" : "hidden",
+            opacity: 0.5,
+            cursor: "pointer",
+          }}
           onClick={() => {
             removeFile(fileName);
           }}
-          text="remove"
         />
       </TableCell>
     </>
@@ -88,6 +101,7 @@ function Cells({
 
 function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
   const fileName = file.fileObj.name;
+  const { hoverRef, isHover } = useHover();
 
   const { setNodeRef, transform, transition, isDragging } = useSortable({
     id: fileName,
@@ -99,8 +113,15 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
   };
 
   return (
-    <TableRow key={fileName} ref={setNodeRef} style={style}>
-      <Cells file={file} pos={pos} isDragging={isDragging} />
+    <TableRow
+      key={fileName}
+      ref={(r) => {
+        setNodeRef(r);
+        hoverRef.current = r;
+      }}
+      style={style}
+    >
+      <Cells file={file} pos={pos} isDragging={isDragging} isHover={isHover} />
     </TableRow>
   );
 }

@@ -17,13 +17,19 @@ function App() {
       <div className="BackgroundOverlay"></div>
       <div className="App">
         <a href="/EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ">Verified</a>
-        <a href="/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz">Verified2</a>
-        <a href="/EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR">Unverified</a>
+        <a href="/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz">
+          Verified2
+        </a>
+        <a href="/EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR">
+          Unverified
+        </a>
         <TopBar />
-        <h2 style={{ textAlign: "center" }}>Smart Contract Verifier</h2>
+        <h2 style={{ textAlign: "center", color: "white" }}>
+          Smart Contract Verifier
+        </h2>
         <AddressInput />
         <Spacer space={40} />
-        {isLoading && <div>Loading...</div>}
+        {isLoading && <div style={{ color: "white" }}>Loading...</div>}
         {!isLoading && (
           <div style={{ display: "flex", gap: 20 }}>
             <ContractInfo />

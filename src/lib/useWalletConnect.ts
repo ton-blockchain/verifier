@@ -8,7 +8,6 @@ import {
   TonhubWalletConfig,
 } from "ton-x";
 import create from "zustand";
-import { disconnect } from 'process';
 const connector = new TonhubConnector({});
 
 const useSessionStore = create<{
