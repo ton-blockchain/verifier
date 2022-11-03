@@ -70,7 +70,7 @@ function AddSources() {
       {hasFiles() && <CompilerSettings />}
       <Spacer space={20} />
       <Button
-        disabled={!hasFiles()}
+        disabled={!hasFiles() || !!data?.result?.msgCell}
         onClick={() => {
           mutate(null);
         }}

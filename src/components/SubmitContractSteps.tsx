@@ -6,15 +6,19 @@ import {
 } from "@mui/material";
 import AddSources from "./AddSources";
 import { useSubmitSources } from "../lib/useSubmitSources";
-import { useState, useEffect } from "react";
-import Button from "./Button";
 import PublishProof from "./PublishProof";
+import { usePublishStepsStore } from "./usePublishStepsStore";
 
 function SubmitContractSteps() {
   const { data } = useSubmitSources();
 
-  const [isPublishExpanded, setPublishExpanded] = useState(false);
-  const [isAddSourcesExpanded, setAddSourcesExpanded] = useState(true);
+  const {
+    isPublishExpanded,
+    isAddSourcesExpanded,
+    setPublishExpanded,
+    setAddSourcesExpanded,
+  } = usePublishStepsStore();
+
   const canPublish = !!data?.result?.msgCell;
 
   return (

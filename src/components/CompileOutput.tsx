@@ -2,9 +2,13 @@ import { useSubmitSources } from "../lib/useSubmitSources";
 import InfoPiece from "./InfoPiece";
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
 import Spacer from "./Spacer";
+import Button from "./Button";
+import { usePublishStepsStore } from "./usePublishStepsStore";
 export function CompileOutput() {
   const { data: submitSourcesData, error } = useSubmitSources();
   const { data: contractInfoData } = useLoadContractInfo();
+  const { setPublishExpanded, setAddSourcesExpanded } = usePublishStepsStore();
+
   const compileResult = submitSourcesData?.result?.compileResult;
   const hints = submitSourcesData?.hints;
   // https://t.me/+4S9EdWndFec4MWYy
@@ -12,7 +16,28 @@ export function CompileOutput() {
     <div>
       <h3>Result</h3>
       {["similar"].includes(compileResult?.result ?? "") && (
-        <div>Hashes match</div>
+        <>
+          <div
+            style={{
+              background: "#D6FFCE",
+              padding: 20,
+              border: "1px solid #D8D8D8",
+              borderRadius: 20,
+            }}
+          >
+            Great! Compile output hash matches this on-chain contract
+          </div>
+          <Spacer space={20} />
+          <div style={{ display: "flex", gap: 14 }}>
+            <Button
+              text={"Publish"}
+              onClick={() => {
+                setAddSourcesExpanded(false);
+                setPublishExpanded(true);
+              }}
+            />
+          </div>
+        </>
       )}
 
       {["not_similar"].includes(compileResult?.result ?? "") && (

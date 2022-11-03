@@ -1,4 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { Cell, Address, toNano } from "ton";
 import { useSubmitSources } from "./useSubmitSources";
 import { useWalletConnect } from "./useWalletConnect";
@@ -6,14 +7,33 @@ import { useWalletConnect } from "./useWalletConnect";
 export function usePublishProof() {
   const { data } = useSubmitSources();
   const { requestTXN } = useWalletConnect();
+  const [txnStatus, setTxnStatus] = useState<
+    | "pending"
+    | "success"
+    | "rejected"
+    | "expired"
+    | "invalid_session"
+    | "not_issued"
+  >("not_issued");
 
   return useMutation(async () => {
-    if (!data?.msgCell) return;
+    if (!data?.result.msgCell) return;
 
-    await requestTXN(
+    const txnRespP = requestTXN(
       import.meta.env.VITE_VERIFIER_REGISTRY,
       toNano(0.55),
-      Cell.fromBoc(Buffer.from(data.msgCell!))[0] // .data?,
+      Cell.fromBoc(Buffer.from(data.result.msgCell!))[0] // .data?,
     );
+    setTxnStatus("pending");
+
+    const resp = await txnRespP;
+
+    if (resp === undefined) {
+      return "invalid_session";
+    }
+
+    setTxnStatus(resp!.type);
+
+    return txnStatus;
   });
 }

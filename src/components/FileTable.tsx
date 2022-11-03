@@ -35,7 +35,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { DragIndicator } from "@mui/icons-material";
 import { useHover } from "../lib/useHover";
 
 function Cells({
@@ -63,7 +63,7 @@ function Cells({
             visibility: isHover ? "visible" : "hidden",
           }}
         >
-          <DragHandleIcon sx={{ opacity: 0.5 }} />
+          <DragIndicator sx={{ opacity: 0.5 }} />
         </div>
       </TableCell>
       <TableCell>{pos}</TableCell>
@@ -156,7 +156,7 @@ export function FileTable() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell></TableCell>
+              <TableCell sx={{width: 0}}></TableCell>
               <TableCell>Order</TableCell>
               <TableCell>Directory</TableCell>
               <TableCell>File</TableCell>

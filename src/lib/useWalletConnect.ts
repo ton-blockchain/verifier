@@ -86,7 +86,7 @@ export function useWalletConnect() {
     requestTXN: async (to: string, value: BN, message: Cell) => {
       if (!session) return;
 
-      await connector.requestTransaction({
+      return connector.requestTransaction({
         seed: session.seed,
         appPublicKey: session.walletConfig.appPublicKey,
         to: to,
