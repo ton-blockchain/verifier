@@ -53,14 +53,14 @@ export function useSubmitSources() {
       jsonToBlob({
         compiler,
         version,
-        compileCommandLine: commandLine, // TODO change on server
+        commandLine: commandLine, // TODO change on server
         knownContractAddress: contractAddress,
         knownContractHash: contractInfo.hash,
         sources: files.map((u) => ({
           includeInCommand: u.includeInCommand,
-          // isEntrypoint: u.isEntrypoint,
-          // isStdLib: u.isStdlib,
-          // hasIncludeDirectives: u.hasIncludeDirectives,
+          isEntrypoint: u.isEntrypoint,
+          isStdLib: u.isStdlib,
+          hasIncludeDirectives: u.hasIncludeDirectives,
           folder: u.folder,
         })),
         senderAddress: "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ", //senderAddress,
@@ -76,6 +76,45 @@ export function useSubmitSources() {
       throw new Error(await response.text());
     }
 
-    return (await response.json()) as VerifyResult;
+    const result = (await response.json()) as VerifyResult;
+
+    const hints = [];
+
+    if (
+      ["unknown_error", "compile_error"].includes(result.compileResult.result)
+    ) {
+      // stdlib
+      if (!files.some((u) => u.isStdlib)) {
+        hints.push("You can try to add stdlib.fc to your sources.");
+      } else if (!files[0].isStdlib) {
+        hints.push(
+          "stdlib.fc should usually be the first file in the list (unless it's imported from another file)"
+        );
+      }
+
+      if (!files.some((u) => u.isEntrypoint)) {
+        hints.push(
+          "There usually should be at least one file containing an entrypoint (recv_internal, main)"
+        );
+      }
+
+      hints.push(
+        "Try to use the same compiler version as the contract was compiled with"
+      );
+      hints.push(
+        "Make sure all required files are included in the command line"
+      );
+      hints.push(
+        "Make sure all files in the command line are in the correct order"
+      );
+    }
+
+    if (result.compileResult.result === "not_similar") {
+      hints.push(
+        "Source code compiles correctly but does not match the on-chain contract hash. Make sure you are using the correct compiler version, command line and file order."
+      );
+    }
+
+    return { result, hints };
   });
 }

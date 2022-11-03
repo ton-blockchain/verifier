@@ -5,6 +5,9 @@ import { immer } from "zustand/middleware/immer";
 export type FileToUpload = {
   fileObj: File;
   includeInCommand: boolean;
+  hasIncludeDirectives: boolean;
+  isEntrypoint: boolean;
+  isStdlib: boolean;
   folder: string;
 };
 
@@ -33,22 +36,30 @@ export const useFileStore = create(
     hasFiles: () => get().files.length > 0,
 
     // Actions
-    addFiles: (files) => {
+    addFiles: async (files) => {
+      const modifiedFiles = await Promise.all(
+        files.map(async (f) => {
+          const content = await f.text();
+          return {
+            fileObj: f,
+            includeInCommand: true,
+            folder: "",
+            hasIncludeDirectives: content.includes("#include"),
+            isEntrypoint: /\(\)\s*(recv_internal|main)\s*\(/.test(content),
+            isStdlib: /stdlib.(fc|func)/i.test(f.name),
+          };
+        })
+      );
+
       set((state) => {
         state.files.push(
-          ...files
-            .filter(
-              (f) =>
-                f.name.match(/.*\.(fc|func)/) &&
-                !state.files.find(
-                  (existingF) => existingF.fileObj.name === f.name
-                )
-            )
-            .map((f) => ({
-              fileObj: f,
-              includeInCommand: true,
-              folder: "",
-            }))
+          ...modifiedFiles.filter(
+            (f) =>
+              f.fileObj.name.match(/.*\.(fc|func)/) &&
+              !state.files.find(
+                (existingF) => existingF.fileObj.name === f.fileObj.name
+              )
+          )
         );
       });
     },

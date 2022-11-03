@@ -15,18 +15,7 @@ function SubmitContractSteps() {
 
   const [isPublishExpanded, setPublishExpanded] = useState(false);
   const [isAddSourcesExpanded, setAddSourcesExpanded] = useState(true);
-  const canPublish = !!data?.msgCell;
-
-  useEffect(() => {
-    if (!isPublishExpanded && canPublish) {
-      setPublishExpanded(true);
-      setAddSourcesExpanded(false);
-    }
-
-    if (!canPublish) {
-      setPublishExpanded(false);
-    }
-  }, [data]);
+  const canPublish = !!data?.result?.msgCell;
 
   return (
     <>

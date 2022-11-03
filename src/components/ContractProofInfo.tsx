@@ -15,7 +15,7 @@ function ContractProofInfo() {
       <h3 style={{ textAlign: "center" }}>Compiler</h3>
       <InfoPiece label="Compiler" data={data!.compiler!} />
       <InfoPiece label="Version" data={data!.version!} />
-      <InfoPiece label="Command" data={data!.compileCommandLine!} />
+      <InfoPiece label="Command" data={data!.commandLine!} />
       <InfoPiece
         label="Verified"
         data={new TimeAgo("en-US").format(data!.verificationDate!)}

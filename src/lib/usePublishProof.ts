@@ -12,7 +12,7 @@ export function usePublishProof() {
 
     await requestTXN(
       import.meta.env.VITE_VERIFIER_REGISTRY,
-      toNano(0.05),
+      toNano(0.55),
       Cell.fromBoc(Buffer.from(data.msgCell!))[0] // .data?,
     );
   });
