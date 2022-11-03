@@ -15,7 +15,7 @@ type DerivedState = {};
 
 type Actions = {
   setVersion: (version: FuncVersion) => void;
-  setOverrideCommandLine: (commandLine: string) => void;
+  setOverrideCommandLine: (commandLine: string | null) => void;
 };
 
 const _useCompilerSettingsStore = create(
@@ -34,7 +34,7 @@ const _useCompilerSettingsStore = create(
         state.version = version;
       });
     },
-    setOverrideCommandLine: (cmd: string) => {
+    setOverrideCommandLine: (cmd: string | null) => {
       set((state) => {
         state.overrideCommandLine = cmd;
       });
@@ -53,7 +53,7 @@ export function useCompilerSettingsStore() {
       .join(" ");
 
     if (!files) return "";
-    return `func -o tmp.fif -SPA ${cmd}`;
+    return `-SPA ${cmd}`;
   }
 
   return {

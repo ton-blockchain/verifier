@@ -5,7 +5,7 @@ import Spacer from "./Spacer";
 export function CompileOutput() {
   const { data: submitSourcesData, error } = useSubmitSources();
   const { data: contractInfoData } = useLoadContractInfo();
-  const compileResult = submitSourcesData?.result.compileResult;
+  const compileResult = submitSourcesData?.result?.compileResult;
   const hints = submitSourcesData?.hints;
   // https://t.me/+4S9EdWndFec4MWYy
   return (
