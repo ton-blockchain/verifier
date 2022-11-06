@@ -21,7 +21,7 @@ export function usePublishProof() {
 
     const txnRespP = requestTXN(
       import.meta.env.VITE_VERIFIER_REGISTRY,
-      toNano(0.55),
+      toNano(0.1),
       Cell.fromBoc(Buffer.from(data.result.msgCell!))[0] // .data?,
     );
     setTxnStatus("pending");

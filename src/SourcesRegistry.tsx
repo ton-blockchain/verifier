@@ -2,7 +2,7 @@ import InfoPiece from "./components/InfoPiece";
 import { useEffect } from "react";
 import { makeGetCall } from "./lib/makeGetCall";
 import { getClient } from "./lib/getClient";
-import { Address, beginCell, Cell, toNano } from "ton";
+import { Address, beginCell, Cell, fromNano, toNano } from "ton";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import WalletConnect from "./components/WalletConnect";
 import { useWalletConnect } from "./lib/useWalletConnect";
@@ -16,32 +16,41 @@ import {
   TextField,
   DialogActions,
 } from "@mui/material";
+import { useParams } from "react-router-dom";
+import BN from "bn.js";
 
 function useLoadSourcesRegistryInfo() {
-  const addr = import.meta.env.VITE_SOURCES_REGISTRY;
-  return useQuery(["sourcesRegistry", addr], async () => {
+  const address = Address.parse(import.meta.env.VITE_SOURCES_REGISTRY);
+  return useQuery(["sourcesRegistry", address], async () => {
     const tc = await getClient();
     const admin = await makeGetCall(
-      addr,
+      address,
       "get_admin_address",
       [],
       (s) => (s[0] as Cell).beginParse().readAddress()!.toFriendly(),
       tc
     );
     const verifierRegistry = await makeGetCall(
-      addr,
+      address,
       "get_verifier_registry_address",
       [],
       (s) => (s[0] as Cell).beginParse().readAddress()!.toFriendly(),
       tc
     );
+    const deploymentCosts = await makeGetCall(
+      address,
+      "get_deployment_costs",
+      [],
+      (s) => [fromNano(s[0] as BN), fromNano(s[1] as BN)],
+      tc
+    );
 
     const codeCellHash = Cell.fromBoc(
-      (await tc.getContractState(Address.parse(addr))).code as Buffer
+      (await tc.getContractState(address)).code as Buffer
     )[0]
       .hash()
       .toString("base64");
-    return { admin, verifierRegistry, codeCellHash };
+    return { admin, verifierRegistry, codeCellHash, address, deploymentCosts };
   });
 }
 
@@ -61,28 +70,23 @@ function changeAdmin(newAdmin: Address): Cell {
     .endCell();
 }
 
-function setSourceItemCode(newCode: Cell): Cell {
+function setDeploymentCosts(minTon: BN, maxTon: BN): Cell {
   return beginCell()
-    .storeUint(4005, 32)
+    .storeUint(6007, 32)
     .storeUint(0, 64)
-    .storeRef(newCode)
-    .endCell();
-}
-
-function changeCode(newCode: Cell): Cell {
-  return beginCell()
-    .storeUint(5006, 32)
-    .storeUint(0, 64)
-    .storeRef(newCode)
+    .storeCoins(minTon)
+    .storeCoins(maxTon)
     .endCell();
 }
 
 function ActionDialog({
   text,
   action,
+  address,
 }: {
   text: string;
   action: (param: string) => Cell;
+  address: Address;
 }) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -123,11 +127,7 @@ function ActionDialog({
           <Button
             text={"DOIT"}
             onClick={() => {
-              requestTXN(
-                import.meta.env.VITE_SOURCES_REGISTRY,
-                toNano(0.01),
-                action(value)
-              );
+              requestTXN(address.toFriendly(), toNano(0.01), action(value));
             }}
           />
         </DialogActions>
@@ -137,8 +137,6 @@ function ActionDialog({
 }
 
 function SourcesRegistry() {
-  const addr = import.meta.env.VITE_SOURCES_REGISTRY;
-
   const { data, isLoading } = useLoadSourcesRegistryInfo();
 
   return (
@@ -150,22 +148,30 @@ function SourcesRegistry() {
       {isLoading && <div>Loading...</div>}
       {data && (
         <>
-          <InfoPiece label="Address" data={addr} />
+          <InfoPiece label="Address" data={data.address.toFriendly()} />
           <InfoPiece label="Admin" data={data.admin} />
           <InfoPiece label="Verifier Reg." data={data.verifierRegistry} />
+          <InfoPiece label="Min Ton" data={data.deploymentCosts[0]} />
+          <InfoPiece label="Max Ton" data={data.deploymentCosts[1]} />
           <InfoPiece label="Code hash" data={data.codeCellHash} />
           <div style={{ marginTop: 20, gap: 10, display: "flex" }}>
             <ActionDialog
               text="Change Verifier Registry"
               action={(val) => changeVerifierRegistry(Address.parse(val))}
+              address={data.address}
             />
             <ActionDialog
               text="Change Admin"
               action={(val) => changeAdmin(Address.parse(val))}
+              address={data.address}
             />
             <ActionDialog
-              text="Set code"
-              action={(val) => changeCode(Cell.fromBoc(val)[0])}
+              text="Set deployment costs"
+              action={(val) => {
+                const [min, max] = val.split(",");
+                return setDeploymentCosts(toNano(min), toNano(max));
+              }}
+              address={data.address}
             />
           </div>
         </>

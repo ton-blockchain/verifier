@@ -9,6 +9,30 @@ import ContractSourceCode from "./components/ContractSourceCode";
 import AddSources from "./components/AddSources";
 import SubmitContractSteps from "./components/SubmitContractSteps";
 
+const examples_not_verified = [
+  ["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"],
+  ["dns-root", "Ef-OJd0IF0yc0xkhgaAirq12WawqnUoSuE9RYO3S7McG6lDh"],
+]
+
+const examples = [
+  ["wallet-v4", "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ"],
+  ["dns-collection", "EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz"],
+  ["dns-item", "EQAGSjhQajnMSne9c9hGnKdMKmohX2-MkZuOkk7TmwQKwFOU"],
+  ["counter", "EQC-QTihJV_B4f8M2nynateMLynaRT_uwNYnnuyy87kam-G7"],
+  [
+    "jetton-minter-discoverable",
+    "EQD-LkpmPTHhPW68cNfc7B83NcfE9JyGegXzAT8LetpQSRSm",
+  ],
+  [
+    "jetton-minter",
+    "EQBb4JNqn4Z6U6-nf0cSLnOJo2dxj1QRuGoq-y6Hod72jPbl",
+  ],
+  [
+    "jetton-wallet",
+    "EQAhuLHxOcrBwwMHKDnCUMYefuHwJ2iTOFKHWYQlDD-dgb__",
+  ],
+];
+
 function App() {
   const { isLoading, data: proofData } = useLoadContractProof();
 
@@ -16,13 +40,19 @@ function App() {
     <div>
       <div className="BackgroundOverlay"></div>
       <div className="App">
-        <a href="/EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ">Verified</a>
-        <a href="/EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz">
-          Verified2
-        </a>
-        <a href="/EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR">
-          Unverified
-        </a>
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+            background: "white",
+            borderRadius: 20,
+            padding: 10,
+          }}
+        >
+          {examples.map(([name, address]) => (
+            <a href={`/${address}`}>{name}</a>
+          ))}
+        </div>
         <TopBar />
         <h2 style={{ textAlign: "center", color: "white" }}>
           Smart Contract Verifier
