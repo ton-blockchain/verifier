@@ -46,11 +46,11 @@ function App() {
             gap: 10,
             background: "white",
             borderRadius: 20,
-            padding: 10,
+            padding: "10px 20px",
           }}
         >
-          {examples.map(([name, address]) => (
-            <a href={`/${address}`}>{name}</a>
+          {examples.concat(examples_not_verified).map(([name, address]) => (
+            <a key={name} href={`/${address}`}>{name}</a>
           ))}
         </div>
         <TopBar />

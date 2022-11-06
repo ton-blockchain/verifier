@@ -2,7 +2,7 @@ import InfoPiece from "./components/InfoPiece";
 import { useEffect } from "react";
 import { makeGetCall } from "./lib/makeGetCall";
 import { getClient } from "./lib/getClient";
-import { Address, beginCell, Cell, fromNano, toNano } from "ton";
+import { Address, beginCell, Cell, fromNano, toNano, TonClient } from "ton";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import WalletConnect from "./components/WalletConnect";
 import { useWalletConnect } from "./lib/useWalletConnect";
@@ -12,24 +12,26 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   TextField,
   DialogActions,
 } from "@mui/material";
-import { useParams } from "react-router-dom";
 import BN from "bn.js";
+
+export async function getAdmin(sourcesRegistry: Address, tonClient: TonClient) {
+  return makeGetCall(
+    sourcesRegistry,
+    "get_admin_address",
+    [],
+    (s) => (s[0] as Cell).beginParse().readAddress()!.toFriendly(),
+    tonClient
+  );
+}
 
 function useLoadSourcesRegistryInfo() {
   const address = Address.parse(import.meta.env.VITE_SOURCES_REGISTRY);
   return useQuery(["sourcesRegistry", address], async () => {
     const tc = await getClient();
-    const admin = await makeGetCall(
-      address,
-      "get_admin_address",
-      [],
-      (s) => (s[0] as Cell).beginParse().readAddress()!.toFriendly(),
-      tc
-    );
+    const admin = await getAdmin(address, tc);
     const verifierRegistry = await makeGetCall(
       address,
       "get_verifier_registry_address",
