@@ -1,39 +1,48 @@
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { Cell, Address, toNano } from "ton";
+import { useState, useEffect } from "react";
+import { Cell, Address, toNano, parseTransaction } from "ton";
+import { getClient } from "./getClient";
+import { useSendTXN } from "./useSendTxn";
 import { useSubmitSources } from "./useSubmitSources";
 import { useWalletConnect } from "./useWalletConnect";
 
 export function usePublishProof() {
   const { data } = useSubmitSources();
-  const { requestTXN } = useWalletConnect();
-  const [txnStatus, setTxnStatus] = useState<
-    | "pending"
-    | "success"
-    | "rejected"
-    | "expired"
-    | "invalid_session"
-    | "not_issued"
-  >("not_issued");
+  const { walletAddress } = useWalletConnect();
+  // TODO if data is null
 
-  return useMutation(async () => {
-    if (!data?.result.msgCell) return;
+  const m = useSendTXN(
+    Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY),
+    toNano(0.1),
+    data ? Cell.fromBoc(Buffer.from(data!.result.msgCell!))[0] : new Cell()
+  );
 
-    const txnRespP = requestTXN(
-      import.meta.env.VITE_VERIFIER_REGISTRY,
-      toNano(0.1),
-      Cell.fromBoc(Buffer.from(data.result.msgCell!))[0] // .data?,
-    );
-    setTxnStatus("pending");
+  useEffect(() => {
+    (async () => {
+      if (m.data.status === "success") {
+        const tc = await getClient();
+        const walletTxns = await tc.getTransactions(walletAddress, {
+          limit: 20,
+        });
 
-    const resp = await txnRespP;
+        
 
-    if (resp === undefined) {
-      return "invalid_session";
-    }
+        const txnToVerifier = walletTxns.find(
+          (t) =>
+            t.outMessages[0].destination ===
+            import.meta.env.VITE_VERIFIER_REGISTRY
+        );
 
-    setTxnStatus(resp!.type);
+        // txnToVerifier.
 
-    return txnStatus;
-  });
+        // tc.isContractDeployed(
+        //   Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY)
+        // );
+      }
+    })();
+  }, [m.data]);
+
+  return {
+    mutate: m.mutate,
+  };
 }

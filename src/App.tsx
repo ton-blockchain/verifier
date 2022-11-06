@@ -31,6 +31,10 @@ const examples = [
     "jetton-wallet",
     "EQAhuLHxOcrBwwMHKDnCUMYefuHwJ2iTOFKHWYQlDD-dgb__",
   ],
+  [
+    "single-nominator",
+    "Ef_BLbagjGnqZEkpURP96guu7M9aICAYe5hKB_P5Ng5Gju5Y",
+  ],
 ];
 
 function App() {
