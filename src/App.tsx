@@ -8,12 +8,13 @@ import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
 import AddSources from "./components/AddSources";
 import SubmitContractSteps from "./components/SubmitContractSteps";
-import { useOverride } from './lib/useOverride';
+import { useOverride } from "./lib/useOverride";
+import { useFileStore } from "./lib/useFileStore";
 
 const examples_not_verified = [
   ["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"],
   ["dns-root", "Ef-OJd0IF0yc0xkhgaAirq12WawqnUoSuE9RYO3S7McG6lDh"],
-]
+];
 
 const examples = [
   ["wallet-v4", "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ"],
@@ -24,23 +25,15 @@ const examples = [
     "jetton-minter-discoverable",
     "EQD-LkpmPTHhPW68cNfc7B83NcfE9JyGegXzAT8LetpQSRSm",
   ],
-  [
-    "jetton-minter",
-    "EQBb4JNqn4Z6U6-nf0cSLnOJo2dxj1QRuGoq-y6Hod72jPbl",
-  ],
-  [
-    "jetton-wallet",
-    "EQAhuLHxOcrBwwMHKDnCUMYefuHwJ2iTOFKHWYQlDD-dgb__",
-  ],
-  [
-    "single-nominator",
-    "Ef_BLbagjGnqZEkpURP96guu7M9aICAYe5hKB_P5Ng5Gju5Y",
-  ],
+  ["jetton-minter", "EQBb4JNqn4Z6U6-nf0cSLnOJo2dxj1QRuGoq-y6Hod72jPbl"],
+  ["jetton-wallet", "EQAhuLHxOcrBwwMHKDnCUMYefuHwJ2iTOFKHWYQlDD-dgb__"],
+  ["single-nominator", "Ef_BLbagjGnqZEkpURP96guu7M9aICAYe5hKB_P5Ng5Gju5Y"],
 ];
 
 function App() {
   const { isLoading, data: proofData } = useLoadContractProof();
   const canOverride = useOverride();
+  const { hasFiles } = useFileStore();
 
   return (
     <div>
@@ -56,7 +49,9 @@ function App() {
           }}
         >
           {examples.concat(examples_not_verified).map(([name, address]) => (
-            <a key={name} href={`/${address}`}>{name}</a>
+            <a key={name} href={`/${address}`}>
+              {name}
+            </a>
           ))}
         </div>
         <TopBar />
@@ -79,7 +74,7 @@ function App() {
           </>
         )}
         <Spacer space={40} />
-        {proofData && <ContractSourceCode />}
+        {proofData && !hasFiles() && <ContractSourceCode />}
       </div>
     </div>
   );
