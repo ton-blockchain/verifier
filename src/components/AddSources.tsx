@@ -8,7 +8,6 @@ import Button from "./Button";
 import { useFileStore } from "../lib/useFileStore";
 import CompilerSettings from "./CompilerSettings";
 import Spacer from "./Spacer";
-import { useMutation } from "@tanstack/react-query";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { CompileOutput } from "./CompileOutput";
 

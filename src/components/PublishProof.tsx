@@ -1,10 +1,9 @@
-import { Typography } from "@mui/material";
 import { usePublishProof } from "../lib/usePublishProof";
 import Button from "./Button";
 import Spacer from "./Spacer";
 
 function PublishProof() {
-  const { mutate, data } = usePublishProof();
+  const { mutate, status } = usePublishProof();
 
   return (
     <>
@@ -16,11 +15,18 @@ function PublishProof() {
           borderRadius: 20,
         }}
       >
-        To store your contract’s verification proof on-chain, you will need to
-        issue a transaction. This will cost 0.5 TON
+        {status === "not_issued" &&
+          `To store your contract’s verification proof on-chain, you will need to
+          issue a transaction. This will cost 0.5 TON`}
+        {status === "pending" &&
+          `Check your tonhub wallet for a pending transaction`}
+        {status === "rejected" && `Transaction rejected, please retry`}
+        {status === "expired" && `Transaction expired, please retry`}
+        {status === "success" &&
+          `Transaction issued, monitoring proof deployment on-chain`}
+        {status === "deployed" && `Your proof is ready!`}
       </div>
       <Spacer space={20} />
-      <div>{JSON.stringify(data)}</div>
       <Button
         text="Publish"
         onClick={() => {

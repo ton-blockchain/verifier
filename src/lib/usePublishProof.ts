@@ -1,39 +1,42 @@
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { Cell, Address, toNano } from "ton";
+import BN from "bn.js";
+import { useState, useEffect } from "react";
+import { Cell, Address, toNano, parseTransaction } from "ton";
+import { getClient } from "./getClient";
+import { useSendTXN, TXNStatus } from "./useSendTxn";
 import { useSubmitSources } from "./useSubmitSources";
 import { useWalletConnect } from "./useWalletConnect";
+import { useLoadContractProof } from "./useLoadContractProof";
 
 export function usePublishProof() {
   const { data } = useSubmitSources();
-  const { requestTXN } = useWalletConnect();
-  const [txnStatus, setTxnStatus] = useState<
-    | "pending"
-    | "success"
-    | "rejected"
-    | "expired"
-    | "invalid_session"
-    | "not_issued"
-  >("not_issued");
+  const { invalidate, data: contractProofData } = useLoadContractProof();
 
-  return useMutation(async () => {
-    if (!data?.result.msgCell) return;
+  const m = useSendTXN(
+    Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY),
+    toNano(0.1),
+    data ? Cell.fromBoc(Buffer.from(data!.result.msgCell!))[0] : new Cell()
+  );
+  const sleep = async (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
-    const txnRespP = requestTXN(
-      import.meta.env.VITE_VERIFIER_REGISTRY,
-      toNano(0.1),
-      Cell.fromBoc(Buffer.from(data.result.msgCell!))[0] // .data?,
-    );
-    setTxnStatus("pending");
-
-    const resp = await txnRespP;
-
-    if (resp === undefined) {
-      return "invalid_session";
+  useEffect(() => {
+    if (m.data.status === "success") {
+      let i = 0;
+      (async () => {
+        while (!contractProofData?.hasOnchainProof && i < 20) {
+          i++;
+          await sleep(2000);
+          invalidate();
+        }
+      })();
     }
+  }, [m.data.status]);
 
-    setTxnStatus(resp!.type);
-
-    return txnStatus;
-  });
+  return {
+    mutate: m.mutate,
+    status: contractProofData?.hasOnchainProof
+      ? "deployed"
+      : (m.data.status as TXNStatus | "deployed"),
+  };
 }

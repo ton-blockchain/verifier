@@ -3,6 +3,7 @@ import { useFileStore } from "./useFileStore";
 import { useCompilerSettingsStore } from "./useCompilerSettingsStore";
 import { useParams } from "react-router-dom";
 import { useCustomMutation } from "./useCustomMutation";
+import { Cell } from "ton";
 
 export type VerifyResult = {
   compileResult: CompileResult;
@@ -115,6 +116,14 @@ export function useSubmitSources() {
       );
     }
 
-    return { result, hints };
+    let queryId;
+
+    if (result.msgCell) {
+      const s = Cell.fromBoc(Buffer.from(result.msgCell))[0].beginParse()
+      console.log(s.readUint(32).toString("hex"));
+      queryId = s.readUint(64);
+    }
+
+    return { result, hints, queryId };
   });
 }
