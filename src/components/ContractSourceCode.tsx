@@ -7,7 +7,7 @@ function ContractSourceCode() {
 
   return (
     <Container>
-      <h3 style={{ textAlign: "center" }}>Source Code</h3>
+      <h3>Source Code</h3>
       {hasOnchainProof && (
         <div id="myVerifierContainer" style={{ height: 800, color: "black" }}>
           <div id="myVerifierFiles"></div>

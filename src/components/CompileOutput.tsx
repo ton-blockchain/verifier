@@ -14,7 +14,7 @@ export function CompileOutput() {
   // https://t.me/+4S9EdWndFec4MWYy
   return (
     <div>
-      <h3>Result</h3>
+      <h4>Result</h4>
       {["similar"].includes(compileResult?.result ?? "") && (
         <>
           <div

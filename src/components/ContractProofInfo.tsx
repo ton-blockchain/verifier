@@ -12,7 +12,7 @@ function ContractProofInfo() {
 
   return (
     <Container className="ContractProof">
-      <h3 style={{ textAlign: "center" }}>Compiler</h3>
+      <h3>Compiler</h3>
       <InfoPiece label="Compiler" data={data!.compiler!} />
       <InfoPiece label="Version" data={data!.version!} />
       <InfoPiece label="Command" data={data!.commandLine!} />

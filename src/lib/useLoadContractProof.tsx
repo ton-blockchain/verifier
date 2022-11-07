@@ -36,7 +36,8 @@ export function useLoadContractProof() {
       );
 
       // TODO temp
-      if (!ipfslink || i < 8) {
+      // if (!ipfslink || i < 3) {
+      if (!ipfslink) {
         i++;
         return { hasOnchainProof: false };
       }

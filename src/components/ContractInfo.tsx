@@ -10,14 +10,17 @@ function ContractInfo() {
   const { data, isLoading } = useLoadContractInfo();
   return (
     <Container className="ContractInfo">
-      <h3 style={{ textAlign: "center" }}>Contract</h3>
+      <h3>Contract</h3>
       <InfoPiece label="Address" data={useParams().contractAddress ?? ""} />
       {isLoading && <div>Loading...</div>}
       {data && (
         <div>
           <InfoPiece label="Balance" data={data.balance} />
           <InfoPiece label="Hash" data={data.hash} />
-          <InfoPiece label="Workchain" data={workchainForAddress(contractAddress ?? "")} />
+          <InfoPiece
+            label="Workchain"
+            data={workchainForAddress(contractAddress ?? "")}
+          />
         </div>
       )}
     </Container>

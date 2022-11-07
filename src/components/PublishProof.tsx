@@ -8,7 +8,7 @@ function PublishProof() {
 
   return (
     <Container>
-      <h3 style={{ textAlign: "center" }}>Publish proof</h3>
+      <h3>Publish proof</h3>
       <div
         style={{
           background: "#D8D8D840",
