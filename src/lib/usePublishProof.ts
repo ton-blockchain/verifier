@@ -15,7 +15,7 @@ export function usePublishProof() {
   const m = useSendTXN(
     Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY),
     toNano(0.1),
-    data ? Cell.fromBoc(Buffer.from(data!.result.msgCell!))[0] : new Cell()
+    data?.result?.msgCell ? Cell.fromBoc(Buffer.from(data.result.msgCell))[0] : new Cell()
   );
   const sleep = async (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));

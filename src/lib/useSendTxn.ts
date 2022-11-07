@@ -23,8 +23,6 @@ export function useSendTXN(to: Address, value: BN, message: Cell) {
 
     const txnResp = await requestTXN(to.toFriendly(), value, message);
 
-    console.log(txnResp, "SHAHAR");
-
     if (txnResp === undefined) {
       setTxnStatus("unknown");
     }
