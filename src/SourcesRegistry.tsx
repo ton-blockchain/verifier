@@ -2,7 +2,7 @@ import InfoPiece from "./components/InfoPiece";
 import { useEffect } from "react";
 import { makeGetCall } from "./lib/makeGetCall";
 import { getClient } from "./lib/getClient";
-import { Address, beginCell, Cell, fromNano, toNano, TonClient } from "ton";
+import { Address, beginCell, Cell, fromNano, toNano } from "ton";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import WalletConnect from "./components/WalletConnect";
 import { useWalletConnect } from "./lib/useWalletConnect";
@@ -16,16 +16,7 @@ import {
   DialogActions,
 } from "@mui/material";
 import BN from "bn.js";
-
-export async function getAdmin(sourcesRegistry: Address, tonClient: TonClient) {
-  return makeGetCall(
-    sourcesRegistry,
-    "get_admin_address",
-    [],
-    (s) => (s[0] as Cell).beginParse().readAddress()!.toFriendly(),
-    tonClient
-  );
-}
+import { getAdmin } from "./lib/getAdmin";
 
 function useLoadSourcesRegistryInfo() {
   const address = Address.parse(import.meta.env.VITE_SOURCES_REGISTRY);

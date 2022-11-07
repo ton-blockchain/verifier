@@ -8,6 +8,7 @@ import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
 import AddSources from "./components/AddSources";
 import SubmitContractSteps from "./components/SubmitContractSteps";
+import { useOverride } from './lib/useOverride';
 
 const examples_not_verified = [
   ["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"],
@@ -39,6 +40,7 @@ const examples = [
 
 function App() {
   const { isLoading, data: proofData } = useLoadContractProof();
+  const canOverride = useOverride();
 
   return (
     <div>
@@ -70,7 +72,7 @@ function App() {
             {proofData && proofData.hasOnchainProof && <ContractProofInfo />}
           </div>
         )}
-        {proofData && !proofData.hasOnchainProof && (
+        {proofData && (!proofData.hasOnchainProof || canOverride) && (
           <>
             <Spacer space={40} />
             <SubmitContractSteps />
