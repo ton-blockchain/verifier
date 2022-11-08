@@ -25,6 +25,7 @@ export function useSendTXN(to: Address, value: BN, message: Cell) {
 
     if (txnResp === undefined) {
       setTxnStatus("unknown");
+      return;
     }
 
     setTxnStatus(txnResp!.type);
