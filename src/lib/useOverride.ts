@@ -1,11 +1,13 @@
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useParams } from "react-router-dom";
 import { Address } from "ton";
 import { getAdmin } from "./getAdmin";
 import { getClient } from "./getClient";
 import { useWalletConnect } from "./useWalletConnect";
 import { useEffect, useState } from "react";
+import { useContractAddress } from './useContractAddress';
 
 export function useOverride() {
+  const { contractAddress } = useContractAddress();
   const { walletAddress } = useWalletConnect();
   const [urlParams] = useSearchParams();
   const [canOverride, setCanOverride] = useState(false);
@@ -20,10 +22,12 @@ export function useOverride() {
         );
         if (admin === walletAddress) {
           setCanOverride(true);
+          return;
         }
       }
+      setCanOverride(false);
     })();
-  }, [walletAddress]);
+  }, [walletAddress, contractAddress]);
 
   return canOverride;
 }

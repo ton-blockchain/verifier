@@ -1,10 +1,16 @@
 import "./AddressInput.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useContractAddress } from '../lib/useContractAddress';
 
 function AddressInput() {
-  const { contractAddress } = useParams();
+  const { contractAddress } = useContractAddress();
   const [val, setVal] = useState(contractAddress ?? "");
+
+  useEffect(() => {
+    setVal(contractAddress ?? "");
+  }, [contractAddress]);
+
   const navigate = useNavigate();
   return (
     <input

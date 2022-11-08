@@ -10,6 +10,10 @@ import AddSources from "./components/AddSources";
 import SubmitContractSteps from "./components/SubmitContractSteps";
 import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
+import { useNavigate, useParams } from "react-router-dom";
+import { useResetState } from "./lib/useResetState";
+import { contractAddress } from "ton";
+import { useContractAddress } from "./lib/useContractAddress";
 
 const examples_not_verified = [
   ["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"],
@@ -32,8 +36,11 @@ const examples = [
 
 function App() {
   const { isLoading, data: proofData } = useLoadContractProof();
+  const { isAddressValid, contractAddress } = useContractAddress();
   const canOverride = useOverride();
   const { hasFiles } = useFileStore();
+  const navigate = useNavigate();
+  useResetState();
 
   return (
     <div>
@@ -49,9 +56,15 @@ function App() {
           }}
         >
           {examples.concat(examples_not_verified).map(([name, address]) => (
-            <a key={name} href={`/${address}`}>
+            <span
+              style={{ color: "blue", cursor: "pointer" }}
+              key={name}
+              onClick={() => {
+                navigate(`/${address}`);
+              }}
+            >
               {name}
-            </a>
+            </span>
           ))}
         </div>
         <TopBar />
@@ -60,7 +73,15 @@ function App() {
         </h2>
         <AddressInput />
         <Spacer space={40} />
-        {isLoading && <div style={{ color: "white" }}>Loading...</div>}
+        {isLoading && isAddressValid && (
+          <div style={{ color: "white" }}>Loading...</div>
+        )}
+        {!contractAddress && (
+          <div style={{ color: "white" }}>Enter an address</div>
+        )}
+        {!!contractAddress && !isAddressValid && (
+          <div style={{ color: "white" }}>Invalid address</div>
+        )}
         {!isLoading && (
           <div style={{ display: "flex", gap: 20 }}>
             <ContractInfo />

@@ -21,7 +21,14 @@ export const useCustomMutation = <
     UseMutationOptions<TData, TError, TVariables, TContext>,
     "mutationKey" | "mutationFn"
   >
-): UseMutationResult<TData, TError, TVariables, TContext> => {
+): UseMutationResult<TData, TError, TVariables, TContext> & {
+  invalidate: () => void;
+} => {
+  const invalidate = () => {
+    queryClient.invalidateQueries(["CustomMutation", mutationKey]);
+    queryClient.invalidateQueries(["CustomMutationError", mutationKey]);
+  };
+
   const queryClient = useQueryClient();
   const query = useQuery<TData, TError>(
     ["CustomMutation", mutationKey],
@@ -37,8 +44,7 @@ export const useCustomMutation = <
     mutationKey,
     async (...params) => {
       // TODO maybe sometimes invalidation should be optional?
-      queryClient.invalidateQueries(["CustomMutation", mutationKey]);
-      queryClient.invalidateQueries(["CustomMutationError", mutationKey]);
+      invalidate();
 
       queryClient.setQueryData(["CustomMutationError", mutationKey], false);
       return await mutationFn(...params);
@@ -66,5 +72,8 @@ export const useCustomMutation = <
     isLoading: !!isLoading,
     error: queryError.data,
     isError: !!queryError.data,
-  } as UseMutationResult<TData, TError, TVariables, TContext>;
+    invalidate: invalidate,
+  } as UseMutationResult<TData, TError, TVariables, TContext> & {
+    invalidate: () => void;
+  };
 };

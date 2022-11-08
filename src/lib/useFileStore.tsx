@@ -25,6 +25,7 @@ type Actions = {
   setDirectory: (name: string, folder: string) => void;
   removeFile: (name: string) => void;
   reorderFiles: (fileBeingReplaced: string, fileToReplaceWith: string) => void;
+  reset: () => void;
 };
 
 export const useFileStore = create(
@@ -90,6 +91,11 @@ export const useFileStore = create(
         );
         const [removed] = files.splice(oldIndex, 1);
         files.splice(newIndex, 0, removed);
+      });
+    },
+    reset: () => {
+      set((state) => {
+        state.files = [];
       });
     },
   }))

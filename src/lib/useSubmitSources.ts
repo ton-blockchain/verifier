@@ -4,6 +4,9 @@ import { useCompilerSettingsStore } from "./useCompilerSettingsStore";
 import { useParams } from "react-router-dom";
 import { useCustomMutation } from "./useCustomMutation";
 import { Cell } from "ton";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useContractAddress } from './useContractAddress';
 
 export type VerifyResult = {
   compileResult: CompileResult;
@@ -30,12 +33,12 @@ const server =
     : "http://localhost:3003";
 
 export function useSubmitSources() {
-  const { contractAddress } = useParams();
+  const { contractAddress } = useContractAddress();
   const { data: contractInfo } = useLoadContractInfo();
   const { hasFiles, files } = useFileStore();
   const { compiler, version, commandLine } = useCompilerSettingsStore();
 
-  return useCustomMutation(["submitSources"], async () => {
+  const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;
     if (!contractInfo?.hash) return;
     if (!hasFiles()) return;
@@ -119,11 +122,13 @@ export function useSubmitSources() {
     let queryId;
 
     if (result.msgCell) {
-      const s = Cell.fromBoc(Buffer.from(result.msgCell))[0].beginParse()
+      const s = Cell.fromBoc(Buffer.from(result.msgCell))[0].beginParse();
       console.log(s.readUint(32).toString("hex"));
       queryId = s.readUint(64);
     }
 
     return { result, hints, queryId };
   });
+
+  return mutation;
 }
