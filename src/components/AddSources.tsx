@@ -62,7 +62,7 @@ function AddSources() {
 
   return (
     <Container>
-      <h3 style={{ textAlign: "center" }}>Add sources</h3>
+      <h3>Add sources</h3>
       <FileUploader />
       <Spacer space={20} />
       {hasFiles() && <FileTable />}

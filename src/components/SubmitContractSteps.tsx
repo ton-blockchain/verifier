@@ -8,9 +8,12 @@ import AddSources from "./AddSources";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import PublishProof from "./PublishProof";
 import { usePublishStepsStore } from "./usePublishStepsStore";
+import Spacer from "./Spacer";
+import { useFileStore } from '../lib/useFileStore';
 
 function SubmitContractSteps() {
   const { data } = useSubmitSources();
+  const { hasFiles } = useFileStore();
 
   const {
     isPublishExpanded,
@@ -23,7 +26,10 @@ function SubmitContractSteps() {
 
   return (
     <>
-      <Accordion
+      <AddSources />
+      <Spacer space={20} />
+      {hasFiles() && <PublishProof />}
+      {/* <Accordion
         onChange={() => {
           setAddSourcesExpanded(!isAddSourcesExpanded);
         }}
@@ -37,7 +43,7 @@ function SubmitContractSteps() {
           <Typography>Add sources</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <AddSources />
+          
         </AccordionDetails>
       </Accordion>
       <Accordion
@@ -57,7 +63,7 @@ function SubmitContractSteps() {
         <AccordionDetails>
           <PublishProof />
         </AccordionDetails>
-      </Accordion>
+      </Accordion> */}
     </>
   );
 }

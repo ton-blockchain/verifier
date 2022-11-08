@@ -17,7 +17,7 @@ function CompilerSettings() {
   const compilerSettings = useCompilerSettingsStore();
   return (
     <div>
-      <h3>Compiler</h3>
+      <h4>Compiler</h4>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
         <FormControl sx={{ flexGrow: 1 }}>
           <InputLabel>Compiler</InputLabel>

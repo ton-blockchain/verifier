@@ -1,20 +1,18 @@
-import { useEffect } from "react";
-
 import { Address, fromNano } from "ton";
-import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { fromCode } from "tvm-disassembler";
 import { Cell as DisassmeblerCell } from "tvm-disassembler/node_modules/ton";
 import { getClient } from "./getClient";
+import { useContractAddress } from "./useContractAddress";
 
 export function useLoadContractInfo() {
-  const { contractAddress } = useParams();
+  const { contractAddress } = useContractAddress();
 
   const { isLoading, error, data } = useQuery(
     [contractAddress, "info"],
     async () => {
-      if (!contractAddress) return;
+      if (!contractAddress) return null;
       const client = await getClient();
 
       const _address = Address.parse(contractAddress);

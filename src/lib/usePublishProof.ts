@@ -1,11 +1,7 @@
-import { useMutation } from "@tanstack/react-query";
-import BN from "bn.js";
-import { useState, useEffect } from "react";
-import { Cell, Address, toNano, parseTransaction } from "ton";
-import { getClient } from "./getClient";
+import { useEffect } from "react";
+import { Cell, Address, toNano } from "ton";
 import { useSendTXN, TXNStatus } from "./useSendTxn";
 import { useSubmitSources } from "./useSubmitSources";
-import { useWalletConnect } from "./useWalletConnect";
 import { useLoadContractProof } from "./useLoadContractProof";
 
 export function usePublishProof() {
@@ -15,7 +11,9 @@ export function usePublishProof() {
   const m = useSendTXN(
     Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY),
     toNano(0.1),
-    data ? Cell.fromBoc(Buffer.from(data!.result.msgCell!))[0] : new Cell()
+    data?.result?.msgCell
+      ? Cell.fromBoc(Buffer.from(data.result.msgCell))[0]
+      : new Cell() // TODO this is a hack
   );
   const sleep = async (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));

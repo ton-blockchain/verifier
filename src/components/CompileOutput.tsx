@@ -10,11 +10,11 @@ export function CompileOutput() {
   const { setPublishExpanded, setAddSourcesExpanded } = usePublishStepsStore();
 
   const compileResult = submitSourcesData?.result?.compileResult;
-  const hints = submitSourcesData?.hints;
+  const hints = submitSourcesData?.hints ?? [];
   // https://t.me/+4S9EdWndFec4MWYy
   return (
     <div>
-      <h3>Result</h3>
+      <h4>Result</h4>
       {["similar"].includes(compileResult?.result ?? "") && (
         <>
           <div
@@ -84,32 +84,31 @@ export function CompileOutput() {
           <code>{compileResult.error}</code>
         </pre>
       )}
-      {error && <h4>❌ {error.toString()}</h4>}
+      
+      {!!error && <h4>❌ {error.toString()}</h4>}
 
-      {hints?.length > 0 && (
-        <>
-          <pre
-            style={{
-              backgroundColor: "#5E75E80A",
-              border: "#D8D8D8 1px solid",
-              padding: "10px 20px",
-              borderRadius: 20,
-              overflow: "hidden",
-              maxHeight: 300,
-              whiteSpace: "pre-wrap",
-              fontFamily: "inherit",
-              lineHeight: 1.8,
-            }}
-          >
-            <div>
-              <b>Possible reasons for failure</b>
-            </div>
-            <Spacer space={10} />
-            {hints?.map((h) => (
-              <div key={h}>💎 {h}</div>
-            ))}
-          </pre>
-        </>
+      {hints.length > 0 && (
+        <pre
+          style={{
+            backgroundColor: "#5E75E80A",
+            border: "#D8D8D8 1px solid",
+            padding: "10px 20px",
+            borderRadius: 20,
+            overflow: "hidden",
+            maxHeight: 300,
+            whiteSpace: "pre-wrap",
+            fontFamily: "inherit",
+            lineHeight: 1.8,
+          }}
+        >
+          <div>
+            <b>Possible reasons for failure</b>
+          </div>
+          <Spacer space={10} />
+          {hints?.map((h) => (
+            <div key={h}>💎 {h}</div>
+          ))}
+        </pre>
       )}
     </div>
   );
