@@ -34,19 +34,13 @@ function WalletConnect() {
         }}
         endIcon={walletAddress && <KeyboardArrowDown />}
       />
-      <Menu
-        id="login-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-      >
+      <Menu id="login-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem
           onClick={() => {
             disconnect();
             handleClose();
           }}
-          disableRipple
-        >
+          disableRipple>
           Disconnect
         </MenuItem>
       </Menu>
@@ -54,8 +48,7 @@ function WalletConnect() {
         open={!!qrLink && !walletAddress}
         onClose={() => {
           setQRLink(null);
-        }}
-      >
+        }}>
         <Box
           sx={{
             position: "absolute",
@@ -67,15 +60,19 @@ function WalletConnect() {
             p: 4,
             borderRadius: 4,
             color: "#000",
-          }}
-        >
+          }}>
           <div
             style={{ cursor: "pointer" }}
             onClick={() => {
               setQRLink(null);
-            }}
-          >
-            <Close sx={{ position: "absolute", right: 16, top: 16 }} />
+            }}>
+            <Close
+              sx={{
+                position: "absolute",
+                right: 16,
+                top: 16,
+              }}
+            />
           </div>
           <div style={{ textAlign: "center" }}>Connect with Tonhub</div>
           <br />

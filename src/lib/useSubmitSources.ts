@@ -6,7 +6,7 @@ import { useCustomMutation } from "./useCustomMutation";
 import { Cell } from "ton";
 import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { useContractAddress } from './useContractAddress';
+import { useContractAddress } from "./useContractAddress";
 
 export type VerifyResult = {
   compileResult: CompileResult;
@@ -23,7 +23,9 @@ export type CompileResult = {
 };
 
 function jsonToBlob(json: Record<string, any>): Blob {
-  return new Blob([JSON.stringify(json)], { type: "application/json" });
+  return new Blob([JSON.stringify(json)], {
+    type: "application/json",
+  });
 }
 
 // TODO from env
@@ -46,10 +48,7 @@ export function useSubmitSources() {
     const formData = new FormData();
 
     for (const f of files) {
-      formData.append(
-        (f.folder ? f.folder + "/" : "") + f.fileObj.name,
-        f.fileObj
-      );
+      formData.append((f.folder ? f.folder + "/" : "") + f.fileObj.name, f.fileObj);
     }
 
     formData.append(
@@ -68,7 +67,7 @@ export function useSubmitSources() {
           folder: u.folder,
         })),
         senderAddress: "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ", //senderAddress,
-      })
+      }),
     );
 
     const response = await fetch(`${server}/source`, {
@@ -84,38 +83,30 @@ export function useSubmitSources() {
 
     const hints = [];
 
-    if (
-      ["unknown_error", "compile_error"].includes(result.compileResult.result)
-    ) {
+    if (["unknown_error", "compile_error"].includes(result.compileResult.result)) {
       // stdlib
       if (!files.some((u) => u.isStdlib)) {
         hints.push("You can try to add stdlib.fc to your sources.");
       } else if (!files[0].isStdlib) {
         hints.push(
-          "stdlib.fc should usually be the first file in the list (unless it's imported from another file)"
+          "stdlib.fc should usually be the first file in the list (unless it's imported from another file)",
         );
       }
 
       if (!files.some((u) => u.isEntrypoint)) {
         hints.push(
-          "There usually should be at least one file containing an entrypoint (recv_internal, main)"
+          "There usually should be at least one file containing an entrypoint (recv_internal, main)",
         );
       }
 
-      hints.push(
-        "Try to use the same compiler version as the contract was compiled with"
-      );
-      hints.push(
-        "Make sure all required files are included in the command line"
-      );
-      hints.push(
-        "Make sure all files in the command line are in the correct order"
-      );
+      hints.push("Try to use the same compiler version as the contract was compiled with");
+      hints.push("Make sure all required files are included in the command line");
+      hints.push("Make sure all files in the command line are in the correct order");
     }
 
     if (result.compileResult.result === "not_similar") {
       hints.push(
-        "Source code compiles correctly but does not match the on-chain contract hash. Make sure you are using the correct compiler version, command line and file order."
+        "Source code compiles correctly but does not match the on-chain contract hash. Make sure you are using the correct compiler version, command line and file order.",
       );
     }
 

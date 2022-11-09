@@ -21,7 +21,9 @@ export function useLoadContractProof() {
   const queryClient = useQueryClient();
 
   const { isLoading, error, data } = useQuery<
-    Partial<SourcesData> & { hasOnchainProof: boolean }
+    Partial<SourcesData> & {
+      hasOnchainProof: boolean;
+    }
   >(
     [contractAddress, "proof"],
     async () => {
@@ -31,12 +33,9 @@ export function useLoadContractProof() {
         };
       }
 
-      const ipfslink = await ContractVerifier.getSourcesJsonUrl(
-        contractInfo!.hash,
-        {
-          httpApiEndpoint: await getEndpoint(),
-        }
-      );
+      const ipfslink = await ContractVerifier.getSourcesJsonUrl(contractInfo!.hash, {
+        httpApiEndpoint: await getEndpoint(),
+      });
 
       // TODO temp
       // if (!ipfslink || i < 3) {
@@ -47,9 +46,14 @@ export function useLoadContractProof() {
 
       const sourcesData = await ContractVerifier.getSourcesData(ipfslink);
 
-      return { hasOnchainProof: true, ...sourcesData };
+      return {
+        hasOnchainProof: true,
+        ...sourcesData,
+      };
     },
-    { enabled: !!contractAddress && !!contractInfo?.hash }
+    {
+      enabled: !!contractAddress && !!contractInfo?.hash,
+    },
   );
 
   const invalidate = () => {

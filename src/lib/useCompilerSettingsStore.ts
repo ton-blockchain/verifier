@@ -39,7 +39,7 @@ const _useCompilerSettingsStore = create(
         state.overrideCommandLine = cmd;
       });
     },
-  }))
+  })),
 );
 
 export function useCompilerSettingsStore() {

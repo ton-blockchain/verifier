@@ -34,7 +34,7 @@ const StyledButton = styled(MUIButton)({
 function Button(
   props: {
     text: string;
-  } & ButtonProps
+  } & ButtonProps,
 ) {
   return (
     <StyledButton
@@ -45,8 +45,7 @@ function Button(
       variant="contained"
       disabled={props.disabled}
       onClick={props.disabled ? undefined : props.onClick}
-      {...props}
-    >
+      {...props}>
       {props.text}
     </StyledButton>
   );

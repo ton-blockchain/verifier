@@ -24,10 +24,7 @@ const examples = [
   ["dns-collection", "EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz"],
   ["dns-item", "EQAGSjhQajnMSne9c9hGnKdMKmohX2-MkZuOkk7TmwQKwFOU"],
   ["counter", "EQC-QTihJV_B4f8M2nynateMLynaRT_uwNYnnuyy87kam-G7"],
-  [
-    "jetton-minter-discoverable",
-    "EQD-LkpmPTHhPW68cNfc7B83NcfE9JyGegXzAT8LetpQSRSm",
-  ],
+  ["jetton-minter-discoverable", "EQD-LkpmPTHhPW68cNfc7B83NcfE9JyGegXzAT8LetpQSRSm"],
   ["jetton-minter", "EQBb4JNqn4Z6U6-nf0cSLnOJo2dxj1QRuGoq-y6Hod72jPbl"],
   ["jetton-wallet", "EQAhuLHxOcrBwwMHKDnCUMYefuHwJ2iTOFKHWYQlDD-dgb__"],
   ["single-nominator", "Ef_BLbagjGnqZEkpURP96guu7M9aICAYe5hKB_P5Ng5Gju5Y"],
@@ -52,32 +49,33 @@ function App() {
             background: "white",
             borderRadius: 20,
             padding: "10px 20px",
-          }}
-        >
+          }}>
           {examples.concat(examples_not_verified).map(([name, address]) => (
             <span
-              style={{ color: "blue", cursor: "pointer" }}
+              style={{
+                color: "blue",
+                cursor: "pointer",
+              }}
               key={name}
               onClick={() => {
                 navigate(`/${address}`);
-              }}
-            >
+              }}>
               {name}
             </span>
           ))}
         </div>
         <TopBar />
-        <h2 style={{ textAlign: "center", color: "white" }}>
+        <h2
+          style={{
+            textAlign: "center",
+            color: "white",
+          }}>
           Smart Contract Verifier
         </h2>
         <AddressInput />
         <Spacer space={40} />
-        {isLoading && isAddressValid && (
-          <div style={{ color: "white" }}>Loading...</div>
-        )}
-        {!contractAddress && (
-          <div style={{ color: "white" }}>Enter an address</div>
-        )}
+        {isLoading && isAddressValid && <div style={{ color: "white" }}>Loading...</div>}
+        {!contractAddress && <div style={{ color: "white" }}>Enter an address</div>}
         {!!contractAddress && !isAddressValid && (
           <div style={{ color: "white" }}>Invalid address</div>
         )}
