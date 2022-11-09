@@ -5,8 +5,7 @@ import { fontWeight } from "@mui/system";
 
 const StyledButton = styled(MUIButton)({
   borderRadius: 40,
-  fontFamily: "inherit",
-  fontWeight: 700,
+  fontFamily: "Mulish-Bold, sans-serif",
   textTransform: "none",
   // color: "fff",
   // boxShadow: "none",

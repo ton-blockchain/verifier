@@ -1,12 +1,12 @@
 .TopBar {
   display: flex;
   gap: 10px;
-  font-weight: 700;
+  font-family: "Mulish-Bold", sans-serif;
   color: white;
 }
 
 .TopBar-Right {
-  align-self: flex-end; 
+  align-self: flex-end;
   display: flex;
   margin-left: auto;
   gap: 10px;

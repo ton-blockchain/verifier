@@ -4,11 +4,11 @@
 }
 
 .InfoPiece-Label {
-  font-weight: 700;
+  font-family: "Mulish-Bold", sans-serif;
   min-width: 100px;
   /* TODO denis table-like behavior */
 }
 
 .InfoPiece-Data {
- color: #728A96; 
+  color: #728a96;
 }

@@ -1,6 +1,11 @@
 import "./App.css";
 import "./assets/fonts/fonts.css";
 import "./assets/fonts/Mulish-Regular.ttf";
+import "./assets/fonts/Mulish-Bold.ttf";
+import "./assets/fonts/Mulish-ExtraBold.ttf";
+import "./assets/fonts/Mulish-Medium.ttf";
+import "./assets/fonts/Mulish-SemiBold.ttf";
+
 import AddressInput from "./components/AddressInput";
 import ContractInfo from "./components/ContractInfo";
 import Spacer from "./components/Spacer";
@@ -70,6 +75,7 @@ function App() {
           style={{
             textAlign: "center",
             color: "white",
+            fontFamily: "Mulish-Bold, sans-serif",
           }}>
           Smart Contract Verifier
         </h2>
