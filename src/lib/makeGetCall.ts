@@ -16,9 +16,7 @@ function _prepareParams(params: any[] = []) {
 
 type GetResponseValue = Cell | BN | null;
 
-function _parseGetMethodCall(
-  stack: [["num" | "cell" | "list", any]]
-): GetResponseValue[] {
+function _parseGetMethodCall(stack: [["num" | "cell" | "list", any]]): GetResponseValue[] {
   return stack.map(([type, val]) => {
     switch (type) {
       case "num":
@@ -42,13 +40,9 @@ export async function makeGetCall<T>(
   name: string,
   params: any[],
   parser: (stack: GetResponseValue[]) => T,
-  tonClient: TonClient
+  tonClient: TonClient,
 ) {
-  const { stack } = await tonClient.callGetMethod(
-    address!,
-    name,
-    _prepareParams(params)
-  );
+  const { stack } = await tonClient.callGetMethod(address!, name, _prepareParams(params));
 
   return parser(_parseGetMethodCall(stack as [["num" | "cell", any]]));
 }

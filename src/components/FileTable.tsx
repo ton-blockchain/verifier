@@ -8,10 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import { FileToUpload, useFileStore } from "../lib/useFileStore";
 import Button from "./Button";
 import { CSS } from "@dnd-kit/utilities";
-import {
-  restrictToParentElement,
-  restrictToVerticalAxis,
-} from "@dnd-kit/modifiers";
+import { restrictToParentElement, restrictToVerticalAxis } from "@dnd-kit/modifiers";
 
 import { Delete } from "@mui/icons-material";
 
@@ -49,7 +46,9 @@ function Cells({
   isHover: boolean;
 }) {
   const fileName = file.fileObj.name;
-  const { attributes, listeners } = useSortable({ id: fileName });
+  const { attributes, listeners } = useSortable({
+    id: fileName,
+  });
   const { isHover: isRemoveCellHover, hoverRef } = useHover();
 
   const { setInclueInCommand, setDirectory, removeFile } = useFileStore();
@@ -61,8 +60,7 @@ function Cells({
           style={{
             cursor: "pointer",
             visibility: isHover ? "visible" : "hidden",
-          }}
-        >
+          }}>
           <DragIndicator sx={{ opacity: 0.5 }} />
         </div>
       </TableCell>
@@ -119,8 +117,7 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
         setNodeRef(r);
         hoverRef.current = r;
       }}
-      style={style}
-    >
+      style={style}>
       <Cells file={file} pos={pos} isDragging={isDragging} isHover={isHover} />
     </TableRow>
   );
@@ -134,7 +131,7 @@ export function FileTable() {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   function handleDragEnd(event: any) {
@@ -150,13 +147,12 @@ export function FileTable() {
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
-      modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-    >
+      modifiers={[restrictToVerticalAxis, restrictToParentElement]}>
       <TableContainer>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell sx={{width: 0}}></TableCell>
+              <TableCell sx={{ width: 0 }}></TableCell>
               <TableCell>Order</TableCell>
               <TableCell>Directory</TableCell>
               <TableCell>File</TableCell>
@@ -167,16 +163,9 @@ export function FileTable() {
           <TableBody>
             <SortableContext
               items={files.map((file) => file.fileObj.name)}
-              strategy={verticalListSortingStrategy}
-            >
+              strategy={verticalListSortingStrategy}>
               {files.map((file, i) => {
-                return (
-                  <SortableRow
-                    file={file}
-                    pos={i + 1}
-                    key={file.fileObj.name}
-                  />
-                );
+                return <SortableRow file={file} pos={i + 1} key={file.fileObj.name} />;
               })}
             </SortableContext>
           </TableBody>

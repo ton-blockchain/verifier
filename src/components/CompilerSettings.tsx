@@ -1,15 +1,5 @@
-import {
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TextField,
-  Chip,
-} from "@mui/material";
-import {
-  FuncVersion,
-  useCompilerSettingsStore,
-} from "../lib/useCompilerSettingsStore";
+import { FormControl, InputLabel, Select, MenuItem, TextField, Chip } from "@mui/material";
+import { FuncVersion, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
 
 import { Edit, Cancel } from "@mui/icons-material";
 
@@ -18,7 +8,12 @@ function CompilerSettings() {
   return (
     <div>
       <h4>Compiler</h4>
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+        }}>
         <FormControl sx={{ flexGrow: 1 }}>
           <InputLabel>Compiler</InputLabel>
           <Select disabled value={compilerSettings.compiler} label="Compiler">
@@ -34,8 +29,7 @@ function CompilerSettings() {
             disabled
             onChange={(e) => {
               compilerSettings.setVersion(e.target.value as FuncVersion);
-            }}
-          >
+            }}>
             <MenuItem value={"0.2.0"}>0.2.0</MenuItem>
           </Select>
         </FormControl>
@@ -53,16 +47,13 @@ function CompilerSettings() {
         </TextField> */}
         <div
           style={{
-            backgroundColor: !!compilerSettings.overrideCommandLine
-              ? "white"
-              : "#efefef",
+            backgroundColor: !!compilerSettings.overrideCommandLine ? "white" : "#efefef",
             border: "1px solid #aeaeae",
             padding: 10,
             flexGrow: 6,
             display: "flex",
             gap: 4,
-          }}
-        >
+          }}>
           <Chip label="func -o tmp.fif" />
           <input
             style={{
@@ -82,9 +73,7 @@ function CompilerSettings() {
           <Edit
             sx={{ color: "blue" }}
             onClick={() => {
-              compilerSettings.setOverrideCommandLine(
-                compilerSettings.commandLine
-              );
+              compilerSettings.setOverrideCommandLine(compilerSettings.commandLine);
             }}
           />
         )}

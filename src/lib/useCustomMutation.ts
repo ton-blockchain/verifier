@@ -13,14 +13,14 @@ export const useCustomMutation = <
   TData = unknown,
   TError = unknown,
   TVariables = unknown,
-  TContext = unknown
+  TContext = unknown,
 >(
   mutationKey: MutationKey,
   mutationFn: MutationFunction<TData, TVariables>,
   options?: Omit<
     UseMutationOptions<TData, TError, TVariables, TContext>,
     "mutationKey" | "mutationFn"
-  >
+  >,
 ): UseMutationResult<TData, TError, TVariables, TContext> & {
   invalidate: () => void;
 } => {
@@ -33,12 +33,20 @@ export const useCustomMutation = <
   const query = useQuery<TData, TError>(
     ["CustomMutation", mutationKey],
     async () => await Promise.resolve(false as unknown as TData),
-    { retry: false, cacheTime: Infinity, staleTime: Infinity }
+    {
+      retry: false,
+      cacheTime: Infinity,
+      staleTime: Infinity,
+    },
   );
   const queryError = useQuery<TError, TData>(
     ["CustomMutationError", mutationKey],
     async () => await Promise.resolve(false as unknown as TError),
-    { retry: false, cacheTime: Infinity, staleTime: Infinity }
+    {
+      retry: false,
+      cacheTime: Infinity,
+      staleTime: Infinity,
+    },
   );
   const mutation = useMutation<TData, TError, TVariables, TContext>(
     mutationKey,
@@ -59,7 +67,7 @@ export const useCustomMutation = <
         queryClient.setQueryData(["CustomMutationError", mutationKey], err);
         if (options?.onError) options.onError(err, variables, context);
       },
-    }
+    },
   );
   const isLoading = useIsMutating(mutationKey);
 

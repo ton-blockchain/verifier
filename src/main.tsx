@@ -19,5 +19,5 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <Route path="/" element={<App />} />
       </Routes>
     </BrowserRouter>
-  </QueryClientProvider>
+  </QueryClientProvider>,
 );

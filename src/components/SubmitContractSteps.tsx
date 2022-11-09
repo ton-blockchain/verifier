@@ -1,26 +1,17 @@
-import {
-  Accordion,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
-} from "@mui/material";
+import { Accordion, AccordionSummary, Typography, AccordionDetails } from "@mui/material";
 import AddSources from "./AddSources";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import PublishProof from "./PublishProof";
 import { usePublishStepsStore } from "./usePublishStepsStore";
 import Spacer from "./Spacer";
-import { useFileStore } from '../lib/useFileStore';
+import { useFileStore } from "../lib/useFileStore";
 
 function SubmitContractSteps() {
   const { data } = useSubmitSources();
   const { hasFiles } = useFileStore();
 
-  const {
-    isPublishExpanded,
-    isAddSourcesExpanded,
-    setPublishExpanded,
-    setAddSourcesExpanded,
-  } = usePublishStepsStore();
+  const { isPublishExpanded, isAddSourcesExpanded, setPublishExpanded, setAddSourcesExpanded } =
+    usePublishStepsStore();
 
   const canPublish = !!data?.result?.msgCell;
 

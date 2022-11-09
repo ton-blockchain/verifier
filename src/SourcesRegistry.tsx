@@ -8,13 +8,7 @@ import WalletConnect from "./components/WalletConnect";
 import { useWalletConnect } from "./lib/useWalletConnect";
 import Button from "./components/Button";
 import React from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField,
-  DialogActions,
-} from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import BN from "bn.js";
 import { getAdmin } from "./lib/getAdmin";
 
@@ -28,22 +22,26 @@ function useLoadSourcesRegistryInfo() {
       "get_verifier_registry_address",
       [],
       (s) => (s[0] as Cell).beginParse().readAddress()!.toFriendly(),
-      tc
+      tc,
     );
     const deploymentCosts = await makeGetCall(
       address,
       "get_deployment_costs",
       [],
       (s) => [fromNano(s[0] as BN), fromNano(s[1] as BN)],
-      tc
+      tc,
     );
 
-    const codeCellHash = Cell.fromBoc(
-      (await tc.getContractState(address)).code as Buffer
-    )[0]
+    const codeCellHash = Cell.fromBoc((await tc.getContractState(address)).code as Buffer)[0]
       .hash()
       .toString("base64");
-    return { admin, verifierRegistry, codeCellHash, address, deploymentCosts };
+    return {
+      admin,
+      verifierRegistry,
+      codeCellHash,
+      address,
+      deploymentCosts,
+    };
   });
 }
 
@@ -56,11 +54,7 @@ function changeVerifierRegistry(newVerifierRegistry: Address): Cell {
 }
 
 function changeAdmin(newAdmin: Address): Cell {
-  return beginCell()
-    .storeUint(3004, 32)
-    .storeUint(0, 64)
-    .storeAddress(newAdmin)
-    .endCell();
+  return beginCell().storeUint(3004, 32).storeUint(0, 64).storeAddress(newAdmin).endCell();
 }
 
 function setDeploymentCosts(minTon: BN, maxTon: BN): Cell {
@@ -134,7 +128,12 @@ function SourcesRegistry() {
 
   return (
     <div style={{ padding: "20px 40px" }}>
-      <div style={{ display: "flex", gap: 30, alignItems: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: 30,
+          alignItems: "center",
+        }}>
         <h1>Sources Registry</h1>
         <WalletConnect />
       </div>
@@ -147,7 +146,12 @@ function SourcesRegistry() {
           <InfoPiece label="Min Ton" data={data.deploymentCosts[0]} />
           <InfoPiece label="Max Ton" data={data.deploymentCosts[1]} />
           <InfoPiece label="Code hash" data={data.codeCellHash} />
-          <div style={{ marginTop: 20, gap: 10, display: "flex" }}>
+          <div
+            style={{
+              marginTop: 20,
+              gap: 10,
+              display: "flex",
+            }}>
             <ActionDialog
               text="Change Verifier Registry"
               action={(val) => changeVerifierRegistry(Address.parse(val))}

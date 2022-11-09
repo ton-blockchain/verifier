@@ -8,8 +8,6 @@ export const usePublishStepsStore = create<{
 }>((set) => ({
   isPublishExpanded: false,
   isAddSourcesExpanded: true,
-  setPublishExpanded: (isExpanded: boolean) =>
-    set({ isPublishExpanded: isExpanded }),
-  setAddSourcesExpanded: (isExpanded: boolean) =>
-    set({ isAddSourcesExpanded: isExpanded }),
+  setPublishExpanded: (isExpanded: boolean) => set({ isPublishExpanded: isExpanded }),
+  setAddSourcesExpanded: (isExpanded: boolean) => set({ isAddSourcesExpanded: isExpanded }),
 }));

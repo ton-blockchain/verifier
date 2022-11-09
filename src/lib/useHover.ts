@@ -17,7 +17,7 @@ export function useHover() {
         };
       }
     },
-    [ref.current] // Recall only if ref changes
+    [ref.current], // Recall only if ref changes
   );
-  return {hoverRef: ref, isHover: value};
+  return { hoverRef: ref, isHover: value };
 }
