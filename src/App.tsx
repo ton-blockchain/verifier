@@ -1,5 +1,6 @@
 import "./App.css";
 import "./assets/fonts/fonts.css";
+import "./assets/fonts/Mulish-Regular.ttf";
 import AddressInput from "./components/AddressInput";
 import ContractInfo from "./components/ContractInfo";
 import Spacer from "./components/Spacer";
