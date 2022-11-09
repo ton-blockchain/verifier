@@ -1,9 +1,7 @@
-@import url("https://fonts.googleapis.com/css?family=Mulish:400,700");
-
 body {
   background-color: #F7F9FB;
   margin: 0;
-  font-family: "Mulish";
+  font-family: "Mulish-Regular", sans-serif;
   padding-bottom: 40px;
 }
 

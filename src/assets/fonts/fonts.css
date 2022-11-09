@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'Mulish-Bold';
+    font-display: optional;
+    src: local("Mulish-Bold"),
+    url("Mulish-Bold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Mulish-ExtraBold';
+    font-display: optional;
+    src: local("Mulish-ExtraBold"),
+    url("Mulish-ExtraBold.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Mulish-Medium';
+    font-display: optional;
+    src: local("Mulish-Medium"),
+    url("Mulish-Medium.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Mulish-Regular';
+    font-display: optional;
+    src: local("Mulish-Regular"),
+    url("Mulish-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: 'Mulish-SemiBold';
+    font-display: optional;
+    src: local("Mulish-SemiBold"),
+    url("Mulish-SemiBold.ttf") format("truetype");
+}

@@ -1,4 +1,5 @@
 import "./App.css";
+import "./assets/fonts/fonts.css";
 import AddressInput from "./components/AddressInput";
 import ContractInfo from "./components/ContractInfo";
 import Spacer from "./components/Spacer";
@@ -6,13 +7,11 @@ import TopBar from "./components/TopBar";
 import ContractProofInfo from "./components/ContractProofInfo";
 import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
-import AddSources from "./components/AddSources";
 import SubmitContractSteps from "./components/SubmitContractSteps";
 import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useResetState } from "./lib/useResetState";
-import { contractAddress } from "ton";
 import { useContractAddress } from "./lib/useContractAddress";
 
 const examples_not_verified = [
