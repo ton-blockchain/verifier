@@ -11,12 +11,9 @@ export function usePublishProof() {
   const m = useSendTXN(
     Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY),
     toNano(0.1),
-    data?.result?.msgCell
-      ? Cell.fromBoc(Buffer.from(data.result.msgCell))[0]
-      : new Cell() // TODO this is a hack
+    data?.result?.msgCell ? Cell.fromBoc(Buffer.from(data.result.msgCell))[0] : new Cell(), // TODO this is a hack
   );
-  const sleep = async (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
+  const sleep = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
   useEffect(() => {
     if (m.data.status === "success") {

@@ -15,5 +15,7 @@ export function useLoadContractSourceCode() {
     });
   }, [data?.files]);
 
-  return { hasOnchainProof: data?.hasOnchainProof };
+  return {
+    hasOnchainProof: data?.hasOnchainProof,
+  };
 }

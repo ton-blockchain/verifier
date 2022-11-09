@@ -5,7 +5,10 @@ import Spacer from "./components/Spacer";
 import WalletConnect from "./components/WalletConnect";
 
 function CellBuilder() {
-  const [state, setState] = useState<{ builder: Builder; spec: any[] }>({
+  const [state, setState] = useState<{
+    builder: Builder;
+    spec: any[];
+  }>({
     spec: [],
     builder: beginCell(),
   });
@@ -24,7 +27,13 @@ function CellBuilder() {
             const [num, size] = e.target.value.split(",");
             setState((state) => {
               return {
-                spec: [...state.spec, { type: "uint" + size, value: num }],
+                spec: [
+                  ...state.spec,
+                  {
+                    type: "uint" + size,
+                    value: num,
+                  },
+                ],
                 builder: state.builder.storeUint(num, size),
               };
             });
@@ -44,10 +53,16 @@ function CellBuilder() {
             const addressStr = e.target.value;
             setState((state) => {
               return {
-                spec: [...state.spec, { type: "address", value: addressStr }],
+                spec: [
+                  ...state.spec,
+                  {
+                    type: "address",
+                    value: addressStr,
+                  },
+                ],
                 builder: state.builder.storeAddress(
                   // @ts-ignore
-                  Address.parse(addressStr)
+                  Address.parse(addressStr),
                 ),
               };
             });
@@ -65,32 +80,20 @@ function CellBuilder() {
 
 function ContractInteract() {
   return (
-    <div style={{ margin: "0 auto", maxWidth: 1100, padding: 40 }}>
+    <div
+      style={{
+        margin: "0 auto",
+        maxWidth: 1100,
+        padding: 40,
+      }}>
       <WalletConnect />
       <Spacer space={35} />
-      <TextField
-        required
-        id="outlined-required"
-        label="Contract address"
-        fullWidth
-      />
-      <TextField
-        required
-        id="outlined-required"
-        label="Value"
-        fullWidth
-        type={"number"}
-      />
+      <TextField required id="outlined-required" label="Contract address" fullWidth />
+      <TextField required id="outlined-required" label="Value" fullWidth type={"number"} />
 
       <div>
         <h3>OPs</h3>
-        <TextField
-          required
-          id="outlined-required"
-          label="Value"
-          fullWidth
-          type={"number"}
-        />
+        <TextField required id="outlined-required" label="Value" fullWidth type={"number"} />
         <CellBuilder />
       </div>
     </div>

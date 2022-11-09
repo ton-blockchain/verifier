@@ -4,7 +4,7 @@ import { Box, Tabs, Tab } from "@mui/material";
 import { useState } from "react";
 import { VerifiedSourceCode } from "./VerifiedSourceCode";
 import { DisassembledSourceCode } from "./DisassembledSourceCode";
-import { useLoadContractProof } from '../lib/useLoadContractProof';
+import { useLoadContractProof } from "../lib/useLoadContractProof";
 
 function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();
@@ -17,7 +17,11 @@ function ContractSourceCode() {
   return (
     <Container>
       <h3>Source Code</h3>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "divider",
+        }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab disabled={!contractProof?.hasOnchainProof} label="FunC" />
           <Tab label="Disassembled" />

@@ -23,8 +23,7 @@ export function CompileOutput() {
               padding: 20,
               border: "1px solid #D8D8D8",
               borderRadius: 20,
-            }}
-          >
+            }}>
             Great! Compile output hash matches this on-chain contract
           </div>
           <Spacer space={20} />
@@ -49,20 +48,13 @@ export function CompileOutput() {
             borderRadius: 20,
             overflow: "auto",
             fontFamily: "inherit",
-          }}
-        >
+          }}>
           <div>
             <b>Hashes are not similar</b>
           </div>
           <Spacer space={10} />
-          <InfoPiece
-            label="Contract hash"
-            data={contractInfoData?.hash ?? ""}
-          />
-          <InfoPiece
-            label="Compile output hash"
-            data={compileResult?.hash ?? ""}
-          />
+          <InfoPiece label="Contract hash" data={contractInfoData?.hash ?? ""} />
+          <InfoPiece label="Compile output hash" data={compileResult?.hash ?? ""} />
         </pre>
       )}
 
@@ -75,8 +67,7 @@ export function CompileOutput() {
             borderRadius: 20,
             overflow: "auto",
             maxHeight: 300,
-          }}
-        >
+          }}>
           <div style={{ fontSize: 16 }}>
             <b>Compile error</b>
           </div>
@@ -84,7 +75,7 @@ export function CompileOutput() {
           <code>{compileResult.error}</code>
         </pre>
       )}
-      
+
       {!!error && <h4>❌ {error.toString()}</h4>}
 
       {hints.length > 0 && (
@@ -99,8 +90,7 @@ export function CompileOutput() {
             whiteSpace: "pre-wrap",
             fontFamily: "inherit",
             lineHeight: 1.8,
-          }}
-        >
+          }}>
           <div>
             <b>Possible reasons for failure</b>
           </div>

@@ -4,7 +4,9 @@ import { getHttpEndpoint } from "@orbs-network/ton-gateway";
 const endpointP = getHttpEndpoint();
 
 async function _getClient() {
-  return new TonClient({ endpoint: await endpointP });
+  return new TonClient({
+    endpoint: await endpointP,
+  });
 }
 
 const clientP = _getClient();

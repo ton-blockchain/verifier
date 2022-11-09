@@ -1,7 +1,7 @@
 import "./AddressInput.css";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useContractAddress } from '../lib/useContractAddress';
+import { useContractAddress } from "../lib/useContractAddress";
 
 function AddressInput() {
   const { contractAddress } = useContractAddress();

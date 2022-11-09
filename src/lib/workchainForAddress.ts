@@ -1,6 +1,5 @@
 import { Address } from "ton";
 
-
 export function workchainForAddress(address: string): string {
   try {
     const _address = Address.parse(address);

@@ -33,11 +33,10 @@ export function useWalletConnect() {
     connect: async (onLinkReady: (link: string) => void) => {
       if (session) return;
 
-      let createdSession: TonhubCreatedSession =
-        await connector.createNewSession({
-          name: "TON Contract Verifier",
-          url: "https://ton.org", // TODO
-        });
+      let createdSession: TonhubCreatedSession = await connector.createNewSession({
+        name: "TON Contract Verifier",
+        url: "https://ton.org", // TODO
+      });
 
       // Session ID, Seed and Auth Link
       const sessionId = createdSession.id;
@@ -46,13 +45,12 @@ export function useWalletConnect() {
 
       onLinkReady(sessionLink);
 
-      const awaitedSession: TonhubSessionAwaited =
-        await connector.awaitSessionReady(sessionId, 5 * 60 * 1000); // 5 min timeout
+      const awaitedSession: TonhubSessionAwaited = await connector.awaitSessionReady(
+        sessionId,
+        5 * 60 * 1000,
+      ); // 5 min timeout
 
-      if (
-        awaitedSession.state === "revoked" ||
-        awaitedSession.state === "expired"
-      ) {
+      if (awaitedSession.state === "revoked" || awaitedSession.state === "expired") {
         // Handle revoked or expired awaitedSession
       } else if (awaitedSession.state === "ready") {
         // Handle awaitedSession
@@ -66,13 +64,13 @@ export function useWalletConnect() {
         // You can check signed wallet config on backend using TonhubConnector.verifyWalletConfig.
         // walletConfig is cryptographically signed for specific session and other parameters
         // you can safely use it as authentication proof without the need to sign something.
-        const correctConfig: boolean = TonhubConnector.verifyWalletConfig(
-          sessionId,
-          walletConfig
-        );
+        const correctConfig: boolean = TonhubConnector.verifyWalletConfig(sessionId, walletConfig);
 
         if (correctConfig) {
-          const toPersit = { ...createdSession, walletConfig };
+          const toPersit = {
+            ...createdSession,
+            walletConfig,
+          };
           localStorage.setItem("tonhubSession", JSON.stringify(toPersit));
           setSession(toPersit);
         }

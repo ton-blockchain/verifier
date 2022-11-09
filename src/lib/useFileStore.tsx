@@ -49,7 +49,7 @@ export const useFileStore = create(
             isEntrypoint: /\(\)\s*(recv_internal|main)\s*\(/.test(content),
             isStdlib: /stdlib.(fc|func)/i.test(f.name),
           };
-        })
+        }),
       );
 
       set((state) => {
@@ -57,17 +57,14 @@ export const useFileStore = create(
           ...modifiedFiles.filter(
             (f) =>
               f.fileObj.name.match(/.*\.(fc|func)/) &&
-              !state.files.find(
-                (existingF) => existingF.fileObj.name === f.fileObj.name
-              )
-          )
+              !state.files.find((existingF) => existingF.fileObj.name === f.fileObj.name),
+          ),
         );
       });
     },
     setInclueInCommand: (name: string, include: boolean) => {
       set((state) => {
-        state.files.find((f) => f.fileObj.name === name)!.includeInCommand =
-          include;
+        state.files.find((f) => f.fileObj.name === name)!.includeInCommand = include;
       });
     },
     setDirectory: (name: string, folder: string) => {
@@ -83,12 +80,8 @@ export const useFileStore = create(
     reorderFiles: (fileBeingReplaced: string, fileToReplaceWith: string) => {
       set((state) => {
         const files = state.files;
-        const oldIndex = files.findIndex(
-          (f) => f.fileObj.name === fileBeingReplaced
-        );
-        const newIndex = files.findIndex(
-          (f) => f.fileObj.name === fileToReplaceWith
-        );
+        const oldIndex = files.findIndex((f) => f.fileObj.name === fileBeingReplaced);
+        const newIndex = files.findIndex((f) => f.fileObj.name === fileToReplaceWith);
         const [removed] = files.splice(oldIndex, 1);
         files.splice(newIndex, 0, removed);
       });
@@ -98,5 +91,5 @@ export const useFileStore = create(
         state.files = [];
       });
     },
-  }))
+  })),
 );
