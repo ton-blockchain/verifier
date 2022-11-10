@@ -1,18 +1,15 @@
 import "./App.css";
-import AddressInput from "./components/AddressInput";
 import ContractInfo from "./components/ContractInfo";
 import Spacer from "./components/Spacer";
-import TopBar from "./components/TopBar";
+import { TopBar } from "./components/TopBar";
 import ContractProofInfo from "./components/ContractProofInfo";
 import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
-import AddSources from "./components/AddSources";
 import SubmitContractSteps from "./components/SubmitContractSteps";
 import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useResetState } from "./lib/useResetState";
-import { contractAddress } from "ton";
 import { useContractAddress } from "./lib/useContractAddress";
 
 const examples_not_verified = [
@@ -41,7 +38,7 @@ function App() {
 
   return (
     <div>
-      <div className="BackgroundOverlay"></div>
+      <TopBar />
       <div className="App">
         <div
           style={{
@@ -50,6 +47,10 @@ function App() {
             background: "white",
             borderRadius: 20,
             padding: "10px 20px",
+            position: "absolute",
+            bottom: 0,
+            width: 800,
+            left: "calc(50% - 400px)",
           }}>
           {examples.concat(examples_not_verified).map(([name, address]) => (
             <span
@@ -65,15 +66,6 @@ function App() {
             </span>
           ))}
         </div>
-        <TopBar />
-        <h2
-          style={{
-            textAlign: "center",
-            color: "white",
-          }}>
-          Smart Contract Verifier
-        </h2>
-        <AddressInput />
         <Spacer space={40} />
         {isLoading && isAddressValid && <div style={{ color: "white" }}>Loading...</div>}
         {!contractAddress && <div style={{ color: "white" }}>Enter an address</div>}
