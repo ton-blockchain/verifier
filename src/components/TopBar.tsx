@@ -1,11 +1,11 @@
 import "./TopBar.css";
-import icon from "../assets/icons/icon.svg";
+import icon from "../assets/icon.svg";
 import WalletConnect from "./WalletConnect";
 
 function TopBar() {
   return (
     <div className="TopBar">
-      <img src={icon} alt="Logo icon" />
+      <img src={icon} />
       <h3>TON VERIFY</h3>
       <div className="TopBar-Right">
         <WalletConnect />
