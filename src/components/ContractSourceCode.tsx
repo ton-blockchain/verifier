@@ -1,5 +1,4 @@
 import "./ContractSourceCode.css";
-import Container from "./Container";
 import { Box, Tabs, Tab } from "@mui/material";
 import { useState } from "react";
 import { VerifiedSourceCode } from "./VerifiedSourceCode";
@@ -15,7 +14,7 @@ function ContractSourceCode() {
   };
 
   return (
-    <Container>
+    <>
       <h3>Source Code</h3>
       <Box
         sx={{
@@ -29,7 +28,7 @@ function ContractSourceCode() {
       </Box>
       {value === 0 && <VerifiedSourceCode />}
       {value === 1 && <DisassembledSourceCode />}
-    </Container>
+    </>
   );
 }
 
