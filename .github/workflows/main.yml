@@ -5,7 +5,7 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - steps_revamp
+      - main
 
 jobs:
   build:
