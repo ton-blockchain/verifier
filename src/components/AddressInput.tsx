@@ -86,7 +86,7 @@ export function AddressInput() {
     }
 
     if (!isValidAddress(value)) {
-      showNotification("Invalid jetton address", "error");
+      showNotification("Invalid address", "error");
       return;
     }
 
