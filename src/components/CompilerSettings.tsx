@@ -24,13 +24,12 @@ function CompilerSettings() {
           <InputLabel>Version</InputLabel>
           <Select
             value={compilerSettings.version}
-            defaultValue="0.2.0"
             label="Version"
-            disabled
             onChange={(e) => {
               compilerSettings.setVersion(e.target.value as FuncVersion);
             }}>
             <MenuItem value={"0.2.0"}>0.2.0</MenuItem>
+            <MenuItem value={"0.3.0"}>0.3.0</MenuItem>
           </Select>
         </FormControl>
         {/* <TextField

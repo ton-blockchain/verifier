@@ -2,7 +2,7 @@ import create from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { useFileStore } from "./useFileStore";
 
-export type FuncVersion = "0.0.9" | "0.1.0" | "0.2.0";
+export type FuncVersion = "0.2.0" | "0.3.0";
 
 type State = {
   compiler: "func";
@@ -22,7 +22,7 @@ const _useCompilerSettingsStore = create(
   immer<State & DerivedState & Actions>((set, get) => ({
     // State
     compiler: "func" as "func",
-    version: "0.2.0" as FuncVersion,
+    version: "0.3.0" as FuncVersion,
     commandLine: "",
     overrideCommandLine: null as string | null,
 

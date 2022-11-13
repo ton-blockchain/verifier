@@ -5,10 +5,10 @@
 
 .InfoPiece-Label {
   font-weight: 700;
-  min-width: 100px;
+  min-width: 112px;
   /* TODO denis table-like behavior */
 }
 
 .InfoPiece-Data {
- color: #728A96; 
+  color: #728a96;
 }
