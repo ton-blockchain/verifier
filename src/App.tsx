@@ -40,35 +40,8 @@ function App() {
     <div>
       <TopBar />
       <div className="App">
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            background: "white",
-            borderRadius: 20,
-            padding: "10px 20px",
-            position: "absolute",
-            bottom: 0,
-            width: 800,
-            left: "calc(50% - 400px)",
-          }}>
-          {examples.concat(examples_not_verified).map(([name, address]) => (
-            <span
-              style={{
-                color: "blue",
-                cursor: "pointer",
-              }}
-              key={name}
-              onClick={() => {
-                navigate(`/${address}`);
-              }}>
-              {name}
-            </span>
-          ))}
-        </div>
         <Spacer space={40} />
         {isLoading && isAddressValid && <div style={{ color: "white" }}>Loading...</div>}
-        {!contractAddress && <div style={{ color: "white" }}>Enter an address</div>}
         {!!contractAddress && !isAddressValid && (
           <div style={{ color: "white" }}>Invalid address</div>
         )}
@@ -86,6 +59,31 @@ function App() {
         )}
         <Spacer space={40} />
         {proofData && !hasFiles() && <ContractSourceCode />}
+      </div>
+      <div
+        style={{
+          marginTop: 20,
+          display: "flex",
+          gap: 10,
+          background: "white",
+          borderRadius: 20,
+          padding: "10px 20px",
+          width: 800,
+          margin: "auto",
+        }}>
+        {examples.concat(examples_not_verified).map(([name, address]) => (
+          <span
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+            key={name}
+            onClick={() => {
+              navigate(`/${address}`);
+            }}>
+            {name}
+          </span>
+        ))}
       </div>
     </div>
   );

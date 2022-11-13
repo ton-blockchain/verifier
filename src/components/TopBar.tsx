@@ -1,14 +1,14 @@
 import icon from "../assets/icon.svg";
 import WalletConnect from "./WalletConnect";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import { Box, Fade } from "@mui/material";
+import { Box, Fade, Link } from "@mui/material";
 import headerBg from "../assets/headerBg.svg";
 import github from "../assets/github.svg";
 import { AddressInput } from "../components/AddressInput";
 import { CenteringBox } from "./common.styled";
-import { animationTimeout, contentMaxWidth } from "../const";
+import { animationTimeout, contentMaxWidth, githubLink } from "../const";
 
 const expandedHeaderHeight = 960;
 const headerHeight = 360;
@@ -44,6 +44,15 @@ const ContentColumn = styled(CenteringBox)(() => ({
   gap: 10,
 }));
 
+const LinkWrapper = styled(Link)(() => ({
+  display: "flex",
+  alignItems: "center",
+  gap: 10,
+  color: "#fff",
+  textDecoration: "none",
+  cursor: "pointer",
+}));
+
 const TopBarContent = styled(CenteringBox)(({ theme }) => ({
   margin: "auto",
   paddingTop: theme.spacing(3),
@@ -76,6 +85,7 @@ const SearchWrapper = styled(CenteringBox)(() => ({
 
 export function TopBar() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [showExpanded, setShowExpanded] = useState(pathname.length === 1);
   useEffect(() => {
     setShowExpanded(pathname.length === 1);
@@ -85,18 +95,18 @@ export function TopBar() {
     <>
       <TopBarWrapper showExpanded={showExpanded}>
         <TopBarContent>
-          <ContentColumn>
+          <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} alt="App icon" />
             <AppLogo>TON VERIFY</AppLogo>
-          </ContentColumn>
+          </LinkWrapper>
           <ContentColumn>
             <CenteringBox mr={2}>
               <WalletConnect />
             </CenteringBox>
-            <ContentColumn>
+            <LinkWrapper href={githubLink} target="_blank">
               <img src={github} alt="Github icon" />
               <GitLogo>GitHub</GitLogo>
-            </ContentColumn>
+            </LinkWrapper>
           </ContentColumn>
         </TopBarContent>
         <TopBarHeading>
