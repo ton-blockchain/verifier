@@ -74,7 +74,7 @@ function App() {
   useResetState();
 
   useEffect(() => {
-    window.scrollTo({ behavior: "smooth", top: scrollToRef.current?.offsetTop });
+    window.scrollTo({ behavior: "smooth", top: scrollToRef.current?.["offsetTop"] });
   }, [window.location.pathname]);
 
   return (
