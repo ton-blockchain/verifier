@@ -22,7 +22,7 @@ function WalletConnect() {
   return (
     <>
       <Button
-        text={walletAddress ? walletAddress : "Connect"}
+        text={walletAddress ? walletAddress : "Connect wallet"}
         onClick={(e) => {
           if (walletAddress) {
             handleClick(e);
