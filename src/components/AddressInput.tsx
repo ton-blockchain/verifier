@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
-import { useContractAddress } from "../lib/useContractAddress";
 import { styled } from "@mui/material/styles";
 import search from "../assets/search.svg";
 import close from "../assets/close.svg";
@@ -44,8 +43,7 @@ export interface SearchRequest {
 }
 
 export function AddressInput() {
-  const { contractAddress } = useContractAddress();
-  const [value, setValue] = useState(contractAddress ?? "");
+  const [value, setValue] = useState("");
   const [active, setActive] = useState(false);
   const navigate = useNavigate();
   const { showNotification } = useNotification();

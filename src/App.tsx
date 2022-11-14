@@ -1,6 +1,5 @@
 import "./App.css";
 import ContractInfo from "./components/ContractInfo";
-import Spacer from "./components/Spacer";
 import { TopBar } from "./components/TopBar";
 import ContractProofInfo from "./components/ContractProofInfo";
 import { useLoadContractProof } from "./lib/useLoadContractProof";
@@ -13,6 +12,7 @@ import { useResetState } from "./lib/useResetState";
 import { styled } from "@mui/system";
 import { Box } from "@mui/material";
 import { useContractAddress } from "./lib/useContractAddress";
+import { useEffect, useRef } from "react";
 
 const AppWrapper = styled(Box)({});
 
@@ -30,15 +30,24 @@ const PositionedContent = styled(Box)({
   left: 0,
 });
 
+const ContractDataWrapper = styled(Box)({
+  display: "flex",
+  gap: 20,
+});
+
 const OverflowingWrapper = styled(Box)({
   boxSizing: "border-box",
   maxWidth: 1160,
   width: "100%",
-  margin: "20px 0",
+  marginTop: 20,
   backgroundColor: "#fff",
   borderRadius: 20,
   padding: 20,
   color: "#000",
+});
+
+const OverflowingFlexibleWrapper = styled(OverflowingWrapper)({
+  flex: 1,
 });
 
 const examples_not_verified = [["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"]];
@@ -61,25 +70,31 @@ function App() {
   const { isAddressValid } = useContractAddress();
   const { hasFiles } = useFileStore();
   const navigate = useNavigate();
+  const scrollToRef = useRef();
   useResetState();
+
+  useEffect(() => {
+    window.scrollTo({ behavior: "smooth", top: scrollToRef.current?.offsetTop });
+  }, [window.location.pathname]);
 
   return (
     <AppWrapper>
+      <Box ref={scrollToRef} />
       <TopBar />
       <ContentWrapper>
         {isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
         <PositionedContent>
           {!isLoading && (
-            <>
-              <OverflowingWrapper>
+            <ContractDataWrapper>
+              <OverflowingFlexibleWrapper>
                 <ContractInfo />
-              </OverflowingWrapper>
+              </OverflowingFlexibleWrapper>
               {proofData && proofData.hasOnchainProof && (
-                <OverflowingWrapper>
+                <OverflowingFlexibleWrapper>
                   <ContractProofInfo />
-                </OverflowingWrapper>
+                </OverflowingFlexibleWrapper>
               )}
-            </>
+            </ContractDataWrapper>
           )}
           {proofData && (!proofData.hasOnchainProof || canOverride) && (
             <OverflowingWrapper>
