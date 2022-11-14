@@ -13,7 +13,7 @@ function ContractProofInfo() {
   return (
     <Container className="ContractProof">
       <h3>Compiler</h3>
-      <InfoPiece label="FunC Version" data={data!.version!} />
+      <InfoPiece label="Compiler" data={data!.compiler!} />
       <InfoPiece label="Fift Commit" data={data!.fiftCommit?.slice(0, 8) ?? ""} />
       <InfoPiece label="Fiftlib Commit" data={data!.fiftLibCommit?.slice(0, 8) ?? ""} />
       <InfoPiece label="Command" data={data!.commandLine!} />

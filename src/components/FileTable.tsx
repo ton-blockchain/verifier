@@ -34,6 +34,7 @@ import {
 } from "@dnd-kit/sortable";
 import { DragIndicator } from "@mui/icons-material";
 import { useHover } from "../lib/useHover";
+import { useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
 
 function Cells({
   file,
@@ -52,6 +53,7 @@ function Cells({
   const { isHover: isRemoveCellHover, hoverRef } = useHover();
 
   const { setInclueInCommand, setDirectory, removeFile } = useFileStore();
+  const { compiler } = useCompilerSettingsStore();
 
   return (
     <>
@@ -75,6 +77,7 @@ function Cells({
       <TableCell>{file.fileObj.name}</TableCell>
       <TableCell>
         <Switch
+          disabled={compiler === "npm:ton-compiler"}
           checked={file.includeInCommand}
           onChange={(e) => {
             setInclueInCommand(fileName, e.target.checked);
