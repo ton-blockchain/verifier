@@ -38,7 +38,7 @@ export function useSubmitSources() {
   const { contractAddress } = useContractAddress();
   const { data: contractInfo } = useLoadContractInfo();
   const { hasFiles, files } = useFileStore();
-  const { compiler, version, commandLine } = useCompilerSettingsStore();
+  const { compiler, compilerSettings } = useCompilerSettingsStore();
 
   const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;
@@ -55,8 +55,7 @@ export function useSubmitSources() {
       "json",
       jsonToBlob({
         compiler,
-        version,
-        commandLine: commandLine, // TODO change on server
+        compilerSettings,
         knownContractAddress: contractAddress,
         knownContractHash: contractInfo.hash,
         sources: files.map((u) => ({
