@@ -1,10 +1,7 @@
 import "./App.css";
-import ContractInfo from "./components/ContractInfo";
 import { TopBar } from "./components/TopBar";
-import ContractProofInfo from "./components/ContractProofInfo";
 import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
-import SubmitContractSteps from "./components/SubmitContractSteps";
 import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
 import { useNavigate } from "react-router-dom";
@@ -13,10 +10,13 @@ import { styled } from "@mui/system";
 import { Box } from "@mui/material";
 import { useContractAddress } from "./lib/useContractAddress";
 import { useEffect, useRef } from "react";
+import { ContractBlock } from "./components/ContractBlock";
+import { CompilerBlock } from "./components/CompilerBlock";
+import { AddSourcesBlock } from "./components/AddSourcesBlock";
 
-const AppWrapper = styled(Box)({});
+const AppBox = styled(Box)({});
 
-const ContentWrapper = styled(Box)({
+const ContentBox = styled(Box)({
   position: "relative",
   maxWidth: 1160,
   width: "100%",
@@ -30,12 +30,12 @@ const PositionedContent = styled(Box)({
   left: 0,
 });
 
-const ContractDataWrapper = styled(Box)({
+const ContractDataBox = styled(Box)({
   display: "flex",
   gap: 20,
 });
 
-const OverflowingWrapper = styled(Box)({
+const OverflowingBox = styled(Box)({
   boxSizing: "border-box",
   maxWidth: 1160,
   width: "100%",
@@ -44,10 +44,6 @@ const OverflowingWrapper = styled(Box)({
   borderRadius: 20,
   padding: 20,
   color: "#000",
-});
-
-const OverflowingFlexibleWrapper = styled(OverflowingWrapper)({
-  flex: 1,
 });
 
 const examples_not_verified = [["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"]];
@@ -74,40 +70,39 @@ function App() {
   useResetState();
 
   useEffect(() => {
-    window.scrollTo({ behavior: "smooth", top: scrollToRef.current?.["offsetTop"] });
+    window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });
   }, [window.location.pathname]);
 
   return (
-    <AppWrapper>
+    <AppBox>
       <Box ref={scrollToRef} />
       <TopBar />
-      <ContentWrapper>
+      <ContentBox>
         {isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
         <PositionedContent>
           {!isLoading && (
-            <ContractDataWrapper>
-              <OverflowingFlexibleWrapper>
-                <ContractInfo />
-              </OverflowingFlexibleWrapper>
-              {proofData && proofData.hasOnchainProof && (
-                <OverflowingFlexibleWrapper>
-                  <ContractProofInfo />
-                </OverflowingFlexibleWrapper>
-              )}
-            </ContractDataWrapper>
+            <ContractDataBox>
+              <ContractBlock />
+              {proofData && proofData.hasOnchainProof && <CompilerBlock />}
+            </ContractDataBox>
           )}
           {proofData && (!proofData.hasOnchainProof || canOverride) && (
-            <OverflowingWrapper>
-              <SubmitContractSteps />
-            </OverflowingWrapper>
+            <>
+              <AddSourcesBlock />
+              {/*TODO important block below that handles publish process, without
+                canPublish bool variable it breaks the app the second any file is
+                uploaded
+              */}
+              {/*{hasFiles() && canPublish && <PublishProof />}*/}
+            </>
           )}
           {proofData && !hasFiles() && (
-            <OverflowingWrapper>
+            <OverflowingBox>
               <ContractSourceCode />
-            </OverflowingWrapper>
+            </OverflowingBox>
           )}
         </PositionedContent>
-      </ContentWrapper>
+      </ContentBox>
       <div
         style={{
           position: "fixed",
@@ -137,7 +132,7 @@ function App() {
           </span>
         ))}
       </div>
-    </AppWrapper>
+    </AppBox>
   );
 }
 

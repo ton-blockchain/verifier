@@ -1,15 +1,9 @@
-import { useDropzone } from "react-dropzone";
-
-import { FileTable } from "./FileTable";
-
-import Button from "./Button";
 import { useFileStore } from "../lib/useFileStore";
-import CompilerSettings from "./CompilerSettings";
-import Spacer from "./Spacer";
-import { useSubmitSources } from "../lib/useSubmitSources";
-import { CompileOutput } from "./CompileOutput";
+import { useDropzone } from "react-dropzone";
+import Button from "./Button";
+import React from "react";
 
-function FileUploader() {
+export function FileUploaderArea() {
   const { addFiles, hasFiles } = useFileStore();
 
   const onDrop = (acceptedFiles: any) => {
@@ -53,30 +47,3 @@ function FileUploader() {
     </>
   );
 }
-
-function AddSources() {
-  const { hasFiles } = useFileStore();
-  const { mutate, data, error, isLoading } = useSubmitSources();
-
-  return (
-    <>
-      <h3>Add sources</h3>
-      <FileUploader />
-      <Spacer space={20} />
-      {hasFiles() && <FileTable />}
-      {hasFiles() && <CompilerSettings />}
-      <Spacer space={20} />
-      <Button
-        disabled={!hasFiles() || !!data?.result?.msgCell}
-        onClick={() => {
-          mutate(null);
-        }}
-        text={isLoading ? "Submitting..." : `Submit`}
-      />
-      <Spacer space={15} />
-      {(data || error) && <CompileOutput />}
-    </>
-  );
-}
-
-export default AddSources;

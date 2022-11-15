@@ -1,9 +1,32 @@
 import { styled } from "@mui/material/styles";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const CenteringBox = styled(Box)(() => ({
   display: "flex",
   alignItems: "center",
 }));
 
-export { CenteringBox };
+const DataBox = styled(Box)({
+  boxSizing: "border-box",
+  maxWidth: 1160,
+  width: "100%",
+  marginTop: 20,
+  backgroundColor: "#fff",
+  borderRadius: 20,
+  color: "#000",
+});
+
+const TitleBox = styled(CenteringBox)({
+  padding: "15px 20px 0 20px",
+});
+
+const IconBox = styled(CenteringBox)({
+  marginRight: 8,
+});
+
+const TitleText = styled(Typography)({
+  fontWeight: 20,
+  color: "#161C28",
+});
+
+export { CenteringBox, DataBox, TitleBox, TitleText, IconBox };
