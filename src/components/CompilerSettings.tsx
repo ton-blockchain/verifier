@@ -1,15 +1,9 @@
-import { FormControl, InputLabel, Select, MenuItem, TextField, Chip } from "@mui/material";
-import {
-  FuncCliCompilerVersion,
-  useCompilerSettingsStore,
-  NpmTonCompilerVersion,
-  Compiler,
-} from "../lib/useCompilerSettingsStore";
+import { FormControl, InputLabel, Select, MenuItem, Chip } from "@mui/material";
+import { FuncCliCompilerVersion, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
 
 import { Edit, Cancel } from "@mui/icons-material";
-import { UserProvidedNpmTonCompilerSettings } from "../lib/useCompilerSettingsStore";
 
-function CliTonCompilerSettings() {
+function FuncCompilerSettings() {
   const { compilerSettings, setOverrideCommandLine, setFuncCliVersion } =
     useCompilerSettingsStore();
 
@@ -71,29 +65,8 @@ function CliTonCompilerSettings() {
   );
 }
 
-function NpmTonCompilerSettings() {
-  const { compilerSettings, setNpmTonCompilerVersion } = useCompilerSettingsStore();
-
-  return (
-    <>
-      <FormControl sx={{ flexGrow: 1 }}>
-        <InputLabel>Version</InputLabel>
-        <Select
-          disabled
-          value={(compilerSettings as UserProvidedNpmTonCompilerSettings).version}
-          label="Version"
-          onChange={(e) => {
-            setNpmTonCompilerVersion(e.target.value as NpmTonCompilerVersion);
-          }}>
-          <MenuItem value={"v2022.10"}>v2022.10</MenuItem>
-        </Select>
-      </FormControl>
-    </>
-  );
-}
-
 function CompilerSettings() {
-  const { compiler, setCompiler } = useCompilerSettingsStore();
+  const { compiler } = useCompilerSettingsStore();
 
   return (
     <div>
@@ -106,16 +79,11 @@ function CompilerSettings() {
         }}>
         <FormControl sx={{ flexGrow: 1 }}>
           <InputLabel>Compiler</InputLabel>
-          <Select
-            onChange={(e) => setCompiler(e.target.value as Compiler)}
-            value={compiler}
-            label="Compiler">
-            <MenuItem value={"cli:func"}>cli:func</MenuItem>
-            <MenuItem value={"npm:ton-compiler"}>npm:ton-compiler</MenuItem>
+          <Select disabled value={compiler} label="Compiler">
+            <MenuItem value={"func"}>func</MenuItem>
           </Select>
         </FormControl>
-        {compiler === "cli:func" && <CliTonCompilerSettings />}
-        {compiler === "npm:ton-compiler" && <NpmTonCompilerSettings />}
+        {compiler === "func" && <FuncCompilerSettings />}
       </div>
     </div>
   );

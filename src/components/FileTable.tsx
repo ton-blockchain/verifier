@@ -77,7 +77,6 @@ function Cells({
       <TableCell>{file.fileObj.name}</TableCell>
       <TableCell>
         <Switch
-          disabled={compiler === "npm:ton-compiler"}
           checked={file.includeInCommand}
           onChange={(e) => {
             setInclueInCommand(fileName, e.target.checked);

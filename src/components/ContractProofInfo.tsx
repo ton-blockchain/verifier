@@ -10,13 +10,21 @@ TimeAgo.addDefaultLocale(en);
 function ContractProofInfo() {
   const { data } = useLoadContractProof();
 
+  const compilerSettings = data!.compilerSettings;
+
+  console.log(data);
+
   return (
     <Container className="ContractProof">
       <h3>Compiler</h3>
       <InfoPiece label="Compiler" data={data!.compiler!} />
-      <InfoPiece label="Fift Commit" data={data!.fiftCommit?.slice(0, 8) ?? ""} />
-      <InfoPiece label="Fiftlib Commit" data={data!.fiftLibCommit?.slice(0, 8) ?? ""} />
-      <InfoPiece label="Command" data={data!.commandLine!} />
+      <InfoPiece label="Func Version" data={compilerSettings?.funcVersion ?? ""} />
+      <InfoPiece label="Fift Version" data={compilerSettings?.fiftVersion?.slice(0, 8) ?? ""} />
+      <InfoPiece
+        label="Fiftlib Commit"
+        data={compilerSettings?.fiftlibVersion?.slice(0, 8) ?? ""}
+      />
+      <InfoPiece label="Command" data={compilerSettings?.commandLine!} />
       <InfoPiece label="Verified" data={new TimeAgo("en-US").format(data!.verificationDate!)} />
     </Container>
   );
