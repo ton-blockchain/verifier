@@ -1,5 +1,3 @@
-import "./ContractProof.css";
-import Container from "./Container";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 import InfoPiece from "./InfoPiece";
 
@@ -15,7 +13,7 @@ function ContractProofInfo() {
   console.log(data);
 
   return (
-    <Container className="ContractProof">
+    <>
       <h3>Compiler</h3>
       <InfoPiece label="Compiler" data={data!.compiler!} />
       <InfoPiece label="Func Version" data={compilerSettings?.funcVersion ?? ""} />
@@ -26,7 +24,7 @@ function ContractProofInfo() {
       />
       <InfoPiece label="Command" data={compilerSettings?.commandLine!} />
       <InfoPiece label="Verified" data={new TimeAgo("en-US").format(data!.verificationDate!)} />
-    </Container>
+    </>
   );
 }
 

@@ -1,13 +1,12 @@
 import { usePublishProof } from "../lib/usePublishProof";
 import Button from "./Button";
-import Container from "./Container";
 import Spacer from "./Spacer";
 
 function PublishProof() {
   const { mutate, status } = usePublishProof();
 
   return (
-    <Container>
+    <>
       <h3>Publish proof</h3>
       <div
         style={{
@@ -32,7 +31,7 @@ function PublishProof() {
           mutate();
         }}
       />
-    </Container>
+    </>
   );
 }
 

@@ -1,5 +1,4 @@
 import "./AddSources.css";
-import Container from "./Container";
 import { useDropzone } from "react-dropzone";
 
 import { FileTable } from "./FileTable";
@@ -61,7 +60,7 @@ function AddSources() {
   const { mutate, data, error, isLoading } = useSubmitSources();
 
   return (
-    <Container>
+    <>
       <h3>Add sources</h3>
       <FileUploader />
       <Spacer space={20} />
@@ -77,7 +76,7 @@ function AddSources() {
       />
       <Spacer space={15} />
       {(data || error) && <CompileOutput />}
-    </Container>
+    </>
   );
 }
 

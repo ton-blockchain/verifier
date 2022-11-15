@@ -1,19 +1,54 @@
 import "./App.css";
-import AddressInput from "./components/AddressInput";
 import ContractInfo from "./components/ContractInfo";
-import Spacer from "./components/Spacer";
-import TopBar from "./components/TopBar";
+import { TopBar } from "./components/TopBar";
 import ContractProofInfo from "./components/ContractProofInfo";
 import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
-import AddSources from "./components/AddSources";
 import SubmitContractSteps from "./components/SubmitContractSteps";
 import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useResetState } from "./lib/useResetState";
-import { contractAddress } from "ton";
+import { styled } from "@mui/system";
+import { Box } from "@mui/material";
 import { useContractAddress } from "./lib/useContractAddress";
+import { useEffect, useRef } from "react";
+
+const AppWrapper = styled(Box)({});
+
+const ContentWrapper = styled(Box)({
+  position: "relative",
+  maxWidth: 1160,
+  width: "100%",
+  margin: "auto",
+});
+
+const PositionedContent = styled(Box)({
+  position: "absolute",
+  width: "100%",
+  top: -141,
+  left: 0,
+});
+
+const ContractDataWrapper = styled(Box)({
+  display: "flex",
+  gap: 20,
+});
+
+const OverflowingWrapper = styled(Box)({
+  boxSizing: "border-box",
+  maxWidth: 1160,
+  width: "100%",
+  marginTop: 20,
+  backgroundColor: "#fff",
+  borderRadius: 20,
+  padding: 20,
+  color: "#000",
+});
+
+const OverflowingFlexibleWrapper = styled(OverflowingWrapper)({
+  flex: 1,
+});
 
 const examples_not_verified = [["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"]];
 
@@ -31,69 +66,78 @@ const examples = [
 
 function App() {
   const { isLoading, data: proofData } = useLoadContractProof();
-  const { isAddressValid, contractAddress } = useContractAddress();
   const canOverride = useOverride();
+  const { isAddressValid } = useContractAddress();
   const { hasFiles } = useFileStore();
   const navigate = useNavigate();
+  const scrollToRef = useRef();
   useResetState();
 
+  useEffect(() => {
+    window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });
+  }, [window.location.pathname]);
+
   return (
-    <div>
-      <div className="BackgroundOverlay"></div>
-      <div className="App">
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            background: "white",
-            borderRadius: 20,
-            padding: "10px 20px",
-          }}>
-          {examples.concat(examples_not_verified).map(([name, address]) => (
-            <span
-              style={{
-                color: "blue",
-                cursor: "pointer",
-              }}
-              key={name}
-              onClick={() => {
-                navigate(`/${address}`);
-              }}>
-              {name}
-            </span>
-          ))}
-        </div>
-        <TopBar />
-        <h2
-          style={{
-            textAlign: "center",
-            color: "white",
-          }}>
-          Smart Contract Verifier
-        </h2>
-        <AddressInput />
-        <Spacer space={40} />
-        {isLoading && isAddressValid && <div style={{ color: "white" }}>Loading...</div>}
-        {!contractAddress && <div style={{ color: "white" }}>Enter an address</div>}
-        {!!contractAddress && !isAddressValid && (
-          <div style={{ color: "white" }}>Invalid address</div>
-        )}
-        {!isLoading && (
-          <div style={{ display: "flex", gap: 20 }}>
-            <ContractInfo />
-            {proofData && proofData.hasOnchainProof && <ContractProofInfo />}
-          </div>
-        )}
-        {proofData && (!proofData.hasOnchainProof || canOverride) && (
-          <>
-            <Spacer space={40} />
-            <SubmitContractSteps />
-          </>
-        )}
-        <Spacer space={40} />
-        {proofData && !hasFiles() && <ContractSourceCode />}
+    <AppWrapper>
+      <Box ref={scrollToRef} />
+      <TopBar />
+      <ContentWrapper>
+        {isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
+        <PositionedContent>
+          {!isLoading && (
+            <ContractDataWrapper>
+              <OverflowingFlexibleWrapper>
+                <ContractInfo />
+              </OverflowingFlexibleWrapper>
+              {proofData && proofData.hasOnchainProof && (
+                <OverflowingFlexibleWrapper>
+                  <ContractProofInfo />
+                </OverflowingFlexibleWrapper>
+              )}
+            </ContractDataWrapper>
+          )}
+          {proofData && (!proofData.hasOnchainProof || canOverride) && (
+            <OverflowingWrapper>
+              <SubmitContractSteps />
+            </OverflowingWrapper>
+          )}
+          {proofData && !hasFiles() && (
+            <OverflowingWrapper>
+              <ContractSourceCode />
+            </OverflowingWrapper>
+          )}
+        </PositionedContent>
+      </ContentWrapper>
+      <div
+        style={{
+          position: "fixed",
+          bottom: 0,
+          left: "calc(50% - 400px)",
+          marginTop: 20,
+          display: "flex",
+          gap: 10,
+          background: "white",
+          borderRadius: 20,
+          padding: "10px 20px",
+          width: 800,
+          zIndex: 99,
+          margin: "auto",
+        }}>
+        {examples.concat(examples_not_verified).map(([name, address]) => (
+          <span
+            style={{
+              color: "blue",
+              cursor: "pointer",
+            }}
+            key={name}
+            onClick={() => {
+              navigate(`/${address}`);
+            }}>
+            {name}
+          </span>
+        ))}
       </div>
-    </div>
+    </AppWrapper>
   );
 }
 
