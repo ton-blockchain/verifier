@@ -28,12 +28,6 @@ function jsonToBlob(json: Record<string, any>): Blob {
   });
 }
 
-// TODO from env
-const server =
-  process.env.NODE_ENV === "production"
-    ? "https://ton-source-staging.herokuapp.com"
-    : "http://localhost:3003";
-
 export function useSubmitSources() {
   const { contractAddress } = useContractAddress();
   const { data: contractInfo } = useLoadContractInfo();
@@ -69,7 +63,7 @@ export function useSubmitSources() {
       }),
     );
 
-    const response = await fetch(`${server}/source`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/source`, {
       method: "POST",
       body: formData,
     });
