@@ -19,7 +19,7 @@ function ContractProofInfo() {
       <InfoPiece label="Func Version" data={compilerSettings?.funcVersion ?? ""} />
       <InfoPiece label="Fift Version" data={compilerSettings?.fiftVersion?.slice(0, 8) ?? ""} />
       <InfoPiece
-        label="Fiftlib Commit"
+        label="Fiftlib Version"
         data={compilerSettings?.fiftlibVersion?.slice(0, 8) ?? ""}
       />
       <InfoPiece label="Command" data={compilerSettings?.commandLine!} />
