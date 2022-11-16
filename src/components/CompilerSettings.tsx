@@ -14,7 +14,7 @@ function CompilerSettings() {
   const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler } =
     useCompilerSettingsStore();
   return (
-    <div>
+    <Box mt={4}>
       <Typography variant="h5" style={{ fontWeight: 800, fontSize: 16, marginBottom: 16 }}>
         Compiler
       </Typography>
@@ -72,7 +72,7 @@ function CompilerSettings() {
           </>
         )}
       </CenteringBox>
-    </div>
+    </Box>
   );
 }
 

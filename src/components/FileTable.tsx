@@ -122,7 +122,6 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
         transition: ".15s all",
         "&:hover": {
           background: "#FAFAFA",
-          boxShadow: isDragging ? "0px 4px 20px rgba(0, 0, 0, 0.1) !important" : "",
         },
       }}
       key={fileName}

@@ -28,6 +28,7 @@ export function AddSourcesBlock() {
             <AppButton
               disabled={!hasFiles() || !!data?.result?.msgCell}
               fontSize={14}
+              fontWeight={800}
               textColor="#fff"
               height={44}
               width={144}
