@@ -5,31 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d0cd4a2-460d-40c2-9ae6-9e874310b72a" name="Changes" comment="WIP">
-      <change afterPath="$PROJECT_DIR$/src/assets/delete.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/dnd.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/upload.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/theme.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddSources.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddSources.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddSourcesBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddSourcesBlock.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AppButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppButton.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Button.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Button.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Button.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env.development" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/CompilerSettings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompilerSettings.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ContractBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ContractBlock.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/DataBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataBlock.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/FileTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FileTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FileUploaderArea.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FileUploaderArea.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/InfoPiece.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InfoPiece.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/InfoPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InfoPiece.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SearchResults.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SearchResults.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Spacer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Spacer.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/TopBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TopBar.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/WalletConnect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/WalletConnect.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/common.styled.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common.styled.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/dataBlock.styled.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dataBlock.styled.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/useCompilerSettingsStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/useCompilerSettingsStore.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lib/useSubmitSources.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/useSubmitSources.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,7 +96,7 @@
       <workItem from="1668501099663" duration="89000" />
       <workItem from="1668501375211" duration="232000" />
       <workItem from="1668501884860" duration="21827000" />
-      <workItem from="1668592281428" duration="6208000" />
+      <workItem from="1668592281428" duration="9949000" />
     </task>
     <task id="LOCAL-00001" summary="fonts added, assets folder separated to icons and fonts, dist(build) folder added to gitignore">
       <created>1667989326669</created>

@@ -10,12 +10,23 @@ TimeAgo.addDefaultLocale(en);
 
 export function CompilerBlock() {
   const { data } = useLoadContractProof();
+
+  const compilerSettings = data!.compilerSettings;
+
   const dataRows: DataRowItem[] = [];
 
   if (data) {
-    dataRows.push({ title: "FunC Version", value: data!.version! });
-    dataRows.push({ title: "Fift Commit", value: data!.fiftCommit?.slice(0, 8) || "-" });
-    dataRows.push({ title: "Command", value: data!.commandLine! });
+    dataRows.push({ title: "Compiler", value: data!.compiler! });
+    dataRows.push({ title: "Func Version", value: compilerSettings?.funcVersion ?? "" });
+    dataRows.push({
+      title: "Fift Version",
+      value: compilerSettings?.fiftVersion?.slice(0, 8) ?? "",
+    });
+    dataRows.push({
+      title: "Fiftlib Version",
+      value: compilerSettings?.fiftlibVersion?.slice(0, 8) ?? "",
+    });
+    dataRows.push({ title: "Command", value: compilerSettings?.commandLine! });
     dataRows.push({
       title: "Verified",
       value: new TimeAgo("en-US").format(data!.verificationDate!),

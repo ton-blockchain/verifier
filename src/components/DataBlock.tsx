@@ -41,7 +41,6 @@ export function DataBlock({
     navigator.clipboard.writeText(value);
     showNotification("Copied to clipboard!", "success");
   }, []);
-
   return (
     <Wrapper>
       <TitleBox mb={1}>
@@ -55,7 +54,7 @@ export function DataBlock({
           return (
             <DataRow>
               <DataRowTitle>{title}</DataRowTitle>
-              <DataRowValue>{value ?? "-"}</DataRowValue>
+              <DataRowValue>{!!value ? value : "-"}</DataRowValue>
               {showIcons && (
                 <IconsWrapper>
                   {value && (

@@ -26,7 +26,7 @@ const DataRow = styled(CenteringBox)({
 });
 
 const DataRowTitle = styled(Typography)({
-  fontWeight: 16,
+  fontSize: 16,
   color: "#000",
   minWidth: 120,
   fontWeight: 800,
