@@ -1,7 +1,27 @@
 import { useFileStore } from "../lib/useFileStore";
 import { useDropzone } from "react-dropzone";
-import Button from "./Button";
 import React from "react";
+import { Box } from "@mui/material";
+import { CenteringBox, IconBox, TitleBox, TitleText } from "./common.styled";
+import sources from "../assets/sources.svg";
+import { AppButton } from "./AppButton";
+import upload from "../assets/upload.svg";
+import { styled } from "@mui/system";
+
+const FilesDropzone = styled(CenteringBox)(({ theme }) => ({
+  justifyContent: "center",
+  backgroundColor: "#F7F9FB",
+  textAlign: "center",
+  height: 148,
+  border: "1px dashed #E3E8EA",
+  color: "#728A96",
+  borderRadius: 20,
+  lineHeight: 148,
+  cursor: "pointer",
+  "&:hover": {
+    border: "1px dashed #9da3a5",
+  },
+}));
 
 export function FileUploaderArea() {
   const { addFiles, hasFiles } = useFileStore();
@@ -18,32 +38,51 @@ export function FileUploaderArea() {
 
   return (
     <>
-      {!hasFiles() && (
-        <div className="FilesDropzone" {...getRootProps()}>
-          Drop ".fc" files here
-        </div>
-      )}
-      {hasFiles() && (
-        <div {...getRootProps()}>
-          <Button text="Upload source" />
-        </div>
-      )}
+      <TitleBox mb={1}>
+        <CenteringBox sx={{ justifyContent: "space-between", width: "100%" }}>
+          <CenteringBox sx={{ width: "100%" }}>
+            <IconBox>
+              <img src={sources} alt="Block icon" width={41} height={41} />
+            </IconBox>
+            <TitleText>Add sources</TitleText>
+          </CenteringBox>
+          {hasFiles() && (
+            <div {...getRootProps()}>
+              <AppButton
+                fontSize={12}
+                fontWeight={700}
+                hoverBackground="#e3e3e3"
+                background="#F8F8F8"
+                height={44}
+                width={159}>
+                <img src={upload} alt="Sources icon" width={19} height={19} />
+                Upload source
+              </AppButton>
+            </div>
+          )}
+        </CenteringBox>
+      </TitleBox>
+      <Box sx={{ padding: "15px 30px" }}>
+        <Box sx={{ position: "relative", zIndex: 5 }}>
+          {!hasFiles() && <FilesDropzone {...getRootProps()}>Drop ".fc" files here</FilesDropzone>}
+        </Box>
 
-      <input
-        {...getInputProps()}
-        // onChange={onUploadFiles}
-        onClick={(e) => {
+        <input
+          {...getInputProps()}
+          // onChange={onUploadFiles}
+          onClick={(e) => {
+            // @ts-ignore
+            e.target.value = "";
+          }}
+          style={{ display: "none" }}
+          id="fileUpload"
+          type="file"
+          multiple
+          accept=".fc,.func"
+          // ref={inputRef}
           // @ts-ignore
-          e.target.value = "";
-        }}
-        style={{ display: "none" }}
-        id="fileUpload"
-        type="file"
-        multiple
-        accept=".fc,.func"
-        // ref={inputRef}
-        // @ts-ignore
-      />
+        />
+      </Box>
     </>
   );
 }

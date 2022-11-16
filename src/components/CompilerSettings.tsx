@@ -1,90 +1,72 @@
-import { FormControl, InputLabel, Select, MenuItem, TextField, Chip } from "@mui/material";
+import { Chip, MenuItem, Typography } from "@mui/material";
 import { FuncVersion, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
-
-import { Edit, Cancel } from "@mui/icons-material";
+import { Box } from "@mui/system";
+import { CenteringBox } from "./common.styled";
+import {
+  DirectoryInput,
+  CompilerFormControl,
+  CompilerLabel,
+  CompilerSelect,
+} from "./compilerSetting.styled";
+import { Cancel, Edit } from "@mui/icons-material";
 
 function CompilerSettings() {
   const compilerSettings = useCompilerSettingsStore();
   return (
     <div>
-      <h4>Compiler</h4>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-        }}>
-        <FormControl sx={{ flexGrow: 1 }}>
-          <InputLabel>Compiler</InputLabel>
-          <Select disabled value={compilerSettings.compiler} label="Compiler">
-            <MenuItem value={"func"}>func</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl sx={{ flexGrow: 1 }}>
-          <InputLabel>Version</InputLabel>
-          <Select
-            value={compilerSettings.version}
-            label="Version"
-            onChange={(e) => {
-              compilerSettings.setVersion(e.target.value as FuncVersion);
-            }}>
-            <MenuItem value={"0.2.0"}>0.2.0</MenuItem>
-            <MenuItem value={"0.3.0"}>0.3.0</MenuItem>
-          </Select>
-        </FormControl>
-        {/* <TextField
-          sx={{ flexGrow: 6 }}
-          disabled={!compilerSettings.overrideCommandLine}
-          variant="outlined"
-          value={compilerSettings.commandLine}
-          onChange={(e) => {
-            compilerSettings.setOverrideCommandLine(e.target.value);
-          }}
-          label="Command Line"
-        >
-          <div>hi</div>
-        </TextField> */}
-        <div
-          style={{
-            backgroundColor: !!compilerSettings.overrideCommandLine ? "white" : "#efefef",
-            border: "1px solid #aeaeae",
-            padding: 10,
-            flexGrow: 6,
-            display: "flex",
-            gap: 4,
-          }}>
-          <Chip label="func -o tmp.fif" />
-          <input
-            style={{
-              border: "none",
-              width: "100%",
-              fontSize: 14,
-              background: "transparent",
-            }}
+      <Typography variant="h5" style={{ fontWeight: 800, fontSize: 16, marginBottom: 16 }}>
+        Compiler
+      </Typography>
+      <CenteringBox sx={{ gap: 1, alignItems: "flex-end" }}>
+        <CenteringBox>
+          <CompilerFormControl>
+            <CompilerLabel>Compiler</CompilerLabel>
+            <CompilerSelect disabled value={compilerSettings.compiler}>
+              <MenuItem value={"func"}>func</MenuItem>
+            </CompilerSelect>
+          </CompilerFormControl>
+        </CenteringBox>
+        <CenteringBox>
+          <CompilerFormControl>
+            <CompilerLabel>Version</CompilerLabel>
+            <CompilerSelect
+              value={compilerSettings.version}
+              onChange={(e) => {
+                compilerSettings.setVersion(e.target.value as FuncVersion);
+              }}>
+              <MenuItem value={"0.2.0"}>0.2.0</MenuItem>
+              <MenuItem value={"0.3.0"}>0.3.0</MenuItem>
+            </CompilerSelect>
+          </CompilerFormControl>
+        </CenteringBox>
+        <Box sx={{ width: "100%", position: "relative" }}>
+          <CompilerLabel sx={{ display: "block" }}>Func command</CompilerLabel>
+          <DirectoryInput
             disabled={!compilerSettings.overrideCommandLine}
             value={compilerSettings.commandLine}
             onChange={(e) => {
               compilerSettings.setOverrideCommandLine(e.target.value);
             }}
           />
-        </div>
-        {!compilerSettings.overrideCommandLine && (
-          <Edit
-            sx={{ color: "blue" }}
-            onClick={() => {
-              compilerSettings.setOverrideCommandLine(compilerSettings.commandLine);
-            }}
-          />
-        )}
-        {!!compilerSettings.overrideCommandLine && (
-          <Cancel
-            sx={{ color: "blue" }}
-            onClick={() => {
-              compilerSettings.setOverrideCommandLine(null);
-            }}
-          />
-        )}
-      </div>
+          <Chip sx={{ position: "absolute", left: 5, top: 31 }} label="func -o tmp.fif" />
+          {!compilerSettings.overrideCommandLine && (
+            <Edit
+              sx={{ color: "blue", position: "absolute", right: 10, top: 34 }}
+              onClick={() => {
+                compilerSettings.setOverrideCommandLine(compilerSettings.commandLine);
+              }}
+            />
+          )}
+          {!!compilerSettings.overrideCommandLine && (
+            <Cancel
+              sx={{ color: "blue", position: "absolute", right: 10, top: 34 }}
+              onClick={() => {
+                compilerSettings.setOverrideCommandLine(null);
+              }}
+            />
+          )}
+        </Box>
+      </CenteringBox>
     </div>
   );
 }

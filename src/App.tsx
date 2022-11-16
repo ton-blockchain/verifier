@@ -7,9 +7,9 @@ import { useFileStore } from "./lib/useFileStore";
 import { useNavigate } from "react-router-dom";
 import { useResetState } from "./lib/useResetState";
 import { styled } from "@mui/system";
-import { Box } from "@mui/material";
+import { Backdrop, Box } from "@mui/material";
 import { useContractAddress } from "./lib/useContractAddress";
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ContractBlock } from "./components/ContractBlock";
 import { CompilerBlock } from "./components/CompilerBlock";
 import { AddSourcesBlock } from "./components/AddSourcesBlock";
@@ -62,6 +62,7 @@ const examples = [
 
 function App() {
   const { isLoading, data: proofData } = useLoadContractProof();
+  const [isDragging, setIsDragging] = useState(false);
   const canOverride = useOverride();
   const { isAddressValid } = useContractAddress();
   const { hasFiles } = useFileStore();
@@ -74,7 +75,12 @@ function App() {
   }, [window.location.pathname]);
 
   return (
-    <AppBox>
+    <AppBox onDragEnter={() => setIsDragging(true)} onDrop={() => setIsDragging(false)}>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: 4 }}
+        open={isDragging}
+        onDragEnd={() => setIsDragging(false)}
+      />
       <Box ref={scrollToRef} />
       <TopBar />
       <ContentBox>

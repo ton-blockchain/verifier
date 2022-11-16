@@ -3,10 +3,13 @@ import { Button, styled } from "@mui/material";
 
 interface StyledButtonProps {
   fontSize?: number;
+  fontWeight?: number;
   transparent?: boolean;
   background?: string;
+  hoverBackground?: string;
   width?: number;
   height?: number;
+  textColor?: string;
 }
 
 const StyledButton = styled(Button)((props: StyledButtonProps) => ({
@@ -20,12 +23,17 @@ const StyledButton = styled(Button)((props: StyledButtonProps) => ({
   width: props.width || "100%",
   height: props.height || "100%",
   fontSize: props.fontSize || 14,
+  fontWeight: props.fontWeight || 400,
   boxShadow: "none",
-  fontWeight: 600,
   borderRadius: 40,
   border: props.transparent ? "1px solid #50A7EA" : "",
   background: props.background || "",
   whiteSpace: "nowrap",
+  textTransform: "none",
+  color: props.textColor || "#000",
+  "&:hover": {
+    background: props.hoverBackground || "inherit",
+  },
   "& img": {
     maxWidth: 22,
   },
@@ -48,18 +56,24 @@ export const AppButton: React.FC<AppButtonProps> = ({
   onClick,
   type = "button",
   fontSize = 14,
+  fontWeight,
   transparent,
   background,
+  hoverBackground,
   width,
   height,
+  textColor,
 }) => {
   return (
     <StyledButton
       width={width}
       height={height}
       fontSize={fontSize}
+      fontWeight={fontWeight}
       transparent={transparent}
       background={background}
+      textColor={textColor}
+      hoverBackground={hoverBackground}
       className={children !== "Update metadata" ? "base-button" : ""}
       type={type}
       onClick={onClick ? onClick : () => {}}

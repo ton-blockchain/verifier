@@ -17,7 +17,7 @@ const DataBox = styled(Box)({
 });
 
 const TitleBox = styled(CenteringBox)({
-  padding: "15px 20px 0 20px",
+  padding: "30px 30px 0 30px",
 });
 
 const IconBox = styled(CenteringBox)({
@@ -25,8 +25,9 @@ const IconBox = styled(CenteringBox)({
 });
 
 const TitleText = styled(Typography)({
-  fontWeight: 20,
+  fontSize: 20,
   color: "#161C28",
+  fontWeight: 800,
 });
 
 export { CenteringBox, DataBox, TitleBox, TitleText, IconBox };

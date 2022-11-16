@@ -1,19 +1,16 @@
 import React from "react";
-import "./AddSources.css";
-import { DataBox, IconBox, TitleText, TitleBox } from "./common.styled";
-import sources from "../assets/sources.svg";
+import { DataBox } from "./common.styled";
 import { useFileStore } from "../lib/useFileStore";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { FileUploaderArea } from "./FileUploaderArea";
-import Spacer from "./Spacer";
 import { FileTable } from "./FileTable";
 import CompilerSettings from "./CompilerSettings";
-import Button from "./Button";
 import { CompileOutput } from "./CompileOutput";
 import { Box, styled } from "@mui/system";
+import { AppButton } from "./AppButton";
 
 const ContentBox = styled(Box)({
-  padding: "15px 20px",
+  padding: "15px 30px",
 });
 
 export function AddSourcesBlock() {
@@ -22,32 +19,29 @@ export function AddSourcesBlock() {
 
   return (
     <DataBox>
-      <Box>
-        <TitleBox mb={1}>
-          <IconBox>
-            <img src={sources} alt="Block icon" width={41} height={41} />
-          </IconBox>
-          <TitleText>Add sources</TitleText>
-        </TitleBox>
-        <ContentBox>
-          <>
-            <FileUploaderArea />
-            <Spacer space={20} />
-            {hasFiles() && <FileTable />}
-            {hasFiles() && <CompilerSettings />}
-            <Spacer space={20} />
-            <Button
+      <FileUploaderArea />
+      <ContentBox>
+        <>
+          {hasFiles() && <FileTable />}
+          {hasFiles() && <CompilerSettings />}
+          <Box my={3}>
+            <AppButton
               disabled={!hasFiles() || !!data?.result?.msgCell}
+              fontSize={14}
+              textColor="#fff"
+              height={44}
+              width={144}
+              background="#1976d2"
+              hoverBackground="#156cc2"
               onClick={() => {
                 mutate(null);
-              }}
-              text={isLoading ? "Submitting..." : `Submit`}
-            />
-            <Spacer space={15} />
-            {(data || error) && <CompileOutput />}
-          </>
-        </ContentBox>
-      </Box>
+              }}>
+              {isLoading ? "Submitting..." : `Compile`}
+            </AppButton>
+          </Box>
+          {(data || error) && <CompileOutput />}
+        </>
+      </ContentBox>
     </DataBox>
   );
 }

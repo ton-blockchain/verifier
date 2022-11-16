@@ -4,23 +4,32 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d0cd4a2-460d-40c2-9ae6-9e874310b72a" name="Changes" comment="main blocks UI refactor">
-      <change afterPath="$PROJECT_DIR$/src/assets/compiler.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/contract.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/copy.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/qr.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/assets/sources.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/AddSourcesBlock.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/ContractBlock.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/DataBlock.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/FileUploaderArea.tsx" afterDir="false" />
+    <list default="true" id="7d0cd4a2-460d-40c2-9ae6-9e874310b72a" name="Changes" comment="WIP">
+      <change afterPath="$PROJECT_DIR$/src/assets/delete.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/dnd.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/assets/upload.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/theme.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/AddSources.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddSources.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ContractInfo.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ContractProofInfo.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SubmitContractSteps.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddSources.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddSources.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddSourcesBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddSourcesBlock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AppButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Button.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Button.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CompilerSettings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompilerSettings.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ContractBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ContractBlock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DataBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataBlock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FileTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FileTable.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FileUploaderArea.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FileUploaderArea.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/InfoPiece.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InfoPiece.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/InfoPiece.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/InfoPiece.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/SearchResults.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/SearchResults.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Spacer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Spacer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TopBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TopBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/WalletConnect.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/WalletConnect.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/common.styled.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/common.styled.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,6 +105,13 @@
       <workItem from="1668410452301" duration="258000" />
       <workItem from="1668416493575" duration="18250000" />
       <workItem from="1668499786578" duration="52000" />
+      <workItem from="1668499841060" duration="128000" />
+      <workItem from="1668499972337" duration="85000" />
+      <workItem from="1668500080667" duration="136000" />
+      <workItem from="1668501099663" duration="89000" />
+      <workItem from="1668501375211" duration="232000" />
+      <workItem from="1668501884860" duration="21827000" />
+      <workItem from="1668592281428" duration="6208000" />
     </task>
     <task id="LOCAL-00001" summary="fonts added, assets folder separated to icons and fonts, dist(build) folder added to gitignore">
       <created>1667989326669</created>
@@ -223,7 +239,6 @@
     <MESSAGE value="fonts added, assets folder separated to icons and fonts, dist(build) folder added to gitignore" />
     <MESSAGE value="Fonts fix in progress" />
     <MESSAGE value="Header WIP" />
-    <MESSAGE value="WIP" />
     <MESSAGE value="revert" />
     <MESSAGE value="topbar refactor" />
     <MESSAGE value="search bar refactor" />
@@ -235,6 +250,8 @@
     <MESSAGE value="merge with main" />
     <MESSAGE value="scroll mode changed" />
     <MESSAGE value="main blocks UI refactor" />
-    <option name="LAST_COMMIT_MESSAGE" value="main blocks UI refactor" />
+    <MESSAGE value="ui refactor" />
+    <MESSAGE value="WIP" />
+    <option name="LAST_COMMIT_MESSAGE" value="WIP" />
   </component>
 </project>

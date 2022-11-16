@@ -7,20 +7,24 @@ import ContractInteract from "./ContractInteract";
 import "./index.css";
 import SourcesRegistry from "./SourcesRegistry";
 import { SnackbarProvider } from "notistack";
+import { ThemeProvider } from "@mui/material";
+import { theme } from "./theme";
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <SnackbarProvider maxSnack={3}>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename={import.meta.env.BASE_URL}>
-        <Routes>
-          <Route path="/interact" element={<ContractInteract />} />
-          <Route path="/sourcesRegistry" element={<SourcesRegistry />} />
-          <Route path="/:contractAddress" element={<App />} />
-          <Route path="/" element={<App />} />
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+          <Routes>
+            <Route path="/interact" element={<ContractInteract />} />
+            <Route path="/sourcesRegistry" element={<SourcesRegistry />} />
+            <Route path="/:contractAddress" element={<App />} />
+            <Route path="/" element={<App />} />
+          </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ThemeProvider>
   </SnackbarProvider>,
 );

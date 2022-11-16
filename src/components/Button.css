@@ -1,6 +1,7 @@
+/*TODO delete*/
 .Button {
   font-weight: 700;
-  background-color: #0088CC;
+  background-color: #0088cc;
   border-radius: 8px;
   padding: 10px 20px;
   cursor: pointer;
@@ -8,6 +9,6 @@
 }
 
 .Button-disabled {
-  background-color: #CCCCCC;
+  background-color: #cccccc;
   cursor: not-allowed;
 }
