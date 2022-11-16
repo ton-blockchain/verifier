@@ -28,17 +28,11 @@ function jsonToBlob(json: Record<string, any>): Blob {
   });
 }
 
-// TODO from env
-const server =
-  process.env.NODE_ENV === "production"
-    ? "https://ton-source-staging.herokuapp.com"
-    : "http://localhost:3003";
-
 export function useSubmitSources() {
   const { contractAddress } = useContractAddress();
   const { data: contractInfo } = useLoadContractInfo();
   const { hasFiles, files } = useFileStore();
-  const { compiler, version, commandLine } = useCompilerSettingsStore();
+  const { compiler, compilerSettings } = useCompilerSettingsStore();
 
   const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;
@@ -55,8 +49,7 @@ export function useSubmitSources() {
       "json",
       jsonToBlob({
         compiler,
-        version,
-        commandLine: commandLine, // TODO change on server
+        compilerSettings,
         knownContractAddress: contractAddress,
         knownContractHash: contractInfo.hash,
         sources: files.map((u) => ({
@@ -70,7 +63,7 @@ export function useSubmitSources() {
       }),
     );
 
-    const response = await fetch(`${server}/source`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/source`, {
       method: "POST",
       body: formData,
     });

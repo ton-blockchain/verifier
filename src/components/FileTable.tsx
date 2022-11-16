@@ -28,6 +28,7 @@ import { CenteringBox } from "./common.styled";
 import deleteIcon from "../assets/delete.svg";
 import dndIcon from "../assets/dnd.svg";
 import { BorderLessCell, DirectoryBox, HeaderCell, HR } from "./fileTable.styled";
+import { useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
 
 function Cells({
   file,
@@ -45,6 +46,7 @@ function Cells({
   });
 
   const { setInclueInCommand, setDirectory, removeFile } = useFileStore();
+  const { compiler } = useCompilerSettingsStore();
 
   return (
     <>

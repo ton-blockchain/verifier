@@ -9,10 +9,7 @@
       <change afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/CompilerSettings.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompilerSettings.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/DataBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataBlock.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/FileTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FileTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/dataBlock.styled.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dataBlock.styled.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/useCompilerSettingsStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/useCompilerSettingsStore.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lib/useSubmitSources.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/useSubmitSources.ts" afterDir="false" />
     </list>
@@ -66,6 +63,7 @@
       <recent name="$PROJECT_DIR$/src/assets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/lib" />
       <recent name="$PROJECT_DIR$/src/assets" />
       <recent name="$PROJECT_DIR$/src/assets/icons" />
       <recent name="$PROJECT_DIR$/src/assets/fonts" />
