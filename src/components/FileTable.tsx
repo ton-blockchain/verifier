@@ -91,6 +91,7 @@ function Cells({
             visibility: isHover ? "visible" : "hidden",
             opacity: 0.5,
             cursor: "pointer",
+            marginRight: 1,
           }}
           onClick={() => {
             removeFile(fileName);

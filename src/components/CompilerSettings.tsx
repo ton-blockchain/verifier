@@ -1,4 +1,4 @@
-import { Chip, MenuItem, Typography } from "@mui/material";
+import { Chip, IconButton, MenuItem, Typography } from "@mui/material";
 import { FuncCliCompilerVersion, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
 import { Box } from "@mui/system";
 import { CenteringBox } from "./common.styled";
@@ -8,7 +8,7 @@ import {
   CompilerLabel,
   CompilerSelect,
 } from "./compilerSetting.styled";
-import { Cancel, Edit } from "@mui/icons-material";
+import undo from "../assets/undo.svg";
 
 function CompilerSettings() {
   const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler } =
@@ -45,28 +45,33 @@ function CompilerSettings() {
             <Box sx={{ width: "100%", position: "relative" }}>
               <CompilerLabel sx={{ display: "block" }}>Func command</CompilerLabel>
               <DirectoryInput
-                disabled={!compilerSettings.overrideCommandLine}
                 value={compilerSettings.commandLine}
                 onChange={(e) => {
                   setOverrideCommandLine(e.target.value);
                 }}
+                spellcheck={false}
               />
-              <Chip sx={{ position: "absolute", left: 5, top: 31 }} label="func -o tmp.fif" />
-              {!compilerSettings.overrideCommandLine && (
-                <Edit
-                  sx={{ color: "blue", position: "absolute", right: 10, top: 34 }}
-                  onClick={() => {
-                    setOverrideCommandLine(compilerSettings.commandLine ?? null);
-                  }}
-                />
-              )}
+              <Chip
+                sx={{
+                  position: "absolute",
+                  left: 3,
+                  top: 28,
+                  height: 37,
+                  background: "#F5F5F5",
+                  borderRadius: 1.5,
+                  color: "#000",
+                  fontSize: 14,
+                }}
+                label="func -o tmp.fif"
+              />
               {!!compilerSettings.overrideCommandLine && (
-                <Cancel
-                  sx={{ color: "blue", position: "absolute", right: 10, top: 34 }}
+                <IconButton
+                  sx={{ color: "blue", position: "absolute", right: 10, top: 31 }}
                   onClick={() => {
                     setOverrideCommandLine(null);
-                  }}
-                />
+                  }}>
+                  <img src={undo} alt="Undo icon" width={15} height={15} />
+                </IconButton>
               )}
             </Box>
           </>

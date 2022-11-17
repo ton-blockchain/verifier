@@ -1,9 +1,59 @@
 import { useSubmitSources } from "../lib/useSubmitSources";
-import InfoPiece from "./InfoPiece";
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
 import Spacer from "./Spacer";
 import Button from "./Button";
 import { usePublishStepsStore } from "./usePublishStepsStore";
+import { Box } from "@mui/system";
+import { CompilationNotification, NotificationType } from "./CompilationNotification";
+import { CenteringBox } from "./common.styled";
+import puzzle from "../assets/reorder-hint.svg";
+import hint from "../assets/light-bulb.svg";
+import { styled } from "@mui/material/styles";
+import { Typography } from "@mui/material";
+import { DataRow, DataRowTitle, DataRowValue } from "./dataBlock.styled";
+import React from "react";
+
+const NotificationTitle = styled(Typography)({
+  fontSize: 14,
+  fontWeight: 400,
+  marginBottom: "10px",
+});
+
+const HintItem = styled("li")({
+  maxWidth: 650,
+  fontSize: 14,
+  fontWeight: 400,
+  marginBottom: 10,
+});
+
+const OutputTitle = styled(Typography)({
+  fontSize: 14,
+  fontWeight: 700,
+});
+
+const ErrorRow = styled(DataRow)({
+  paddingLeft: 0,
+  "&:hover": {
+    background: "transparent",
+  },
+});
+
+const ErrorRowTitle = styled(DataRowTitle)({
+  minWidth: 200,
+  fontSize: 14,
+  fontWeight: 600,
+});
+
+const ErrorRowSeparator = styled(Box)({
+  borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+});
+
+const ErrorRowValue = styled(DataRowValue)({
+  color: "#000",
+  fontSize: 14,
+  fontWeight: 400,
+});
+
 export function CompileOutput() {
   const { data: submitSourcesData, error } = useSubmitSources();
   const { data: contractInfoData } = useLoadContractInfo();
@@ -13,8 +63,7 @@ export function CompileOutput() {
   const hints = submitSourcesData?.hints ?? [];
   // https://t.me/+4S9EdWndFec4MWYy
   return (
-    <div>
-      <h4>Result</h4>
+    <Box my={3}>
       {["similar"].includes(compileResult?.result ?? "") && (
         <>
           <div
@@ -40,66 +89,67 @@ export function CompileOutput() {
       )}
 
       {["not_similar"].includes(compileResult?.result ?? "") && (
-        <pre
-          style={{
-            backgroundColor: "#FC565620",
-            border: "#D8D8D8 1px solid",
-            padding: "10px 20px",
-            borderRadius: 20,
-            overflow: "auto",
-            fontFamily: "inherit",
-          }}>
-          <div>
-            <b>Hashes are not similar</b>
-          </div>
-          <Spacer space={10} />
-          <InfoPiece label="Contract hash" data={contractInfoData?.hash ?? ""} />
-          <InfoPiece label="Compile output hash" data={compileResult?.hash ?? ""} />
-        </pre>
+        <CompilationNotification
+          type={NotificationType.ERROR}
+          title={
+            <CenteringBox>
+              <CenteringBox mr={1}>
+                <img src={puzzle} alt="Reorder icon" width={39} height={26} />
+              </CenteringBox>
+              <OutputTitle>Hashes are not similar</OutputTitle>
+            </CenteringBox>
+          }
+          notificationBody={
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <ErrorRow>
+                <ErrorRowTitle>Contract hash</ErrorRowTitle>
+                <ErrorRowValue>{contractInfoData?.hash ?? "-"}</ErrorRowValue>
+              </ErrorRow>
+              <ErrorRowSeparator />
+              <ErrorRow>
+                <ErrorRowTitle>Compile output hash</ErrorRowTitle>
+                <ErrorRowValue>{compileResult?.hash ?? "-"}</ErrorRowValue>
+              </ErrorRow>
+            </Box>
+          }
+        />
       )}
 
       {compileResult?.error && (
-        <pre
-          style={{
-            backgroundColor: "#D8D8D830",
-            border: "#D8D8D8 1px solid",
-            padding: "16px 20px",
-            borderRadius: 20,
-            overflow: "auto",
-            maxHeight: 300,
-          }}>
-          <div style={{ fontSize: 16 }}>
-            <b>Compile error</b>
-          </div>
-          <Spacer space={10} />
-          <code>{compileResult.error}</code>
-        </pre>
+        <CompilationNotification
+          type={NotificationType.NOTIFICATION}
+          title={
+            <NotificationTitle>
+              <span style={{ color: "#FC5656" }}>Error: </span>
+              Compile error
+            </NotificationTitle>
+          }
+          notificationBody={<code>{compileResult.error}</code>}
+        />
       )}
 
       {!!error && <h4>❌ {error.toString()}</h4>}
 
       {hints.length > 0 && (
-        <pre
-          style={{
-            backgroundColor: "#5E75E80A",
-            border: "#D8D8D8 1px solid",
-            padding: "10px 20px",
-            borderRadius: 20,
-            overflow: "hidden",
-            maxHeight: 300,
-            whiteSpace: "pre-wrap",
-            fontFamily: "inherit",
-            lineHeight: 1.8,
-          }}>
-          <div>
-            <b>Possible reasons for failure</b>
-          </div>
-          <Spacer space={10} />
-          {hints?.map((h) => (
-            <div key={h}>💎 {h}</div>
-          ))}
-        </pre>
+        <CompilationNotification
+          type={NotificationType.HINT}
+          title={
+            <CenteringBox mb={2}>
+              <CenteringBox mr={1}>
+                <img src={hint} alt="Light bulb icon" width={21} height={22} />
+              </CenteringBox>
+              <OutputTitle>Possible reasons for failure</OutputTitle>
+            </CenteringBox>
+          }
+          notificationBody={
+            <ul style={{ paddingLeft: 25 }}>
+              {hints.map((hint) => (
+                <HintItem>{hint}</HintItem>
+              ))}
+            </ul>
+          }
+        />
       )}
-    </div>
+    </Box>
   );
 }

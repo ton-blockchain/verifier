@@ -24,6 +24,7 @@ export function AddSourcesBlock() {
         <>
           {hasFiles() && <FileTable />}
           {hasFiles() && <CompilerSettings />}
+          {(data || error) && <CompileOutput />}
           <Box my={3}>
             <AppButton
               disabled={!hasFiles() || !!data?.result?.msgCell}
@@ -40,7 +41,6 @@ export function AddSourcesBlock() {
               {isLoading ? "Submitting..." : `Compile`}
             </AppButton>
           </Box>
-          {(data || error) && <CompileOutput />}
         </>
       </ContentBox>
     </DataBox>

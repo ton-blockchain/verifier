@@ -4,7 +4,6 @@ import { getEndpoint } from "./getClient";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import "@ton-community/contract-verifier-sdk";
 import { SourcesData } from "@ton-community/contract-verifier-sdk";
-import { Address } from "ton";
 import { useContractAddress } from "./useContractAddress";
 
 export const toSha256Buffer = (s: string) => {
@@ -46,8 +45,9 @@ export function useLoadContractProof() {
 
       const sourcesData = await ContractVerifier.getSourcesData(ipfslink);
 
+      //TODO switch false to true, it's the way to check notifications block for now
       return {
-        hasOnchainProof: true,
+        hasOnchainProof: false,
         ...sourcesData,
       };
     },
