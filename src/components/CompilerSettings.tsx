@@ -49,7 +49,6 @@ function CompilerSettings() {
                 onChange={(e) => {
                   setOverrideCommandLine(e.target.value);
                 }}
-                spellcheck={false}
               />
               <Chip
                 sx={{
