@@ -7,6 +7,7 @@ import {
   DataFlexibleBox,
   DataRow,
   DataRowsBox,
+  DataRowSeparator,
   DataRowTitle,
   DataRowValue,
   IconsWrapper,
@@ -49,10 +50,11 @@ export function DataBlock({
         </IconBox>
         <TitleText>{title}</TitleText>
       </TitleBox>
-      <DataRowsBox>
+      <DataRowsBox isShrinked={!isFlexibleWrapper}>
+        {!isFlexibleWrapper && <DataRowSeparator />}
         {dataRows.map(({ title, value }) => {
           return (
-            <DataRow>
+            <DataRow isShrinked={!isFlexibleWrapper}>
               <DataRowTitle>{title}</DataRowTitle>
               <DataRowValue>{!!value ? value : "-"}</DataRowValue>
               {showIcons && (

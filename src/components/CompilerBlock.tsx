@@ -16,8 +16,10 @@ export function CompilerBlock() {
   const dataRows: DataRowItem[] = [];
 
   if (data) {
-    dataRows.push({ title: "Compiler", value: data!.compiler! });
-    dataRows.push({ title: "Func Version", value: compilerSettings?.funcVersion ?? "" });
+    dataRows.push({
+      title: "Compiler",
+      value: `${data!.compiler!} ${compilerSettings?.funcVersion}`,
+    });
     dataRows.push({
       title: "Fift Version",
       value: compilerSettings?.fiftVersion?.slice(0, 8) ?? "",
@@ -27,10 +29,6 @@ export function CompilerBlock() {
       value: compilerSettings?.fiftlibVersion?.slice(0, 8) ?? "",
     });
     dataRows.push({ title: "Command", value: compilerSettings?.commandLine! });
-    dataRows.push({
-      title: "Verified",
-      value: new TimeAgo("en-US").format(data!.verificationDate!),
-    });
   }
 
   return <DataBlock title="Compiler" icon={compilerIcon} dataRows={dataRows} isFlexibleWrapper />;

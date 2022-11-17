@@ -13,6 +13,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { ContractBlock } from "./components/ContractBlock";
 import { CompilerBlock } from "./components/CompilerBlock";
 import { AddSourcesBlock } from "./components/AddSourcesBlock";
+import { useSubmitSources } from "./lib/useSubmitSources";
+import { PublishProof } from "./components/PublishProof";
 
 const AppBox = styled(Box)({});
 
@@ -68,7 +70,10 @@ function App() {
   const { hasFiles } = useFileStore();
   const navigate = useNavigate();
   const scrollToRef = useRef();
+  const { data } = useSubmitSources();
   useResetState();
+
+  const canPublish = !!data?.result?.msgCell;
 
   useEffect(() => {
     window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });
@@ -99,7 +104,7 @@ function App() {
                 canPublish bool variable it breaks the app the second any file is
                 uploaded
               */}
-              {/*{hasFiles() && canPublish && <PublishProof />}*/}
+              {hasFiles() && canPublish && <PublishProof />}
             </>
           )}
           {proofData && !hasFiles() && (

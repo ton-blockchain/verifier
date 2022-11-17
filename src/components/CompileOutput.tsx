@@ -9,10 +9,10 @@ import hint from "../assets/light-bulb.svg";
 import like from "../assets/like.svg";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
-import { DataRow, DataRowTitle, DataRowValue } from "./dataBlock.styled";
+import { DataRowTitle, DataRowValue } from "./dataBlock.styled";
 import React from "react";
 
-const NotificationTitle = styled(Typography)({
+export const NotificationTitle = styled(Typography)({
   fontSize: 14,
   fontWeight: 400,
   marginBottom: "10px",
@@ -35,7 +35,8 @@ const SuccessTitle = styled(Typography)({
   fontWeight: 400,
 });
 
-const ErrorRow = styled(DataRow)({
+const ErrorRow = styled(CenteringBox)({
+  padding: "20px 30px",
   paddingLeft: 0,
   "&:hover": {
     background: "transparent",
@@ -122,7 +123,13 @@ export function CompileOutput() {
               Compile error
             </NotificationTitle>
           }
-          notificationBody={<code>{compileResult.error}</code>}
+          notificationBody={
+            <Box sx={{ overflow: "auto", maxHeight: 300 }}>
+              <pre>
+                <code>{compileResult.error}</code>
+              </pre>
+            </Box>
+          }
         />
       )}
 

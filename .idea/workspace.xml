@@ -5,13 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7d0cd4a2-460d-40c2-9ae6-9e874310b72a" name="Changes" comment="WIP">
-      <change afterPath="$PROJECT_DIR$/.env.development" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.env.production" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CompileOutput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompileOutput.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/FileTable.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FileTable.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/useCompilerSettingsStore.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/useCompilerSettingsStore.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lib/useSubmitSources.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/lib/useSubmitSources.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DataBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataBlock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/PublishProof.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PublishProof.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/dataBlock.styled.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dataBlock.styled.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,8 +62,8 @@
       <recent name="$PROJECT_DIR$/src/assets" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/lib" />
       <recent name="$PROJECT_DIR$/src/assets" />
+      <recent name="$PROJECT_DIR$/src/lib" />
       <recent name="$PROJECT_DIR$/src/assets/icons" />
       <recent name="$PROJECT_DIR$/src/assets/fonts" />
     </key>
@@ -201,7 +200,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668431449712</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="pr comments fix">
+      <created>1668691106469</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1668691106469</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -235,6 +241,7 @@
     <MESSAGE value="main blocks UI refactor" />
     <MESSAGE value="ui refactor" />
     <MESSAGE value="WIP" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP" />
+    <MESSAGE value="pr comments fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="pr comments fix" />
   </component>
 </project>
