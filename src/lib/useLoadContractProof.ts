@@ -45,9 +45,8 @@ export function useLoadContractProof() {
 
       const sourcesData = await ContractVerifier.getSourcesData(ipfslink);
 
-      //TODO switch false to true, it's the way to check notifications block for now
       return {
-        hasOnchainProof: false,
+        hasOnchainProof: true,
         ...sourcesData,
       };
     },

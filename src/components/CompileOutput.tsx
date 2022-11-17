@@ -1,13 +1,12 @@
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
-import Spacer from "./Spacer";
-import Button from "./Button";
 import { usePublishStepsStore } from "./usePublishStepsStore";
 import { Box } from "@mui/system";
 import { CompilationNotification, NotificationType } from "./CompilationNotification";
 import { CenteringBox } from "./common.styled";
 import puzzle from "../assets/reorder-hint.svg";
 import hint from "../assets/light-bulb.svg";
+import like from "../assets/like.svg";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import { DataRow, DataRowTitle, DataRowValue } from "./dataBlock.styled";
@@ -29,6 +28,11 @@ const HintItem = styled("li")({
 const OutputTitle = styled(Typography)({
   fontSize: 14,
   fontWeight: 700,
+});
+
+const SuccessTitle = styled(Typography)({
+  fontSize: 14,
+  fontWeight: 400,
 });
 
 const ErrorRow = styled(DataRow)({
@@ -65,27 +69,21 @@ export function CompileOutput() {
   return (
     <Box my={3}>
       {["similar"].includes(compileResult?.result ?? "") && (
-        <>
-          <div
-            style={{
-              background: "#D6FFCE",
-              padding: 20,
-              border: "1px solid #D8D8D8",
-              borderRadius: 20,
-            }}>
-            Great! Compile output hash matches this on-chain contract
-          </div>
-          <Spacer space={20} />
-          <div style={{ display: "flex", gap: 14 }}>
-            <Button
-              text={"Publish"}
-              onClick={() => {
-                setAddSourcesExpanded(false);
-                setPublishExpanded(true);
-              }}
-            />
-          </div>
-        </>
+        <CompilationNotification
+          type={NotificationType.SUCCESS}
+          title={
+            <CenteringBox>
+              <CenteringBox mr={1}>
+                <img src={like} alt="Like icon" width={31} height={31} />
+              </CenteringBox>
+              <SuccessTitle>
+                {" "}
+                <b>Great!</b> Compile output hash matches this on-chain contract
+              </SuccessTitle>
+            </CenteringBox>
+          }
+          notificationBody={<Box />}
+        />
       )}
 
       {["not_similar"].includes(compileResult?.result ?? "") && (
