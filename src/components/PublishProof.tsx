@@ -56,7 +56,7 @@ export function PublishProof() {
           }
         />
       </Box>
-      <CenteringBox sx={{ justifyContent: "center" }}>
+      <CenteringBox mb={3} pb={3} sx={{ justifyContent: "center" }}>
         <Button
           sx={{ width: 140, height: 44 }}
           text="Publish proof"

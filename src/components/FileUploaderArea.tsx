@@ -8,11 +8,12 @@ import { AppButton } from "./AppButton";
 import upload from "../assets/upload.svg";
 import { styled } from "@mui/system";
 
-const FilesDropzone = styled(CenteringBox)(({ theme }) => ({
+const FilesDropzone = styled(CenteringBox)({
   justifyContent: "center",
   backgroundColor: "#F7F9FB",
   textAlign: "center",
   height: 148,
+  overflow: "hidden",
   border: "1px dashed #E3E8EA",
   color: "#728A96",
   borderRadius: 20,
@@ -21,7 +22,7 @@ const FilesDropzone = styled(CenteringBox)(({ theme }) => ({
   "&:hover": {
     border: "1px dashed #9da3a5",
   },
-}));
+});
 
 export function FileUploaderArea() {
   const { addFiles, hasFiles } = useFileStore();

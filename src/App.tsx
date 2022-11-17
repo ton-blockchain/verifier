@@ -80,7 +80,10 @@ function App() {
   }, [window.location.pathname]);
 
   return (
-    <AppBox onDragEnter={() => setIsDragging(true)} onDrop={() => setIsDragging(false)}>
+    <AppBox
+      onDragEnter={() => setIsDragging(true)}
+      onDrop={() => setIsDragging(false)}
+      onClick={() => setIsDragging(false)}>
       <Backdrop
         sx={{ color: "#fff", zIndex: 4 }}
         open={isDragging}
