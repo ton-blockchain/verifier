@@ -35,11 +35,23 @@ export function PublishProof() {
                   This will cost 0.5 TON
                 </NotificationTitle>
               )}
-              {status === "pending" && `Check your tonhub wallet for a pending transaction`}
-              {status === "rejected" && `Transaction rejected, please retry`}
-              {status === "expired" && `Transaction expired, please retry`}
-              {status === "success" && `Transaction issued, monitoring proof deployment on-chain`}
-              {status === "deployed" && `Your proof is ready!`}
+              {status === "pending" && (
+                <NotificationTitle>
+                  Check your tonhub wallet for a pending transaction`
+                </NotificationTitle>
+              )}
+              {status === "rejected" && (
+                <NotificationTitle>Transaction rejected, please retry</NotificationTitle>
+              )}
+              {status === "expired" && (
+                <NotificationTitle>Transaction expired, please retry</NotificationTitle>
+              )}
+              {status === "success" && (
+                <NotificationTitle>
+                  Transaction issued, monitoring proof deployment on-chain
+                </NotificationTitle>
+              )}
+              {status === "deployed" && <NotificationTitle>Your proof is ready!</NotificationTitle>}
             </Box>
           }
         />
