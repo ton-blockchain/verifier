@@ -3,6 +3,7 @@ import { VariantType, useSnackbar } from "notistack";
 import { IconButton, styled } from "@mui/material";
 import { Box } from "@mui/system";
 import CloseIcon from "@mui/icons-material/Close";
+
 const StyledMessage = styled(Box)({
   "& &": {
     color: "white",
@@ -29,7 +30,7 @@ function useNotification() {
         onClick: () => closeSnackbar(key),
         action: () => (
           <IconButton>
-            <CloseIcon style={{ width: 20, height: 20 }} />
+            <CloseIcon sx={{ color: "#fff", stroke: "#fff", width: 20, height: 20 }} />
           </IconButton>
         ),
       });

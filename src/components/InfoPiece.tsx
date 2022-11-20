@@ -1,3 +1,4 @@
+//TODO replace with DataRow
 import "./InfoPiece.css";
 
 function InfoPiece({ label, data }: { label: string; data: string }) {
