@@ -39,7 +39,7 @@ export function Footer() {
           <HoverableIcon
             iconUrl={telegram}
             hoveredIconUrl={telegramHovered}
-            link="https://t.me/+YDnoBue1Dz81ZTMy"
+            link="https://t.me/+4S9EdWndFec4MWYy"
           />
           <HoverableIcon
             iconUrl={github}
@@ -64,7 +64,7 @@ export function Footer() {
           </FooterContributedText>
         </ContributedWrapper>
         <FooterTextBoxRight>
-          <FooterLink target="_blank" href="https://t.me/+YDnoBue1Dz81ZTMy">
+          <FooterLink target="_blank" href="https://t.me/+4S9EdWndFec4MWYy">
             <Typography variant="body2">Support</Typography>
           </FooterLink>
         </FooterTextBoxRight>
