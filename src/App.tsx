@@ -4,7 +4,6 @@ import { useLoadContractProof } from "./lib/useLoadContractProof";
 import ContractSourceCode from "./components/ContractSourceCode";
 import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
-import { useNavigate } from "react-router-dom";
 import { useResetState } from "./lib/useResetState";
 import { styled } from "@mui/system";
 import { Backdrop, Box } from "@mui/material";
@@ -15,8 +14,13 @@ import { CompilerBlock } from "./components/CompilerBlock";
 import { AddSourcesBlock } from "./components/AddSourcesBlock";
 import { useSubmitSources } from "./lib/useSubmitSources";
 import { PublishProof } from "./components/PublishProof";
+import { Footer } from "./components/Footer";
+import { CenteringWrapper } from "./components/footer.styled";
+import { useNavigate } from "react-router-dom";
 
-const AppBox = styled(Box)({});
+const AppBox = styled(Box)({
+  minHeight: "100vh",
+});
 
 const ContentBox = styled(Box)({
   position: "relative",
@@ -34,7 +38,7 @@ const PositionedContent = styled(Box)({
 
 const ContractDataBox = styled(Box)({
   display: "flex",
-  gap: 20,
+  justifyContent: "space-between",
 });
 
 const OverflowingBox = styled(Box)({
@@ -68,8 +72,8 @@ function App() {
   const canOverride = useOverride();
   const { isAddressValid } = useContractAddress();
   const { hasFiles } = useFileStore();
-  const navigate = useNavigate();
   const scrollToRef = useRef();
+  const navigate = useNavigate();
   const { data } = useSubmitSources();
   useResetState();
 
@@ -107,12 +111,18 @@ function App() {
             </>
           )}
           {proofData && !hasFiles() && (
-            <OverflowingBox>
+            <OverflowingBox mb={5}>
               <ContractSourceCode />
             </OverflowingBox>
           )}
+          {proofData && <Footer />}
         </PositionedContent>
       </ContentBox>
+      {!proofData && (
+        <CenteringWrapper sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+          <Footer />
+        </CenteringWrapper>
+      )}
       <div
         style={{
           position: "fixed",
