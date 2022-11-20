@@ -115,7 +115,7 @@ function App() {
         </PositionedContent>
       </ContentBox>
       {!proofData && (
-        <CenteringWrapper sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+        <CenteringWrapper sx={{ position: "fixed", bottom: 0, width: "100%" }}>
           <Footer />
         </CenteringWrapper>
       )}
