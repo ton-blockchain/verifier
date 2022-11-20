@@ -12,7 +12,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { ContractBlock } from "./components/ContractBlock";
 import { CompilerBlock } from "./components/CompilerBlock";
 import { AddSourcesBlock } from "./components/AddSourcesBlock";
-import { useSubmitSources } from "./lib/useSubmitSources";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
@@ -74,10 +73,7 @@ function App() {
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
   const navigate = useNavigate();
-  const { data } = useSubmitSources();
   useResetState();
-
-  const canPublish = !!data?.result?.msgCell;
 
   useEffect(() => {
     window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });
@@ -107,7 +103,7 @@ function App() {
           {proofData && (!proofData.hasOnchainProof || canOverride) && (
             <>
               <AddSourcesBlock />
-              {hasFiles() && canPublish && <PublishProof />}
+              {hasFiles() && <PublishProof />}
             </>
           )}
           {proofData && !hasFiles() && (

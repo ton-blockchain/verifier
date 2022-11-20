@@ -1,20 +1,32 @@
 import { usePublishProof } from "../lib/usePublishProof";
 import Button from "./Button";
-import { CenteringBox, DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
+import { CenteringBox, DataBox, IconBox, TitleText } from "./common.styled";
 import React from "react";
 import publish from "../assets/publish.svg";
 import { CompilationNotification, NotificationType } from "./CompilationNotification";
 import { Box } from "@mui/system";
 import { NotificationTitle } from "./CompileOutput";
+import { useSubmitSources } from "../lib/useSubmitSources";
+import { STEPS, usePublishStore } from "../lib/usePublishSteps";
+import { Fade } from "@mui/material";
 
 export function PublishProof() {
+  const { data } = useSubmitSources();
   const { mutate, status } = usePublishProof();
-  let text = "";
+  const { step } = usePublishStore();
+
+  const canPublish = !!data?.result?.msgCell;
+
+  let text: React.ReactNode;
 
   switch (status) {
     case "not_issued":
-      text =
-        "To store your contract’s verification proof on-chain, you will need to issue a transaction. This will cost 0.5 TON";
+      text = (
+        <span>
+          To store your contract’s verification proof on-chain, you will need to issue a
+          transaction. <br /> This will cost 0.5 TON
+        </span>
+      );
       break;
     case "rejected":
       text = "Transaction rejected, please retry";
@@ -35,32 +47,38 @@ export function PublishProof() {
 
   return (
     <DataBox mb={3}>
-      <TitleBox mb={1}>
+      <CenteringBox p={3} mb={1}>
         <IconBox>
           <img src={publish} alt="publish icon" width={41} height={41} />
         </IconBox>
-        <TitleText>Publish proof</TitleText>
-      </TitleBox>
-      <Box sx={{ padding: "0 30px" }}>
-        <CompilationNotification
-          type={NotificationType.NOTIFICATION}
-          title={<></>}
-          notificationBody={
-            <Box sx={{ overflow: "auto", maxHeight: 300 }}>
-              <NotificationTitle>{text}</NotificationTitle>
-            </Box>
-          }
-        />
-      </Box>
-      <CenteringBox mb={3} pb={3} sx={{ justifyContent: "center" }}>
-        <Button
-          sx={{ width: 140, height: 44 }}
-          text="Publish proof"
-          onClick={() => {
-            mutate();
-          }}
-        />
+        <TitleText>Publish</TitleText>
       </CenteringBox>
+      {step === STEPS.PUBLISH && canPublish && (
+        <Fade in={step === STEPS.PUBLISH}>
+          <Box>
+            <Box sx={{ padding: "0 30px" }}>
+              <CompilationNotification
+                type={NotificationType.NOTIFICATION}
+                title={<></>}
+                notificationBody={
+                  <Box sx={{ overflow: "auto", maxHeight: 300 }}>
+                    <NotificationTitle>{text}</NotificationTitle>
+                  </Box>
+                }
+              />
+            </Box>
+            <CenteringBox mb={3} pb={3} sx={{ justifyContent: "center" }}>
+              <Button
+                sx={{ width: 140, height: 44 }}
+                text="Publish"
+                onClick={() => {
+                  mutate();
+                }}
+              />
+            </CenteringBox>
+          </Box>
+        </Fade>
+      )}
     </DataBox>
   );
 }
