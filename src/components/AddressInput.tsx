@@ -124,7 +124,7 @@ export function AddressInput() {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onSubmit={onSubmit}
-              onFocus={() => setActive(true)}
+              onKeyUp={(e: any) => setActive(!!e.target.value.length)}
               spellCheck={false}
             />
             <Fade in={!!value} timeout={animationTimeout}>

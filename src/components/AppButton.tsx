@@ -6,10 +6,10 @@ interface StyledButtonProps {
   fontWeight?: number;
   transparent?: boolean;
   background?: string;
-  hoverbackground?: string;
+  hoverBackground?: string;
   width?: number;
   height?: number;
-  textcolor?: string;
+  textColor?: string;
 }
 
 const StyledButton = styled(Button)((props: StyledButtonProps) => ({
@@ -30,9 +30,9 @@ const StyledButton = styled(Button)((props: StyledButtonProps) => ({
   background: props.background || "",
   whiteSpace: "nowrap",
   textTransform: "none",
-  color: props.textcolor || "#000",
+  color: props.textColor || "#000",
   "&:hover": {
-    background: props.hoverbackground || "inherit",
+    background: props.hoverBackground || "inherit",
   },
   "& img": {
     maxWidth: 22,
@@ -59,10 +59,10 @@ export const AppButton: React.FC<AppButtonProps> = ({
   fontWeight,
   transparent,
   background,
-  hoverbackground,
+  hoverBackground,
   width,
   height,
-  textcolor,
+  textColor,
 }) => {
   return (
     <StyledButton
@@ -72,8 +72,8 @@ export const AppButton: React.FC<AppButtonProps> = ({
       fontWeight={fontWeight}
       transparent={transparent}
       background={background}
-      textcolor={textcolor ? 1 : 0}
-      hoverbackground={hoverbackground}
+      textColor={textColor}
+      hoverBackground={hoverBackground}
       className={children !== "Update metadata" ? "base-button" : ""}
       type={type}
       onClick={onClick ? onClick : () => {}}

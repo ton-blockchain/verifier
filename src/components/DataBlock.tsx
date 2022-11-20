@@ -50,11 +50,11 @@ export function DataBlock({
         </IconBox>
         <TitleText>{title}</TitleText>
       </TitleBox>
-      <DataRowsBox isshrinked={!isFlexibleWrapper ? 1 : 0}>
+      <DataRowsBox isShrinked={!isFlexibleWrapper}>
         {!isFlexibleWrapper && <DataRowSeparator />}
         {dataRows.map(({ title, value }) => {
           return (
-            <DataRow key={title} isshrinked={!isFlexibleWrapper ? 1 : 0}>
+            <DataRow key={title} isShrinked={!isFlexibleWrapper}>
               <DataRowTitle>{title}</DataRowTitle>
               <DataRowValue>{!!value ? value : "-"}</DataRowValue>
               {showIcons && (
