@@ -30,11 +30,11 @@ export function AddSourcesBlock() {
               disabled={!hasFiles() || !!data?.result?.msgCell}
               fontSize={14}
               fontWeight={800}
-              textColor="#fff"
+              textcolor="#fff"
               height={44}
               width={144}
               background="#1976d2"
-              hoverBackground="#156cc2"
+              hoverbackground="#156cc2"
               onClick={() => {
                 mutate(null);
               }}>

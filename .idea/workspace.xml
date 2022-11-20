@@ -4,8 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d0cd4a2-460d-40c2-9ae6-9e874310b72a" name="Changes" comment="WIP">
-      <change beforePath="$PROJECT_DIR$/src/components/PublishProof.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/PublishProof.tsx" afterDir="false" />
+    <list default="true" id="7d0cd4a2-460d-40c2-9ae6-9e874310b72a" name="Changes" comment="bugs fix">
+      <change beforePath="$PROJECT_DIR$/src/App.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AddSourcesBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AddSourcesBlock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AppButton.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AppButton.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CompileOutput.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompileOutput.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/CompilerBlock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/DataBlock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/DataBlock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/FileUploaderArea.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/FileUploaderArea.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/TopBar.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/TopBar.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/dataBlock.styled.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/dataBlock.styled.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/topbar.styled.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/topbar.styled.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,7 +211,14 @@
       <option name="project" value="LOCAL" />
       <updated>1668691106469</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="bugs fix">
+      <created>1668699484327</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1668699484327</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -237,6 +253,7 @@
     <MESSAGE value="ui refactor" />
     <MESSAGE value="pr comments fix" />
     <MESSAGE value="WIP" />
-    <option name="LAST_COMMIT_MESSAGE" value="WIP" />
+    <MESSAGE value="bugs fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="bugs fix" />
   </component>
 </project>

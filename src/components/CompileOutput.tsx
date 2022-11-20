@@ -149,7 +149,7 @@ export function CompileOutput() {
           notificationBody={
             <ul style={{ paddingLeft: 25 }}>
               {hints.map((hint) => (
-                <HintItem>{hint}</HintItem>
+                <HintItem key={hint}>{hint}</HintItem>
               ))}
             </ul>
           }

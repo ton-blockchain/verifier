@@ -18,6 +18,7 @@ import {
   TopBarWrapper,
   TopBarHeading,
 } from "./topbar.styled";
+
 export function TopBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ export function TopBar() {
 
   return (
     <>
-      <TopBarWrapper showExpanded={showExpanded}>
+      <TopBarWrapper showexpanded={showExpanded ? 1 : 0}>
         <TopBarContent>
           <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} alt="App icon" />
@@ -44,9 +45,7 @@ export function TopBar() {
             </LinkWrapper>
           </ContentColumn>
         </TopBarContent>
-        <TopBarHeading>
-          <TopBarHeading>Smart Contract Verifier</TopBarHeading>
-        </TopBarHeading>
+        <TopBarHeading>Smart Contract Verifier</TopBarHeading>
         <SearchWrapper>
           <AddressInput />
         </SearchWrapper>

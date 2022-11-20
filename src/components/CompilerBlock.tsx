@@ -22,14 +22,22 @@ export function CompilerBlock() {
     });
     dataRows.push({
       title: "Fift Version",
-      value: compilerSettings?.fiftVersion?.slice(0, 8) ?? "",
+      value: compilerSettings?.fiftVersion ?? "",
     });
     dataRows.push({
       title: "Fiftlib Version",
-      value: compilerSettings?.fiftlibVersion?.slice(0, 8) ?? "",
+      value: compilerSettings?.fiftlibVersion ?? "",
     });
     dataRows.push({ title: "Command", value: compilerSettings?.commandLine! });
   }
 
-  return <DataBlock title="Compiler" icon={compilerIcon} dataRows={dataRows} isFlexibleWrapper />;
+  return (
+    <DataBlock
+      title="Compiler"
+      icon={compilerIcon}
+      dataRows={dataRows}
+      isFlexibleWrapper
+      showIcons
+    />
+  );
 }

@@ -103,10 +103,6 @@ function App() {
           {proofData && (!proofData.hasOnchainProof || canOverride) && (
             <>
               <AddSourcesBlock />
-              {/*TODO important block below that handles publish process, without
-                canPublish bool variable it breaks the app the second any file is
-                uploaded
-              */}
               {hasFiles() && canPublish && <PublishProof />}
             </>
           )}

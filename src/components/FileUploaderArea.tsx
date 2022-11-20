@@ -52,7 +52,7 @@ export function FileUploaderArea() {
               <AppButton
                 fontSize={12}
                 fontWeight={700}
-                hoverBackground="#e3e3e3"
+                hoverbackground="#e3e3e3"
                 background="#F8F8F8"
                 height={44}
                 width={159}>

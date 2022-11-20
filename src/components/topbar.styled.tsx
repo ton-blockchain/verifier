@@ -8,7 +8,7 @@ const expandedHeaderHeight = 960;
 const headerHeight = 360;
 
 interface TopBarWrapperProps {
-  showExpanded: boolean;
+  showexpanded: boolean;
 }
 
 const TopBarWrapper = styled(Box)(({ theme }) => (props: TopBarWrapperProps) => ({
@@ -16,7 +16,7 @@ const TopBarWrapper = styled(Box)(({ theme }) => (props: TopBarWrapperProps) => 
   color: "#fff",
   width: "100%",
   minHeight: headerHeight,
-  height: props.showExpanded ? expandedHeaderHeight : headerHeight,
+  height: props.showexpanded ? expandedHeaderHeight : headerHeight,
   background: "#232328",
   borderBottomLeftRadius: theme.spacing(6),
   borderBottomRightRadius: theme.spacing(6),
