@@ -29,7 +29,7 @@ export function TopBar() {
 
   return (
     <>
-      <TopBarWrapper showexpanded={showExpanded ? 1 : 0}>
+      <TopBarWrapper showExpanded={showExpanded}>
         <TopBarContent>
           <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} alt="App icon" />
