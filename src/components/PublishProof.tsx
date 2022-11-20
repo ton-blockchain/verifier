@@ -9,6 +9,29 @@ import { NotificationTitle } from "./CompileOutput";
 
 export function PublishProof() {
   const { mutate, status } = usePublishProof();
+  let text = "";
+
+  switch (status) {
+    case "not_issued":
+      text =
+        "To store your contract’s verification proof on-chain, you will need to issue a transaction. This will cost 0.5 TON";
+      break;
+    case "rejected":
+      text = "Transaction rejected, please retry";
+      break;
+    case "pending":
+      text = "Check your tonhub wallet for a pending transaction";
+      break;
+    case "success":
+      text = "Transaction issued, monitoring proof deployment on-chain";
+      break;
+    case "deployed":
+      text = "Your proof is ready!";
+      break;
+    case "expired":
+      text = "Transaction expired, please retry";
+      break;
+  }
 
   return (
     <DataBox mb={3}>
@@ -24,34 +47,7 @@ export function PublishProof() {
           title={<></>}
           notificationBody={
             <Box sx={{ overflow: "auto", maxHeight: 300 }}>
-              {status === "not_issued" && (
-                <NotificationTitle>
-                  To store your contract’s verification proof on-chain, you will need to issue a
-                  transaction.
-                </NotificationTitle>
-              )}
-              {status === "not_issued" && (
-                <NotificationTitle sx={{ fontWeight: 700 }}>
-                  This will cost 0.5 TON
-                </NotificationTitle>
-              )}
-              {status === "pending" && (
-                <NotificationTitle>
-                  Check your tonhub wallet for a pending transaction`
-                </NotificationTitle>
-              )}
-              {status === "rejected" && (
-                <NotificationTitle>Transaction rejected, please retry</NotificationTitle>
-              )}
-              {status === "expired" && (
-                <NotificationTitle>Transaction expired, please retry</NotificationTitle>
-              )}
-              {status === "success" && (
-                <NotificationTitle>
-                  Transaction issued, monitoring proof deployment on-chain
-                </NotificationTitle>
-              )}
-              {status === "deployed" && <NotificationTitle>Your proof is ready!</NotificationTitle>}
+              <NotificationTitle>{text}</NotificationTitle>
             </Box>
           }
         />
