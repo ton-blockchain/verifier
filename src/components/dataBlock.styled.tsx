@@ -3,7 +3,7 @@ import { CenteringBox, DataBox } from "./common.styled";
 import { Box, Typography } from "@mui/material";
 
 const DataFlexibleBox = styled(DataBox)({
-  maxWidth: "50%",
+  maxWidth: "49%",
   flex: 1,
 });
 
