@@ -16,7 +16,7 @@ let i = 0;
 
 export function useLoadContractProof() {
   const { contractAddress, isAddressValid } = useContractAddress();
-  const { data: contractInfo } = useLoadContractInfo();
+  const { data: contractInfo, error: contractError } = useLoadContractInfo();
   const queryClient = useQueryClient();
 
   const { isLoading, error, data } = useQuery<
@@ -36,10 +36,7 @@ export function useLoadContractProof() {
         httpApiEndpoint: await getEndpoint(),
       });
 
-      // TODO temp
-      // if (!ipfslink || i < 3) {
       if (!ipfslink) {
-        i++;
         return { hasOnchainProof: false };
       }
 
@@ -62,5 +59,5 @@ export function useLoadContractProof() {
     queryClient.invalidateQueries([contractAddress, "proof"]);
   };
 
-  return { isLoading, error, data, invalidate };
+  return { isLoading, error: error ?? contractError, data, invalidate };
 }
