@@ -41,12 +41,8 @@ export function useLoadContractProof() {
       }
 
       const sourcesData = await ContractVerifier.getSourcesData(ipfslink);
-
-      {
-        /*TODO return true to return, temporary solution to check all cases*/
-      }
       return {
-        hasOnchainProof: false,
+        hasOnchainProof: true,
         ...sourcesData,
       };
     },

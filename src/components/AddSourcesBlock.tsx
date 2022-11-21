@@ -47,8 +47,7 @@ export function AddSourcesBlock() {
               {(data || error) && <CompileOutput />}
               {hasFiles() && (
                 <CenteringBox sx={{ justifyContent: "center" }} my={3}>
-                  {/*TODO return ! to condition, temporary solution to check all cases*/}
-                  {walletAddress ? (
+                  {!walletAddress ? (
                     <WalletConnect />
                   ) : !data?.result?.msgCell ? (
                     <AppButton
