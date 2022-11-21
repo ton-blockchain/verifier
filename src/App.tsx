@@ -17,9 +17,7 @@ import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
 import { useNavigate } from "react-router-dom";
 
-const AppBox = styled(Box)({
-  minHeight: "100vh",
-});
+const AppBox = styled(Box)({});
 
 const ContentBox = styled(Box)({
   position: "relative",
@@ -73,6 +71,7 @@ function App() {
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
   const navigate = useNavigate();
+
   useResetState();
 
   useEffect(() => {

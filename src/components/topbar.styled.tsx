@@ -4,7 +4,7 @@ import { animationTimeout, contentMaxWidth } from "../const";
 import headerBg from "../assets/headerBg.svg";
 import { CenteringBox } from "./common.styled";
 
-const expandedHeaderHeight = 960;
+const expandedHeaderHeight = "60vh";
 const headerHeight = 360;
 
 interface TopBarWrapperProps {

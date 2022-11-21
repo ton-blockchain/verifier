@@ -10,7 +10,7 @@ import { Box, styled } from "@mui/system";
 import { AppButton } from "./AppButton";
 import { useWalletConnect } from "../lib/useWalletConnect";
 import WalletConnect from "./WalletConnect";
-import { STEPS, usePublishStore } from "../lib/usePublishSteps";
+import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { Fade } from "@mui/material";
 
 const ContentBox = styled(Box)({
@@ -20,14 +20,22 @@ const ContentBox = styled(Box)({
 export function AddSourcesBlock() {
   const { walletAddress } = useWalletConnect();
   const { hasFiles } = useFileStore();
-  const { step, proceedToPublish } = usePublishStore();
+  const { step, proceedToPublish, toggleSection, currentSection } = usePublishStore();
   const { mutate, data, error, isLoading } = useSubmitSources();
+
+  const canPublish = !!data?.result?.msgCell;
+
+  const onSectionExpand = () => toggleSection(SECTIONS.SOURCES);
 
   return (
     <DataBox>
-      <FileUploaderArea />
-      {step !== STEPS.PUBLISH && (
-        <Fade in={step !== STEPS.PUBLISH}>
+      <Box
+        sx={{ cursor: step === STEPS.PUBLISH && canPublish ? "pointer" : "inherit" }}
+        onClick={onSectionExpand}>
+        <FileUploaderArea />
+      </Box>
+      {currentSection === SECTIONS.SOURCES && (
+        <Fade in={currentSection === SECTIONS.SOURCES}>
           <ContentBox>
             <>
               {hasFiles() && (
@@ -39,7 +47,8 @@ export function AddSourcesBlock() {
               {(data || error) && <CompileOutput />}
               {hasFiles() && (
                 <CenteringBox sx={{ justifyContent: "center" }} my={3}>
-                  {!walletAddress ? (
+                  {/*TODO return ! to condition, temporary solution to check all cases*/}
+                  {walletAddress ? (
                     <WalletConnect />
                   ) : !data?.result?.msgCell ? (
                     <AppButton

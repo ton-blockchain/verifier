@@ -7,17 +7,20 @@ import { CompilationNotification, NotificationType } from "./CompilationNotifica
 import { Box } from "@mui/system";
 import { NotificationTitle } from "./CompileOutput";
 import { useSubmitSources } from "../lib/useSubmitSources";
-import { STEPS, usePublishStore } from "../lib/usePublishSteps";
+import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { Fade } from "@mui/material";
 
 export function PublishProof() {
   const { data } = useSubmitSources();
   const { mutate, status } = usePublishProof();
-  const { step } = usePublishStore();
+  const { step, toggleSection, currentSection } = usePublishStore();
 
   const canPublish = !!data?.result?.msgCell;
 
   let text: React.ReactNode;
+
+  const onSectionExpand = () =>
+    step === STEPS.PUBLISH && canPublish && toggleSection(SECTIONS.PUBLISH);
 
   switch (status) {
     case "not_issued":
@@ -46,15 +49,22 @@ export function PublishProof() {
   }
 
   return (
-    <DataBox mb={3}>
-      <CenteringBox p={3} mb={1}>
+    <DataBox mb={6}>
+      <CenteringBox
+        p={3}
+        mb={1}
+        onClick={onSectionExpand}
+        sx={{
+          opacity: step === STEPS.PUBLISH && canPublish ? 1 : 0.25,
+          cursor: step === STEPS.PUBLISH && canPublish ? "pointer" : "inherit",
+        }}>
         <IconBox>
           <img src={publish} alt="publish icon" width={41} height={41} />
         </IconBox>
         <TitleText>Publish</TitleText>
       </CenteringBox>
-      {step === STEPS.PUBLISH && canPublish && (
-        <Fade in={step === STEPS.PUBLISH}>
+      {currentSection === SECTIONS.PUBLISH && canPublish && (
+        <Fade in={currentSection === SECTIONS.PUBLISH}>
           <Box>
             <Box sx={{ padding: "0 30px" }}>
               <CompilationNotification
