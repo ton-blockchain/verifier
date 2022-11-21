@@ -218,20 +218,14 @@ export function FileTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {step === STEPS.PUBLISH && canPublish ? (
-              files.map((file, i) => {
+            <SortableContext
+              disabled={step === STEPS.PUBLISH && canPublish}
+              items={files.map((file) => file.fileObj.name)}
+              strategy={verticalListSortingStrategy}>
+              {files.map((file, i) => {
                 return <SortableRow file={file} pos={i + 1} key={file.fileObj.name} />;
-              })
-            ) : (
-              <SortableContext
-                disabled={step === STEPS.PUBLISH && canPublish}
-                items={files.map((file) => file.fileObj.name)}
-                strategy={verticalListSortingStrategy}>
-                {files.map((file, i) => {
-                  return <SortableRow file={file} pos={i + 1} key={file.fileObj.name} />;
-                })}
-              </SortableContext>
-            )}
+              })}
+            </SortableContext>
           </TableBody>
         </Table>
       </TableContainer>
