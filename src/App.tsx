@@ -67,7 +67,7 @@ const examples = [
 ];
 
 function App() {
-  const { isLoading, data: proofData } = useLoadContractProof();
+  const { isLoading, data: proofData, error } = useLoadContractProof();
   const [isDragging, setIsDragging] = useState(false);
   const canOverride = useOverride();
   const { isAddressValid } = useContractAddress();
@@ -96,7 +96,8 @@ function App() {
       <Box ref={scrollToRef} />
       <TopBar />
       <ContentBox>
-        {isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
+        {!error && isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
+        {!!error && <Box sx={{ marginTop: 4 }}>Error {`${error}`}</Box>}
         <PositionedContent>
           {!isLoading && (
             <ContractDataBox>

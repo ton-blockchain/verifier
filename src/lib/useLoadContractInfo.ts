@@ -1,8 +1,7 @@
-import { Address, fromNano } from "ton";
+import { Address, fromNano, Cell } from "ton";
 import { useQuery } from "@tanstack/react-query";
 
 import { fromCode } from "tvm-disassembler";
-import { Cell as DisassmeblerCell } from "tvm-disassembler/node_modules/ton";
 import { getClient } from "./getClient";
 import { useContractAddress } from "./useContractAddress";
 
@@ -15,7 +14,7 @@ export function useLoadContractInfo() {
 
     const _address = Address.parse(contractAddress);
     let { code } = await client.getContractState(_address);
-    let codeCell = DisassmeblerCell.fromBoc(code!)[0];
+    let codeCell = Cell.fromBoc(code!)[0];
 
     const b = await client.getBalance(_address);
 
