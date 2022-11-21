@@ -71,9 +71,9 @@ export function PublishProof() {
                 type={NotificationType.NOTIFICATION}
                 title={<></>}
                 notificationBody={
-                  <Box sx={{ overflow: "auto", maxHeight: 300 }}>
-                    <NotificationTitle>{text}</NotificationTitle>
-                  </Box>
+                  <CenteringBox sx={{ overflow: "auto", maxHeight: 300 }}>
+                    <NotificationTitle sx={{ marginBottom: 0 }}>{text}</NotificationTitle>
+                  </CenteringBox>
                 }
               />
             </Box>
