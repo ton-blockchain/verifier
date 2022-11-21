@@ -7,6 +7,7 @@ import sources from "../assets/sources.svg";
 import { AppButton } from "./AppButton";
 import upload from "../assets/upload.svg";
 import { styled } from "@mui/system";
+import { STEPS, usePublishStore } from "../lib/usePublishSteps";
 
 const FilesDropzone = styled(CenteringBox)({
   justifyContent: "center",
@@ -26,6 +27,7 @@ const FilesDropzone = styled(CenteringBox)({
 
 export function FileUploaderArea() {
   const { addFiles, hasFiles } = useFileStore();
+  const { step } = usePublishStore();
 
   const onDrop = (acceptedFiles: any) => {
     addFiles(acceptedFiles);
@@ -47,7 +49,7 @@ export function FileUploaderArea() {
             </IconBox>
             <TitleText>Add sources</TitleText>
           </CenteringBox>
-          {hasFiles() && (
+          {hasFiles() && step !== STEPS.PUBLISH && (
             <div {...getRootProps()}>
               <AppButton
                 fontSize={12}

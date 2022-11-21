@@ -12,15 +12,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { ContractBlock } from "./components/ContractBlock";
 import { CompilerBlock } from "./components/CompilerBlock";
 import { AddSourcesBlock } from "./components/AddSourcesBlock";
-import { useSubmitSources } from "./lib/useSubmitSources";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
 import { useNavigate } from "react-router-dom";
 
-const AppBox = styled(Box)({
-  minHeight: "100vh",
-});
+const AppBox = styled(Box)({});
 
 const ContentBox = styled(Box)({
   position: "relative",
@@ -74,10 +71,8 @@ function App() {
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
   const navigate = useNavigate();
-  const { data } = useSubmitSources();
-  useResetState();
 
-  const canPublish = !!data?.result?.msgCell;
+  useResetState();
 
   useEffect(() => {
     window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });
@@ -108,7 +103,7 @@ function App() {
           {proofData && (!proofData.hasOnchainProof || canOverride) && (
             <>
               <AddSourcesBlock />
-              {hasFiles() && canPublish && <PublishProof />}
+              {hasFiles() && <PublishProof />}
             </>
           )}
           {proofData && !hasFiles() && (
@@ -120,7 +115,7 @@ function App() {
         </PositionedContent>
       </ContentBox>
       {!proofData && (
-        <CenteringWrapper sx={{ position: "absolute", bottom: 0, width: "100%" }}>
+        <CenteringWrapper sx={{ position: "fixed", bottom: 0, width: "100%" }}>
           <Footer />
         </CenteringWrapper>
       )}

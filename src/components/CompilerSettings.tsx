@@ -9,10 +9,17 @@ import {
   CompilerSelect,
 } from "./compilerSetting.styled";
 import undo from "../assets/undo.svg";
+import { useSubmitSources } from "../lib/useSubmitSources";
+import { STEPS, usePublishStore } from "../lib/usePublishSteps";
 
 function CompilerSettings() {
   const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler } =
     useCompilerSettingsStore();
+  const { data } = useSubmitSources();
+  const { step } = usePublishStore();
+
+  const canPublish = !!data?.result?.msgCell;
+
   return (
     <Box mt={4}>
       <Typography variant="h5" style={{ fontWeight: 800, fontSize: 16, marginBottom: 16 }}>
@@ -30,7 +37,7 @@ function CompilerSettings() {
         {compiler === "func" && (
           <>
             <CenteringBox>
-              <CompilerFormControl>
+              <CompilerFormControl disabled={step === STEPS.PUBLISH && canPublish}>
                 <CompilerLabel>Version</CompilerLabel>
                 <CompilerSelect
                   value={compilerSettings.funcVersion}
@@ -45,6 +52,7 @@ function CompilerSettings() {
             <Box sx={{ width: "100%", position: "relative" }}>
               <CompilerLabel sx={{ display: "block" }}>Func command</CompilerLabel>
               <DirectoryInput
+                disabled={step === STEPS.PUBLISH && canPublish}
                 value={compilerSettings.commandLine}
                 onChange={(e) => {
                   setOverrideCommandLine(e.target.value);

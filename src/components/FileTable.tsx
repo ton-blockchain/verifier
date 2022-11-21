@@ -28,7 +28,8 @@ import { CenteringBox } from "./common.styled";
 import deleteIcon from "../assets/delete.svg";
 import dndIcon from "../assets/dnd.svg";
 import { BorderLessCell, DirectoryBox, HeaderCell, HR } from "./fileTable.styled";
-import { useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
+import { useSubmitSources } from "../lib/useSubmitSources";
+import { STEPS, usePublishStore } from "../lib/usePublishSteps";
 
 function Cells({
   file,
@@ -46,7 +47,11 @@ function Cells({
   });
 
   const { setInclueInCommand, setDirectory, removeFile } = useFileStore();
-  const { compiler } = useCompilerSettingsStore();
+
+  const { data } = useSubmitSources();
+  const { step } = usePublishStore();
+
+  const canPublish = !!data?.result?.msgCell;
 
   return (
     <>
@@ -65,6 +70,7 @@ function Cells({
       </BorderLessCell>
       <BorderLessCell>
         <DirectoryBox
+          disabled={step === STEPS.PUBLISH && canPublish}
           value={file.folder}
           onChange={(e) => {
             setDirectory(fileName, e.target.value);
@@ -79,6 +85,7 @@ function Cells({
       </BorderLessCell>
       <BorderLessCell>
         <Switch
+          disabled={step === STEPS.PUBLISH && canPublish}
           checked={file.includeInCommand}
           onChange={(e) => {
             setInclueInCommand(fileName, e.target.checked);
@@ -106,6 +113,10 @@ function Cells({
 function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
   const fileName = file.fileObj.name;
   const { hoverRef, isHover } = useHover();
+  const { data } = useSubmitSources();
+  const { step } = usePublishStore();
+
+  const canPublish = !!data?.result?.msgCell;
 
   const { setNodeRef, transform, transition, isDragging } = useSortable({
     id: fileName,
@@ -115,6 +126,14 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+
+  if (step === STEPS.PUBLISH && canPublish) {
+    return (
+      <TableRow sx={{ height: 60 }}>
+        <Cells file={file} pos={pos} isDragging={false} isHover={false} />
+      </TableRow>
+    );
+  }
 
   return (
     <TableRow
@@ -138,6 +157,10 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
 
 export function FileTable() {
   const { files, reorderFiles } = useFileStore();
+  const { data } = useSubmitSources();
+  const { step } = usePublishStore();
+
+  const canPublish = !!data?.result?.msgCell;
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
@@ -196,6 +219,7 @@ export function FileTable() {
           </TableHead>
           <TableBody>
             <SortableContext
+              disabled={step === STEPS.PUBLISH && canPublish}
               items={files.map((file) => file.fileObj.name)}
               strategy={verticalListSortingStrategy}>
               {files.map((file, i) => {
