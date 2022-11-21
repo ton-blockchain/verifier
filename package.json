@@ -20,7 +20,7 @@
     "@mui/material": "^5.10.10",
     "@orbs-network/ton-gateway": "^1.3.0",
     "@tanstack/react-query": "^4.13.0",
-    "@ton-community/contract-verifier-sdk": "github:shaharyakir/contract-verifier-sdk",
+    "@ton-community/contract-verifier-sdk": "github:ton-community/contract-verifier-sdk",
     "bn.js": "^5.2.1",
     "buffer": "^6.0.3",
     "javascript-time-ago": "^2.5.7",
