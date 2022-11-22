@@ -3,12 +3,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import App from "./App";
-import ContractInteract from "./ContractInteract";
+import ContractInteract from "./components/admin/ContractInteract";
 import "./index.css";
-import SourcesRegistry from "./SourcesRegistry";
 import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
+import { Admin } from "./components/admin/Admin";
 
 const queryClient = new QueryClient();
 
@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
         <BrowserRouter basename={import.meta.env.BASE_URL}>
           <Routes>
             <Route path="/interact" element={<ContractInteract />} />
-            <Route path="/sourcesRegistry" element={<SourcesRegistry />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="/:contractAddress" element={<App />} />
             <Route path="/" element={<App />} />
           </Routes>

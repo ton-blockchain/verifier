@@ -1,16 +1,15 @@
-import InfoPiece from "./components/InfoPiece";
-import { useEffect } from "react";
-import { makeGetCall } from "./lib/makeGetCall";
-import { getClient } from "./lib/getClient";
+import InfoPiece from "../../components/InfoPiece";
+import { makeGetCall } from "../../lib/makeGetCall";
+import { getClient } from "../../lib/getClient";
 import { Address, beginCell, Cell, fromNano, toNano } from "ton";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import WalletConnect from "./components/WalletConnect";
-import { useWalletConnect } from "./lib/useWalletConnect";
-import Button from "./components/Button";
+import { useQuery } from "@tanstack/react-query";
+import WalletConnect from "../../components/WalletConnect";
+import { useWalletConnect } from "../../lib/useWalletConnect";
+import Button from "../../components/Button";
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import BN from "bn.js";
-import { getAdmin } from "./lib/getAdmin";
+import { getAdmin } from "../../lib/getAdmin";
 
 function useLoadSourcesRegistryInfo() {
   const address = Address.parse(import.meta.env.VITE_SOURCES_REGISTRY);
@@ -128,15 +127,7 @@ function SourcesRegistry() {
 
   return (
     <div style={{ padding: "20px 40px" }}>
-      <div
-        style={{
-          display: "flex",
-          gap: 30,
-          alignItems: "center",
-        }}>
-        <h1>Sources Registry</h1>
-        <WalletConnect />
-      </div>
+      <h1>Sources Registry</h1>
       {isLoading && <div>Loading...</div>}
       {data && (
         <>
