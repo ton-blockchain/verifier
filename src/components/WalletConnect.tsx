@@ -8,7 +8,6 @@ import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { ConnectorPopup, Provider } from "./ConnectorPopup";
 import { DisconnectButton, WalletButtonContent, WalletWrapper } from "./walletconnect.styled";
 import { makeElipsisAddress } from "../utils/textUtils";
-import { isMobile } from "react-device-detect";
 
 export interface Adapter {
   provider: string;
@@ -20,7 +19,6 @@ export interface Adapter {
 
 export function WalletConnect() {
   const [showDisconnect, setShowDisconnect] = useState(false);
-  const [showQr, setShowQr] = useState(false);
   const [showConnect, setShowConnect] = useState(false);
   const { connect, walletAddress, disconnect } = useWalletConnect();
   const [qrLink, setQRLink] = useState<null | string>(null);
@@ -37,26 +35,23 @@ export function WalletConnect() {
   };
 
   const onCancel = () => {
-    setShowQr(false);
+    setQRLink(null);
   };
 
   const close = async () => {
     setShowConnect(false);
-    setShowQr(false);
     setQRLink(null);
   };
 
   const onOpen = () => {
     setShowConnect(true);
-
-    connect((link: string) => {
-      setQRLink(link);
-    });
   };
 
-  const onSelect = async (provider: string) => {
-    if (provider === Provider.TONHUB && !isMobile) {
-      setShowQr(true);
+  const onSelect = (provider: string) => {
+    if (provider === Provider.TONHUB) {
+      connect((link: string) => {
+        setQRLink(link);
+      });
     }
   };
 
@@ -107,7 +102,7 @@ export function WalletConnect() {
         onCancel={onCancel}
         qrLink={qrLink}
         showConnect={showConnect}
-        showQr={showQr}
+        showQr={!!qrLink}
         onClose={close}
         onSelect={onSelect}
       />
