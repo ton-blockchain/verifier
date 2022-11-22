@@ -29,6 +29,7 @@ const AppAddressInput = styled("input")({
   border: "none",
   padding: 0,
   paddingLeft: 5,
+  fontFamily: "Mulish",
   fontSize: 16,
   background: "transparent",
   caretColor: "#728A96",
