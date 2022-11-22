@@ -4,8 +4,16 @@ import { styled } from "@mui/system";
 import { AppPopup } from "./AppPopup";
 import chromeExtension from "../assets/chrome.svg";
 import qrExtension from "../assets/tonhub.png";
+import tonKeeper from "../assets/tonkeeper.png";
 import { QrConnector } from "./QrConnector";
 import { AdaptersList } from "./AdaptersList";
+import { Adapter } from "./WalletConnect";
+
+export enum Provider {
+  CHROME = "CHROME",
+  TONHUB = "TONHUB",
+  TONKEEPER = "TONKEEPER",
+}
 
 const StyledContainer = styled(Box)({
   position: "relative",
@@ -16,21 +24,27 @@ const StyledContainer = styled(Box)({
   width: "fit-content",
 });
 
-export interface Adapter {
-  icon: string;
-  title: string;
-  description: string;
-  disabled?: boolean;
-}
-
 const options: Adapter[] = [
   {
+    provider: Provider.CHROME,
     icon: chromeExtension,
     title: "Google Chrome Plugin",
     description: "TON Wallet Plugin for Google Chrome",
     disabled: true,
   },
-  { icon: qrExtension, title: "Tonhub", description: "A mobile wallet in your pocket" },
+  {
+    provider: Provider.TONKEEPER,
+    icon: tonKeeper,
+    title: "Tonkeeper",
+    description: "A Non-custodial cryptocurrency wallet",
+    disabled: true,
+  },
+  {
+    provider: Provider.TONHUB,
+    icon: qrExtension,
+    title: "Tonhub",
+    description: "A mobile wallet in your pocket",
+  },
 ];
 
 interface ConnectorPopupProps {
@@ -39,7 +53,7 @@ interface ConnectorPopupProps {
   qrLink: string | null;
   onCancel: () => void;
   onClose: () => void;
-  onSelect: () => void;
+  onSelect: (provider: string) => void;
 }
 
 export function ConnectorPopup({

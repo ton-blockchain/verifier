@@ -5,11 +5,13 @@ import React, { useEffect, useState } from "react";
 import { AppButton } from "./AppButton";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
-import { ConnectorPopup } from "./ConnectorPopup";
+import { ConnectorPopup, Provider } from "./ConnectorPopup";
 import { DisconnectButton, WalletButtonContent, WalletWrapper } from "./walletconnect.styled";
 import { makeElipsisAddress } from "../utils/textUtils";
+import { isMobile } from "react-device-detect";
 
 export interface Adapter {
+  provider: string;
   icon: string;
   title: string;
   description: string;
@@ -39,24 +41,23 @@ export function WalletConnect() {
   };
 
   const close = async () => {
+    setShowConnect(false);
     setShowQr(false);
     setQRLink(null);
-    setShowConnect(false);
   };
 
   const onOpen = () => {
     setShowConnect(true);
 
-    if (walletAddress) {
-    } else {
-      connect((link: string) => {
-        setQRLink(link);
-      });
-    }
+    connect((link: string) => {
+      setQRLink(link);
+    });
   };
 
-  const onSelect = () => {
-    setShowQr(true);
+  const onSelect = async (provider: string) => {
+    if (provider === Provider.TONHUB && !isMobile) {
+      setShowQr(true);
+    }
   };
 
   useEffect(() => {
@@ -70,9 +71,7 @@ export function WalletConnect() {
       {walletAddress ? (
         <AppButton
           fontSize={14}
-          textColor="#fff"
-          background="#1976d2"
-          hoverBackground="#156cc2"
+          textColor="#50A7EA"
           fontWeight={800}
           width={144}
           height={44}

@@ -25,7 +25,7 @@ const DisabledOption = styled(Box)({
 interface AdaptersListProps {
   adapters: Adapter[];
   onClose: () => void;
-  select: () => void;
+  select: (provider: string) => void;
 }
 
 export function AdaptersList({ adapters, select, onClose }: AdaptersListProps) {
@@ -46,7 +46,7 @@ export function AdaptersList({ adapters, select, onClose }: AdaptersListProps) {
             );
           } else {
             return (
-              <ConnectionOption key={adapter.description} onClick={select}>
+              <ConnectionOption key={adapter.description} onClick={() => select(adapter.provider)}>
                 <img alt="Icon" src={adapter.icon} width={40} height={40} />
                 <Box ml={2}>
                   <Typography variant="h6">{adapter.title}</Typography>
