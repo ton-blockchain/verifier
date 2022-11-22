@@ -18,9 +18,16 @@ export function useLoadContractInfo() {
 
     const b = await client.getBalance(_address);
 
+    let decompiled;
+    try {
+      decompiled = fromCode(codeCell);
+    } catch (e) {
+      decompiled = e?.toString();
+    }
+
     return {
       hash: codeCell.hash().toString("base64"),
-      decompiled: fromCode(codeCell),
+      decompiled,
       balance: fromNano(b),
     };
   });

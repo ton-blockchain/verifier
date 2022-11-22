@@ -19,7 +19,7 @@ export function useLoadContractProof() {
   const { data: contractInfo, error: contractError } = useLoadContractInfo();
   const queryClient = useQueryClient();
 
-  const { isLoading, error, data } = useQuery<
+  const { isLoading, error, data, refetch } = useQuery<
     Partial<SourcesData> & {
       hasOnchainProof: boolean;
     }
@@ -51,9 +51,5 @@ export function useLoadContractProof() {
     },
   );
 
-  const invalidate = () => {
-    queryClient.invalidateQueries([contractAddress, "proof"]);
-  };
-
-  return { isLoading, error: error ?? contractError, data, invalidate };
+  return { isLoading, error: error ?? contractError, data, refetch };
 }

@@ -12,7 +12,6 @@ export function DisassembledSourceCode() {
   const ref = useRef<any>(null);
 
   useEffect(() => {
-    console.log(ref.current);
     hljs.highlightElement(ref.current);
   }, [contractInfo?.decompiled, ref.current]);
 
