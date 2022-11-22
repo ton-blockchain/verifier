@@ -3,7 +3,6 @@ import { makeGetCall } from "../../lib/makeGetCall";
 import { getClient } from "../../lib/getClient";
 import { Address, beginCell, Cell, fromNano, toNano } from "ton";
 import { useQuery } from "@tanstack/react-query";
-import WalletConnect from "../../components/WalletConnect";
 import { useWalletConnect } from "../../lib/useWalletConnect";
 import Button from "../../components/Button";
 import React from "react";

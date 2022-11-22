@@ -1,87 +1,111 @@
-import { Box, Menu, MenuItem, Modal } from "@mui/material";
-import { useState } from "react";
-import QRCode from "react-qr-code";
+import { ClickAwayListener, Typography } from "@mui/material";
 import { useWalletConnect } from "../lib/useWalletConnect";
-import Button from "./Button";
-import { KeyboardArrowDown, Close } from "@mui/icons-material";
-import React from "react";
+import { ArrowDropUp } from "@mui/icons-material";
+import React, { useEffect, useState } from "react";
+import { AppButton } from "./AppButton";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import { ConnectorPopup, Provider } from "./ConnectorPopup";
+import { DisconnectButton, WalletButtonContent, WalletWrapper } from "./walletconnect.styled";
+import { makeElipsisAddress } from "../utils/textUtils";
 
-function WalletConnect() {
+export interface Adapter {
+  provider: string;
+  icon: string;
+  title: string;
+  description: string;
+  disabled?: boolean;
+}
+
+export function WalletConnect() {
+  const [showDisconnect, setShowDisconnect] = useState(false);
+  const [showConnect, setShowConnect] = useState(false);
   const { connect, walletAddress, disconnect } = useWalletConnect();
   const [qrLink, setQRLink] = useState<null | string>(null);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
+  const onDisconnect = () => {
+    setShowDisconnect(false);
+    disconnect();
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+
+  const onClickAway = () => {
+    if (showDisconnect) {
+      setShowDisconnect(false);
+    }
   };
+
+  const onCancel = () => {
+    setQRLink(null);
+  };
+
+  const close = async () => {
+    setShowConnect(false);
+    setQRLink(null);
+  };
+
+  const onOpen = () => {
+    setShowConnect(true);
+  };
+
+  const onSelect = (provider: string) => {
+    if (provider === Provider.TONHUB) {
+      connect((link: string) => {
+        setQRLink(link);
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (walletAddress) {
+      close();
+    }
+  }, [walletAddress]);
 
   return (
-    <>
-      <Button
-        sx={{ fontWeight: 800 }}
-        text={walletAddress ? walletAddress : "Connect wallet"}
-        onClick={(e) => {
-          if (walletAddress) {
-            handleClick(e);
-          } else {
-            connect((link: string) => {
-              setQRLink(link);
-            });
-          }
-        }}
-        endIcon={walletAddress && <KeyboardArrowDown />}
+    <WalletWrapper>
+      {walletAddress ? (
+        <AppButton
+          fontSize={14}
+          textColor="#50A7EA"
+          fontWeight={800}
+          width={144}
+          height={44}
+          transparent
+          onClick={() => setShowDisconnect(true)}>
+          <WalletButtonContent>
+            {makeElipsisAddress(walletAddress, 4)}
+            {showDisconnect ? <ArrowDropUp /> : <ArrowDropDownIcon />}
+          </WalletButtonContent>
+        </AppButton>
+      ) : (
+        <AppButton
+          fontSize={14}
+          textColor="#fff"
+          background="#1976d2"
+          hoverBackground="#156cc2"
+          fontWeight={800}
+          width={144}
+          height={44}
+          onClick={onOpen}>
+          <WalletButtonContent>Connect Wallet</WalletButtonContent>
+        </AppButton>
+      )}
+      {showDisconnect && (
+        <ClickAwayListener onClickAway={onClickAway}>
+          <DisconnectButton onClick={onDisconnect}>
+            <PowerSettingsNewIcon style={{ width: 15, height: 15 }} />
+            <Typography>Disconnect</Typography>
+          </DisconnectButton>
+        </ClickAwayListener>
+      )}
+      <ConnectorPopup
+        onCancel={onCancel}
+        qrLink={qrLink}
+        showConnect={showConnect}
+        showQr={!!qrLink}
+        onClose={close}
+        onSelect={onSelect}
       />
-      <Menu id="login-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
-        <MenuItem
-          onClick={() => {
-            disconnect();
-            handleClose();
-          }}
-          disableRipple>
-          Disconnect
-        </MenuItem>
-      </Menu>
-      <Modal
-        open={!!qrLink && !walletAddress}
-        onClose={() => {
-          setQRLink(null);
-        }}>
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            bgcolor: "background.paper",
-            boxShadow: 24,
-            p: 4,
-            borderRadius: 4,
-            color: "#000",
-          }}>
-          <div
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              setQRLink(null);
-            }}>
-            <Close
-              sx={{
-                position: "absolute",
-                right: 16,
-                top: 16,
-              }}
-            />
-          </div>
-          <div style={{ textAlign: "center" }}>Connect with Tonhub</div>
-          <br />
-          <QRCode value={qrLink!} />
-        </Box>
-      </Modal>
-    </>
+    </WalletWrapper>
   );
 }
-
-export default WalletConnect;

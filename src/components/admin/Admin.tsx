@@ -1,4 +1,4 @@
-import WalletConnect from "../WalletConnect";
+import { WalletConnect } from "../WalletConnect";
 import SourcesRegistry from "./SourcesRegistry";
 import { VerifierRegistry } from "./VerifierRegistry";
 
