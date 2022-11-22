@@ -107,7 +107,6 @@ export function useSubmitSources() {
 
     if (result.msgCell) {
       const s = Cell.fromBoc(Buffer.from(result.msgCell))[0].beginParse();
-      console.log(s.readUint(32).toString("hex"));
       queryId = s.readUint(64);
     }
 

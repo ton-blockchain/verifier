@@ -4,10 +4,11 @@ import { useSendTXN, TXNStatus } from "./useSendTxn";
 import { useSubmitSources } from "./useSubmitSources";
 import { useLoadContractProof } from "./useLoadContractProof";
 import { useFileStore } from "./useFileStore";
+import { useQuery } from "@tanstack/react-query";
 
 export function usePublishProof() {
   const { data } = useSubmitSources();
-  const { invalidate, data: contractProofData } = useLoadContractProof();
+  const { refetch, data: contractProofData } = useLoadContractProof();
   const { reset: resetFiles } = useFileStore();
 
   const m = useSendTXN(
@@ -15,23 +16,21 @@ export function usePublishProof() {
     toNano(0.1),
     data?.result?.msgCell ? Cell.fromBoc(Buffer.from(data.result.msgCell))[0] : new Cell(), // TODO this is a hack
   );
-  const sleep = async (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-  useEffect(() => {
-    if (m.data.status === "success") {
-      console.log("starting this");
-      let i = 0;
-      (async () => {
-        while (!contractProofData?.hasOnchainProof && i < 20) {
-          // console.log("inloop", i, JSON.stringify(contractProofData));
-          i++;
-          await sleep(2000);
-          invalidate();
-        }
+  useQuery(
+    ["publishProofMonitoring"],
+    async () => {
+      // TODO add counter to report back an error
+      refetch();
+      if (contractProofData?.hasOnchainProof) {
         resetFiles();
-      })();
-    }
-  }, [m.data.status]);
+      }
+    },
+    {
+      enabled: m.data.status === "success" && !contractProofData?.hasOnchainProof,
+      refetchInterval: 2000,
+    },
+  );
 
   return {
     mutate: m.mutate,
