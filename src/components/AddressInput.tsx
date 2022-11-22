@@ -39,6 +39,9 @@ const AppAddressInput = styled("input")({
 
 const examples_not_verified = [["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"]];
 
+// to verify https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-auction-v2/nft-auction-v2.func
+// EQCnTg1uvsqc1ZCSgEOl5Yk5LItktG6OOYrSQ8SnJP4FFa58
+
 const examples = [
   ["dns-root", "Ef_lZ1T4NCb2mwkme9h2rJfESCE0W34ma9lWp7-_uY3zXDvq"],
   ["wallet-v4", "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ"],
@@ -59,25 +62,13 @@ const examples = [
   ["sbt-item", "EQC7JOIVycOY_cQnNRVtEBk8DpEFClZM8S3TlqfuD72jvU59"],
   ["nft-single", "EQBPIJPKd1G8eJ8vIWUnkpRf-5rpRp_oqiOepv3Tf571LKbq"],
   ["nft-marketplace-v2", "EQBYTuYbLf8INxFtD8tQeNk5ZLy-nAX9ahQbG_yl1qQ-GEMS"],
+  ["nft-item-editable", "EQC2VNMbjQ8BY8b4iXTEop7dxNgYEXPAlr6ph1I-h42LrdED"],
+  ["nft-offer", "EQA6rqhL9hxd8c3c1JVYQPohQVicy8PEZibTgF60iQCSEk1c"],
+  ["nft-fixprice-sale-v2", "EQBeaUJdPdO66uL-P_D7-oHClw6uYIAPxoo9CX-TE6psn6lk"],
+  ["nft-fixprice-sale-v3", "EQCljxPgw_0Z0uELYyt7AoGsmtGP7ORB-A4jk-gyuNJIjsRW"],
+  ["nft-collection-editable", "EQCHmW1OkT6_-_vO6zoSFW9Z2T62dhffNZkkKRpdaPTFLPdT"],
+  ["nft-auction", "EQC1yTmHvpD5z4Dk_l-YnEhZclc06utSisqhthfzBGz-w0Ae"],
 ];
-
-// https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-item-editable-DRAFT.fc
-
-// EQC2VNMbjQ8BY8b4iXTEop7dxNgYEXPAlr6ph1I-h42LrdED
-
-// —
-
-// https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-offer.fc
-
-// EQA6rqhL9hxd8c3c1JVYQPohQVicy8PEZibTgF60iQCSEk1c
-
-// EQBeaUJdPdO66uL-P_D7-oHClw6uYIAPxoo9CX-TE6psn6lk //
-
-// EQCljxPgw_0Z0uELYyt7AoGsmtGP7ORB-A4jk-gyuNJIjsRW
-
-// EQCHmW1OkT6_-_vO6zoSFW9Z2T62dhffNZkkKRpdaPTFLPdT
-
-// EQC1yTmHvpD5z4Dk_l-YnEhZclc06utSisqhthfzBGz-w0Ae
 
 export interface SearchRequest {
   index: number;
