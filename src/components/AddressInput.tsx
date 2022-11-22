@@ -37,6 +37,21 @@ const AppAddressInput = styled("input")({
   },
 });
 
+const examples_not_verified = [["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"]];
+
+const examples = [
+  ["dns-root", "Ef_lZ1T4NCb2mwkme9h2rJfESCE0W34ma9lWp7-_uY3zXDvq"],
+  ["wallet-v4", "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ"],
+  ["dns-collection", "EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz"],
+  ["dns-item", "EQAGSjhQajnMSne9c9hGnKdMKmohX2-MkZuOkk7TmwQKwFOU"],
+  ["counter", "EQC-QTihJV_B4f8M2nynateMLynaRT_uwNYnnuyy87kam-G7"],
+  ["jetton-minter-discoverable", "EQD-LkpmPTHhPW68cNfc7B83NcfE9JyGegXzAT8LetpQSRSm"],
+  ["jetton-minter", "EQBb4JNqn4Z6U6-nf0cSLnOJo2dxj1QRuGoq-y6Hod72jPbl"],
+  ["jetton-wallet", "EQAhuLHxOcrBwwMHKDnCUMYefuHwJ2iTOFKHWYQlDD-dgb__"],
+  ["single-nominator", "Ef_BLbagjGnqZEkpURP96guu7M9aICAYe5hKB_P5Ng5Gju5Y"],
+  ["sources-registry", "EQD-BJSVUJviud_Qv7Ymfd3qzXdrmV525e3YDzWQoHIAiInL"],
+];
+
 export interface SearchRequest {
   index: number;
   value: string;
@@ -124,7 +139,7 @@ export function AddressInput() {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               onSubmit={onSubmit}
-              onFocus={() => searchResults.length && setActive(true)}
+              onFocus={() => setActive(true)}
               spellCheck={false}
             />
             <Fade in={!!value} timeout={animationTimeout}>
@@ -141,9 +156,38 @@ export function AddressInput() {
               onHistoryClear={onHistoryClear}
             />
           )}
+          {import.meta.env.DEV && active && (
+            <div
+              style={{
+                padding: 2,
+                background: "#000000",
+                gap: 10,
+                display: "flex",
+                textAlign: "center",
+              }}>
+              {examples.concat(examples_not_verified).map(([name, address]) => (
+                <div
+                  style={{
+                    color: "white",
+                    cursor: "pointer",
+                  }}
+                  key={name}
+                  onClick={(e) => {
+                    navigate(`/${address}`);
+                  }}>
+                  {name}
+                </div>
+              ))}
+            </div>
+          )}
         </Box>
         <Backdrop
-          sx={{ color: "#fff", zIndex: 1, overflow: "hidden" }}
+          sx={{
+            color: "#fff",
+            zIndex: 1,
+            overflow: "hidden",
+          }}
+          invisible={!searchResults.length}
           open={active}
           onClick={() => setActive(false)}
         />
