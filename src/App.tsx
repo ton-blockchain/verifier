@@ -63,6 +63,8 @@ function App() {
     window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });
   }, [window.location.pathname]);
 
+  // console.log(hasFiles(), JSON.stringify(proofData), "hasFIles?")
+
   return (
     <AppBox
       onDragEnter={() => setIsDragging(true)}

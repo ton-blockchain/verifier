@@ -10,9 +10,13 @@ export const SECTIONS = {
   PUBLISH: "PUBLISH",
 };
 
-const publishSteps = (set: any) => ({
+const DEFAULT = () => ({
   step: STEPS.COMPILE,
   currentSection: SECTIONS.SOURCES,
+});
+
+const publishSteps = (set: any) => ({
+  ...DEFAULT(),
   proceedToPublish: () => {
     set({
       step: STEPS.PUBLISH,
@@ -23,6 +27,9 @@ const publishSteps = (set: any) => ({
     set({
       currentSection: section,
     });
+  },
+  reset: () => {
+    set(DEFAULT());
   },
 });
 

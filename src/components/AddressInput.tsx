@@ -51,6 +51,13 @@ const examples = [
   ["single-nominator", "Ef_BLbagjGnqZEkpURP96guu7M9aICAYe5hKB_P5Ng5Gju5Y"],
   ["sources-registry", "EQD-BJSVUJviud_Qv7Ymfd3qzXdrmV525e3YDzWQoHIAiInL"],
   ["nominator-pool", "Ef8iu8EiNOP2MczVvHseFi-CrGO1C4v6MkSSOgVZcESNGfT7"],
+  ["telemint-item", "EQAwC64h_7B6YrmGlsto39tBcFWjjakGzSvV7QaMwXiMKy20"],
+  ["telemint-collection", "EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi"],
+  ["nft-item-v1", "EQCZLzCnJuXCBktkb5IiqANbgThvqo2hYXjpupdTe5yHV6oY"],
+  ["elector", "Ef8zMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzMzM0vF"],
+  ["wallet-subscription-plugin", "EQAteJqywxP0g6-6e6LX7VRKKDmZDoQv1Mhx0hdslJvAUGEy"],
+  ["sbt-item", "EQC7JOIVycOY_cQnNRVtEBk8DpEFClZM8S3TlqfuD72jvU59"],
+  ["nft-single", "EQBPIJPKd1G8eJ8vIWUnkpRf-5rpRp_oqiOepv3Tf571LKbq"],
 ];
 
 export interface SearchRequest {
