@@ -15,7 +15,6 @@ import { AddSourcesBlock } from "./components/AddSourcesBlock";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
-import { useNavigate } from "react-router-dom";
 
 const AppBox = styled(Box)({});
 
@@ -92,7 +91,7 @@ function App() {
             </>
           )}
           {proofData && !hasFiles() && (
-            <OverflowingBox mb={5}>
+            <OverflowingBox sx={{ paddingTop: 0 }} mb={5}>
               <ContractSourceCode />
             </OverflowingBox>
           )}
