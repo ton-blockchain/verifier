@@ -4,6 +4,7 @@ import React from "react";
 import { Box } from "@mui/material";
 import { CenteringBox, IconBox, TitleBox, TitleText } from "./common.styled";
 import sources from "../assets/sources.svg";
+import sourcesVerified from "../assets/verified-light.svg";
 import { AppButton } from "./AppButton";
 import upload from "../assets/upload.svg";
 import { styled } from "@mui/system";
@@ -45,9 +46,14 @@ export function FileUploaderArea() {
         <CenteringBox sx={{ justifyContent: "space-between", width: "100%" }}>
           <CenteringBox sx={{ width: "100%" }}>
             <IconBox>
-              <img src={sources} alt="Block icon" width={41} height={41} />
+              <img
+                src={step === STEPS.PUBLISH ? sourcesVerified : sources}
+                alt="Block icon"
+                width={41}
+                height={41}
+              />
             </IconBox>
-            <TitleText>Add sources</TitleText>
+            <TitleText>Add sources {step === STEPS.PUBLISH && " - Done"}</TitleText>
           </CenteringBox>
           {hasFiles() && step !== STEPS.PUBLISH && (
             <div {...getRootProps()}>
