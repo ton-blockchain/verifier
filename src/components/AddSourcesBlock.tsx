@@ -9,7 +9,7 @@ import { CompileOutput } from "./CompileOutput";
 import { Box, styled } from "@mui/system";
 import { AppButton } from "./AppButton";
 import { useWalletConnect } from "../lib/useWalletConnect";
-import WalletConnect from "./WalletConnect";
+import { WalletConnect } from "./WalletConnect";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { Fade } from "@mui/material";
 

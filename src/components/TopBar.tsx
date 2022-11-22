@@ -1,5 +1,5 @@
 import icon from "../assets/icon.svg";
-import WalletConnect from "./WalletConnect";
+import { WalletConnect } from "./WalletConnect";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Fade } from "@mui/material";

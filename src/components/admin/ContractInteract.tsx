@@ -1,8 +1,8 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
-import { beginCell, Builder, Cell, Address } from "ton";
+import { Address, beginCell, Builder } from "ton";
 import Spacer from "../Spacer";
-import WalletConnect from "../WalletConnect";
+import { WalletConnect } from "../WalletConnect";
 
 function CellBuilder() {
   const [state, setState] = useState<{
