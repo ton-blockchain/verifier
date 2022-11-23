@@ -5,6 +5,7 @@ import { useLoadContractInfo } from "./useLoadContractInfo";
 import "@ton-community/contract-verifier-sdk";
 import { SourcesData } from "@ton-community/contract-verifier-sdk";
 import { useContractAddress } from "./useContractAddress";
+import { usePublishProof } from "./usePublishProof";
 
 export const toSha256Buffer = (s: string) => {
   const sha = new Sha256();
@@ -18,9 +19,18 @@ export async function hasOnchainProof(hash: string): Promise<string | null> {
   });
 }
 
+// let i = 0;
+
+// export async function hasOnchainProof(stam: string) {
+//   i++;
+//   console.log(i);
+//   return i > 10 ? "yes" : null;
+// }
+
 export function useLoadContractProof() {
   const { contractAddress, isAddressValid } = useContractAddress();
   const { data: contractInfo, error: contractError } = useLoadContractInfo();
+  const { status: publishProofStatus } = usePublishProof();
   const { isLoading, error, data, refetch } = useQuery<
     Partial<SourcesData> & {
       hasOnchainProof: boolean;
@@ -40,6 +50,11 @@ export function useLoadContractProof() {
         return { hasOnchainProof: false };
       }
 
+      // temp TODO
+      if (ipfslink) {
+        return { hasOnchainProof: true };
+      }
+
       const sourcesData = await ContractVerifier.getSourcesData(ipfslink);
       return {
         hasOnchainProof: true,
@@ -47,7 +62,7 @@ export function useLoadContractProof() {
       };
     },
     {
-      enabled: !!contractAddress && !!contractInfo?.hash,
+      enabled: !!contractAddress && !!contractInfo?.hash && publishProofStatus === "initial",
     },
   );
 

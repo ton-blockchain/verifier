@@ -10,11 +10,13 @@ import { NotificationTitle } from "./CompileOutput";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { Fade } from "@mui/material";
+import { useFileStore } from "../lib/useFileStore";
 
 export function PublishProof() {
   const { data } = useSubmitSources();
-  const { sendTXN, status } = usePublishProof();
+  const { sendTXN, status, clearTXN } = usePublishProof();
   const { step, toggleSection, currentSection } = usePublishStore();
+  const { reset: resetFiles } = useFileStore();
 
   const canPublish = !!data?.result?.msgCell;
 
@@ -23,32 +25,34 @@ export function PublishProof() {
   const onSectionExpand = () =>
     step === STEPS.PUBLISH && canPublish && toggleSection(SECTIONS.PUBLISH);
 
-  // switch (status) {
-  //   case "not_issued":
-  //     text = (
-  //       <span>
-  //         To store your contract’s verification proof on-chain, you will need to issue a
-  //         transaction. <br /> This will cost 0.5 TON
-  //       </span>
-  //     );
-  //     break;
-  //   case "rejected":
-  //     text = "Transaction rejected, please retry";
-  //     break;
-  //   case "pending":
-  //     text = "Check your tonhub wallet for a pending transaction";
-  //     break;
-  //   case "success":
-  //     text = "Transaction issued, monitoring proof deployment on-chain";
-  //     break;
-  //   case "deployed":
-  //     text = "Your proof is ready!";
-  //     break;
-  //   case "expired":
-  //     text = "Transaction expired, please retry";
-  //     break;
-  // }
-  text = status;
+  switch (status) {
+    case "initial":
+      text = (
+        <span>
+          To store your contract’s verification proof on-chain, you will need to issue a
+          transaction. <br /> This will cost 0.5 TON
+        </span>
+      );
+      break;
+    case "rejected":
+      text = "Transaction rejected, please retry.";
+      break;
+    case "pending":
+      text = "Check your tonhub wallet for a pending transaction.";
+      break;
+    case "issued":
+      text = "Transaction issued, monitoring proof deployment on-chain.";
+      break;
+    case "success":
+      text = "Your proof is ready! Click below to view it.";
+      break;
+    case "expired":
+      text = "Transaction expired, please retry.";
+      break;
+    case "error":
+      text =
+        "The transaction is taking too long to complete or have failed. Please use a blockchain explorer to monitor it. You can also use our telegram support group.";
+  }
 
   return (
     <DataBox mb={6}>
@@ -85,14 +89,26 @@ export function PublishProof() {
               />
             </Box>
             <CenteringBox mb={3} pb={3} sx={{ justifyContent: "center" }}>
-              <Button
-                disabled={status === "success" || status === "pending"}
-                sx={{ width: 140, height: 44 }}
-                text="Publish"
-                onClick={() => {
-                  sendTXN();
-                }}
-              />
+              {status !== "success" && (
+                <Button
+                  disabled={status === "pending" || status === "issued"}
+                  sx={{ width: 140, height: 44 }}
+                  text="Publish"
+                  onClick={() => {
+                    sendTXN();
+                  }}
+                />
+              )}
+              {status === "success" && (
+                <Button
+                  sx={{ width: 140, height: 44 }}
+                  text="View proof"
+                  onClick={() => {
+                    resetFiles();
+                    clearTXN();
+                  }}
+                />
+              )}
             </CenteringBox>
           </Box>
         </Fade>

@@ -1,38 +1,71 @@
-import { useMutation } from "@tanstack/react-query";
 import BN from "bn.js";
-import { useState } from "react";
-import { Address, Cell, toNano } from "ton";
+import { useEffect } from "react";
+import { Address, Cell } from "ton";
+import create from "zustand";
 import { useWalletConnect } from "./useWalletConnect";
 
 export type TXNStatus =
+  | "initial"
   | "pending"
-  | "success"
+  | "issued"
   | "rejected"
+  | "error"
   | "expired"
-  | "invalid_session"
-  | "not_issued"
-  | "unknown";
+  | "success";
 
-export function useSendTXN(to: Address, value: BN, message: Cell) {
+const useTxnMonitors = create<{
+  txns: Record<string, TXNStatus>;
+  updateTxn: (key: string, txn: TXNStatus) => void;
+}>((set, get) => ({
+  txns: {},
+  updateTxn: (key: string, txn: TXNStatus) => {
+    set((state) => ({ txns: { ...get().txns, [key]: txn } }));
+  },
+}));
+
+/*
+TODOs
+1. Support a broader API - tonkeeper / ton-connection
+2. Ensure cell is not null
+3. Ensure connection exists
+*/
+export function useSendTXN(key: string, monitorSuccess: (count: number) => Promise<TXNStatus>) {
   const { requestTXN } = useWalletConnect();
+  const { updateTxn, txns } = useTxnMonitors();
 
-  const [txnStatus, setTxnStatus] = useState<TXNStatus>("not_issued");
-
-  const m = useMutation(async () => {
-    setTxnStatus("pending");
-
-    const txnResp = await requestTXN(to.toFriendly(), value, message);
-
-    if (txnResp === undefined) {
-      setTxnStatus("unknown");
-      return;
+  useEffect(() => {
+    if (!txns[key]) {
+      updateTxn(key, "initial");
     }
-
-    setTxnStatus(txnResp!.type);
-  });
+  }, []);
 
   return {
-    mutate: m.mutate,
-    data: { status: txnStatus },
+    sendTXN: async (to: Address, value: BN, message: Cell) => {
+      updateTxn(key, "pending");
+      const status = await requestTXN(to.toFriendly(), value, message);
+
+      let i = 1;
+
+      if (status?.type === "success") {
+        updateTxn(key, "issued");
+        const _id = setInterval(async () => {
+          const txnStatus = await monitorSuccess(i);
+          i++;
+          console.log("monitor", txnStatus);
+          updateTxn(key, txnStatus);
+          if (txnStatus !== "issued") {
+            clearInterval(_id);
+          }
+        }, 2000);
+      } else if (status?.type === "rejected") {
+        updateTxn(key, "rejected");
+      } else if (status?.type === "expired") {
+        updateTxn(key, "expired");
+      }
+    },
+    data: { status: txns[key] },
+    clearTXN: () => {
+      updateTxn(key, "initial");
+    },
   };
 }
