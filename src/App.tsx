@@ -15,7 +15,6 @@ import { AddSourcesBlock } from "./components/AddSourcesBlock";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
-import { useMonitorPublishProof, usePublishProof } from "./lib/usePublishProof";
 
 const AppBox = styled(Box)({});
 
