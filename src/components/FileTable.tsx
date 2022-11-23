@@ -29,7 +29,6 @@ import deleteIcon from "../assets/delete.svg";
 import dndIcon from "../assets/dnd.svg";
 import { BorderLessCell, DirectoryBox, HeaderCell, HR } from "./fileTable.styled";
 import { useSubmitSources } from "../lib/useSubmitSources";
-import { STEPS, usePublishStore } from "../lib/usePublishSteps";
 
 function Cells({
   file,
@@ -49,7 +48,6 @@ function Cells({
   const { setInclueInCommand, setDirectory, removeFile } = useFileStore();
 
   const { data } = useSubmitSources();
-  const { step } = usePublishStore();
 
   const canPublish = !!data?.result?.msgCell;
 
@@ -70,7 +68,7 @@ function Cells({
       </BorderLessCell>
       <BorderLessCell>
         <DirectoryBox
-          disabled={step === STEPS.PUBLISH && canPublish}
+          disabled={canPublish}
           value={file.folder}
           onChange={(e) => {
             setDirectory(fileName, e.target.value);
@@ -85,7 +83,7 @@ function Cells({
       </BorderLessCell>
       <BorderLessCell>
         <Switch
-          disabled={step === STEPS.PUBLISH && canPublish}
+          disabled={canPublish}
           checked={file.includeInCommand}
           onChange={(e) => {
             setInclueInCommand(fileName, e.target.checked);
@@ -114,7 +112,6 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
   const fileName = file.fileObj.name;
   const { hoverRef, isHover } = useHover();
   const { data } = useSubmitSources();
-  const { step } = usePublishStore();
 
   const canPublish = !!data?.result?.msgCell;
 
@@ -127,7 +124,7 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
     transition,
   };
 
-  if (step === STEPS.PUBLISH && canPublish) {
+  if (canPublish) {
     return (
       <TableRow sx={{ height: 60 }}>
         <Cells file={file} pos={pos} isDragging={false} isHover={false} />
@@ -158,7 +155,6 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
 export function FileTable() {
   const { files, reorderFiles } = useFileStore();
   const { data } = useSubmitSources();
-  const { step } = usePublishStore();
 
   const canPublish = !!data?.result?.msgCell;
 
@@ -219,7 +215,7 @@ export function FileTable() {
           </TableHead>
           <TableBody>
             <SortableContext
-              disabled={step === STEPS.PUBLISH && canPublish}
+              disabled={canPublish}
               items={files.map((file) => file.fileObj.name)}
               strategy={verticalListSortingStrategy}>
               {files.map((file, i) => {
