@@ -34,7 +34,6 @@ const PositionedContent = styled(Box)({
 
 const ContractDataBox = styled(Box)({
   display: "flex",
-  justifyContent: "space-between",
   gap: 20,
 });
 

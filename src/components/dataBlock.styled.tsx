@@ -3,8 +3,7 @@ import { CenteringBox, DataBox } from "./common.styled";
 import { Box, Typography } from "@mui/material";
 
 const DataFlexibleBox = styled(DataBox)({
-  maxWidth: "49.2%",
-  flex: 1,
+  minWidth: 100,
 });
 
 interface DataRowProps {
