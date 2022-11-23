@@ -3,6 +3,7 @@ import Button from "./Button";
 import { CenteringBox, DataBox, IconBox, TitleText } from "./common.styled";
 import React from "react";
 import publish from "../assets/publish.svg";
+import verified from "../assets/verified-light.svg";
 import { CompilationNotification, NotificationType } from "./CompilationNotification";
 import { Box } from "@mui/system";
 import { NotificationTitle } from "./CompileOutput";
@@ -59,7 +60,12 @@ export function PublishProof() {
           cursor: step === STEPS.PUBLISH && canPublish ? "pointer" : "inherit",
         }}>
         <IconBox>
-          <img src={publish} alt="publish icon" width={41} height={41} />
+          <img
+            src={status === "success" ? verified : publish}
+            alt="publish icon"
+            width={41}
+            height={41}
+          />
         </IconBox>
         <TitleText>Publish</TitleText>
       </CenteringBox>
@@ -79,8 +85,9 @@ export function PublishProof() {
             </Box>
             <CenteringBox mb={3} pb={3} sx={{ justifyContent: "center" }}>
               <Button
+                disabled={status === "success"}
                 sx={{ width: 140, height: 44 }}
-                text="Publish"
+                text={status === "success" ? "Published" : "Publish"}
                 onClick={() => {
                   mutate();
                 }}
