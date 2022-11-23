@@ -50,7 +50,6 @@ export function useSendTXN(key: string, monitorSuccess: (count: number) => Promi
         const _id = setInterval(async () => {
           const txnStatus = await monitorSuccess(i);
           i++;
-          console.log("monitor", txnStatus);
           updateTxn(key, txnStatus);
           if (txnStatus !== "issued") {
             clearInterval(_id);
