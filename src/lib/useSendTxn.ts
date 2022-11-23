@@ -26,8 +26,7 @@ const useTxnMonitors = create<{
 /*
 TODOs
 1. Support a broader API - tonkeeper / ton-connection
-2. Ensure cell is not null
-3. Ensure connection exists
+2. Ensure connection exists
 */
 export function useSendTXN(key: string, monitorSuccess: (count: number) => Promise<TXNStatus>) {
   const { requestTXN } = useWalletConnect();

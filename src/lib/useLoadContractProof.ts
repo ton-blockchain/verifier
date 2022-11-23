@@ -19,14 +19,6 @@ export async function hasOnchainProof(hash: string): Promise<string | null> {
   });
 }
 
-// let i = 0;
-
-// export async function hasOnchainProof(stam: string) {
-//   i++;
-//   console.log(i);
-//   return i > 10 ? "yes" : null;
-// }
-
 export function useLoadContractProof() {
   const { contractAddress, isAddressValid } = useContractAddress();
   const { data: contractInfo, error: contractError } = useLoadContractInfo();
@@ -48,11 +40,6 @@ export function useLoadContractProof() {
 
       if (!ipfslink) {
         return { hasOnchainProof: false };
-      }
-
-      // temp TODO
-      if (ipfslink) {
-        return { hasOnchainProof: true };
       }
 
       const sourcesData = await ContractVerifier.getSourcesData(ipfslink);
