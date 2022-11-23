@@ -28,13 +28,14 @@ const ContentBox = styled(Box)({
 const PositionedContent = styled(Box)({
   position: "absolute",
   width: "100%",
-  top: -141,
+  top: -133,
   left: 0,
 });
 
 const ContractDataBox = styled(Box)({
   display: "flex",
   justifyContent: "space-between",
+  gap: 20,
 });
 
 const OverflowingBox = styled(Box)({
@@ -91,7 +92,7 @@ function App() {
             </>
           )}
           {proofData && !hasFiles() && (
-            <OverflowingBox sx={{ paddingTop: 0 }} mb={5}>
+            <OverflowingBox sx={{ padding: 0 }} mb={5}>
               <ContractSourceCode />
             </OverflowingBox>
           )}
@@ -103,21 +104,6 @@ function App() {
           <Footer />
         </CenteringWrapper>
       )}
-      <div
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: "calc(50% - 400px)",
-          marginTop: 20,
-          display: "flex",
-          gap: 10,
-          background: "white",
-          borderRadius: 20,
-          padding: "10px 20px",
-          width: 800,
-          zIndex: 99,
-          margin: "auto",
-        }}></div>
     </AppBox>
   );
 }
