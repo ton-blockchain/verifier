@@ -53,7 +53,7 @@ export function FileUploaderArea() {
                 height={41}
               />
             </IconBox>
-            <TitleText>Add sources {step === STEPS.PUBLISH && " - Done"}</TitleText>
+            <TitleText>Add sources</TitleText>
           </CenteringBox>
           {hasFiles() && step !== STEPS.PUBLISH && (
             <div {...getRootProps()}>

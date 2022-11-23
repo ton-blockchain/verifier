@@ -67,7 +67,7 @@ export function PublishProof() {
             height={41}
           />
         </IconBox>
-        <TitleText>Publish {status === "success" && "- Done"}</TitleText>
+        <TitleText>Publish</TitleText>
       </CenteringBox>
       {currentSection === SECTIONS.PUBLISH && canPublish && (
         <Fade in={currentSection === SECTIONS.PUBLISH}>
