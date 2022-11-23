@@ -1,13 +1,13 @@
 #myVerifierFiles {
   border-right: 1px solid #f7f9fb;
-  max-width: 150px;
+  max-width: 180px;
   font-weight: 600;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 #myVerifierContent code {
   background-color: #fff;
-  font-size: 12px;
+  font-size: 14px;
   max-width: 600px;
 }
 

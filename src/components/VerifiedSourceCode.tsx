@@ -33,7 +33,7 @@ const VerificationRule = styled(CenteringWrapper)({
 });
 
 const VerificationRuleDescription = styled(Typography)({
-  fontSize: 12,
+  fontSize: 14,
   color: "#728A96",
 });
 
