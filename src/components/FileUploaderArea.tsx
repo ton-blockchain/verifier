@@ -3,8 +3,8 @@ import { useDropzone } from "react-dropzone";
 import React from "react";
 import { Box } from "@mui/material";
 import { CenteringBox, IconBox, TitleBox, TitleText } from "./common.styled";
-import sources from "../assets/sources.svg";
-import sourcesVerified from "../assets/verified-light.svg";
+import sourcesDefault from "../assets/sources.svg";
+import sourcesVerified from "../assets/verified-bold.svg";
 import { AppButton } from "./AppButton";
 import upload from "../assets/upload.svg";
 import { styled } from "@mui/system";
@@ -47,7 +47,7 @@ export function FileUploaderArea() {
           <CenteringBox sx={{ width: "100%" }}>
             <IconBox>
               <img
-                src={step === STEPS.PUBLISH ? sourcesVerified : sources}
+                src={step === STEPS.PUBLISH ? sourcesVerified : sourcesDefault}
                 alt="Block icon"
                 width={41}
                 height={41}

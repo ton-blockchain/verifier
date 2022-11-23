@@ -3,7 +3,7 @@ import Button from "./Button";
 import { CenteringBox, DataBox, IconBox, TitleText } from "./common.styled";
 import React from "react";
 import publish from "../assets/publish.svg";
-import verified from "../assets/verified-light.svg";
+import verified from "../assets/verified-bold.svg";
 import { CompilationNotification, NotificationType } from "./CompilationNotification";
 import { Box } from "@mui/system";
 import { NotificationTitle } from "./CompileOutput";
@@ -52,7 +52,7 @@ export function PublishProof() {
   return (
     <DataBox mb={6}>
       <CenteringBox
-        p={3}
+        p="15px 30px"
         mb={1}
         onClick={onSectionExpand}
         sx={{
@@ -85,9 +85,9 @@ export function PublishProof() {
             </Box>
             <CenteringBox mb={3} pb={3} sx={{ justifyContent: "center" }}>
               <Button
-                disabled={status === "success"}
+                disabled={status === "success" || status === "pending"}
                 sx={{ width: 140, height: 44 }}
-                text={status === "success" ? "Published" : "Publish"}
+                text="Publish"
                 onClick={() => {
                   mutate();
                 }}
