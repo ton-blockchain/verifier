@@ -178,25 +178,34 @@ export function AddressInput() {
           {import.meta.env.DEV && active && (
             <div
               style={{
-                padding: 2,
+                padding: 20,
                 background: "#000000",
-                gap: 10,
+                gap: 20,
                 display: "flex",
                 textAlign: "center",
+                flexWrap: "wrap",
+                borderRadius: 20,
               }}>
-              {examples.concat(examples_not_verified).map(([name, address]) => (
-                <div
-                  style={{
-                    color: "white",
-                    cursor: "pointer",
-                  }}
-                  key={name}
-                  onClick={(e) => {
-                    navigate(`/${address}`);
-                  }}>
-                  {name}
-                </div>
-              ))}
+              <div>DEV//EXAMPLES:</div>
+              {examples
+                .sort((a, b) => a[0].localeCompare(b[0]))
+                .concat(examples_not_verified)
+                .map(([name, address]) => (
+                  <div
+                    style={{
+                      color: "black",
+                      cursor: "pointer",
+                      background: "white",
+                      padding: "10px 20px",
+                      borderRadius: 10,
+                    }}
+                    key={name}
+                    onClick={(e) => {
+                      navigate(`/${address}`);
+                    }}>
+                    {name}
+                  </div>
+                ))}
             </div>
           )}
         </Box>
