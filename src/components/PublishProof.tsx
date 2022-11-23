@@ -13,7 +13,7 @@ import { Fade } from "@mui/material";
 
 export function PublishProof() {
   const { data } = useSubmitSources();
-  const { mutate, status } = usePublishProof();
+  const { sendTXN, status } = usePublishProof();
   const { step, toggleSection, currentSection } = usePublishStore();
 
   const canPublish = !!data?.result?.msgCell;
@@ -23,31 +23,32 @@ export function PublishProof() {
   const onSectionExpand = () =>
     step === STEPS.PUBLISH && canPublish && toggleSection(SECTIONS.PUBLISH);
 
-  switch (status) {
-    case "not_issued":
-      text = (
-        <span>
-          To store your contract’s verification proof on-chain, you will need to issue a
-          transaction. <br /> This will cost 0.5 TON
-        </span>
-      );
-      break;
-    case "rejected":
-      text = "Transaction rejected, please retry";
-      break;
-    case "pending":
-      text = "Check your tonhub wallet for a pending transaction";
-      break;
-    case "success":
-      text = "Transaction issued, monitoring proof deployment on-chain";
-      break;
-    case "deployed":
-      text = "Your proof is ready!";
-      break;
-    case "expired":
-      text = "Transaction expired, please retry";
-      break;
-  }
+  // switch (status) {
+  //   case "not_issued":
+  //     text = (
+  //       <span>
+  //         To store your contract’s verification proof on-chain, you will need to issue a
+  //         transaction. <br /> This will cost 0.5 TON
+  //       </span>
+  //     );
+  //     break;
+  //   case "rejected":
+  //     text = "Transaction rejected, please retry";
+  //     break;
+  //   case "pending":
+  //     text = "Check your tonhub wallet for a pending transaction";
+  //     break;
+  //   case "success":
+  //     text = "Transaction issued, monitoring proof deployment on-chain";
+  //     break;
+  //   case "deployed":
+  //     text = "Your proof is ready!";
+  //     break;
+  //   case "expired":
+  //     text = "Transaction expired, please retry";
+  //     break;
+  // }
+  text = status;
 
   return (
     <DataBox mb={6}>
@@ -89,7 +90,7 @@ export function PublishProof() {
                 sx={{ width: 140, height: 44 }}
                 text={status === "success" ? "Published" : "Publish"}
                 onClick={() => {
-                  mutate();
+                  sendTXN();
                 }}
               />
             </CenteringBox>
