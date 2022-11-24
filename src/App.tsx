@@ -15,7 +15,7 @@ import { AddSourcesBlock } from "./components/AddSourcesBlock";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
-import { CompilationNotification, NotificationType } from "./components/CompilationNotification";
+import { AppNotification, NotificationType } from "./components/AppNotification";
 import { NotificationTitle } from "./components/CompileOutput";
 
 const AppBox = styled(Box)({});
@@ -80,12 +80,12 @@ function App() {
         {!error && isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
         {!!error && (
           <Box mt={4}>
-            <CompilationNotification
+            <AppNotification
               type={NotificationType.NOTIFICATION}
               title={
                 <NotificationTitle>
                   <span style={{ color: "#FC5656" }}>Error: </span>
-                  Blockchain error
+                  Unable to fetch contract data
                 </NotificationTitle>
               }
               notificationBody={

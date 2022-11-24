@@ -2,7 +2,7 @@ import { useSubmitSources } from "../lib/useSubmitSources";
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
 import { usePublishStepsStore } from "./usePublishStepsStore";
 import { Box } from "@mui/system";
-import { CompilationNotification, NotificationType } from "./CompilationNotification";
+import { AppNotification, NotificationType } from "./AppNotification";
 import { CenteringBox } from "./common.styled";
 import puzzle from "../assets/reorder-hint.svg";
 import hint from "../assets/light-bulb.svg";
@@ -70,7 +70,7 @@ export function CompileOutput() {
   return (
     <Box my={3}>
       {["similar"].includes(compileResult?.result ?? "") && (
-        <CompilationNotification
+        <AppNotification
           singleLine
           type={NotificationType.SUCCESS}
           title={
@@ -89,7 +89,7 @@ export function CompileOutput() {
       )}
 
       {["not_similar"].includes(compileResult?.result ?? "") && (
-        <CompilationNotification
+        <AppNotification
           type={NotificationType.ERROR}
           title={
             <CenteringBox>
@@ -116,7 +116,7 @@ export function CompileOutput() {
       )}
 
       {compileResult?.error && (
-        <CompilationNotification
+        <AppNotification
           type={NotificationType.NOTIFICATION}
           title={
             <NotificationTitle>
@@ -135,7 +135,7 @@ export function CompileOutput() {
       )}
 
       {!!error && (
-        <CompilationNotification
+        <AppNotification
           type={NotificationType.NOTIFICATION}
           title={
             <NotificationTitle>
@@ -154,7 +154,7 @@ export function CompileOutput() {
       )}
 
       {hints.length > 0 && (
-        <CompilationNotification
+        <AppNotification
           type={NotificationType.HINT}
           title={
             <CenteringBox mb={2}>

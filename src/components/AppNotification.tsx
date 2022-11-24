@@ -29,7 +29,7 @@ interface CompilationNotificationProps {
   singleLine?: boolean;
 }
 
-export function CompilationNotification({
+export function AppNotification({
   title,
   type,
   notificationBody,

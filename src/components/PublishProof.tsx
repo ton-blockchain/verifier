@@ -4,7 +4,7 @@ import { CenteringBox, DataBox, IconBox, TitleText } from "./common.styled";
 import React from "react";
 import publish from "../assets/publish.svg";
 import verified from "../assets/verified-bold.svg";
-import { CompilationNotification, NotificationType } from "./CompilationNotification";
+import { AppNotification, NotificationType } from "./AppNotification";
 import { Box } from "@mui/system";
 import { NotificationTitle } from "./CompileOutput";
 import { useSubmitSources } from "../lib/useSubmitSources";
@@ -78,7 +78,7 @@ export function PublishProof() {
         <Fade in={currentSection === SECTIONS.PUBLISH}>
           <Box>
             <Box sx={{ padding: "0 30px" }}>
-              <CompilationNotification
+              <AppNotification
                 type={NotificationType.NOTIFICATION}
                 title={<></>}
                 notificationBody={
