@@ -5,16 +5,17 @@ export enum NotificationType {
   ERROR = "Error",
   HINT = "Hint",
   SUCCESS = "Success",
-  NOTIFICATION = "Notification",
+  INFO = "Info",
 }
 
 interface NotificationBoxProps {
   borderColor?: string;
   backgroundColor?: string;
+  singleLine?: boolean;
 }
 
 const NotificationBox = styled(Box)((props: NotificationBoxProps) => ({
-  padding: "15px 25px",
+  padding: `${props.singleLine ? 0 : 15}px 25px`,
   margin: "24px 0",
   background: props.backgroundColor || "",
   border: `1px solid ${props.borderColor || "#D8D8D8"}`,
@@ -25,18 +26,20 @@ interface CompilationNotificationProps {
   type: NotificationType;
   title: React.ReactNode;
   notificationBody: React.ReactNode;
+  singleLine?: boolean;
 }
 
-export function CompilationNotification({
+export function AppNotification({
   title,
   type,
   notificationBody,
+  singleLine,
 }: CompilationNotificationProps) {
   let borderColor;
   let backgroundColor;
 
   switch (type) {
-    case NotificationType.NOTIFICATION:
+    case NotificationType.INFO:
       backgroundColor = "rgba(216, 216, 216, 0.2);";
       break;
     case NotificationType.ERROR:
@@ -52,7 +55,10 @@ export function CompilationNotification({
   }
 
   return (
-    <NotificationBox borderColor={borderColor} backgroundColor={backgroundColor}>
+    <NotificationBox
+      singleLine={singleLine}
+      borderColor={borderColor}
+      backgroundColor={backgroundColor}>
       {title}
       {notificationBody}
     </NotificationBox>
