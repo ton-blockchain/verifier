@@ -1,4 +1,4 @@
-import { Box, Link, styled, Typography } from "@mui/material";
+import { Box, Link, styled } from "@mui/material";
 
 const FooterWrapper = styled(Box)({
   maxWidth: 1160,
@@ -58,10 +58,6 @@ const CenteringWrapper = styled(Box)({
   alignItems: "center",
 });
 
-const FooterContributedText = styled(Typography)({
-  fontSize: 12,
-});
-
 const ContributedWrapper = styled(CenteringWrapper)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     minWidth: "100%",
@@ -98,7 +94,6 @@ const FooterTextBoxRight = styled(FooterTextBox)(({ theme }) => ({
 
 export {
   FooterLink,
-  FooterContributedText,
   ContributedWrapper,
   FooterTextBox,
   FooterTextBoxLeft,
