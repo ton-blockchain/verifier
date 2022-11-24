@@ -104,8 +104,7 @@ export function PublishProof() {
                   sx={{ height: 44 }}
                   text="View verified contract"
                   onClick={() => {
-                    resetFiles();
-                    clearTXN();
+                    location.reload();
                   }}
                 />
               )}
