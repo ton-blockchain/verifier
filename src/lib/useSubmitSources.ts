@@ -74,8 +74,6 @@ export function useSubmitSources() {
 
     const result = (await response.json()) as VerifyResult;
 
-    console.log(result, "KOKO");
-
     const hints = [];
 
     if (["unknown_error", "compile_error"].includes(result.compileResult.result)) {
