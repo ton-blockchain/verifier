@@ -1,41 +1,32 @@
-import { useEffect } from "react";
 import { Cell, Address, toNano } from "ton";
-import { useSendTXN, TXNStatus } from "./useSendTxn";
 import { useSubmitSources } from "./useSubmitSources";
-import { useLoadContractProof } from "./useLoadContractProof";
-import { useFileStore } from "./useFileStore";
-import { useQuery } from "@tanstack/react-query";
+import { hasOnchainProof } from "./useLoadContractProof";
+import { useLoadContractInfo } from "./useLoadContractInfo";
+import { useSendTXN } from "./useSendTxn";
 
 export function usePublishProof() {
-  const { data } = useSubmitSources();
-  const { refetch, data: contractProofData } = useLoadContractProof();
-  const { reset: resetFiles } = useFileStore();
+  const { data: submitSourcesData } = useSubmitSources();
+  const { data: contractInfo } = useLoadContractInfo();
 
-  const m = useSendTXN(
-    Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY),
-    toNano(0.1),
-    data?.result?.msgCell ? Cell.fromBoc(Buffer.from(data.result.msgCell))[0] : new Cell(), // TODO this is a hack
-  );
+  const { sendTXN, data, clearTXN } = useSendTXN("publishProof", async (count: number) => {
+    const hasIpfsLink = await hasOnchainProof(contractInfo!.hash);
 
-  useQuery(
-    ["publishProofMonitoring"],
-    async () => {
-      // TODO add counter to report back an error
-      refetch();
-      if (contractProofData?.hasOnchainProof) {
-        resetFiles();
-      }
-    },
-    {
-      enabled: m.data.status === "success" && !contractProofData?.hasOnchainProof,
-      refetchInterval: 2000,
-    },
-  );
+    if (count > 20) {
+      return "error";
+    }
+
+    return hasIpfsLink ? "success" : "issued";
+  });
 
   return {
-    mutate: m.mutate,
-    status: contractProofData?.hasOnchainProof
-      ? "deployed"
-      : (m.data.status as TXNStatus | "deployed"),
+    sendTXN: () => {
+      sendTXN(
+        Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY),
+        toNano(0.1),
+        Cell.fromBoc(Buffer.from(submitSourcesData!.result.msgCell!))[0],
+      );
+    },
+    status: data.status,
+    clearTXN,
   };
 }

@@ -5,6 +5,7 @@ import { useLoadContractInfo } from "./useLoadContractInfo";
 import "@ton-community/contract-verifier-sdk";
 import { SourcesData } from "@ton-community/contract-verifier-sdk";
 import { useContractAddress } from "./useContractAddress";
+import { usePublishProof } from "./usePublishProof";
 
 export const toSha256Buffer = (s: string) => {
   const sha = new Sha256();
@@ -12,13 +13,16 @@ export const toSha256Buffer = (s: string) => {
   return Buffer.from(sha.digestSync());
 };
 
-let i = 0;
+export async function hasOnchainProof(hash: string): Promise<string | null> {
+  return ContractVerifier.getSourcesJsonUrl(hash, {
+    httpApiEndpoint: await getEndpoint(),
+  });
+}
 
 export function useLoadContractProof() {
   const { contractAddress, isAddressValid } = useContractAddress();
   const { data: contractInfo, error: contractError } = useLoadContractInfo();
-  const queryClient = useQueryClient();
-
+  const { status: publishProofStatus } = usePublishProof();
   const { isLoading, error, data, refetch } = useQuery<
     Partial<SourcesData> & {
       hasOnchainProof: boolean;
@@ -32,9 +36,7 @@ export function useLoadContractProof() {
         };
       }
 
-      const ipfslink = await ContractVerifier.getSourcesJsonUrl(contractInfo!.hash, {
-        httpApiEndpoint: await getEndpoint(),
-      });
+      const ipfslink = await hasOnchainProof(contractInfo!.hash);
 
       if (!ipfslink) {
         return { hasOnchainProof: false };
@@ -47,7 +49,7 @@ export function useLoadContractProof() {
       };
     },
     {
-      enabled: !!contractAddress && !!contractInfo?.hash,
+      enabled: !!contractAddress && !!contractInfo?.hash && publishProofStatus === "initial",
     },
   );
 
