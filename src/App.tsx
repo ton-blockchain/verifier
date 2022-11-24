@@ -81,7 +81,7 @@ function App() {
         {!!error && (
           <Box mt={4}>
             <AppNotification
-              type={NotificationType.NOTIFICATION}
+              type={NotificationType.ERROR}
               title={
                 <NotificationTitle>
                   <span style={{ color: "#FC5656" }}>Error: </span>

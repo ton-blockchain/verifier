@@ -5,7 +5,7 @@ export enum NotificationType {
   ERROR = "Error",
   HINT = "Hint",
   SUCCESS = "Success",
-  NOTIFICATION = "Notification",
+  INFO = "INFO",
 }
 
 interface NotificationBoxProps {
@@ -39,7 +39,7 @@ export function AppNotification({
   let backgroundColor;
 
   switch (type) {
-    case NotificationType.NOTIFICATION:
+    case NotificationType.INFO:
       backgroundColor = "rgba(216, 216, 216, 0.2);";
       break;
     case NotificationType.ERROR:
