@@ -11,10 +11,11 @@ export enum NotificationType {
 interface NotificationBoxProps {
   borderColor?: string;
   backgroundColor?: string;
+  singleLine?: boolean;
 }
 
 const NotificationBox = styled(Box)((props: NotificationBoxProps) => ({
-  padding: "15px 25px",
+  padding: `${props.singleLine ? 0 : 15}px 25px`,
   margin: "24px 0",
   background: props.backgroundColor || "",
   border: `1px solid ${props.borderColor || "#D8D8D8"}`,
@@ -25,12 +26,14 @@ interface CompilationNotificationProps {
   type: NotificationType;
   title: React.ReactNode;
   notificationBody: React.ReactNode;
+  singleLine?: boolean;
 }
 
 export function CompilationNotification({
   title,
   type,
   notificationBody,
+  singleLine,
 }: CompilationNotificationProps) {
   let borderColor;
   let backgroundColor;
@@ -52,7 +55,10 @@ export function CompilationNotification({
   }
 
   return (
-    <NotificationBox borderColor={borderColor} backgroundColor={backgroundColor}>
+    <NotificationBox
+      singleLine={singleLine}
+      borderColor={borderColor}
+      backgroundColor={backgroundColor}>
       {title}
       {notificationBody}
     </NotificationBox>

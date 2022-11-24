@@ -71,9 +71,10 @@ export function CompileOutput() {
     <Box my={3}>
       {["similar"].includes(compileResult?.result ?? "") && (
         <CompilationNotification
+          singleLine
           type={NotificationType.SUCCESS}
           title={
-            <CenteringBox>
+            <CenteringBox sx={{ height: 42 }}>
               <CenteringBox mr={1}>
                 <img src={like} alt="Like icon" width={31} height={31} />
               </CenteringBox>
@@ -133,7 +134,24 @@ export function CompileOutput() {
         />
       )}
 
-      {!!error && <h4>❌ {error.toString()}</h4>}
+      {!!error && (
+        <CompilationNotification
+          type={NotificationType.NOTIFICATION}
+          title={
+            <NotificationTitle>
+              <span style={{ color: "#FC5656" }}>Error: </span>
+              Server error
+            </NotificationTitle>
+          }
+          notificationBody={
+            <Box sx={{ overflow: "auto", maxHeight: 300 }}>
+              <pre>
+                <code>{error.toString()}</code>
+              </pre>
+            </Box>
+          }
+        />
+      )}
 
       {hints.length > 0 && (
         <CompilationNotification
