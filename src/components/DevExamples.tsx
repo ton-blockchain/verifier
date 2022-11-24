@@ -1,9 +1,6 @@
 import { useNavigate } from "react-router-dom";
 const examples_not_verified = [["wallet-v3", "EQBuOkznvkh_STO7F8W6FcoeYhP09jjO1OeXR2RZFkN6w7NR"]];
 
-// to verify https://github.com/getgems-io/nft-contracts/blob/main/packages/contracts/sources/nft-auction-v2/nft-auction-v2.func
-// EQCnTg1uvsqc1ZCSgEOl5Yk5LItktG6OOYrSQ8SnJP4FFa58
-
 const examples = [
   ["dns-root", "Ef_lZ1T4NCb2mwkme9h2rJfESCE0W34ma9lWp7-_uY3zXDvq"],
   ["wallet-v4", "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ"],
@@ -30,6 +27,8 @@ const examples = [
   ["nft-fixprice-sale-v3", "EQCljxPgw_0Z0uELYyt7AoGsmtGP7ORB-A4jk-gyuNJIjsRW"],
   ["nft-collection-editable", "EQCHmW1OkT6_-_vO6zoSFW9Z2T62dhffNZkkKRpdaPTFLPdT"],
   ["nft-auction", "EQC1yTmHvpD5z4Dk_l-YnEhZclc06utSisqhthfzBGz-w0Ae"],
+  ["jetton-wallet-fwd-fee", "EQDt0qeoHwip8CtuUeNsaKjK-g0rwL7zUunKAnv0NCTZDSs3"],
+  ["nft-auction-v2", "EQCnTg1uvsqc1ZCSgEOl5Yk5LItktG6OOYrSQ8SnJP4FFa58"],
 ];
 
 export function DevExamples() {

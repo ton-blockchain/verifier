@@ -15,6 +15,8 @@ import { AddSourcesBlock } from "./components/AddSourcesBlock";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
+import { AppNotification, NotificationType } from "./components/AppNotification";
+import { NotificationTitle } from "./components/CompileOutput";
 
 const ContentBox = styled(Box)({
   position: "relative",
@@ -74,7 +76,26 @@ function App() {
       <TopBar />
       <ContentBox>
         {!error && isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
-        {!!error && <Box sx={{ marginTop: 4 }}>Error {`${error}`}</Box>}
+        {!!error && (
+          <Box mt={4}>
+            <AppNotification
+              type={NotificationType.ERROR}
+              title={
+                <NotificationTitle>
+                  <span style={{ color: "#FC5656" }}>Error: </span>
+                  Unable to fetch contract data
+                </NotificationTitle>
+              }
+              notificationBody={
+                <Box sx={{ overflow: "auto", maxHeight: 300 }}>
+                  <pre>
+                    <code>{error.toString()}</code>
+                  </pre>
+                </Box>
+              }
+            />
+          </Box>
+        )}
         <PositionedContent>
           {!isLoading && (
             <ContractDataBox>

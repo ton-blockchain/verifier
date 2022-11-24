@@ -73,7 +73,9 @@ export function FileUploaderArea() {
       </TitleBox>
       <Box sx={{ padding: "15px 30px" }}>
         <Box sx={{ position: "relative", zIndex: 5 }}>
-          {!hasFiles() && <FilesDropzone {...getRootProps()}>Drop ".fc" files here</FilesDropzone>}
+          {!hasFiles() && (
+            <FilesDropzone {...getRootProps()}>Drop sources (.fc, .func) here</FilesDropzone>
+          )}
         </Box>
 
         <input

@@ -1,12 +1,11 @@
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useFileStore } from "./useFileStore";
 import { useCompilerSettingsStore } from "./useCompilerSettingsStore";
-import { useParams } from "react-router-dom";
 import { useCustomMutation } from "./useCustomMutation";
 import { Cell } from "ton";
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useContractAddress } from "./useContractAddress";
+import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
+import { TELEGRAM_SUPPORT_LINK } from "../components/Footer";
 
 export type VerifyResult = {
   compileResult: CompileResult;
@@ -20,6 +19,7 @@ export type CompileResult = {
   error: string | null;
   hash: string | null;
   funcCmd: string | null;
+  compilerSettings: FuncCompilerSettings;
 };
 
 function jsonToBlob(json: Record<string, any>): Blob {
@@ -101,6 +101,11 @@ export function useSubmitSources() {
       hints.push(
         "Source code compiles correctly but does not match the on-chain contract hash. Make sure you are using the correct compiler version, command line and file order.",
       );
+    }
+
+    if (result.compileResult.result !== "similar") {
+      hints.push(`Fiftlib version used: ${result.compileResult.compilerSettings.fiftlibVersion}`);
+      hints.push(`Fift version used: ${result.compileResult.compilerSettings.fiftVersion}`);
     }
 
     let queryId;

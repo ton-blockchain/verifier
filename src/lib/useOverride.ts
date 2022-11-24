@@ -1,4 +1,4 @@
-import { useSearchParams, useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { Address } from "ton";
 import { getAdmin } from "./getAdmin";
 import { getClient } from "./getClient";

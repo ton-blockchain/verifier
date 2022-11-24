@@ -2,7 +2,7 @@ import { useSubmitSources } from "../lib/useSubmitSources";
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
 import { usePublishStepsStore } from "./usePublishStepsStore";
 import { Box } from "@mui/system";
-import { CompilationNotification, NotificationType } from "./CompilationNotification";
+import { AppNotification, NotificationType } from "./AppNotification";
 import { CenteringBox } from "./common.styled";
 import puzzle from "../assets/reorder-hint.svg";
 import hint from "../assets/light-bulb.svg";
@@ -62,18 +62,18 @@ const ErrorRowValue = styled(DataRowValue)({
 export function CompileOutput() {
   const { data: submitSourcesData, error } = useSubmitSources();
   const { data: contractInfoData } = useLoadContractInfo();
-  const { setPublishExpanded, setAddSourcesExpanded } = usePublishStepsStore();
 
   const compileResult = submitSourcesData?.result?.compileResult;
   const hints = submitSourcesData?.hints ?? [];
-  // https://t.me/+4S9EdWndFec4MWYy
+
   return (
     <Box my={3}>
       {["similar"].includes(compileResult?.result ?? "") && (
-        <CompilationNotification
+        <AppNotification
+          singleLine
           type={NotificationType.SUCCESS}
           title={
-            <CenteringBox>
+            <CenteringBox sx={{ height: 42 }}>
               <CenteringBox mr={1}>
                 <img src={like} alt="Like icon" width={31} height={31} />
               </CenteringBox>
@@ -88,7 +88,7 @@ export function CompileOutput() {
       )}
 
       {["not_similar"].includes(compileResult?.result ?? "") && (
-        <CompilationNotification
+        <AppNotification
           type={NotificationType.ERROR}
           title={
             <CenteringBox>
@@ -115,8 +115,8 @@ export function CompileOutput() {
       )}
 
       {compileResult?.error && (
-        <CompilationNotification
-          type={NotificationType.NOTIFICATION}
+        <AppNotification
+          type={NotificationType.ERROR}
           title={
             <NotificationTitle>
               <span style={{ color: "#FC5656" }}>Error: </span>
@@ -125,18 +125,35 @@ export function CompileOutput() {
           }
           notificationBody={
             <Box sx={{ overflow: "auto", maxHeight: 300 }}>
-              <pre>
+              <div>
                 <code>{compileResult.error}</code>
+              </div>
+            </Box>
+          }
+        />
+      )}
+
+      {!!error && (
+        <AppNotification
+          type={NotificationType.ERROR}
+          title={
+            <NotificationTitle>
+              <span style={{ color: "#FC5656" }}>Error: </span>
+              Server error
+            </NotificationTitle>
+          }
+          notificationBody={
+            <Box sx={{ overflow: "auto", maxHeight: 300 }}>
+              <pre>
+                <code>{error.toString()}</code>
               </pre>
             </Box>
           }
         />
       )}
 
-      {!!error && <h4>❌ {error.toString()}</h4>}
-
       {hints.length > 0 && (
-        <CompilationNotification
+        <AppNotification
           type={NotificationType.HINT}
           title={
             <CenteringBox mb={2}>
