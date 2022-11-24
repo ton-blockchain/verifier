@@ -30,7 +30,7 @@ export function PublishProof() {
       text = (
         <span>
           To store your contract’s verification proof on-chain, you will need to issue a
-          transaction. <br /> This will cost 0.5 TON
+          transaction. This will cost 0.5 TON
         </span>
       );
       break;
@@ -44,7 +44,7 @@ export function PublishProof() {
       text = "Transaction issued, monitoring proof deployment on-chain.";
       break;
     case "success":
-      text = "Your proof is ready! Click below to view it.";
+      text = "Your contract is now verified! Click below to view it.";
       break;
     case "expired":
       text = "Transaction expired, please retry.";
@@ -79,7 +79,7 @@ export function PublishProof() {
           <Box>
             <Box sx={{ padding: "0 30px" }}>
               <AppNotification
-                type={NotificationType.NOTIFICATION}
+                type={NotificationType.INFO}
                 title={<></>}
                 notificationBody={
                   <CenteringBox sx={{ overflow: "auto", maxHeight: 300 }}>
@@ -101,8 +101,8 @@ export function PublishProof() {
               )}
               {status === "success" && (
                 <Button
-                  sx={{ width: 140, height: 44 }}
-                  text="View proof"
+                  sx={{ height: 44 }}
+                  text="View verified contract"
                   onClick={() => {
                     resetFiles();
                     clearTXN();

@@ -23,6 +23,12 @@ export function TopBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [showExpanded, setShowExpanded] = useState(pathname.length === 1);
+  const [initialRender, setInitialRender] = useState(true);
+
+  useEffect(() => {
+    setInitialRender(false);
+  }, []);
+
   useEffect(() => {
     setShowExpanded(pathname.length === 1);
   }, [pathname]);
@@ -33,7 +39,7 @@ export function TopBar() {
         <TopBarContent>
           <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} alt="App icon" />
-            <AppLogo>TON VERIFY</AppLogo>
+            <AppLogo>TON VERIFIER</AppLogo>
           </LinkWrapper>
           <ContentColumn>
             <CenteringBox mr={2}>
@@ -49,7 +55,7 @@ export function TopBar() {
         <SearchWrapper>
           <AddressInput />
         </SearchWrapper>
-        <Fade in={showExpanded} timeout={animationTimeout}>
+        <Fade in={showExpanded} timeout={initialRender ? 0 : animationTimeout}>
           <TopBarDropDown />
         </Fade>
       </TopBarWrapper>
