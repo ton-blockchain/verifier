@@ -22,6 +22,8 @@ import { HoverableIcon } from "./HoverableIcon";
 import icon from "../assets/icon.svg";
 import { useNavigate } from "react-router-dom";
 
+export const TELEGRAM_SUPPORT_LINK = "https://t.me/+4S9EdWndFec4MWYy";
+
 export function Footer() {
   const navigate = useNavigate();
 
@@ -38,7 +40,7 @@ export function Footer() {
           <HoverableIcon
             iconUrl={telegram}
             hoveredIconUrl={telegramHovered}
-            link="https://t.me/+4S9EdWndFec4MWYy"
+            link={TELEGRAM_SUPPORT_LINK}
           />
           <HoverableIcon
             iconUrl={github}
@@ -63,7 +65,7 @@ export function Footer() {
           </Typography>
         </ContributedWrapper>
         <FooterTextBoxRight>
-          <FooterLink target="_blank" href="https://t.me/+4S9EdWndFec4MWYy">
+          <FooterLink target="_blank" href={TELEGRAM_SUPPORT_LINK}>
             <Typography variant="body2">Support</Typography>
           </FooterLink>
         </FooterTextBoxRight>
