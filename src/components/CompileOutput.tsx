@@ -62,11 +62,10 @@ const ErrorRowValue = styled(DataRowValue)({
 export function CompileOutput() {
   const { data: submitSourcesData, error } = useSubmitSources();
   const { data: contractInfoData } = useLoadContractInfo();
-  const { setPublishExpanded, setAddSourcesExpanded } = usePublishStepsStore();
 
   const compileResult = submitSourcesData?.result?.compileResult;
   const hints = submitSourcesData?.hints ?? [];
-  // https://t.me/+4S9EdWndFec4MWYy
+
   return (
     <Box my={3}>
       {["similar"].includes(compileResult?.result ?? "") && (
@@ -126,9 +125,9 @@ export function CompileOutput() {
           }
           notificationBody={
             <Box sx={{ overflow: "auto", maxHeight: 300 }}>
-              <pre>
+              <div>
                 <code>{compileResult.error}</code>
-              </pre>
+              </div>
             </Box>
           }
         />
