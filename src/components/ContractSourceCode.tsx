@@ -8,8 +8,8 @@ import { IconBox, TitleBox, TitleText } from "./common.styled";
 import verified from "../assets/verified-light.svg";
 import { styled } from "@mui/system";
 
-const SourceCodeTabs = styled(Tabs)({
-  position: "relative",
+const SourceCodeTabs = styled(Tabs)(({ theme }) => ({
+  marginBottom: theme.spacing(2),
 
   "& .MuiTabs-indicator": {
     borderBottom: "4px solid #0088CC",
@@ -18,7 +18,7 @@ const SourceCodeTabs = styled(Tabs)({
     color: "#000",
     fontWeight: 800,
   },
-});
+}));
 
 function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();

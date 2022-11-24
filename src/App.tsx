@@ -18,8 +18,6 @@ import { CenteringWrapper } from "./components/footer.styled";
 import { AppNotification, NotificationType } from "./components/AppNotification";
 import { NotificationTitle } from "./components/CompileOutput";
 
-const AppBox = styled(Box)({});
-
 const ContentBox = styled(Box)({
   position: "relative",
   maxWidth: 1160,
@@ -30,7 +28,7 @@ const ContentBox = styled(Box)({
 const PositionedContent = styled(Box)({
   position: "absolute",
   width: "100%",
-  top: -133,
+  top: -193,
   left: 0,
 });
 
@@ -65,7 +63,7 @@ function App() {
   }, [window.location.pathname]);
 
   return (
-    <AppBox
+    <Box
       onDragEnter={() => setIsDragging(true)}
       onDrop={() => setIsDragging(false)}
       onClick={() => setIsDragging(false)}>
@@ -124,7 +122,7 @@ function App() {
           <Footer />
         </CenteringWrapper>
       )}
-    </AppBox>
+    </Box>
   );
 }
 
