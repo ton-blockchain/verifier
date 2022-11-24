@@ -5,7 +5,7 @@ export enum NotificationType {
   ERROR = "Error",
   HINT = "Hint",
   SUCCESS = "Success",
-  INFO = "INFO",
+  INFO = "Info",
 }
 
 interface NotificationBoxProps {
