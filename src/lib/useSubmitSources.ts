@@ -6,6 +6,7 @@ import { Cell } from "ton";
 import { useContractAddress } from "./useContractAddress";
 import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
 import { TELEGRAM_SUPPORT_LINK } from "../components/Footer";
+import { useWalletConnect } from "./useWalletConnect";
 
 export type VerifyResult = {
   compileResult: CompileResult;
@@ -33,6 +34,7 @@ export function useSubmitSources() {
   const { data: contractInfo } = useLoadContractInfo();
   const { hasFiles, files } = useFileStore();
   const { compiler, compilerSettings } = useCompilerSettingsStore();
+  const { walletAddress } = useWalletConnect();
 
   const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;
@@ -43,6 +45,10 @@ export function useSubmitSources() {
 
     for (const f of files) {
       formData.append((f.folder ? f.folder + "/" : "") + f.fileObj.name, f.fileObj);
+    }
+
+    if (!walletAddress) {
+      throw new Error("Wallet is not connected");
     }
 
     formData.append(
@@ -59,7 +65,7 @@ export function useSubmitSources() {
           hasIncludeDirectives: u.hasIncludeDirectives,
           folder: u.folder,
         })),
-        senderAddress: "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ", //senderAddress,
+        senderAddress: walletAddress,
       }),
     );
 
