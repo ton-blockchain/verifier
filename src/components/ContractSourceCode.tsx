@@ -38,7 +38,7 @@ function ContractSourceCode() {
       </TitleBox>
       <Box p={3}>
         <SourceCodeTabs value={value} onChange={handleChange}>
-          <Tab disabled={!contractProof?.hasOnchainProof} label="FunC" />
+          <Tab disabled={!contractProof?.hasOnchainProof} label="Sources" />
           <Tab label="Disassembled" />
         </SourceCodeTabs>
         {value === 0 && <VerifiedSourceCode />}
