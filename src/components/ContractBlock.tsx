@@ -14,7 +14,7 @@ export function ContractBlock() {
 
   if (data) {
     dataRows.push({ title: "Address", value: contractAddress || "" });
-    dataRows.push({ title: "Balance", value: data.balance });
+    dataRows.push({ title: "Balance", value: `${parseFloat(data.balance).toFixed(4)} TON` });
     dataRows.push({ title: "Hash", value: data.hash });
     dataRows.push({ title: "Workchain", value: workchainForAddress(contractAddress || "") });
   }

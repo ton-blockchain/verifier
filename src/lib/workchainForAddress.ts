@@ -5,9 +5,9 @@ export function workchainForAddress(address: string): string {
     const _address = Address.parse(address);
     switch (_address.workChain) {
       case -1:
-        return "Masterchain";
+        return "Masterchain (-1)";
       case 0:
-        return "Basic Workchain";
+        return "Basic Workchain (0)";
       default:
         return `${_address.workChain}`;
     }
