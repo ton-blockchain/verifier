@@ -45,8 +45,8 @@ export function TopBar() {
             </LinkWrapper>
           </ContentColumn>
         </TopBarContent>
-        <TopBarHeading>Smart Contract Verifier</TopBarHeading>
-        <SearchWrapper>
+        {pathname.length < 2 && <TopBarHeading>Smart Contract Verifier</TopBarHeading>}
+        <SearchWrapper isHeadingDisplayed={pathname.length < 2}>
           <AddressInput />
         </SearchWrapper>
         <Fade in={showExpanded} timeout={animationTimeout}>

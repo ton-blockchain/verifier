@@ -65,6 +65,10 @@ const GitLogo = styled("span")(() => ({
   fontSize: 18,
 }));
 
+interface Props {
+  isHeadingDisplayed?: boolean;
+}
+
 const TopBarHeading = styled("h3")(({ theme }) => ({
   fontSize: 26,
   textAlign: "center",
@@ -72,10 +76,11 @@ const TopBarHeading = styled("h3")(({ theme }) => ({
   fontWeight: 800,
 }));
 
-const SearchWrapper = styled(CenteringBox)(() => ({
+const SearchWrapper = styled(CenteringBox)((props: Props) => ({
   margin: "auto",
   maxWidth: contentMaxWidth,
   width: "100%",
+  marginTop: props.isHeadingDisplayed ? 0 : 40,
 }));
 
 export {
