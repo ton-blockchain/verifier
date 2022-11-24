@@ -15,6 +15,8 @@ import { AddSourcesBlock } from "./components/AddSourcesBlock";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
+import { CompilationNotification, NotificationType } from "./components/CompilationNotification";
+import { NotificationTitle } from "./components/CompileOutput";
 
 const AppBox = styled(Box)({});
 
@@ -76,7 +78,26 @@ function App() {
       <TopBar />
       <ContentBox>
         {!error && isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
-        {!!error && <Box sx={{ marginTop: 4 }}>Error {`${error}`}</Box>}
+        {!!error && (
+          <Box mt={4}>
+            <CompilationNotification
+              type={NotificationType.NOTIFICATION}
+              title={
+                <NotificationTitle>
+                  <span style={{ color: "#FC5656" }}>Error: </span>
+                  Blockchain error
+                </NotificationTitle>
+              }
+              notificationBody={
+                <Box sx={{ overflow: "auto", maxHeight: 300 }}>
+                  <pre>
+                    <code>{error.toString()}</code>
+                  </pre>
+                </Box>
+              }
+            />
+          </Box>
+        )}
         <PositionedContent>
           {!isLoading && (
             <ContractDataBox>
