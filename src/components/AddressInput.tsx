@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import search from "../assets/search.svg";
@@ -53,6 +53,8 @@ export function AddressInput() {
   const { storedValue: searchDupResults, setValue: setSearchDupResults } = useLocalStorage<
     SearchRequest[]
   >(SEARCH_HISTORY, []);
+  const [urlParams] = useSearchParams();
+  const showDevExamples = urlParams.get("devExamples") !== null;
 
   const onClear = useCallback(() => setValue(""), []);
 
@@ -143,7 +145,7 @@ export function AddressInput() {
               onHistoryClear={onHistoryClear}
             />
           )}
-          {import.meta.env.DEV && active && <DevExamples />}
+          {(showDevExamples || import.meta.env.DEV) && active && <DevExamples />}
         </Box>
         <Backdrop
           sx={{

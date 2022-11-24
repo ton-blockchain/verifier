@@ -1,11 +1,8 @@
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useFileStore } from "./useFileStore";
 import { useCompilerSettingsStore } from "./useCompilerSettingsStore";
-import { useParams } from "react-router-dom";
 import { useCustomMutation } from "./useCustomMutation";
 import { Cell } from "ton";
-import { useEffect } from "react";
-import { useQueryClient } from "@tanstack/react-query";
 import { useContractAddress } from "./useContractAddress";
 
 export type VerifyResult = {
