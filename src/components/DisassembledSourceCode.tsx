@@ -1,5 +1,5 @@
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
-import hljs from "highlight.js";
+import hljs from "highlight.js/lib/core";
 // @ts-ignore
 import hljsDefine from "highlightjs-func";
 import { useEffect, useRef } from "react";
@@ -17,7 +17,7 @@ export function DisassembledSourceCode() {
 
   return (
     <pre style={{ overflow: "auto", maxHeight: 500 }}>
-      <code ref={ref} className="language-tlb">
+      <code ref={ref} className="language-fift">
         {contractInfo?.decompiled}
       </code>
     </pre>

@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "tsc && vite build && cp dist/index.html dist/404.html",
     "preview": "vite preview",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "analyze": "source-map-explorer 'dist/assets/*.js' --no-border-checks"
   },
   "dependencies": {
     "@aws-crypto/sha256-js": "^2.0.2",
@@ -31,6 +32,7 @@
     "react-dropzone": "^14.2.3",
     "react-qr-code": "^2.0.8",
     "react-router-dom": "^6.4.2",
+    "source-map-explorer": "^2.5.3",
     "ton": "^12.1.5",
     "ton-x": "^2.0.0",
     "tvm-disassembler": "https://github.com/shaharyakir/disassembler/tarball/temp",
