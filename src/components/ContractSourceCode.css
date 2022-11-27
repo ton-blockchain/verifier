@@ -9,6 +9,7 @@
   background: #fff;
   font-size: 14px;
   max-width: 100%;
+  line-height: 25px;
 }
 
 #myVerifierFiles .contract-verifier-file.active {
