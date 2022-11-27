@@ -1,7 +1,7 @@
 #myVerifierFiles {
-  border-right: 1px solid #f7f9fb;
+  border-right: 1px solid #e8e8e8;
   width: 240px;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
 }
 
@@ -10,8 +10,14 @@
   font-size: 14px;
   max-width: 100%;
   line-height: 25px;
+  padding-left: 20px;
+  max-height: 800px;
 }
 
 #myVerifierFiles .contract-verifier-file.active {
-  border-right: 2px solid #0088cc;
+  background: #f7f9fb;
+}
+
+#myVerifierFiles .contract-verifier-tree-item {
+  padding: 13px 6px;
 }

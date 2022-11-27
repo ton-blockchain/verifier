@@ -1,10 +1,10 @@
 import { useLoadContractSourceCode } from "../lib/useLoadContractSourceCode";
 
 export function VerifiedSourceCode() {
-  const { hasOnchainProof } = useLoadContractSourceCode();
+  useLoadContractSourceCode();
 
   return (
-    <div id="myVerifierContainer" style={{ height: 500, color: "black" }}>
+    <div id="myVerifierContainer" style={{ color: "black" }}>
       <div id="myVerifierFiles"></div>
       <div id="myVerifierContent"></div>
     </div>
