@@ -9,6 +9,11 @@
   background-color: #fff;
   font-size: 14px;
   max-width: 600px;
+  line-height: 1.5em;
+}
+
+#myVerifierContent code div {
+  background-color: #fff;
 }
 
 #myVerifierFiles .contract-verifier-file.active {
