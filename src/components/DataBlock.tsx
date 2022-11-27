@@ -1,13 +1,12 @@
 import React, { useCallback } from "react";
-import { IconButton } from "@mui/material";
-import { DataBox, IconBox, TitleText, TitleBox } from "./common.styled";
+import { IconButton, Link } from "@mui/material";
+import { DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
 import {
   DataFlexibleBox,
   DataRow,
   DataRowsBox,
-  DataRowSeparator,
   DataRowTitle,
   DataRowValue,
   IconsWrapper,
@@ -16,6 +15,9 @@ import {
 export interface DataRowItem {
   title: string;
   value: string;
+  showIcon?: boolean;
+  color?: string;
+  customLink?: string;
 }
 
 interface DataBlockProps {
@@ -24,17 +26,9 @@ interface DataBlockProps {
   icon: string;
   dataRows: DataRowItem[];
   isLoading?: boolean;
-  showIcons?: boolean;
 }
 
-export function DataBlock({
-  isFlexibleWrapper,
-  icon,
-  title,
-  dataRows,
-  isLoading,
-  showIcons,
-}: DataBlockProps) {
+export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading }: DataBlockProps) {
   const Wrapper = isFlexibleWrapper ? DataFlexibleBox : DataBox;
   const { showNotification } = useNotification();
 
@@ -42,6 +36,7 @@ export function DataBlock({
     navigator.clipboard.writeText(value);
     showNotification("Copied to clipboard!", "success");
   }, []);
+
   return (
     <Wrapper>
       <TitleBox mb={1}>
@@ -50,14 +45,27 @@ export function DataBlock({
         </IconBox>
         <TitleText>{title}</TitleText>
       </TitleBox>
-      <DataRowsBox isShrinked={!isFlexibleWrapper}>
-        {!isFlexibleWrapper && <DataRowSeparator />}
-        {dataRows.map(({ title, value }) => {
+      <DataRowsBox mt={2.5} isShrinked={!isFlexibleWrapper}>
+        {dataRows.map(({ title, value, showIcon, color, customLink }) => {
           return (
             <DataRow key={title} isShrinked={!isFlexibleWrapper}>
               <DataRowTitle>{title}</DataRowTitle>
-              <DataRowValue>{!!value ? value : "-"}</DataRowValue>
-              {showIcons && (
+              <DataRowValue sx={{ color: color }}>
+                {customLink && !!value ? (
+                  <Link
+                    target="_blank"
+                    href={customLink}
+                    sx={{
+                      textDecoration: "none",
+                      cursor: "pointer",
+                    }}>
+                    {value}
+                  </Link>
+                ) : (
+                  value ?? "-"
+                )}
+              </DataRowValue>
+              {showIcon && (
                 <IconsWrapper>
                   {value && (
                     <IconButton onClick={() => onCopy(value)}>

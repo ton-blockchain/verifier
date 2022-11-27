@@ -13,10 +13,10 @@ export function ContractBlock() {
   const dataRows: DataRowItem[] = [];
 
   if (data) {
-    dataRows.push({ title: "Address", value: contractAddress || "" });
-    dataRows.push({ title: "Balance", value: `${parseFloat(data.balance).toFixed(4)} TON` });
-    dataRows.push({ title: "Hash", value: data.hash });
+    dataRows.push({ title: "Address", value: contractAddress || "", showIcon: true });
     dataRows.push({ title: "Workchain", value: workchainForAddress(contractAddress || "") });
+    dataRows.push({ title: "Code Hash", value: data.hash, showIcon: true });
+    dataRows.push({ title: "Balance", value: `${parseFloat(data.balance).toFixed(4)} TON` });
   }
 
   return (
@@ -25,7 +25,6 @@ export function ContractBlock() {
       icon={contractIcon}
       dataRows={dataRows}
       isLoading={isLoading}
-      showIcons
       isFlexibleWrapper={proofData && proofData.hasOnchainProof}
     />
   );
