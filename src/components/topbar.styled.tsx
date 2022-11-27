@@ -3,8 +3,8 @@ import { Box, Link } from "@mui/material";
 import { animationTimeout, contentMaxWidth } from "../const";
 import { CenteringBox } from "./common.styled";
 
-const expandedHeaderHeight = "60vh";
-const headerHeight = 360;
+const expandedHeaderHeight = 340;
+const headerHeight = 200;
 
 interface TopBarWrapperProps {
   showExpanded: boolean;
@@ -16,21 +16,11 @@ const TopBarWrapper = styled(Box)(({ theme }) => (props: TopBarWrapperProps) => 
   width: "100%",
   minHeight: headerHeight,
   height: props.showExpanded ? expandedHeaderHeight : headerHeight,
-  background: "#232328",
+  background: "#fff",
   borderBottomLeftRadius: theme.spacing(6),
   borderBottomRightRadius: theme.spacing(6),
   transition: `${animationTimeout}ms`,
   transitionProperty: "height",
-}));
-
-const TopBarDropDown = styled(Box)(({ theme }) => ({
-  width: "100%",
-  minHeight: 360,
-  height: expandedHeaderHeight,
-  background: "#232328",
-  backgroundSize: "contain",
-  borderBottomLeftRadius: theme.spacing(6),
-  borderBottomRightRadius: theme.spacing(6),
 }));
 
 const ContentColumn = styled(CenteringBox)(() => ({
@@ -41,7 +31,7 @@ const LinkWrapper = styled(Link)(() => ({
   display: "flex",
   alignItems: "center",
   gap: 10,
-  color: "#fff",
+  color: "#000",
   textDecoration: "none",
   cursor: "pointer",
 }));
@@ -56,6 +46,7 @@ const TopBarContent = styled(CenteringBox)(({ theme }) => ({
 }));
 
 const AppLogo = styled("span")(() => ({
+  color: "#000",
   fontSize: 20,
   fontWeight: 800,
 }));
@@ -64,23 +55,20 @@ const GitLogo = styled("span")(() => ({
   fontSize: 18,
 }));
 
-interface Props {
-  isHeadingDisplayed?: boolean;
-}
-
 const TopBarHeading = styled("h3")(({ theme }) => ({
+  color: "#000",
   fontSize: 26,
   textAlign: "center",
   marginBottom: theme.spacing(5),
   fontWeight: 800,
 }));
 
-const SearchWrapper = styled(CenteringBox)((props: Props) => ({
+const SearchWrapper = styled(CenteringBox)({
   margin: "auto",
   maxWidth: contentMaxWidth,
   width: "100%",
-  marginTop: props.isHeadingDisplayed ? 0 : 40,
-}));
+  marginTop: 40,
+});
 
 export {
   SearchWrapper,
@@ -90,6 +78,5 @@ export {
   TopBarContent,
   TopBarHeading,
   GitLogo,
-  TopBarDropDown,
   ContentColumn,
 };
