@@ -17,19 +17,12 @@ import { Footer } from "./components/Footer";
 import { CenteringWrapper } from "./components/footer.styled";
 import { AppNotification, NotificationType } from "./components/AppNotification";
 import { NotificationTitle } from "./components/CompileOutput";
+import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 
 const ContentBox = styled(Box)({
-  position: "relative",
   maxWidth: 1160,
   width: "100%",
   margin: "auto",
-});
-
-const PositionedContent = styled(Box)({
-  position: "absolute",
-  width: "100%",
-  top: -193,
-  left: 0,
 });
 
 const ContractDataBox = styled(Box)({
@@ -96,26 +89,25 @@ function App() {
             />
           </Box>
         )}
-        <PositionedContent>
-          {!isLoading && (
-            <ContractDataBox>
-              <ContractBlock />
-              {proofData && proofData.hasOnchainProof && <CompilerBlock />}
-            </ContractDataBox>
-          )}
-          {proofData && (!proofData.hasOnchainProof || canOverride) && (
-            <>
-              <AddSourcesBlock />
-              {hasFiles() && <PublishProof />}
-            </>
-          )}
-          {proofData && !hasFiles() && (
-            <OverflowingBox sx={{ padding: 0 }} mb={5}>
-              <ContractSourceCode />
-            </OverflowingBox>
-          )}
-          {proofData && <Footer />}
-        </PositionedContent>
+        {!isLoading && (
+          <ContractDataBox>
+            <ContractBlock />
+            {proofData?.hasOnchainProof && <CompilerBlock />}
+          </ContractDataBox>
+        )}
+        {!isLoading && proofData?.hasOnchainProof && <VerificationInfoBlock />}
+        {proofData && (!proofData.hasOnchainProof || canOverride) && (
+          <>
+            <AddSourcesBlock />
+            {hasFiles() && <PublishProof />}
+          </>
+        )}
+        {proofData && !hasFiles() && (
+          <OverflowingBox sx={{ padding: 0 }} mb={5}>
+            <ContractSourceCode />
+          </OverflowingBox>
+        )}
+        {proofData && <Footer />}
       </ContentBox>
       {!proofData && (
         <CenteringWrapper sx={{ position: "fixed", bottom: 0, width: "100%" }}>

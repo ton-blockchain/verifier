@@ -2,11 +2,10 @@ import icon from "../assets/icon.svg";
 import { WalletConnect } from "./WalletConnect";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Fade } from "@mui/material";
-import github from "../assets/github.svg";
+import github from "../assets/github-dark.svg";
 import { AddressInput } from "../components/AddressInput";
 import { CenteringBox } from "./common.styled";
-import { animationTimeout, githubLink } from "../const";
+import { githubLink } from "../const";
 import {
   AppLogo,
   ContentColumn,
@@ -14,20 +13,14 @@ import {
   LinkWrapper,
   SearchWrapper,
   TopBarContent,
-  TopBarDropDown,
-  TopBarWrapper,
   TopBarHeading,
+  TopBarWrapper,
 } from "./topbar.styled";
 
 export function TopBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [showExpanded, setShowExpanded] = useState(pathname.length === 1);
-  const [initialRender, setInitialRender] = useState(true);
-
-  useEffect(() => {
-    setInitialRender(false);
-  }, []);
 
   useEffect(() => {
     setShowExpanded(pathname.length === 1);
@@ -36,7 +29,7 @@ export function TopBar() {
   return (
     <>
       <TopBarWrapper showExpanded={showExpanded}>
-        <TopBarContent>
+        <TopBarContent mb={5}>
           <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} alt="App icon" />
             <AppLogo>TON VERIFIER</AppLogo>
@@ -52,12 +45,9 @@ export function TopBar() {
           </ContentColumn>
         </TopBarContent>
         {pathname.length < 2 && <TopBarHeading>Smart Contract Verifier</TopBarHeading>}
-        <SearchWrapper isHeadingDisplayed={pathname.length < 2}>
+        <SearchWrapper>
           <AddressInput />
         </SearchWrapper>
-        <Fade in={showExpanded} timeout={initialRender ? 0 : animationTimeout}>
-          <TopBarDropDown />
-        </Fade>
       </TopBarWrapper>
     </>
   );

@@ -16,8 +16,8 @@ export function DisassembledSourceCode() {
   }, [contractInfo?.decompiled, ref.current]);
 
   return (
-    <pre style={{ overflow: "auto", maxHeight: 500 }}>
-      <code ref={ref} className="language-fift">
+    <pre style={{ overflow: "auto", maxHeight: 500, marginTop: 0 }}>
+      <code ref={ref} className="language-fift" style={{ background: "#fff" }}>
         {contractInfo?.decompiled}
       </code>
     </pre>

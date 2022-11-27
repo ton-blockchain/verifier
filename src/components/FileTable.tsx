@@ -29,6 +29,7 @@ import deleteIcon from "../assets/delete.svg";
 import dndIcon from "../assets/dnd.svg";
 import { BorderLessCell, DirectoryBox, HeaderCell, HR } from "./fileTable.styled";
 import { useSubmitSources } from "../lib/useSubmitSources";
+import { trimDirectory } from "../utils/textUtils";
 
 function Cells({
   file,
@@ -70,6 +71,9 @@ function Cells({
         <DirectoryBox
           disabled={canPublish}
           value={file.folder}
+          onBlur={(e) => {
+            setDirectory(fileName, trimDirectory(e.target.value));
+          }}
           onChange={(e) => {
             setDirectory(fileName, e.target.value);
           }}></DirectoryBox>

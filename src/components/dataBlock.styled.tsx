@@ -37,7 +37,7 @@ const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
   height: props.isShrinked ? "" : 38,
   padding: "15px 30px",
   transition: "background .15s",
-  borderBottom: "1px solid rgba(114, 138, 150, 0.2)",
+  borderTop: "1px solid rgba(114, 138, 150, 0.2)",
   "&:hover": {
     background: "rgba(114, 138, 150, 0.1)",
   },
@@ -55,7 +55,7 @@ const DataRowValue = styled(Typography)({
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
-  fontWeight: 16,
+  fontSize: 14,
   color: "#728A96",
 });
 
