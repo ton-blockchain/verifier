@@ -1,7 +1,6 @@
 import { styled } from "@mui/material/styles";
 import { Box, Link } from "@mui/material";
 import { animationTimeout, contentMaxWidth } from "../const";
-import headerBg from "../assets/headerBg.svg";
 import { CenteringBox } from "./common.styled";
 
 const expandedHeaderHeight = "60vh";
@@ -28,7 +27,7 @@ const TopBarDropDown = styled(Box)(({ theme }) => ({
   width: "100%",
   minHeight: 360,
   height: expandedHeaderHeight,
-  background: `#232328 url(${headerBg}) no-repeat center center`,
+  background: "#232328",
   backgroundSize: "contain",
   borderBottomLeftRadius: theme.spacing(6),
   borderBottomRightRadius: theme.spacing(6),
