@@ -14,30 +14,34 @@ import { DevExamples } from "./DevExamples";
 const InputWrapper = styled(Box)({
   display: "flex",
   alignItems: "center",
-  height: 60,
-  background: "#fff",
-  borderRadius: 14,
+  height: 56,
+  background: "#F7F9FB",
+  borderRadius: 40,
+  border: "1px solid rgba(114, 138, 150, 0.16)",
   padding: "0 20px",
   zIndex: 9,
 });
 
-const AppAddressInput = styled("input")({
-  display: "flex",
-  alignItems: "center",
+const AppAddressInput = styled("input")(({ theme }) => ({
+  flex: 1,
+  marginLeft: 10,
   width: "100%",
-  height: 60,
-  outline: "unset",
-  border: "none",
-  padding: 0,
-  paddingLeft: 5,
-  fontFamily: "Mulish",
+  height: 56,
   fontSize: 16,
+  fontWeight: 500,
+  outline: "unset",
+  fontFamily: "Mulish",
+  color: "#000",
+  border: "none",
   background: "transparent",
   caretColor: "#728A96",
   "&::placeholder": {
     color: "#728A96",
   },
-});
+  [theme.breakpoints.down("sm")]: {
+    fontSize: 16,
+  },
+}));
 
 export interface SearchRequest {
   index: number;

@@ -19,25 +19,36 @@ export function CompilerBlock() {
     dataRows.push({
       title: "Compiler",
       value: `${data!.compiler!} ${compilerSettings?.funcVersion}`,
+      color: "#0088CC",
+      customLink:
+        compilerSettings?.funcVersion &&
+        `https://github.com/ton-blockchain/ton/releases/tag/${data!.compiler}-${
+          compilerSettings.funcVersion
+        }`,
     });
     dataRows.push({
       title: "Fift Version",
       value: compilerSettings?.fiftVersion ?? "",
+      showIcon: true,
+      color: "#0088CC",
+      customLink:
+        compilerSettings?.fiftVersion &&
+        `https://github.com/ton-blockchain/ton/tree/${compilerSettings.fiftVersion}/crypto/fift`,
     });
     dataRows.push({
       title: "Fiftlib Version",
       value: compilerSettings?.fiftlibVersion ?? "",
+      showIcon: true,
+      customLink:
+        compilerSettings?.fiftlibVersion &&
+        `https://github.com/ton-blockchain/ton/tree/${compilerSettings.fiftlibVersion}/crypto/fift/lib`,
     });
-    dataRows.push({ title: "Command", value: compilerSettings?.commandLine! });
+    dataRows.push({
+      title: "Command",
+      value: compilerSettings?.commandLine!,
+      showIcon: true,
+    });
   }
 
-  return (
-    <DataBlock
-      title="Compiler"
-      icon={compilerIcon}
-      dataRows={dataRows}
-      isFlexibleWrapper
-      showIcons
-    />
-  );
+  return <DataBlock title="Compiler" icon={compilerIcon} dataRows={dataRows} isFlexibleWrapper />;
 }
