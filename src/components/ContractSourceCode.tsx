@@ -22,8 +22,8 @@ const ContentBox = styled(Box)({
 
 const CopyBox = styled(Box)({
   position: "relative",
-  top: 90,
-  left: "96%",
+  top: 5,
+  left: "97%",
   zIndex: 3,
 });
 
@@ -73,17 +73,15 @@ function ContractSourceCode() {
         </TitleWrapper>
       </TitleBox>
       <ContentBox p={3}>
-        {value === 0 && (
-          <CopyBox>
-            <IconButton>
-              <img alt="Copy Icon" src={copy} width={16} height={16} />
-            </IconButton>
-          </CopyBox>
-        )}
         <SourceCodeTabs value={value} onChange={handleChange}>
           <Tab disabled={!contractProof?.hasOnchainProof} label="Sources" />
           <Tab label="Disassembled" />
         </SourceCodeTabs>
+        <CopyBox>
+          <IconButton>
+            <img alt="Copy Icon" src={copy} width={16} height={16} />
+          </IconButton>
+        </CopyBox>
         {value === 0 && <VerifiedSourceCode />}
         {value === 1 && <DisassembledSourceCode />}
       </ContentBox>

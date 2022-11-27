@@ -11,12 +11,6 @@
   max-width: 100%;
 }
 
-#myVerifierFiles .contract-verifier-file {
-  background-image: url("../assets/file.svg");
-  background-repeat: no-repeat;
-  background-position: left;
-}
-
 #myVerifierFiles .contract-verifier-file.active {
   border-right: 2px solid #0088cc;
 }
