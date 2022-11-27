@@ -6,17 +6,10 @@ const makeElipsisAddress = (address?: string | null, padding?: number): string =
   return `${firstPart}...${secondPart}`;
 };
 
-const trimDirectory = (str: string): string => {
-  let trimmed = str.replace(/([^:]\/)\/+/g, "$1");
-  if (trimmed.split("")[0] === "/") {
-    trimmed = trimmed.slice(0, -1);
-  }
-  return trimmed;
-};
+const trimDirectory = (str: string): string =>
+  str
+    .replace(/\/+/g, "/")
+    .replace(/^\/[^\/]/, "")
+    .replace(/\/$/, "");
 
-const checkLastDirectoryDigit = (str: string): string => {
-  let trimmed = str.split("")[str.length - 1] === "/" && str.slice(0, str.length - 1);
-  return typeof trimmed !== "string" ? "" : trimmed;
-};
-
-export { makeElipsisAddress, trimDirectory, checkLastDirectoryDigit };
+export { makeElipsisAddress, trimDirectory };
