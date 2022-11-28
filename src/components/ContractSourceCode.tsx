@@ -48,7 +48,12 @@ function ContractSourceCode() {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        border: "0.5px solid rgba(114, 138, 150, 0.24)",
+        boxShadow: "rgb(114 138 150 / 8%) 0px 2px 16px",
+        borderRadius: "20px",
+      }}>
       <TitleBox mb={1}>
         <TitleWrapper>
           <CenteringBox sx={{ width: "100%" }}>
@@ -89,7 +94,7 @@ function ContractSourceCode() {
           </IconButton>
         </CopyBox>
       </ContentBox>
-    </>
+    </Box>
   );
 }
 
