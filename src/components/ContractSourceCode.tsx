@@ -10,6 +10,7 @@ import { styled } from "@mui/system";
 import download from "../assets/download.svg";
 import { AppButton } from "./AppButton";
 import copy from "../assets/copy.svg";
+import { downloadSources } from "./downloadSources";
 
 const TitleWrapper = styled(CenteringBox)({
   justifyContent: "space-between",
@@ -65,7 +66,9 @@ function ContractSourceCode() {
                 background="#F2F2F2"
                 height={37}
                 width={167}
-                disabled>
+                onClick={() => {
+                  contractProof?.files?.length && downloadSources(contractProof.files);
+                }}>
                 <img src={download} alt="Download icon" width={19} height={19} />
                 Download sources
               </AppButton>
