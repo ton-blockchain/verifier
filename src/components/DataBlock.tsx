@@ -38,7 +38,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper pb={isFlexibleWrapper ? 0 : 2}>
       <TitleBox mb={1}>
         <IconBox>
           <img src={icon} alt="Block icon" width={41} height={41} />
@@ -68,7 +68,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
               {showIcon && (
                 <IconsWrapper>
                   {value && (
-                    <IconButton onClick={() => onCopy(value)}>
+                    <IconButton sx={{ padding: 0 }} onClick={() => onCopy(value)}>
                       <img src={copy} alt="Copy icon" width={15} height={15} />
                     </IconButton>
                   )}

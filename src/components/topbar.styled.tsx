@@ -3,8 +3,8 @@ import { Box, Link } from "@mui/material";
 import { animationTimeout, contentMaxWidth } from "../const";
 import { CenteringBox } from "./common.styled";
 
-const expandedHeaderHeight = 270;
-const headerHeight = 200;
+const expandedHeaderHeight = 250;
+const headerHeight = 188;
 
 interface TopBarWrapperProps {
   showExpanded: boolean;
@@ -21,6 +21,8 @@ const TopBarWrapper = styled(Box)(({ theme }) => (props: TopBarWrapperProps) => 
   borderBottomRightRadius: theme.spacing(6),
   transition: `${animationTimeout}ms`,
   transitionProperty: "height",
+  border: "0.5px solid rgba(114, 138, 150, 0.24)",
+  boxShadow: "rgb(114 138 150 / 8%) 0px 2px 16px",
 }));
 
 const ContentColumn = styled(CenteringBox)(() => ({
@@ -38,28 +40,29 @@ const LinkWrapper = styled(Link)(() => ({
 
 const TopBarContent = styled(CenteringBox)(({ theme }) => ({
   margin: "auto",
-  paddingTop: theme.spacing(3),
   maxWidth: contentMaxWidth,
+  height: 100,
   width: "100%",
   justifyContent: "space-between",
   gap: 10,
 }));
 
-const AppLogo = styled("span")(() => ({
+const AppLogo = styled("h4")(() => ({
   color: "#000",
   fontSize: 20,
   fontWeight: 800,
 }));
-const GitLogo = styled("span")(() => ({
-  fontWeight: 800,
+const GitLogo = styled("h5")(() => ({
+  color: "#000",
+  fontWeight: 700,
   fontSize: 18,
 }));
 
 const TopBarHeading = styled("h3")(({ theme }) => ({
   color: "#000",
   fontSize: 26,
+  marginTop: 0,
   textAlign: "center",
-  marginBottom: theme.spacing(5),
   fontWeight: 800,
 }));
 
@@ -67,7 +70,6 @@ const SearchWrapper = styled(CenteringBox)({
   margin: "auto",
   maxWidth: contentMaxWidth,
   width: "100%",
-  marginTop: 40,
 });
 
 export {

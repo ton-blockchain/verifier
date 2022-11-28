@@ -14,7 +14,7 @@ import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { Fade } from "@mui/material";
 
 const ContentBox = styled(Box)({
-  padding: "15px 30px",
+  padding: "15px 24px",
 });
 
 export function AddSourcesBlock() {
@@ -46,7 +46,7 @@ export function AddSourcesBlock() {
               )}
               {(data || error) && <CompileOutput />}
               {hasFiles() && (
-                <CenteringBox sx={{ justifyContent: "center" }} my={3}>
+                <CenteringBox sx={{ justifyContent: "center" }} mt={3} mb="9px">
                   {!walletAddress ? (
                     <WalletConnect />
                   ) : !data?.result?.msgCell ? (

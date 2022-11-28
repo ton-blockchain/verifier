@@ -19,34 +19,24 @@ const DataRowsBox = styled(Box)((props: DataRowProps) => ({
     borderBottom: props.isShrinked ? "" : "none !important",
   },
   "&:last-child": {
-    marginBottom: 20,
+    marginBottom: 3,
   },
 }));
-
-const DataRowSeparator = styled(Box)({
-  width: "100%",
-  height: 1,
-  marginTop: 20,
-  borderBottom: "1px solid rgba(114, 138, 150, 0.2)",
-});
 
 const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
   boxSizing: props.isShrinked ? "border-box" : "inherit",
   flex: props.isShrinked ? "40%" : "inherit",
   width: props.isShrinked ? 0 : "",
   height: props.isShrinked ? "" : 38,
-  padding: "15px 30px",
+  padding: "10px 24px",
   transition: "background .15s",
   borderTop: "1px solid rgba(114, 138, 150, 0.2)",
-  "&:hover": {
-    background: "rgba(114, 138, 150, 0.1)",
-  },
 }));
 
 const DataRowTitle = styled(Typography)({
-  fontSize: 16,
+  fontSize: 14,
   color: "#000",
-  minWidth: 120,
+  minWidth: 110,
   fontWeight: 800,
 });
 
@@ -60,16 +50,8 @@ const DataRowValue = styled(Typography)({
 });
 
 const IconsWrapper = styled(CenteringBox)({
-  minWidth: 100,
+  minWidth: 25,
   justifyContent: "flex-end",
 });
 
-export {
-  DataRow,
-  DataRowValue,
-  DataRowTitle,
-  DataRowsBox,
-  DataFlexibleBox,
-  IconsWrapper,
-  DataRowSeparator,
-};
+export { DataRow, DataRowValue, DataRowTitle, DataRowsBox, DataFlexibleBox, IconsWrapper };

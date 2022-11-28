@@ -71,7 +71,7 @@ export function WalletConnect() {
           fontSize={14}
           textColor="#50A7EA"
           fontWeight={800}
-          width={144}
+          width={150}
           height={44}
           transparent
           onClick={() => setShowDisconnect(true)}>
@@ -84,10 +84,10 @@ export function WalletConnect() {
         <AppButton
           fontSize={14}
           textColor="#fff"
-          background="#1976d2"
-          hoverBackground="#156cc2"
+          background="rgb(0, 136, 204)"
+          hoverBackground="rgb(0, 95, 142)"
           fontWeight={800}
-          width={144}
+          width={150}
           height={44}
           onClick={onOpen}>
           <WalletButtonContent>Connect Wallet</WalletButtonContent>
