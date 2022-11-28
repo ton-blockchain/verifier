@@ -58,7 +58,7 @@ function Cells({
         <CenteringBox sx={{ color: "#D8D8D8" }}>
           {pos}.
           <CenteringBox
-            ml={2}
+            ml={5}
             style={{
               cursor: "pointer",
               visibility: isHover ? "visible" : "hidden",
@@ -193,7 +193,7 @@ export function FileTable() {
               },
             }}>
             <TableRow sx={{ fontWeight: 700 }}>
-              <HeaderCell sx={{ paddingLeft: 0, width: 70 }}>Order</HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, width: 100 }}>Order</HeaderCell>
               <HeaderCell sx={{ paddingLeft: 0 }}>Directory</HeaderCell>
               <HeaderCell sx={{ paddingLeft: 0, width: 300 }}>File</HeaderCell>
               <HeaderCell sx={{ paddingLeft: 0, width: 150 }}>Include in command</HeaderCell>

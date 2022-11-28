@@ -3,7 +3,7 @@ import { Box, Link } from "@mui/material";
 import { animationTimeout, contentMaxWidth } from "../const";
 import { CenteringBox } from "./common.styled";
 
-const expandedHeaderHeight = 270;
+const expandedHeaderHeight = 250;
 const headerHeight = 200;
 
 interface TopBarWrapperProps {

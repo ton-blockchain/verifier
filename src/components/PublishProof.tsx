@@ -57,7 +57,7 @@ export function PublishProof() {
   return (
     <DataBox mb={6}>
       <CenteringBox
-        p="15px 30px"
+        p="30px 24px 0 24px"
         mb={1}
         onClick={onSectionExpand}
         sx={{
@@ -88,7 +88,7 @@ export function PublishProof() {
                 }
               />
             </Box>
-            <CenteringBox mb={3} pb={3} sx={{ justifyContent: "center" }}>
+            <CenteringBox mb={3} sx={{ justifyContent: "center" }}>
               {status !== "success" && (
                 <Button
                   disabled={status === "pending" || status === "issued"}

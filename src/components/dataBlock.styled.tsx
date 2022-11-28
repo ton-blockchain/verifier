@@ -19,7 +19,7 @@ const DataRowsBox = styled(Box)((props: DataRowProps) => ({
     borderBottom: props.isShrinked ? "" : "none !important",
   },
   "&:last-child": {
-    marginBottom: 20,
+    marginBottom: 3,
   },
 }));
 
@@ -28,18 +28,18 @@ const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
   flex: props.isShrinked ? "40%" : "inherit",
   width: props.isShrinked ? 0 : "",
   height: props.isShrinked ? "" : 38,
-  padding: "15px 24px",
+  padding: "10px 24px",
   transition: "background .15s",
   borderTop: "1px solid rgba(114, 138, 150, 0.2)",
-  "&:hover": {
-    background: "rgba(114, 138, 150, 0.1)",
-  },
+  // "&:hover": {
+  //   background: "rgba(114, 138, 150, 0.1)",
+  // },
 }));
 
 const DataRowTitle = styled(Typography)({
-  fontSize: 16,
+  fontSize: 14,
   color: "#000",
-  minWidth: 120,
+  minWidth: 110,
   fontWeight: 800,
 });
 
@@ -53,7 +53,7 @@ const DataRowValue = styled(Typography)({
 });
 
 const IconsWrapper = styled(CenteringBox)({
-  minWidth: 20,
+  minWidth: 25,
   justifyContent: "flex-end",
 });
 
