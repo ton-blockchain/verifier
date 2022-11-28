@@ -7,4 +7,4 @@ export const fiftVersionToLink = (version: string) =>
   `https://github.com/ton-blockchain/ton/tree/${version}/crypto/fift`;
 
 export const funcVersionToLink = (version: FuncCompilerVersion) =>
-  `https://github.com/ton-blockchain/ton/releases/tag/${data!.compiler}-${version}`;
+  `https://github.com/ton-blockchain/ton/releases/tag/func-${version}`;
