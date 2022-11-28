@@ -1,6 +1,7 @@
 import create from "zustand";
 
 import { immer } from "zustand/middleware/immer";
+import { AnalyticsAction, AnalyticsCategory, sendAnalyticsEvent } from "./googleAnalytics";
 
 export type FileToUpload = {
   fileObj: File;
@@ -53,13 +54,16 @@ export const useFileStore = create(
       );
 
       set((state) => {
-        state.files.push(
-          ...modifiedFiles.filter(
-            (f) =>
-              f.fileObj.name.match(/.*\.(fc|func)/) &&
-              !state.files.find((existingF) => existingF.fileObj.name === f.fileObj.name),
-          ),
+        const filesToAdd = modifiedFiles.filter(
+          (f) =>
+            f.fileObj.name.match(/.*\.(fc|func)/) &&
+            !state.files.find((existingF) => existingF.fileObj.name === f.fileObj.name),
         );
+
+        if (filesToAdd) {
+          sendAnalyticsEvent(AnalyticsCategory.PUBLISH, AnalyticsAction.ADD_FILE);
+          state.files.push(...filesToAdd);
+        }
       });
     },
     setInclueInCommand: (name: string, include: boolean) => {
