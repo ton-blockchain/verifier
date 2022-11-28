@@ -1,7 +1,7 @@
 import create from "zustand";
 
 import { immer } from "zustand/middleware/immer";
-import { AnalyticsAction, AnalyticsCategory, sendAnalyticsEvent } from "./googleAnalytics";
+import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
 
 export type FileToUpload = {
   fileObj: File;
@@ -61,7 +61,7 @@ export const useFileStore = create(
         );
 
         if (filesToAdd) {
-          sendAnalyticsEvent(AnalyticsCategory.PUBLISH, AnalyticsAction.ADD_FILE);
+          sendAnalyticsEvent(AnalyticsAction.ADD_FILE);
           state.files.push(...filesToAdd);
         }
       });

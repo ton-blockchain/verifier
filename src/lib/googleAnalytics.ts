@@ -1,31 +1,29 @@
 import ReactGA from "react-ga4";
 
-export enum AnalyticsCategory {
-  VIEW = "View",
-  PUBLISH = "Publish",
-}
-
 export enum AnalyticsAction {
-  ADD_FILE = "Add file",
-  CONNECT_WALLET_POPUP = "Connect wallet popup",
-  CONNECT_WALLET_CONNECTED = "Connect wallet connected",
-  COMPILE_CLICK = "Submit Compile",
-  COMPILE_ERROR = "Compile Error",
-  COMPILE_SUCCESS = "Compile Success",
-  PUBLISH_CLICK = "Publish",
+  ADD_FILE = "ADD_FILE",
+  CONNECT_WALLET_POPUP = "CONNECT_WALLET_POPUP",
+  WALLET_CONNECTED = "WALLET_CONNECTED",
+  COMPILE_SUBMIT = "COMPILE_SUBMIT",
+  COMPILE_SERVER_ERROR = "COMPILE_SERVER_ERROR",
+  COMPILE_HASHES_NOT_SIMILAR = "COMPILE_HASHES_NOT_SIMILAR",
+  COMPILE_COMPILATION_ERROR = "COMPILE_COMPILATION_ERROR",
+  COMPILE_SUCCESS_HASHES_MATCH = "COMPILE_SUCCESS_HASHES_MATCH",
+  PUBLISH_CLICK = "PUBLISH_CLICK",
+  TRANSACTION_ISSUED = "TRANSACTION_ISSUED",
+  TRANSACTION_REJECTED = "TRANSACTION_REJECTED",
+  TRANSACTION_ERROR = "TRANSACTION_ERROR",
+  TRANSACTION_EXPIRED = "TRANSACTION_EXPIRED",
+  CONTRACT_DEPLOYED = "CONTRACT_DEPLOYED",
 }
 
-export const sendAnalyticsEvent = (
-  category: AnalyticsCategory,
-  action: AnalyticsAction,
-  label: string = "",
-) => {
+export const sendAnalyticsEvent = (action: AnalyticsAction, label: string = "") => {
   if (!ReactGA.isInitialized) {
     return;
   }
   try {
     ReactGA.event({
-      category,
+      category: "VERIFIER",
       action,
       label,
     });
@@ -36,7 +34,7 @@ export const sendAnalyticsEvent = (
 
 export const initGA = () => {
   try {
-    // ReactGA.initialize(import.meta.env.VITE_APP_GA!);
+    ReactGA.initialize(import.meta.env.VITE_APP_GA!);
     ReactGA.send(window.location.pathname + window.location.search);
   } catch (error) {}
 };

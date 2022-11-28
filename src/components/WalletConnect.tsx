@@ -8,6 +8,7 @@ import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { ConnectorPopup, Provider } from "./ConnectorPopup";
 import { DisconnectButton, WalletButtonContent, WalletWrapper } from "./walletconnect.styled";
 import { makeElipsisAddress } from "../utils/textUtils";
+import { AnalyticsAction, sendAnalyticsEvent } from "../lib/googleAnalytics";
 
 export interface Adapter {
   provider: string;
@@ -45,6 +46,7 @@ export function WalletConnect() {
 
   const onOpen = () => {
     setShowConnect(true);
+    sendAnalyticsEvent(AnalyticsAction.CONNECT_WALLET_POPUP);
   };
 
   const onSelect = (provider: string) => {
@@ -56,7 +58,8 @@ export function WalletConnect() {
   };
 
   useEffect(() => {
-    if (walletAddress) {
+    if (showConnect && walletAddress) {
+      sendAnalyticsEvent(AnalyticsAction.WALLET_CONNECTED);
       close();
     }
   }, [walletAddress]);
