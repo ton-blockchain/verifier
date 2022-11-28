@@ -9,8 +9,11 @@ import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { Admin } from "./components/admin/Admin";
+import { initGA } from "./lib/googleAnalytics";
 
 const queryClient = new QueryClient();
+
+initGA();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <SnackbarProvider maxSnack={3}>
