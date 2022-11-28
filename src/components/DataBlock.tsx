@@ -38,7 +38,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
   }, []);
 
   return (
-    <Wrapper>
+    <Wrapper pb={isFlexibleWrapper ? 0 : 2}>
       <TitleBox mb={1}>
         <IconBox>
           <img src={icon} alt="Block icon" width={41} height={41} />

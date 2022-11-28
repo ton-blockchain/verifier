@@ -31,9 +31,6 @@ const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
   padding: "10px 24px",
   transition: "background .15s",
   borderTop: "1px solid rgba(114, 138, 150, 0.2)",
-  // "&:hover": {
-  //   background: "rgba(114, 138, 150, 0.1)",
-  // },
 }));
 
 const DataRowTitle = styled(Typography)({
