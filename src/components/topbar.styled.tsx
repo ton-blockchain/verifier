@@ -4,7 +4,7 @@ import { animationTimeout, contentMaxWidth } from "../const";
 import { CenteringBox } from "./common.styled";
 
 const expandedHeaderHeight = 250;
-const headerHeight = 200;
+const headerHeight = 188;
 
 interface TopBarWrapperProps {
   showExpanded: boolean;

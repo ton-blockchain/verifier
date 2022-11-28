@@ -57,8 +57,7 @@ export function PublishProof() {
   return (
     <DataBox mb={6}>
       <CenteringBox
-        p="30px 24px 0 24px"
-        mb={1}
+        p={currentSection === SECTIONS.PUBLISH ? "30px 24px 0 24px" : "20px 24px"}
         onClick={onSectionExpand}
         sx={{
           opacity: step === STEPS.PUBLISH && canPublish ? 1 : 0.25,

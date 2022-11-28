@@ -32,6 +32,7 @@ const SourceCodeTabs = styled(Tabs)({
   borderBottom: "1px solid #E8E8E8",
   "& .MuiTabs-indicator": {
     borderBottom: "4px solid #0088CC",
+    borderRadius: 20,
   },
   "& .MuiTab-root.Mui-selected": {
     color: "#000",
@@ -83,8 +84,12 @@ function ContractSourceCode() {
       </TitleBox>
       <ContentBox p={3}>
         <SourceCodeTabs value={value} onChange={handleChange}>
-          <Tab disabled={!contractProof?.hasOnchainProof} label="Sources" />
-          <Tab label="Disassembled" />
+          <Tab
+            sx={{ textTransform: "none" }}
+            disabled={!contractProof?.hasOnchainProof}
+            label="Sources"
+          />
+          <Tab sx={{ textTransform: "none" }} label="Disassembled" />
         </SourceCodeTabs>
         {value === 0 && <VerifiedSourceCode />}
         {value === 1 && <DisassembledSourceCode />}
