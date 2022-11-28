@@ -31,7 +31,7 @@ export function TopBar() {
       <TopBarWrapper showExpanded={showExpanded}>
         <TopBarContent mb={5}>
           <LinkWrapper onClick={() => navigate("/")}>
-            <img src={icon} alt="App icon" />
+            <img src={icon} width={30} height={30} alt="App icon" />
             <AppLogo>TON VERIFIER</AppLogo>
           </LinkWrapper>
           <ContentColumn>
@@ -39,7 +39,7 @@ export function TopBar() {
               <WalletConnect />
             </CenteringBox>
             <LinkWrapper href={githubLink} target="_blank">
-              <img src={github} alt="Github icon" />
+              <img src={github} alt="Github icon" width={20} height={20} />
               <GitLogo>GitHub</GitLogo>
             </LinkWrapper>
           </ContentColumn>

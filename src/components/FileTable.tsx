@@ -54,7 +54,7 @@ function Cells({
 
   return (
     <>
-      <BorderLessCell sx={{ paddingLeft: 1 }} {...attributes} {...listeners}>
+      <BorderLessCell {...attributes} {...listeners}>
         <CenteringBox sx={{ color: "#D8D8D8" }}>
           {pos}.
           <CenteringBox
@@ -194,10 +194,10 @@ export function FileTable() {
             }}>
             <TableRow sx={{ fontWeight: 700 }}>
               <HeaderCell sx={{ paddingLeft: 0, width: 70 }}>Order</HeaderCell>
-              <HeaderCell>Directory</HeaderCell>
-              <HeaderCell sx={{ width: 300 }}>File</HeaderCell>
-              <HeaderCell sx={{ width: 150 }}>Include in command</HeaderCell>
-              <HeaderCell sx={{ width: 100 }}></HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0 }}>Directory</HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, width: 300 }}>File</HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, width: 150 }}>Include in command</HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, width: 100 }}></HeaderCell>
             </TableRow>
             <TableRow>
               <BorderLessCell sx={{ paddingBottom: 2 }}>

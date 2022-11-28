@@ -14,10 +14,10 @@ import { DevExamples } from "./DevExamples";
 const InputWrapper = styled(Box)({
   display: "flex",
   alignItems: "center",
-  height: 56,
+  height: 48,
   background: "#F7F9FB",
   borderRadius: 40,
-  border: "1px solid rgba(114, 138, 150, 0.16)",
+  border: "0.5px solid rgba(114, 138, 150, 0.16)",
   padding: "0 20px",
   zIndex: 9,
 });
@@ -26,7 +26,7 @@ const AppAddressInput = styled("input")(({ theme }) => ({
   flex: 1,
   marginLeft: 10,
   width: "100%",
-  height: 56,
+  height: 48,
   fontSize: 16,
   fontWeight: 500,
   outline: "unset",
@@ -37,6 +37,7 @@ const AppAddressInput = styled("input")(({ theme }) => ({
   caretColor: "#728A96",
   "&::placeholder": {
     color: "#728A96",
+    fontWeight: 500,
   },
   [theme.breakpoints.down("sm")]: {
     fontSize: 16,

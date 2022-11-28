@@ -14,7 +14,7 @@ import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { Fade } from "@mui/material";
 
 const ContentBox = styled(Box)({
-  padding: "15px 30px",
+  padding: "15px 24px",
 });
 
 export function AddSourcesBlock() {

@@ -21,9 +21,9 @@ const ContentBox = styled(Box)({
 });
 
 const CopyBox = styled(Box)({
-  position: "relative",
-  top: 5,
-  left: "97%",
+  position: "absolute",
+  top: "9%",
+  right: "3%",
   zIndex: 3,
 });
 
@@ -64,7 +64,8 @@ function ContractSourceCode() {
                 hoverBackground="#F5F5F5"
                 background="#F2F2F2"
                 height={37}
-                width={167}>
+                width={167}
+                disabled>
                 <img src={download} alt="Download icon" width={19} height={19} />
                 Download sources
               </AppButton>
@@ -77,13 +78,13 @@ function ContractSourceCode() {
           <Tab disabled={!contractProof?.hasOnchainProof} label="Sources" />
           <Tab label="Disassembled" />
         </SourceCodeTabs>
-        {/* <CopyBox>
-          <IconButton>
-            <img alt="Copy Icon" src={copy} width={16} height={16} />
-          </IconButton>
-        </CopyBox> */}
         {value === 0 && <VerifiedSourceCode />}
         {value === 1 && <DisassembledSourceCode />}
+        <CopyBox>
+          <IconButton disabled>
+            <img alt="Copy Icon" src={copy} width={16} height={16} />
+          </IconButton>
+        </CopyBox>
       </ContentBox>
     </>
   );

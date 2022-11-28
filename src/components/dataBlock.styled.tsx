@@ -35,7 +35,7 @@ const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
   flex: props.isShrinked ? "40%" : "inherit",
   width: props.isShrinked ? 0 : "",
   height: props.isShrinked ? "" : 38,
-  padding: "15px 30px",
+  padding: "15px 24px",
   transition: "background .15s",
   borderTop: "1px solid rgba(114, 138, 150, 0.2)",
   "&:hover": {
@@ -60,7 +60,7 @@ const DataRowValue = styled(Typography)({
 });
 
 const IconsWrapper = styled(CenteringBox)({
-  minWidth: 100,
+  minWidth: 20,
   justifyContent: "flex-end",
 });
 
