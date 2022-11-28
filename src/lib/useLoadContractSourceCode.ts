@@ -1,6 +1,6 @@
 import { SourcesData } from "@ton-community/contract-verifier-sdk";
 import { useLoadContractProof } from "./useLoadContractProof";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export function useLoadContractSourceCode() {
   const { data } = useLoadContractProof();
