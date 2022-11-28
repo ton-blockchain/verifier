@@ -85,33 +85,28 @@ export function useSubmitSources() {
     if (["unknown_error", "compile_error"].includes(result.compileResult.result)) {
       // stdlib
       if (!files.some((u) => u.isStdlib)) {
-        hints.push("You can try to add stdlib.fc to your sources.");
+        Hints.STDLIB_MISSING;
       } else if (!files[0].isStdlib) {
-        hints.push(
-          "stdlib.fc should usually be the first file in the list (unless it's imported from another file)",
-        );
+        hints.push(Hints.STDLIB_ORDER);
       }
 
       if (!files.some((u) => u.isEntrypoint)) {
-        hints.push(
-          "There usually should be at least one file containing an entrypoint (recv_internal, main)",
-        );
+        hints.push(Hints.ENTRYPOINT_MISSING);
       }
 
-      hints.push("Try to use the same compiler version as the contract was compiled with");
-      hints.push("Make sure all required files are included in the command line");
-      hints.push("Make sure all files in the command line are in the correct order");
+      hints.push(Hints.COMPILER_VERSION);
+      hints.push(Hints.REQUIRED_FILES);
+      hints.push(Hints.FILE_ORDER);
     }
 
     if (result.compileResult.result === "not_similar") {
-      hints.push(
-        "Source code compiles correctly but does not match the on-chain contract hash. Make sure you are using the correct compiler version, command line and file order.",
-      );
+      hints.push(Hints.NOT_SIMILAR);
     }
 
     if (result.compileResult.result !== "similar") {
-      hints.push(`Fiftlib version used: ${result.compileResult.compilerSettings.fiftlibVersion}`);
-      hints.push(`Fift version used: ${result.compileResult.compilerSettings.fiftVersion}`);
+      hints.push(Hints.FIFT);
+      hints.push(Hints.FIFTLIB);
+      hints.push(Hints.SUPPORT_GROUP);
     }
 
     let queryId;
@@ -125,4 +120,17 @@ export function useSubmitSources() {
   });
 
   return mutation;
+}
+
+export enum Hints {
+  STDLIB_ORDER,
+  STDLIB_MISSING,
+  FIFTLIB,
+  FIFT,
+  NOT_SIMILAR,
+  COMPILER_VERSION,
+  REQUIRED_FILES,
+  FILE_ORDER,
+  ENTRYPOINT_MISSING,
+  SUPPORT_GROUP,
 }

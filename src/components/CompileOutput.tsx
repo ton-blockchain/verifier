@@ -11,18 +11,12 @@ import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 import { DataRowTitle, DataRowValue } from "./dataBlock.styled";
 import React from "react";
+import { HintItem } from "./HintItem";
 
 export const NotificationTitle = styled(Typography)({
   fontSize: 14,
   fontWeight: 400,
   marginBottom: "10px",
-});
-
-const HintItem = styled("li")({
-  maxWidth: 650,
-  fontSize: 14,
-  fontWeight: 400,
-  marginBottom: 10,
 });
 
 const OutputTitle = styled(Typography)({
@@ -166,7 +160,7 @@ export function CompileOutput() {
           notificationBody={
             <ul style={{ paddingLeft: 25 }}>
               {hints.map((hint) => (
-                <HintItem key={hint}>{hint}</HintItem>
+                <HintItem key={hint} hint={hint} />
               ))}
             </ul>
           }

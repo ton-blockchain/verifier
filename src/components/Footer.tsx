@@ -22,7 +22,7 @@ import { HoverableIcon } from "./HoverableIcon";
 import icon from "../assets/icon.svg";
 import { useNavigate } from "react-router-dom";
 
-export const TELEGRAM_SUPPORT_LINK = "https://t.me/+4S9EdWndFec4MWYy";
+export const TELEGRAM_SUPPORT_LINK = "https://t.me/tonverifier";
 
 export function Footer() {
   const navigate = useNavigate();
