@@ -88,11 +88,11 @@ function ContractSourceCode() {
         </SourceCodeTabs>
         {value === 0 && <VerifiedSourceCode />}
         {value === 1 && <DisassembledSourceCode />}
-        <CopyBox>
-          <IconButton disabled>
-            <img alt="Copy Icon" src={copy} width={16} height={16} />
-          </IconButton>
-        </CopyBox>
+        {/*<CopyBox>*/}
+        {/*  <IconButton disabled>*/}
+        {/*    <img alt="Copy Icon" src={copy} width={16} height={16} />*/}
+        {/*  </IconButton>*/}
+        {/*</CopyBox>*/}
       </ContentBox>
     </Box>
   );
