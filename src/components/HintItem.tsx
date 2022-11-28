@@ -16,9 +16,9 @@ function hintToElem(hint: Hints, compileResult: CompileResult | undefined) {
     case Hints.ENTRYPOINT_MISSING:
       return "There usually should be at least one file containing an entrypoint (recv_internal, main)";
     case Hints.STDLIB_ORDER:
-      return "You can try to add stdlib.fc to your sources.";
-    case Hints.STDLIB_MISSING:
       return "stdlib.fc should usually be the first file in the list (unless it's imported from another file)";
+    case Hints.STDLIB_MISSING:
+      return "You can try to add stdlib.fc to your sources.";
     case Hints.FIFTLIB:
       return (
         <div>
