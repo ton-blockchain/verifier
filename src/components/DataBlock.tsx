@@ -68,7 +68,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
               {showIcon && (
                 <IconsWrapper>
                   {value && (
-                    <IconButton onClick={() => onCopy(value)}>
+                    <IconButton sx={{ padding: 0 }} onClick={() => onCopy(value)}>
                       <img src={copy} alt="Copy icon" width={15} height={15} />
                     </IconButton>
                   )}
