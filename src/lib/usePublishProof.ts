@@ -3,6 +3,8 @@ import { useSubmitSources } from "./useSubmitSources";
 import { hasOnchainProof } from "./useLoadContractProof";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useSendTXN } from "./useSendTxn";
+import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
+import { useEffect } from "react";
 
 export function usePublishProof() {
   const { data: submitSourcesData } = useSubmitSources();
@@ -17,6 +19,29 @@ export function usePublishProof() {
 
     return hasIpfsLink ? "success" : "issued";
   });
+
+  useEffect(() => {
+    switch (data.status) {
+      case "pending":
+        sendAnalyticsEvent(AnalyticsAction.PUBLISH_CLICK);
+        break;
+      case "issued":
+        sendAnalyticsEvent(AnalyticsAction.TRANSACTION_ISSUED);
+        break;
+      case "rejected":
+        sendAnalyticsEvent(AnalyticsAction.TRANSACTION_REJECTED);
+        break;
+      case "error":
+        sendAnalyticsEvent(AnalyticsAction.TRANSACTION_ERROR);
+        break;
+      case "expired":
+        sendAnalyticsEvent(AnalyticsAction.TRANSACTION_EXPIRED);
+        break;
+      case "success":
+        sendAnalyticsEvent(AnalyticsAction.CONTRACT_DEPLOYED);
+        break;
+    }
+  }, [data.status]);
 
   return {
     sendTXN: () => {

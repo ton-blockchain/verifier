@@ -18,8 +18,8 @@ jobs:
         run: npm ci
       - name: Build
         run: CI=false npm run build
-        # env:
-        #   REACT_APP_GA: ${{ secrets.REACT_APP_GA }} TODO add
+        env:
+          VITE_APP_GA: ${{ secrets.GOOGLE_ANALYTICS }}
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
