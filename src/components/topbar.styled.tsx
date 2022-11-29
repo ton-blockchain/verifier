@@ -19,8 +19,6 @@ const TopBarWrapper = styled(Box)(({ theme }) => (props: TopBarWrapperProps) => 
   background: "#fff",
   borderBottomLeftRadius: theme.spacing(6),
   borderBottomRightRadius: theme.spacing(6),
-  transition: `${animationTimeout}ms`,
-  transitionProperty: "height",
   border: "0.5px solid rgba(114, 138, 150, 0.24)",
   boxShadow: "rgb(114 138 150 / 8%) 0px 2px 16px",
 }));
