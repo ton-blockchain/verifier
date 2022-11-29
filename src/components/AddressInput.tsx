@@ -10,6 +10,8 @@ import { isValidAddress } from "../utils";
 import useNotification from "../lib/useNotification";
 import { SearchResults } from "../components/SearchResults";
 import { DevExamples } from "./DevExamples";
+import { AppButton } from "./AppButton";
+import { CenteringBox } from "./common.styled";
 
 const InputWrapper = styled(Box)({
   display: "flex",
@@ -18,7 +20,7 @@ const InputWrapper = styled(Box)({
   background: "#F7F9FB",
   borderRadius: 40,
   border: "0.5px solid rgba(114, 138, 150, 0.16)",
-  padding: "0 20px",
+  padding: "0 10px 0 20px",
   zIndex: 9,
 });
 
@@ -137,9 +139,19 @@ export function AddressInput() {
               spellCheck={false}
             />
             <Fade in={!!value} timeout={animationTimeout}>
-              <IconButton onClick={onClear}>
-                <img src={close} width={16} height={16} alt="Close icon" />
-              </IconButton>
+              <CenteringBox>
+                <IconButton onClick={onClear}>
+                  <img src={close} width={16} height={16} alt="Close icon" />
+                </IconButton>
+                <AppButton
+                  height={34}
+                  width={40}
+                  textColor="#fff"
+                  fontWeight={600}
+                  onClick={onSubmit}>
+                  Go
+                </AppButton>
+              </CenteringBox>
             </Fade>
           </InputWrapper>
           {active && !!searchResults.length && (
