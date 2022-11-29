@@ -3,18 +3,28 @@ import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { useLoadVerifierRegistryInfo } from "../lib/useLoadVerifierRegistryInfo";
 import { githubLink } from "../const";
 import { CenteringBox, TitleText } from "./common.styled";
-import { Box, IconButton, Link, List, ListItem, Typography } from "@mui/material";
+import {
+  Box,
+  ClickAwayListener,
+  IconButton,
+  Link,
+  List,
+  ListItem,
+  Skeleton,
+  Typography,
+} from "@mui/material";
 import verified from "../assets/verified.svg";
 import copy from "../assets/copy.svg";
 import close from "../assets/close.svg";
 import verificationPopup from "../assets/verification-popup.svg";
-import React from "react";
+import React, { useCallback } from "react";
 import { styled } from "@mui/system";
 import Table from "@mui/material/Table";
 import TableRow from "@mui/material/TableRow";
 import { BorderLessCell, HeaderCell, HR } from "./fileTable.styled";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
+import useNotification from "../lib/useNotification";
 
 function ProofTable() {
   const {
@@ -28,12 +38,18 @@ function ProofTable() {
     error: errorVerifierRegistry,
   } = useLoadVerifierRegistryInfo();
   // contractProofData?.verificationDate
+  const { showNotification } = useNotification();
 
   // TODO this supports a single verifier Id for now.
   // when we wish to support multiple verifiers, load contract proof would have to address that
   const verifierConfig = verifierRegistryInfo?.find(
     (v) => v.name === import.meta.env.VITE_VERIFIER_ID,
   );
+
+  const onCopy = useCallback(async (value: string) => {
+    navigator.clipboard.writeText(value);
+    showNotification("Copied to clipboard!", "success");
+  }, []);
 
   return (
     <>
@@ -52,30 +68,36 @@ function ProofTable() {
               },
             }}>
             <TableRow sx={{ fontWeight: 700 }}>
-              <HeaderCell sx={{ width: 100, paddingLeft: 3 }}>Status</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, width: 370 }}>Public Key</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, width: 35 }}></HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0 }}>IP</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0 }}>Verification date</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0 }}>Verifier</HeaderCell>
+              <HeaderCell sx={{ width: 80, paddingBottom: "2px", paddingLeft: 3 }}>
+                Status
+              </HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px", width: 370 }}>
+                Public Key
+              </HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px", width: 35 }}></HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px" }}>IP</HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px" }}>
+                Verification date
+              </HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px" }}>Verifier</HeaderCell>
             </TableRow>
             <TableRow>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
                 <HR />
               </BorderLessCell>
             </TableRow>
@@ -88,7 +110,7 @@ function ProofTable() {
                     <CenteringBox
                       px={1}
                       sx={{
-                        width: 75,
+                        width: 59,
                         height: 21,
                         background: "#08D088",
                         borderRadius: 40,
@@ -103,12 +125,12 @@ function ProofTable() {
                     <Typography sx={{ color: "#728A96", fontSize: 14 }}>{pubKey}</Typography>
                   </BorderLessCell>
                   <BorderLessCell sx={{ paddingBottom: 2 }}>
-                    <IconButton sx={{ padding: 0.5 }}>
+                    <IconButton onClick={() => onCopy(pubKey)} sx={{ padding: 0.5 }}>
                       <img src={copy} alt="Copy icon" width={16} height={16} />
                     </IconButton>
                   </BorderLessCell>
                   <BorderLessCell sx={{ paddingBottom: 2 }}>
-                    <Typography sx={{ color: "#728A96", fontSize: 13 }}>{endpoint}</Typography>
+                    <Typography sx={{ color: "#728A96", fontSize: 14 }}>{endpoint}</Typography>
                   </BorderLessCell>
                   <BorderLessCell sx={{ paddingBottom: 2 }}>
                     <Typography sx={{ color: "#728A96", fontSize: 14 }}>
@@ -135,7 +157,13 @@ function ProofTable() {
           </TableBody>
         </Table>
       )}
-      {(isLoadingProof || isLoadingVerifierRegistry) && "SKELETON"}
+      {(isLoadingProof || isLoadingVerifierRegistry) && (
+        <Skeleton
+          width="100%"
+          height={100}
+          sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
+        />
+      )}
       {(!!errorProof || !!errorVerifierRegistry) &&
         `${errorProof} ${errorVerifierRegistry} (App notification)`}
     </>
@@ -144,9 +172,11 @@ function ProofTable() {
 
 function ManualProof() {
   const { data: contractProofData, isLoading } = useLoadContractProof();
+  const { isLoading: isLoadingVerifierRegistry } = useLoadVerifierRegistryInfo();
+
   return (
     <Box sx={{ width: "100%" }}>
-      {contractProofData && (
+      {contractProofData && !isLoadingVerifierRegistry && (
         <Box pt={2} pb={1} sx={{ background: "#F7F9FB", borderRadius: "5px", width: "100%" }}>
           <TitleText
             mb={4}
@@ -157,7 +187,7 @@ function ManualProof() {
             <ListItem sx={{ paddingBottom: 0, paddingTop: 0 }}>
               <Typography
                 sx={{
-                  fontSize: 12,
+                  fontSize: 14,
                 }}>
                 1. Install{" "}
                 <Link
@@ -176,7 +206,7 @@ function ManualProof() {
             <ListItem sx={{ paddingTop: "7px", paddingBottom: 0 }}>
               <Typography
                 sx={{
-                  fontSize: 12,
+                  fontSize: 14,
                   lineHeight: "34px",
                 }}>
                 2. Save this file locally as <CommandLabel>sources.json</CommandLabel> :{" "}
@@ -186,7 +216,7 @@ function ManualProof() {
             <ListItem sx={{ paddingBottom: "6px", paddingTop: "7px" }}>
               <Typography
                 sx={{
-                  fontSize: 12,
+                  fontSize: 14,
                 }}>
                 3. Run in terminal:{" "}
                 <CommandLabel>
@@ -198,15 +228,33 @@ function ManualProof() {
             <ListItem>
               <Typography
                 sx={{
-                  fontSize: 12,
+                  fontSize: 14,
                 }}>
-                4. Review docker image source here: <CommandLabel>{githubLink}</CommandLabel>
+                4. Review docker image source here:{" "}
+                <CommandLabel>
+                  <Link
+                    target="_blank"
+                    href={githubLink}
+                    sx={{
+                      textDecoration: "none",
+                      cursor: "pointer",
+                      color: "#212121",
+                    }}>
+                    {githubLink}
+                  </Link>
+                </CommandLabel>
               </Typography>
             </ListItem>
           </List>
         </Box>
       )}
-      {isLoading && "SKELETON"}
+      {(isLoading || isLoadingVerifierRegistry) && (
+        <Skeleton
+          width="100%"
+          height={250}
+          sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
+        />
+      )}
     </Box>
   );
 }
@@ -220,7 +268,7 @@ const CommandLabel = styled(Box)({
   borderRadius: "10px",
   color: "#212121",
   fontWeight: 400,
-  fontSize: "12px",
+  fontSize: "14px",
   fontFamily: "IBM Plex Mono, monospace",
 });
 
@@ -230,23 +278,25 @@ interface VerificationProofPopupProps {
 
 export function VerificationProofPopup({ onClose }: VerificationProofPopupProps) {
   return (
-    <>
-      <AppPopup open={true} maxWidth={1000} hideCloseButton>
-        <Box pt={2} sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-          <IconButton sx={{ padding: 0 }} onClick={onClose}>
-            <img src={close} alt="Close icon" width={15} height={15} />
-          </IconButton>
+    <AppPopup open={true} maxWidth={1000} hideCloseButton>
+      <ClickAwayListener onClickAway={onClose}>
+        <Box sx={{ width: "100%" }}>
+          <Box pt={2} sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+            <IconButton sx={{ padding: 0 }} onClick={onClose}>
+              <img src={close} alt="Close icon" width={15} height={15} />
+            </IconButton>
+          </Box>
+          <CenteringBox mb={4} justifyContent="center">
+            <img src={verificationPopup} alt="Popup icon" width={41} height={41} />
+            <TitleText pl={2} sx={{ fontSize: 18, fontWeight: 800 }}>
+              Verification Proof
+            </TitleText>
+          </CenteringBox>
+          <ProofTable />
+          <br />
+          <ManualProof />
         </Box>
-        <CenteringBox mb={4}>
-          <img src={verificationPopup} alt="Popup icon" width={41} height={41} />
-          <TitleText pl={2} sx={{ fontSize: 18, fontWeight: 800 }}>
-            Verification Proof
-          </TitleText>
-        </CenteringBox>
-        <ProofTable />
-        <br />
-        <ManualProof />
-      </AppPopup>
-    </>
+      </ClickAwayListener>
+    </AppPopup>
   );
 }
