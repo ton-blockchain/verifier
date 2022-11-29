@@ -6,7 +6,7 @@ import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
 import { useResetState } from "./lib/useResetState";
 import { styled } from "@mui/system";
-import { Backdrop, Box } from "@mui/material";
+import { Backdrop, Box, Skeleton } from "@mui/material";
 import { useContractAddress } from "./lib/useContractAddress";
 import React, { useEffect, useRef, useState } from "react";
 import { ContractBlock } from "./components/ContractBlock";
@@ -49,6 +49,8 @@ function App() {
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
 
+  const showSkeleton = !error && isLoading && isAddressValid;
+
   useResetState();
 
   useEffect(() => {
@@ -68,7 +70,6 @@ function App() {
       <Box ref={scrollToRef} />
       <TopBar />
       <ContentBox>
-        {!error && isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
         {!!error && (
           <Box mt={4}>
             <AppNotification
@@ -88,6 +89,31 @@ function App() {
               }
             />
           </Box>
+        )}
+        {showSkeleton && (
+          <>
+            <Box my={2.5}>
+              <Skeleton
+                width="100%"
+                height={331}
+                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
+              />
+            </Box>
+            <Box my={2.5}>
+              <Skeleton
+                width="100%"
+                height={236}
+                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
+              />
+            </Box>
+            <Box my={2.5}>
+              <Skeleton
+                width="100%"
+                height={500}
+                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
+              />
+            </Box>
+          </>
         )}
         {!isLoading && (
           <ContractDataBox>
@@ -110,7 +136,7 @@ function App() {
         {proofData && <Footer />}
       </ContentBox>
       {!proofData && (
-        <CenteringWrapper sx={{ position: "fixed", bottom: 0, width: "100%" }}>
+        <CenteringWrapper sx={{ position: !showSkeleton ? "fixed" : "", bottom: 0, width: "100%" }}>
           <Footer />
         </CenteringWrapper>
       )}

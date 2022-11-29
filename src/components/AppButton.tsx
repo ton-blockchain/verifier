@@ -27,12 +27,12 @@ const StyledButton = styled(Button)((props: StyledButtonProps) => ({
   boxShadow: "none",
   borderRadius: 40,
   border: props.transparent ? "1px solid #50A7EA" : "",
-  background: props.background || "",
+  background: props.background || "inherit", //rgb(0, 136, 204)
   whiteSpace: "nowrap",
   textTransform: "none",
   color: props.textColor || "#000",
   "&:hover": {
-    background: props.hoverBackground || "inherit",
+    background: props.hoverBackground || "inherit", //rgb(0, 95, 142)
   },
   "& img": {
     maxWidth: 22,
