@@ -147,6 +147,8 @@ export function AddressInput() {
                   height={34}
                   width={40}
                   textColor="#fff"
+                  background="rgb(0, 136, 204)"
+                  hoverBackground="rgb(0, 95, 142)"
                   fontWeight={600}
                   onClick={onSubmit}>
                   Go
