@@ -8,15 +8,8 @@ import paper from "../assets/verification-paper.svg";
 import show from "../assets/show.svg";
 import verification from "../assets/verification.svg";
 import { CenteringWrapper } from "./footer.styled";
-import { CenteringBox, DataBox, IconBox, TitleBox } from "./common.styled";
+import { CenteringBox, DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
 import { AppButton } from "./AppButton";
-
-const VerificationRulesTitle = styled(Typography)({
-  textAlign: "center",
-  fontSize: 16,
-  color: "#000",
-  fontWeight: 800,
-});
 
 const VerificationRules = styled(CenteringBox)({
   justifyContent: "space-between",
@@ -73,7 +66,7 @@ export const VerificationInfoBlock = () => {
             <IconBox>
               <img src={verification} alt="Verification icon" width={41} height={41} />
             </IconBox>
-            <VerificationRulesTitle>How is this contract verified?</VerificationRulesTitle>
+            <TitleText>How is this contract verified?</TitleText>
           </CenteringBox>
           <div>
             <AppButton
@@ -82,7 +75,8 @@ export const VerificationInfoBlock = () => {
               hoverBackground="#F5F5F5"
               background="#F2F2F2"
               height={37}
-              width={132}>
+              width={132}
+              disabled>
               <img src={show} alt="Show icon" width={19} height={19} />
               Show Proof
             </AppButton>

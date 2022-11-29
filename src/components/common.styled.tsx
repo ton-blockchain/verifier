@@ -14,10 +14,12 @@ const DataBox = styled(Box)({
   backgroundColor: "#fff",
   borderRadius: 20,
   color: "#000",
+  border: "0.5px solid rgba(114, 138, 150, 0.24)",
+  boxShadow: "rgb(114 138 150 / 8%) 0px 2px 16px",
 });
 
 const TitleBox = styled(CenteringBox)({
-  padding: "30px 30px 0 30px",
+  padding: "30px 24px 0 24px",
 });
 
 const IconBox = styled(CenteringBox)({

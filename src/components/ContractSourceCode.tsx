@@ -22,9 +22,9 @@ const ContentBox = styled(Box)({
 });
 
 const CopyBox = styled(Box)({
-  position: "relative",
-  top: 5,
-  left: "97%",
+  position: "absolute",
+  top: "9%",
+  right: "3%",
   zIndex: 3,
 });
 
@@ -32,6 +32,7 @@ const SourceCodeTabs = styled(Tabs)({
   borderBottom: "1px solid #E8E8E8",
   "& .MuiTabs-indicator": {
     borderBottom: "4px solid #0088CC",
+    borderRadius: 20,
   },
   "& .MuiTab-root.Mui-selected": {
     color: "#000",
@@ -48,7 +49,12 @@ function ContractSourceCode() {
   };
 
   return (
-    <>
+    <Box
+      sx={{
+        border: "0.5px solid rgba(114, 138, 150, 0.24)",
+        boxShadow: "rgb(114 138 150 / 8%) 0px 2px 16px",
+        borderRadius: "20px",
+      }}>
       <TitleBox mb={1}>
         <TitleWrapper>
           <CenteringBox sx={{ width: "100%" }}>
@@ -78,18 +84,22 @@ function ContractSourceCode() {
       </TitleBox>
       <ContentBox p={3}>
         <SourceCodeTabs value={value} onChange={handleChange}>
-          <Tab disabled={!contractProof?.hasOnchainProof} label="Sources" />
-          <Tab label="Disassembled" />
+          <Tab
+            sx={{ textTransform: "none" }}
+            disabled={!contractProof?.hasOnchainProof}
+            label="Sources"
+          />
+          <Tab sx={{ textTransform: "none" }} label="Disassembled" />
         </SourceCodeTabs>
-        {/* <CopyBox>
-          <IconButton>
-            <img alt="Copy Icon" src={copy} width={16} height={16} />
-          </IconButton>
-        </CopyBox> */}
         {value === 0 && <VerifiedSourceCode />}
         {value === 1 && <DisassembledSourceCode />}
+        {/*<CopyBox>*/}
+        {/*  <IconButton disabled>*/}
+        {/*    <img alt="Copy Icon" src={copy} width={16} height={16} />*/}
+        {/*  </IconButton>*/}
+        {/*</CopyBox>*/}
       </ContentBox>
-    </>
+    </Box>
   );
 }
 
