@@ -231,9 +231,9 @@ interface VerificationProofPopupProps {
 export function VerificationProofPopup({ onClose }: VerificationProofPopupProps) {
   return (
     <>
-      <AppPopup open={true} maxWidth={1000} hideCloseButton paddingTop>
-        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
-          <IconButton sx={{ padding: 0.5 }} onClick={onClose}>
+      <AppPopup open={true} maxWidth={1000} hideCloseButton>
+        <Box pt={2} sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+          <IconButton sx={{ padding: 0 }} onClick={onClose}>
             <img src={close} alt="Close icon" width={15} height={15} />
           </IconButton>
         </Box>
