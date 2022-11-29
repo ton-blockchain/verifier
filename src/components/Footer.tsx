@@ -32,7 +32,7 @@ export function Footer() {
       <SocialsWrapper>
         <Box>
           <LinkWrapper sx={{ color: "#000" }} onClick={() => navigate("/")}>
-            <img src={icon} alt="App icon" />
+            <img src={icon} alt="App icon" width={30} height={30} />
             <AppLogo>TON VERIFIER</AppLogo>
           </LinkWrapper>
         </Box>
