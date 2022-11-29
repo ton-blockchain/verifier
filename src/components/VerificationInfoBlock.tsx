@@ -61,6 +61,8 @@ const verificationRules: Rule[] = [
 export const VerificationInfoBlock = () => {
   const [isPopupOpen, setPopupOpen] = React.useState(false);
 
+  const onClose = () => setPopupOpen(false);
+
   return (
     <DataBox>
       <TitleBox mb={1}>
@@ -85,7 +87,7 @@ export const VerificationInfoBlock = () => {
               <img src={show} alt="Show icon" width={19} height={19} />
               Show Proof
             </AppButton>
-            {isPopupOpen && <VerificationProofPopup />}
+            {isPopupOpen && <VerificationProofPopup onClose={onClose} />}
           </div>
         </CenteringBox>
       </TitleBox>

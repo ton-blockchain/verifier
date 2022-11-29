@@ -6,6 +6,7 @@ import { CenteringBox, TitleText } from "./common.styled";
 import { Box, IconButton, Link, List, ListItem, Typography } from "@mui/material";
 import verified from "../assets/verified.svg";
 import copy from "../assets/copy.svg";
+import close from "../assets/close.svg";
 import verificationPopup from "../assets/verification-popup.svg";
 import React from "react";
 import { styled } from "@mui/system";
@@ -223,13 +224,24 @@ const CommandLabel = styled(Box)({
   fontFamily: "IBM Plex Mono, monospace",
 });
 
-export function VerificationProofPopup() {
+interface VerificationProofPopupProps {
+  onClose: () => void;
+}
+
+export function VerificationProofPopup({ onClose }: VerificationProofPopupProps) {
   return (
     <>
       <AppPopup open={true} maxWidth={1000} hideCloseButton paddingTop>
+        <Box sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+          <IconButton sx={{ padding: 0.5 }} onClick={onClose}>
+            <img src={close} alt="Close icon" width={15} height={15} />
+          </IconButton>
+        </Box>
         <CenteringBox mb={4}>
           <img src={verificationPopup} alt="Popup icon" width={41} height={41} />
-          <TitleText sx={{ fontSize: 18, fontWeight: 800 }}>Verification Proof</TitleText>
+          <TitleText pl={2} sx={{ fontSize: 18, fontWeight: 800 }}>
+            Verification Proof
+          </TitleText>
         </CenteringBox>
         <ProofTable />
         <br />
