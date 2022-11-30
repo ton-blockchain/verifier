@@ -1,6 +1,6 @@
 import { Cell, Address, toNano } from "ton";
 import { useSubmitSources } from "./useSubmitSources";
-import { hasOnchainProof } from "./useLoadContractProof";
+import { getProofIpfsLink } from "./useLoadContractProof";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useSendTXN } from "./useSendTxn";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
@@ -11,13 +11,13 @@ export function usePublishProof() {
   const { data: contractInfo } = useLoadContractInfo();
 
   const { sendTXN, data, clearTXN } = useSendTXN("publishProof", async (count: number) => {
-    const hasIpfsLink = await hasOnchainProof(contractInfo!.hash);
+    const ipfsLink = await getProofIpfsLink(contractInfo!.hash);
 
     if (count > 20) {
       return "error";
     }
 
-    return hasIpfsLink ? "success" : "issued";
+    return !!ipfsLink ? "success" : "issued";
   });
 
   useEffect(() => {

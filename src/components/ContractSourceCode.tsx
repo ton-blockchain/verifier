@@ -10,7 +10,7 @@ import { styled } from "@mui/system";
 import download from "../assets/download.svg";
 import { AppButton } from "./AppButton";
 import copy from "../assets/copy.svg";
-import { downloadSources } from "./downloadSources";
+import { downloadSources } from "../lib/downloadSources";
 
 const TitleWrapper = styled(CenteringBox)({
   justifyContent: "space-between",
