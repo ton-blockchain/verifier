@@ -19,28 +19,22 @@ export function CompilerBlock() {
   if (data) {
     dataRows.push({
       title: "Compiler",
-      value: `${data!.compiler!} ${compilerSettings?.funcVersion}`,
+      value: `${data!.compiler!}`,
+    });
+    dataRows.push({
+      title: "Version",
+      value: `${compilerSettings?.funcVersion}`,
       color: "#0088CC",
       customLink: compilerSettings?.funcVersion && funcVersionToLink(compilerSettings.funcVersion),
-    });
-    dataRows.push({
-      title: "Fift Version",
-      value: compilerSettings?.fiftVersion ?? "",
-      showIcon: true,
-      color: "#0088CC",
-      customLink: compilerSettings?.fiftVersion && fiftVersionToLink(compilerSettings.fiftVersion),
-    });
-    dataRows.push({
-      title: "Fiftlib Version",
-      value: compilerSettings?.fiftlibVersion ?? "",
-      showIcon: true,
-      customLink:
-        compilerSettings?.fiftlibVersion && fiftLibVersionToLink(compilerSettings.fiftlibVersion),
     });
     dataRows.push({
       title: "Command",
       value: compilerSettings?.commandLine!,
       showIcon: true,
+    });
+    dataRows.push({
+      title: "Verified on",
+      value: data.verificationDate?.toLocaleDateString() ?? "",
     });
   }
 
