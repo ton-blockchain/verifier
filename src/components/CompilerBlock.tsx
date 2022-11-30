@@ -46,6 +46,10 @@ export function CompilerBlock() {
       value: compilerSettings?.commandLine!,
       showIcon: true,
     });
+    dataRows.push({
+      title: "Verified on",
+      value: data.verificationDate?.toLocaleDateString() ?? "",
+    });
   }
 
   return <DataBlock title="Compiler" icon={compilerIcon} dataRows={dataRows} isFlexibleWrapper />;
