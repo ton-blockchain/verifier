@@ -7,7 +7,6 @@ import {
   Box,
   ClickAwayListener,
   IconButton,
-  Link,
   List,
   ListItem,
   Skeleton,
@@ -17,15 +16,27 @@ import verified from "../assets/verified.svg";
 import copy from "../assets/copy.svg";
 import close from "../assets/close.svg";
 import verificationPopup from "../assets/verification-popup.svg";
-import React, { useCallback } from "react";
-import { styled } from "@mui/system";
-import Table from "@mui/material/Table";
+import React, { ReactNode, useCallback } from "react";
 import TableRow from "@mui/material/TableRow";
-import { BorderLessCell, HeaderCell, HR } from "./fileTable.styled";
-import TableHead from "@mui/material/TableHead";
+import { BorderLessCell, HR } from "./fileTable.styled";
 import TableBody from "@mui/material/TableBody";
 import useNotification from "../lib/useNotification";
 import { downloadJson } from "../utils/jsonUtils";
+import {
+  CloseButtonWrapper,
+  CommandEllipsisLabel,
+  PopupLink,
+  PopupTable,
+  PopupTableBodyCell,
+  PopupTableHead,
+  PopupTableHeadCell,
+  PopupTableHeadPaddingCell,
+  PopupTableHeadRow,
+  PopupTableTitle,
+  PopupTableTypography,
+  PopupWrapper,
+  VerifiedTag,
+} from "./VerificationProofPopup.styled";
 
 function ProofTable() {
   const {
@@ -54,108 +65,75 @@ function ProofTable() {
   return (
     <>
       {contractProofData && verifierConfig && (
-        <Table
-          sx={{
-            background: "#F7F9FB",
-            borderRadius: "5px",
-            width: "100%",
-          }}>
-          <TableHead
-            sx={{
-              "&.MuiTableHead-root th": {
-                border: "none",
-                fontSize: 13,
-              },
-            }}>
-            <TableRow sx={{ fontWeight: 700 }}>
-              <HeaderCell sx={{ width: 80, paddingBottom: "2px", paddingLeft: 3 }}>
-                Status
-              </HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px", width: 370 }}>
-                Public Key
-              </HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px", width: 35 }}></HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px" }}>IP</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px" }}>
-                Verification date
-              </HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: "2px" }}>Verifier</HeaderCell>
-            </TableRow>
+        <PopupTable>
+          <PopupTableHead>
+            <PopupTableHeadRow>
+              <PopupTableHeadCell sx={{ width: 80, paddingLeft: 3 }}>Status</PopupTableHeadCell>
+              <PopupTableHeadCell sx={{ width: 370 }}>Public Key</PopupTableHeadCell>
+              <PopupTableHeadCell sx={{ width: 35 }}></PopupTableHeadCell>
+              <PopupTableHeadCell>IP</PopupTableHeadCell>
+              <PopupTableHeadCell>Verification date</PopupTableHeadCell>
+              <PopupTableHeadCell>Verifier</PopupTableHeadCell>
+            </PopupTableHeadRow>
             <TableRow>
-              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
+              <PopupTableHeadPaddingCell>
                 <HR />
-              </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
+              </PopupTableHeadPaddingCell>
+              <PopupTableHeadPaddingCell>
                 <HR />
-              </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
+              </PopupTableHeadPaddingCell>
+              <PopupTableHeadPaddingCell>
                 <HR />
-              </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
+              </PopupTableHeadPaddingCell>
+              <PopupTableHeadPaddingCell>
                 <HR />
-              </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
+              </PopupTableHeadPaddingCell>
+              <PopupTableHeadPaddingCell>
                 <HR />
-              </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 1.2 }}>
+              </PopupTableHeadPaddingCell>
+              <PopupTableHeadPaddingCell>
                 <HR />
-              </BorderLessCell>
+              </PopupTableHeadPaddingCell>
             </TableRow>
-          </TableHead>
+          </PopupTableHead>
           <TableBody>
             {Object.entries(verifierConfig.pubKeyEndpoints).map(([pubKey, endpoint]) => {
               return (
                 <TableRow key={pubKey}>
                   <BorderLessCell sx={{ paddingLeft: 3, paddingBottom: 2 }}>
-                    <CenteringBox
-                      px={1}
-                      sx={{
-                        width: 59,
-                        height: 21,
-                        background: "#08D088",
-                        borderRadius: 40,
-                        color: "#fff",
-                        justifyContent: "space-around",
-                      }}>
+                    <VerifiedTag px={1}>
                       <img src={verified} alt="Verified icon" width={11} height={11} />
-                      <Typography sx={{ fontSize: 12 }}>Verified</Typography>
-                    </CenteringBox>
+                      Verified
+                    </VerifiedTag>
                   </BorderLessCell>
-                  <BorderLessCell sx={{ paddingBottom: 2 }}>
-                    <Typography sx={{ color: "#728A96", fontSize: 14 }}>{pubKey}</Typography>
-                  </BorderLessCell>
-                  <BorderLessCell sx={{ paddingBottom: 2 }}>
+                  <PopupTableBodyCell>
+                    <PopupTableTypography>{pubKey}</PopupTableTypography>
+                  </PopupTableBodyCell>
+                  <PopupTableBodyCell>
                     <IconButton onClick={() => onCopy(pubKey)} sx={{ padding: 0.5 }}>
                       <img src={copy} alt="Copy icon" width={16} height={16} />
                     </IconButton>
-                  </BorderLessCell>
-                  <BorderLessCell sx={{ paddingBottom: 2 }}>
-                    <Typography sx={{ color: "#728A96", fontSize: 14 }}>{endpoint}</Typography>
-                  </BorderLessCell>
-                  <BorderLessCell sx={{ paddingBottom: 2 }}>
-                    <Typography sx={{ color: "#728A96", fontSize: 14 }}>
+                  </PopupTableBodyCell>
+                  <PopupTableBodyCell>
+                    <PopupTableTypography>{endpoint}</PopupTableTypography>
+                  </PopupTableBodyCell>
+                  <PopupTableBodyCell>
+                    <PopupTableTypography>
                       {contractProofData?.verificationDate?.toLocaleDateString()}
-                    </Typography>
-                  </BorderLessCell>
+                    </PopupTableTypography>
+                  </PopupTableBodyCell>
                   <BorderLessCell sx={{ paddingRight: 3, paddingBottom: 2 }}>
                     <CenteringBox>
-                      <Link
-                        target="_blank"
-                        href={verifierConfig.url}
-                        sx={{
-                          textDecoration: "none",
-                          cursor: "pointer",
-                          color: "#0088CC",
-                        }}>
-                        {verifierConfig.url}
-                      </Link>
+                      <PopupLink target="_blank" href={verifierConfig.url}>
+                        {verifierConfig.name}
+                      </PopupLink>
                     </CenteringBox>
                   </BorderLessCell>
                 </TableRow>
               );
             })}
           </TableBody>
-        </Table>
+        </PopupTable>
       )}
       {(isLoadingProof || isLoadingVerifierRegistry) && (
         <Skeleton
@@ -170,6 +148,10 @@ function ProofTable() {
   );
 }
 
+function CommandLabel(props: { children: ReactNode }) {
+  return null;
+}
+
 function ManualProof() {
   const { data: contractProofData, isLoading } = useLoadContractProof();
   const { isLoading: isLoadingVerifierRegistry } = useLoadVerifierRegistryInfo();
@@ -177,12 +159,8 @@ function ManualProof() {
   return (
     <Box sx={{ width: "100%" }}>
       {contractProofData && !isLoadingVerifierRegistry && (
-        <Box pt={2} pb={1} sx={{ background: "#F7F9FB", borderRadius: "5px", width: "100%" }}>
-          <TitleText
-            mb={4}
-            sx={{ fontSize: 18, fontWeight: 800, color: "#000", textAlign: "center" }}>
-            How to verify manually by yourself?
-          </TitleText>
+        <PopupWrapper pt={2} pb={1}>
+          <PopupTableTitle mb={4}>How to verify manually by yourself?</PopupTableTitle>
           <List sx={{ padding: 0 }}>
             <ListItem sx={{ paddingBottom: 0, paddingTop: 0 }}>
               <Typography
@@ -190,16 +168,9 @@ function ManualProof() {
                   fontSize: 14,
                 }}>
                 1. Install{" "}
-                <Link
-                  target="_blank"
-                  href="https://www.docker.com/"
-                  sx={{
-                    textDecoration: "none",
-                    cursor: "pointer",
-                    color: "#0088CC",
-                  }}>
+                <PopupLink target="_blank" href="https://www.docker.com/">
                   docker
-                </Link>{" "}
+                </PopupLink>{" "}
                 on your local machine
               </Typography>
             </ListItem>
@@ -211,24 +182,13 @@ function ManualProof() {
                   position: "relative",
                 }}>
                 2. Save this file locally as <CommandLabel>sources.json</CommandLabel> :{" "}
-                <CommandLabel
-                  sx={{
-                    position: "relative",
-                    top: 5,
-                    display: "inline-block",
-                    whiteSpace: "nowrap",
-                    lineHeight: "20px",
-                    width: "100%",
-                    maxWidth: 600,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
+                <CommandEllipsisLabel
                   onClick={() =>
                     !!contractProofData?.ipfsHttpLink &&
                     downloadJson(contractProofData.ipfsHttpLink)
                   }>
                   {contractProofData?.ipfsHttpLink}
-                </CommandLabel>
+                </CommandEllipsisLabel>
               </Typography>
             </ListItem>
             <ListItem sx={{ paddingBottom: "6px", paddingTop: "7px" }}>
@@ -250,21 +210,14 @@ function ManualProof() {
                 }}>
                 4. Review docker image source here:{" "}
                 <CommandLabel>
-                  <Link
-                    target="_blank"
-                    href={githubLink}
-                    sx={{
-                      textDecoration: "none",
-                      cursor: "pointer",
-                      color: "#212121",
-                    }}>
+                  <PopupLink target="_blank" href={githubLink} sx={{ color: "#212121" }}>
                     {githubLink}
-                  </Link>
+                  </PopupLink>
                 </CommandLabel>
               </Typography>
             </ListItem>
           </List>
-        </Box>
+        </PopupWrapper>
       )}
       {(isLoading || isLoadingVerifierRegistry) && (
         <Skeleton
@@ -277,19 +230,6 @@ function ManualProof() {
   );
 }
 
-const CommandLabel = styled(Box)({
-  display: "inline-flex",
-  alignItems: "center",
-  height: "20px",
-  padding: "0 7px",
-  background: "rgba(146, 146, 146, 0.3)",
-  borderRadius: "10px",
-  color: "#212121",
-  fontWeight: 400,
-  fontSize: "14px",
-  fontFamily: "IBM Plex Mono, monospace",
-});
-
 interface VerificationProofPopupProps {
   onClose: () => void;
 }
@@ -299,11 +239,11 @@ export function VerificationProofPopup({ onClose }: VerificationProofPopupProps)
     <AppPopup open={true} maxWidth={1000} hideCloseButton>
       <ClickAwayListener onClickAway={onClose}>
         <Box sx={{ width: "100%" }}>
-          <Box pt={2} sx={{ width: "100%", display: "flex", justifyContent: "flex-end" }}>
+          <CloseButtonWrapper pt={2}>
             <IconButton sx={{ padding: 0 }} onClick={onClose}>
               <img src={close} alt="Close icon" width={15} height={15} />
             </IconButton>
-          </Box>
+          </CloseButtonWrapper>
           <CenteringBox mb={4} justifyContent="center">
             <img src={verificationPopup} alt="Popup icon" width={41} height={41} />
             <TitleText pl={2} sx={{ fontSize: 18, fontWeight: 800 }}>
