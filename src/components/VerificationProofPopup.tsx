@@ -141,13 +141,13 @@ function ProofTable() {
                     <CenteringBox>
                       <Link
                         target="_blank"
-                        href="orbs.com"
+                        href={verifierConfig.url}
                         sx={{
                           textDecoration: "none",
                           cursor: "pointer",
                           color: "#0088CC",
                         }}>
-                        orbs.com
+                        {verifierConfig.url}
                       </Link>
                     </CenteringBox>
                   </BorderLessCell>
