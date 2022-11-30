@@ -13,7 +13,7 @@ export const toSha256Buffer = (s: string) => {
   return Buffer.from(sha.digestSync());
 };
 
-export async function hasOnchainProof(hash: string): Promise<string | null> {
+export async function getProofIpfsLink(hash: string): Promise<string | null> {
   return ContractVerifier.getSourcesJsonUrl(hash, {
     httpApiEndpoint: await getEndpoint(),
   });
@@ -36,13 +36,14 @@ export function useLoadContractProof() {
         };
       }
 
-      const ipfslink = await hasOnchainProof(contractInfo!.hash);
+      const ipfsLink = await getProofIpfsLink(contractInfo!.hash);
 
-      if (!ipfslink) {
-        return { hasOnchainProof: false };
+      if (!ipfsLink) {
+        return { hasOnchainProof: false, ipfsLink };
       }
 
-      const sourcesData = await ContractVerifier.getSourcesData(ipfslink);
+      const sourcesData = await ContractVerifier.getSourcesData(ipfsLink);
+      console.log(sourcesData);
       return {
         hasOnchainProof: true,
         ...sourcesData,

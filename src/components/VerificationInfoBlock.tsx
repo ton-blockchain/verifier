@@ -10,6 +10,7 @@ import verification from "../assets/verification.svg";
 import { CenteringWrapper } from "./footer.styled";
 import { CenteringBox, DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
 import { AppButton } from "./AppButton";
+import { VerificationProofPopup } from "./VerificationProofPopup";
 
 const VerificationRules = styled(CenteringBox)({
   justifyContent: "space-between",
@@ -58,6 +59,10 @@ const verificationRules: Rule[] = [
 ];
 
 export const VerificationInfoBlock = () => {
+  const [isPopupOpen, setPopupOpen] = React.useState(false);
+
+  const onClose = () => setPopupOpen(false);
+
   return (
     <DataBox>
       <TitleBox mb={1}>
@@ -76,16 +81,19 @@ export const VerificationInfoBlock = () => {
               background="#F2F2F2"
               height={37}
               width={132}
-              disabled>
+              onClick={() => {
+                setPopupOpen(true);
+              }}>
               <img src={show} alt="Show icon" width={19} height={19} />
               Show Proof
             </AppButton>
+            {isPopupOpen && <VerificationProofPopup onClose={onClose} />}
           </div>
         </CenteringBox>
       </TitleBox>
       <VerificationRules>
         {verificationRules.map((rule) => (
-          <VerificationRule>
+          <VerificationRule key={rule.description}>
             <CenteringWrapper sx={{ alignSelf: "flex-start" }} mr={1.5}>
               <img alt="Icon" src={rule.icon} width={41} height={41} />
             </CenteringWrapper>
