@@ -25,6 +25,7 @@ import { BorderLessCell, HeaderCell, HR } from "./fileTable.styled";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import useNotification from "../lib/useNotification";
+import { downloadJson } from "../utils/jsonUtils";
 
 function ProofTable() {
   const {
@@ -50,7 +51,7 @@ function ProofTable() {
     navigator.clipboard.writeText(value);
     showNotification("Copied to clipboard!", "success");
   }, []);
-
+  console.log(contractProofData);
   return (
     <>
       {contractProofData && verifierConfig && (
@@ -208,9 +209,27 @@ function ManualProof() {
                 sx={{
                   fontSize: 14,
                   lineHeight: "34px",
+                  position: "relative",
                 }}>
                 2. Save this file locally as <CommandLabel>sources.json</CommandLabel> :{" "}
-                <CommandLabel>{contractProofData?.ipfsHttpLink}</CommandLabel>
+                <CommandLabel
+                  sx={{
+                    position: "relative",
+                    top: 5,
+                    display: "inline-block",
+                    whiteSpace: "nowrap",
+                    lineHeight: "20px",
+                    width: "100%",
+                    maxWidth: 600,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                  onClick={() =>
+                    !!contractProofData?.ipfsHttpLink &&
+                    downloadJson(contractProofData.ipfsHttpLink)
+                  }>
+                  {contractProofData?.ipfsHttpLink}
+                </CommandLabel>
               </Typography>
             </ListItem>
             <ListItem sx={{ paddingBottom: "6px", paddingTop: "7px" }}>
