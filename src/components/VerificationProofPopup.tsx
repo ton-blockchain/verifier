@@ -51,7 +51,6 @@ function ProofTable() {
     navigator.clipboard.writeText(value);
     showNotification("Copied to clipboard!", "success");
   }, []);
-  console.log(contractProofData);
   return (
     <>
       {contractProofData && verifierConfig && (
