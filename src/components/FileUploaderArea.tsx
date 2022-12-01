@@ -1,7 +1,7 @@
 import { useFileStore } from "../lib/useFileStore";
 import { useDropzone } from "react-dropzone";
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { CenteringBox, IconBox, TitleBox, TitleText } from "./common.styled";
 import sourcesDefault from "../assets/sources.svg";
 import sourcesVerified from "../assets/verified-bold.svg";
@@ -29,6 +29,7 @@ const FilesDropzone = styled(CenteringBox)({
 export function FileUploaderArea() {
   const { addFiles, hasFiles } = useFileStore();
   const { step } = usePublishStore();
+  const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
 
   const onDrop = (acceptedFiles: any) => {
     addFiles(acceptedFiles);
@@ -43,8 +44,13 @@ export function FileUploaderArea() {
   return (
     <>
       <TitleBox mb={1}>
-        <CenteringBox sx={{ justifyContent: "space-between", width: "100%" }}>
-          <CenteringBox sx={{ width: "100%" }}>
+        <CenteringBox
+          sx={{
+            justifyContent: "space-between",
+            width: "100%",
+            flexDirection: isExtraSmallScreen ? "column" : "inherit",
+          }}>
+          <CenteringBox mb={isExtraSmallScreen ? 2 : 0} sx={{ width: "100%" }}>
             <IconBox>
               <img
                 src={step === STEPS.PUBLISH ? sourcesVerified : sourcesDefault}

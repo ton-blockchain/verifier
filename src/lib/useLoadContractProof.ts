@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Sha256 } from "@aws-crypto/sha256-js";
 import { getEndpoint } from "./getClient";
 import { useLoadContractInfo } from "./useLoadContractInfo";
@@ -43,7 +43,6 @@ export function useLoadContractProof() {
       }
 
       const sourcesData = await ContractVerifier.getSourcesData(ipfsLink);
-      console.log(sourcesData);
       return {
         hasOnchainProof: true,
         ...sourcesData,

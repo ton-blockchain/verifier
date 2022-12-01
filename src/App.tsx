@@ -6,7 +6,7 @@ import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
 import { useResetState } from "./lib/useResetState";
 import { styled } from "@mui/system";
-import { Backdrop, Box, Skeleton } from "@mui/material";
+import { Backdrop, Box, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import { useContractAddress } from "./lib/useContractAddress";
 import React, { useEffect, useRef, useState } from "react";
 import { ContractBlock } from "./components/ContractBlock";
@@ -21,14 +21,17 @@ import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 
 const ContentBox = styled(Box)({
   maxWidth: 1160,
-  width: "100%",
   margin: "auto",
 });
 
-const ContractDataBox = styled(Box)({
-  display: "flex",
+interface ContractDataBoxProps {
+  isMobile?: boolean;
+}
+
+const ContractDataBox = styled(Box)((props: ContractDataBoxProps) => ({
+  display: props.isMobile ? "inherit" : "flex",
   gap: 20,
-});
+}));
 
 const OverflowingBox = styled(Box)({
   boxSizing: "border-box",
@@ -44,10 +47,13 @@ const OverflowingBox = styled(Box)({
 function App() {
   const { isLoading, data: proofData, error } = useLoadContractProof();
   const [isDragging, setIsDragging] = useState(false);
+  const theme = useTheme();
   const canOverride = useOverride();
   const { isAddressValid } = useContractAddress();
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const showSkeleton = !error && isLoading && isAddressValid;
 
@@ -69,7 +75,7 @@ function App() {
       />
       <Box ref={scrollToRef} />
       <TopBar />
-      <ContentBox>
+      <ContentBox px={headerSpacings ? "20px" : 0}>
         {!!error && (
           <Box mt={4}>
             <AppNotification
@@ -116,7 +122,7 @@ function App() {
           </>
         )}
         {!isLoading && (
-          <ContractDataBox>
+          <ContractDataBox isMobile={isSmallScreen}>
             <ContractBlock />
             {proofData?.hasOnchainProof && <CompilerBlock />}
           </ContractDataBox>

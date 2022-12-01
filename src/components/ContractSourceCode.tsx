@@ -1,5 +1,5 @@
 import "./ContractSourceCode.css";
-import { Box, Tabs, Tab, IconButton } from "@mui/material";
+import { Box, Tabs, Tab, IconButton, useMediaQuery } from "@mui/material";
 import React, { useState } from "react";
 import { VerifiedSourceCode } from "./VerifiedSourceCode";
 import { DisassembledSourceCode } from "./DisassembledSourceCode";
@@ -43,6 +43,7 @@ const SourceCodeTabs = styled(Tabs)({
 function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();
   const [value, setValue] = useState(!!contractProof?.hasOnchainProof ? 0 : 1);
+  const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -56,8 +57,8 @@ function ContractSourceCode() {
         borderRadius: "20px",
       }}>
       <TitleBox mb={1}>
-        <TitleWrapper>
-          <CenteringBox sx={{ width: "100%" }}>
+        <TitleWrapper sx={{ flexDirection: isExtraSmallScreen ? "column" : "inherit" }}>
+          <CenteringBox mb={isExtraSmallScreen ? 2 : 0} sx={{ width: "100%" }}>
             <IconBox>
               <img src={verified} alt="Block icon" width={41} height={41} />
             </IconBox>

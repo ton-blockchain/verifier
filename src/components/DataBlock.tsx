@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { IconButton, Link } from "@mui/material";
+import { IconButton, Link, useMediaQuery } from "@mui/material";
 import { DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
@@ -31,6 +31,7 @@ interface DataBlockProps {
 export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading }: DataBlockProps) {
   const Wrapper = isFlexibleWrapper ? DataFlexibleBox : DataBox;
   const { showNotification } = useNotification();
+  const isExtraSmallScreen = useMediaQuery("(max-width: 500px)");
 
   const onCopy = useCallback(async (value: string) => {
     navigator.clipboard.writeText(value);
@@ -45,10 +46,13 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
         </IconBox>
         <TitleText>{title}</TitleText>
       </TitleBox>
-      <DataRowsBox mt={2.5} isShrinked={!isFlexibleWrapper}>
+      <DataRowsBox mt={2.5} isShrinked={!isFlexibleWrapper} isExtraSmallScreen={isExtraSmallScreen}>
         {dataRows.map(({ title, value, showIcon, color, customLink }) => {
           return (
-            <DataRow key={title} isShrinked={!isFlexibleWrapper}>
+            <DataRow
+              isExtraSmallScreen={isExtraSmallScreen}
+              key={title}
+              isShrinked={!isFlexibleWrapper}>
               <DataRowTitle>{title}</DataRowTitle>
               <DataRowValue sx={{ color: color }}>
                 {customLink && !!value ? (

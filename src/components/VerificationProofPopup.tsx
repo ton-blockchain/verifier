@@ -11,6 +11,8 @@ import {
   ListItem,
   Skeleton,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import verified from "../assets/verified.svg";
 import copy from "../assets/copy.svg";
@@ -63,17 +65,17 @@ function ProofTable() {
     showNotification("Copied to clipboard!", "success");
   }, []);
   return (
-    <>
+    <Box sx={{ overflow: "scroll", borderRadius: "5px" }}>
       {contractProofData && verifierConfig && (
-        <PopupTable>
+        <PopupTable sx={{ minWidth: 900 }}>
           <PopupTableHead>
             <PopupTableHeadRow>
               <PopupTableHeadCell sx={{ width: 80, paddingLeft: 3 }}>Status</PopupTableHeadCell>
               <PopupTableHeadCell sx={{ width: 370 }}>Public Key</PopupTableHeadCell>
               <PopupTableHeadCell sx={{ width: 35 }}></PopupTableHeadCell>
-              <PopupTableHeadCell>IP</PopupTableHeadCell>
-              <PopupTableHeadCell>Verification date</PopupTableHeadCell>
-              <PopupTableHeadCell>Verifier</PopupTableHeadCell>
+              <PopupTableHeadCell sx={{ width: 105 }}>IP</PopupTableHeadCell>
+              <PopupTableHeadCell sx={{ width: 150 }}>Verification date</PopupTableHeadCell>
+              <PopupTableHeadCell sx={{ width: 100 }}>Verifier</PopupTableHeadCell>
             </PopupTableHeadRow>
             <TableRow>
               <PopupTableHeadPaddingCell>
@@ -144,7 +146,7 @@ function ProofTable() {
       )}
       {(!!errorProof || !!errorVerifierRegistry) &&
         `${errorProof} ${errorVerifierRegistry} (App notification)`}
-    </>
+    </Box>
   );
 }
 
@@ -235,8 +237,11 @@ interface VerificationProofPopupProps {
 }
 
 export function VerificationProofPopup({ onClose }: VerificationProofPopupProps) {
+  const theme = useTheme();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
+
   return (
-    <AppPopup open={true} maxWidth={1000} hideCloseButton>
+    <AppPopup open={true} maxWidth={headerSpacings ? "88%" : 1000} hideCloseButton>
       <ClickAwayListener onClickAway={onClose}>
         <Box sx={{ width: "100%" }}>
           <CloseButtonWrapper pt={2}>

@@ -7,6 +7,7 @@ import { BorderLessCell, HeaderCell } from "./fileTable.styled";
 import { Box, Link, Typography } from "@mui/material";
 
 const PopupTable = styled(Table)({
+  overflow: "scroll",
   background: "#F7F9FB",
   borderRadius: "5px",
   width: "100%",
