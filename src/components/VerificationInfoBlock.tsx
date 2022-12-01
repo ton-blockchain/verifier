@@ -1,5 +1,5 @@
 import React from "react";
-import { styled } from "@mui/system";
+import { Box, styled } from "@mui/system";
 import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import alert from "../assets/verification-alert.svg";
 import binary from "../assets/verification-binary.svg";
@@ -18,11 +18,15 @@ interface VerificationRulesProps {
   isMobile: boolean;
 }
 
-const VerificationRules = styled(CenteringBox)((props: VerificationRulesProps) => ({
+const VerificationRules = styled(CenteringBox)(({ theme }) => (props: VerificationRulesProps) => ({
   flexWrap: props.makeFlexible ? "wrap" : "inherit",
   gap: props.makeFlexible ? 20 : "inherit",
   justifyContent: props.makeFlexible ? "center" : "space-between",
   padding: 24,
+  [theme.breakpoints.down("lg")]: {
+    width: "70%",
+    margin: "auto",
+  },
 }));
 
 const VerificationRule = styled(CenteringWrapper)({

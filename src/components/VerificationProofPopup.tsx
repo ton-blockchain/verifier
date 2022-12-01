@@ -11,6 +11,8 @@ import {
   ListItem,
   Skeleton,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import verified from "../assets/verified.svg";
 import copy from "../assets/copy.svg";
@@ -235,8 +237,11 @@ interface VerificationProofPopupProps {
 }
 
 export function VerificationProofPopup({ onClose }: VerificationProofPopupProps) {
+  const theme = useTheme();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
+
   return (
-    <AppPopup open={true} maxWidth={1000} hideCloseButton>
+    <AppPopup open={true} maxWidth={headerSpacings ? "88%" : 1000} hideCloseButton>
       <ClickAwayListener onClickAway={onClose}>
         <Box sx={{ width: "100%" }}>
           <CloseButtonWrapper pt={2}>

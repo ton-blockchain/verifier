@@ -40,7 +40,7 @@ export function TopBar() {
       showExpanded={showExpanded}>
       {isSmallScreen && (
         <IconButton
-          sx={{ width: 35, height: 35, marginRight: 2 }}
+          sx={{ width: 35, height: 35, marginRight: 2.4 }}
           onClick={() => setShowMenu(true)}>
           <MenuRoundedIcon sx={{ width: 35, height: 35 }} />
         </IconButton>
