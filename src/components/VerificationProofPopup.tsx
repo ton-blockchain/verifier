@@ -251,8 +251,8 @@ export function VerificationProofPopup({ onClose }: VerificationProofPopupProps)
             </TitleText>
           </CenteringBox>
           <ProofTable />
-          <br />
-          <ManualProof />
+          {/* TODO restore when docker verification is ready <br />
+          <ManualProof /> */}
         </Box>
       </ClickAwayListener>
     </AppPopup>

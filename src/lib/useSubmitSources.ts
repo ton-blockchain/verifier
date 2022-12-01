@@ -109,8 +109,8 @@ export function useSubmitSources() {
     }
 
     if (result.compileResult.result !== "similar") {
-      hints.push(Hints.FIFT);
-      hints.push(Hints.FIFTLIB);
+      /* hints.push(Hints.FIFT);
+      hints.push(Hints.FIFTLIB); TODO restore if we come to conclusion user can benefit from this */
       hints.push(Hints.SUPPORT_GROUP);
     }
 

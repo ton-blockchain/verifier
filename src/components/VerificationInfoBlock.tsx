@@ -11,6 +11,7 @@ import { CenteringWrapper } from "./footer.styled";
 import { CenteringBox, DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
 import { AppButton } from "./AppButton";
 import { VerificationProofPopup } from "./VerificationProofPopup";
+import { useSearchParams } from "react-router-dom";
 
 const VerificationRules = styled(CenteringBox)({
   justifyContent: "space-between",
@@ -59,7 +60,8 @@ const verificationRules: Rule[] = [
 ];
 
 export const VerificationInfoBlock = () => {
-  const [isPopupOpen, setPopupOpen] = React.useState(false);
+  const [urlParams] = useSearchParams();
+  const [isPopupOpen, setPopupOpen] = React.useState(urlParams.get("showProof") !== null);
 
   const onClose = () => setPopupOpen(false);
 
