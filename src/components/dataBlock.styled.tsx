@@ -8,13 +8,14 @@ const DataFlexibleBox = styled(DataBox)({
 
 interface DataRowProps {
   isShrinked?: boolean;
+  isExtraSmallScreen?: boolean;
 }
 
 const DataRowsBox = styled(Box)((props: DataRowProps) => ({
-  display: props.isShrinked ? "flex" : "inherit",
-  flexWrap: props.isShrinked ? "wrap" : "inherit",
-  columnGap: props.isShrinked ? 30 : "",
-  padding: props.isShrinked ? "0 30px" : "",
+  display: props.isShrinked && !props.isExtraSmallScreen ? "flex" : "inherit",
+  flexWrap: props.isShrinked && !props.isExtraSmallScreen ? "wrap" : "inherit",
+  columnGap: props.isShrinked && !props.isExtraSmallScreen ? 30 : "",
+  padding: props.isShrinked && !props.isExtraSmallScreen ? "0 30px" : "",
   "&>*:last-child": {
     borderBottom: props.isShrinked ? "" : "none !important",
   },
@@ -26,7 +27,7 @@ const DataRowsBox = styled(Box)((props: DataRowProps) => ({
 const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
   boxSizing: props.isShrinked ? "border-box" : "inherit",
   flex: props.isShrinked ? "40%" : "inherit",
-  width: props.isShrinked ? 0 : "",
+  width: props.isShrinked && !props.isExtraSmallScreen ? 0 : props.isExtraSmallScreen ? "100%" : "",
   height: props.isShrinked ? "" : 38,
   padding: "10px 24px",
   transition: "background .15s",

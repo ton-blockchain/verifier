@@ -1,4 +1,4 @@
-import { Chip, IconButton, MenuItem, Typography } from "@mui/material";
+import { Chip, IconButton, MenuItem, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { FuncCliCompilerVersion, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
 import { Box } from "@mui/system";
 import { CenteringBox } from "./common.styled";
@@ -15,6 +15,8 @@ function CompilerSettings() {
   const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler } =
     useCompilerSettingsStore();
   const { data } = useSubmitSources();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const canPublish = !!data?.result?.msgCell;
 
@@ -23,8 +25,13 @@ function CompilerSettings() {
       <Typography variant="h5" style={{ fontWeight: 800, fontSize: 16, marginBottom: 16 }}>
         Compiler
       </Typography>
-      <CenteringBox sx={{ gap: 1, alignItems: "flex-end" }}>
-        <CenteringBox>
+      <CenteringBox
+        sx={{
+          gap: 1,
+          alignItems: isSmallScreen ? "center" : "flex-end",
+          flexDirection: isSmallScreen ? "column" : "inherit",
+        }}>
+        <CenteringBox mb={isSmallScreen ? 1 : 0} sx={{ width: isSmallScreen ? "100%" : "inherit" }}>
           <CompilerFormControl>
             <CompilerLabel>Compiler</CompilerLabel>
             <CompilerSelect disabled value={compiler}>
@@ -34,7 +41,9 @@ function CompilerSettings() {
         </CenteringBox>
         {compiler === "func" && (
           <>
-            <CenteringBox>
+            <CenteringBox
+              mb={isSmallScreen ? 1 : 0}
+              sx={{ width: isSmallScreen ? "100%" : "inherit" }}>
               <CompilerFormControl disabled={canPublish}>
                 <CompilerLabel>Version</CompilerLabel>
                 <CompilerSelect

@@ -21,3 +21,16 @@
 #myVerifierFiles .contract-verifier-tree-item {
   padding: 13px 6px;
 }
+
+@media screen and (max-width: 1200px) {
+  #myVerifierContainer {
+    flex-direction: column;
+  }
+  #myVerifierFiles {
+    height: 200px;
+    overflow-y: scroll;
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e8e8e8;
+  }
+}
