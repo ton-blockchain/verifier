@@ -1,6 +1,6 @@
 import icon from "../assets/icon.svg";
 import { WalletConnect } from "./WalletConnect";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import github from "../assets/github-dark.svg";
 import { AddressInput } from "../components/AddressInput";
@@ -49,7 +49,9 @@ export function TopBar() {
         <TopBarContent mb={5}>
           <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} width={30} height={30} alt="App icon" />
-            <AppLogo>TON VERIFIER</AppLogo>
+            <AppLogo>
+              TON VERIFIER <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
+            </AppLogo>
           </LinkWrapper>
           <ContentColumn>
             <CenteringBox mr={2}>

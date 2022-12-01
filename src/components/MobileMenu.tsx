@@ -25,7 +25,7 @@ export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          width: "200px",
+          width: "250px",
           height: "100%",
         }}>
         <IconButton sx={{ alignSelf: "end", padding: 0.3 }} onClick={closeMenu}>
@@ -44,7 +44,9 @@ export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
         </Box>
         <LinkWrapper onClick={() => navigate("/")}>
           <img src={icon} width={30} height={30} alt="App icon" />
-          <AppLogo>TON VERIFIER</AppLogo>
+          <AppLogo>
+            TON VERIFIER <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
+          </AppLogo>
         </LinkWrapper>
       </Box>
     </Drawer>

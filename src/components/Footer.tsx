@@ -39,7 +39,9 @@ export function Footer() {
         <Box>
           <LinkWrapper sx={{ color: "#000" }} onClick={() => navigate("/")}>
             <img src={icon} alt="App icon" />
-            <AppLogo>TON VERIFIER</AppLogo>
+            <AppLogo>
+              TON VERIFIER <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
+            </AppLogo>
           </LinkWrapper>
         </Box>
         <SocialsContent>
