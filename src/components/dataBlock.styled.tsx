@@ -27,7 +27,14 @@ const DataRowsBox = styled(Box)((props: DataRowProps) => ({
 const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
   boxSizing: props.isShrinked ? "border-box" : "inherit",
   flex: props.isShrinked ? "40%" : "inherit",
-  width: props.isShrinked && !props.isExtraSmallScreen ? 0 : props.isExtraSmallScreen ? "100%" : "",
+  width:
+    props.isShrinked && !props.isExtraSmallScreen
+      ? 0
+      : !props.isShrinked
+      ? ""
+      : props.isExtraSmallScreen
+      ? "100%"
+      : "",
   height: props.isShrinked ? "" : 38,
   padding: "10px 24px",
   transition: "background .15s",

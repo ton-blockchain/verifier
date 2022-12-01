@@ -63,17 +63,17 @@ function ProofTable() {
     showNotification("Copied to clipboard!", "success");
   }, []);
   return (
-    <>
+    <Box sx={{ overflow: "scroll", borderRadius: "5px" }}>
       {contractProofData && verifierConfig && (
-        <PopupTable>
+        <PopupTable sx={{ minWidth: 900 }}>
           <PopupTableHead>
             <PopupTableHeadRow>
               <PopupTableHeadCell sx={{ width: 80, paddingLeft: 3 }}>Status</PopupTableHeadCell>
               <PopupTableHeadCell sx={{ width: 370 }}>Public Key</PopupTableHeadCell>
               <PopupTableHeadCell sx={{ width: 35 }}></PopupTableHeadCell>
-              <PopupTableHeadCell>IP</PopupTableHeadCell>
-              <PopupTableHeadCell>Verification date</PopupTableHeadCell>
-              <PopupTableHeadCell>Verifier</PopupTableHeadCell>
+              <PopupTableHeadCell sx={{ width: 105 }}>IP</PopupTableHeadCell>
+              <PopupTableHeadCell sx={{ width: 150 }}>Verification date</PopupTableHeadCell>
+              <PopupTableHeadCell sx={{ width: 100 }}>Verifier</PopupTableHeadCell>
             </PopupTableHeadRow>
             <TableRow>
               <PopupTableHeadPaddingCell>
@@ -144,7 +144,7 @@ function ProofTable() {
       )}
       {(!!errorProof || !!errorVerifierRegistry) &&
         `${errorProof} ${errorVerifierRegistry} (App notification)`}
-    </>
+    </Box>
   );
 }
 

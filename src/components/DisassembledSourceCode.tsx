@@ -4,11 +4,13 @@ import hljs from "highlight.js/lib/core";
 import hljsDefine from "highlightjs-func";
 import { useEffect, useRef } from "react";
 import "highlight.js/styles/atom-one-light.css";
+import { useMediaQuery, useTheme } from "@mui/material";
 hljsDefine(hljs);
 
 export function DisassembledSourceCode() {
   const { data: contractInfo } = useLoadContractInfo();
-
+  const theme = useTheme();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const ref = useRef<any>(null);
 
   useEffect(() => {
@@ -31,7 +33,7 @@ export function DisassembledSourceCode() {
           style={{
             textAlign: "right",
             color: "#728a96",
-            paddingLeft: 20,
+            paddingLeft: headerSpacings ? 0 : 20,
           }}>
           {contractInfo?.decompiled
             ?.trim()

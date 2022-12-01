@@ -23,11 +23,35 @@
 }
 
 @media screen and (max-width: 1200px) {
+  #myVerifierFiles {
+    width: 190px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  #myVerifierFiles {
+    width: 170px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  #myVerifierFiles {
+    width: 150px;
+  }
+}
+
+@media screen and (max-width: 900px) {
   #myVerifierContainer {
     flex-direction: column;
   }
+
+  #myVerifierContent code {
+    padding-left: 0;
+  }
+
   #myVerifierFiles {
-    height: 200px;
+    max-height: 400px;
+    height: content-box;
     overflow-y: scroll;
     width: 100%;
     border-right: none;

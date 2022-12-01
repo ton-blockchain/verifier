@@ -34,10 +34,13 @@ export function TopBar() {
   }, [pathname]);
 
   return (
-    <TopBarWrapper px={headerSpacings ? 2 : 0} isMobile={isSmallScreen} showExpanded={showExpanded}>
+    <TopBarWrapper
+      px={headerSpacings ? 2.4 : 0}
+      isMobile={isSmallScreen}
+      showExpanded={showExpanded}>
       {isSmallScreen && (
         <IconButton
-          sx={{ width: 35, height: 35, marginRight: 1 }}
+          sx={{ width: 35, height: 35, marginRight: 2 }}
           onClick={() => setShowMenu(true)}>
           <MenuRoundedIcon sx={{ width: 35, height: 35 }} />
         </IconButton>
