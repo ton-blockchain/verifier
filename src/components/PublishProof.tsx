@@ -102,12 +102,12 @@ export function PublishProof() {
                   onClick={() => {
                     sendTXN();
                   }}>
-                  {status === "pending" && (
+                  {(status === "pending" || status === "issued") && (
                     <CircularProgress
                       sx={{ color: "#fff", height: "20px !important", width: "20px !important" }}
                     />
                   )}
-                  Compile
+                  Publish
                 </AppButton>
               )}
               {status === "success" && (
