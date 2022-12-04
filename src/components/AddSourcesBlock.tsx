@@ -11,7 +11,7 @@ import { AppButton } from "./AppButton";
 import { useWalletConnect } from "../lib/useWalletConnect";
 import { WalletConnect } from "./WalletConnect";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
-import { Fade } from "@mui/material";
+import { CircularProgress, Fade } from "@mui/material";
 
 const ContentBox = styled(Box)({
   padding: "15px 24px",
@@ -62,7 +62,16 @@ export function AddSourcesBlock() {
                       onClick={() => {
                         mutate(null);
                       }}>
-                      {isLoading ? "Submitting..." : `Compile`}
+                      {isLoading && (
+                        <CircularProgress
+                          sx={{
+                            color: "#fff",
+                            height: "20px !important",
+                            width: "20px !important",
+                          }}
+                        />
+                      )}
+                      Compile
                     </AppButton>
                   ) : (
                     <AppButton
