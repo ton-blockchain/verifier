@@ -9,6 +9,7 @@ const FooterWrapper = styled(Box)({
 const SocialsWrapper = styled(Box)({
   display: "flex",
   justifyContent: "space-between",
+  height: 73,
 });
 
 const SocialsContent = styled(Box)(({ theme }) => ({
@@ -22,7 +23,7 @@ const CredentialsWrapper = styled(Box)(({ theme }) => ({
   display: "flex",
   flexWrap: "wrap",
   justifyContent: "space-between",
-  marginTop: theme.spacing(2),
+  marginTop: theme.spacing(3),
   marginBottom: theme.spacing(2),
   color: "#728A96",
   fontSize: 14,
@@ -30,9 +31,6 @@ const CredentialsWrapper = styled(Box)(({ theme }) => ({
     "& > *": {
       marginBottom: `${theme.spacing(1)} !important`,
     },
-  },
-  [theme.breakpoints.down("sm")]: {
-    flexDirection: "column",
   },
 }));
 
@@ -77,8 +75,7 @@ const FooterTextBoxLeft = styled(FooterTextBox)(({ theme }) => ({
     justifyContent: "start",
   },
   [theme.breakpoints.down("sm")]: {
-    justifyContent: "center",
-    minWidth: "100%",
+    minWidth: 100,
   },
 }));
 
@@ -87,8 +84,7 @@ const FooterTextBoxRight = styled(FooterTextBox)(({ theme }) => ({
     justifyContent: "end",
   },
   [theme.breakpoints.down("sm")]: {
-    justifyContent: "center",
-    minWidth: "100%",
+    minWidth: 100,
   },
 }));
 

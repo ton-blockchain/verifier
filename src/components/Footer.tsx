@@ -12,7 +12,6 @@ import {
 } from "./footer.styled";
 import { AppLogo, LinkWrapper } from "./topbar.styled";
 import { Typography, useMediaQuery } from "@mui/material";
-import { Box } from "@mui/system";
 import heart from "../assets/heart.svg";
 import telegram from "../assets/telegram.svg";
 import telegramHovered from "../assets/telegram-hover.svg";
@@ -21,6 +20,7 @@ import githubHovered from "../assets/github-hover.svg";
 import { HoverableIcon } from "./HoverableIcon";
 import icon from "../assets/icon.svg";
 import { useNavigate } from "react-router-dom";
+import { CenteringBox } from "./common.styled";
 
 export const TELEGRAM_SUPPORT_LINK = "https://t.me/tonverifier";
 
@@ -31,19 +31,19 @@ export function Footer() {
   return (
     <FooterWrapper>
       <SocialsWrapper
-        mb={isExtraSmallScreen ? 3 : "inherit"}
+        mb={isExtraSmallScreen ? 5 : "inherit"}
         sx={{
           flexDirection: isExtraSmallScreen ? "column" : "inherit",
           alignItems: isExtraSmallScreen ? "center" : "inherit",
         }}>
-        <Box>
+        <CenteringBox>
           <LinkWrapper sx={{ color: "#000" }} onClick={() => navigate("/")}>
-            <img src={icon} alt="App icon" />
+            <img src={icon} alt="App icon" width={30} height={30} />
             <AppLogo>
               TON VERIFIER <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
             </AppLogo>
           </LinkWrapper>
-        </Box>
+        </CenteringBox>
         <SocialsContent>
           <HoverableIcon
             iconUrl={telegram}
