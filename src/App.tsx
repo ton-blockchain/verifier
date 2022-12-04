@@ -97,7 +97,7 @@ function App() {
             />
           </Box>
         )}
-        {isLoading && (
+        {showSkeleton && (
           <OverflowingBox sx={{ padding: "30px 24px 24px 24px" }} mb={3}>
             <CenteringBox mb={3}>
               <Skeleton variant="circular" width={41} height={41} sx={{ marginRight: 2 }} />
@@ -113,7 +113,7 @@ function App() {
             {proofData?.hasOnchainProof && <CompilerBlock />}
           </ContractDataBox>
         )}
-        {isLoading && (
+        {showSkeleton && (
           <OverflowingBox sx={{ padding: "30px 24px 24px 24px" }} mb={3}>
             <CenteringBox mb={3}>
               <Skeleton variant="circular" width={41} height={41} sx={{ marginRight: 2 }} />
@@ -134,13 +134,17 @@ function App() {
             <ContractSourceCode />
           </OverflowingBox>
         ) : (
-          <OverflowingBox sx={{ padding: "30px 24px 24px 24px" }} mb={5}>
-            <CenteringBox mb={3}>
-              <Skeleton variant="circular" width={41} height={41} sx={{ marginRight: 2 }} />
-              <Skeleton variant="text" sx={{ fontSize: "20px", width: 250 }} />
-            </CenteringBox>
-            <Skeleton variant="rectangular" width="100%" height={500} />
-          </OverflowingBox>
+          <>
+            {showSkeleton && (
+              <OverflowingBox sx={{ padding: "30px 24px 24px 24px" }} mb={5}>
+                <CenteringBox mb={3}>
+                  <Skeleton variant="circular" width={41} height={41} sx={{ marginRight: 2 }} />
+                  <Skeleton variant="text" sx={{ fontSize: "20px", width: 250 }} />
+                </CenteringBox>
+                <Skeleton variant="rectangular" width="100%" height={500} />
+              </OverflowingBox>
+            )}
+          </>
         )}
         {proofData && <Footer />}
       </ContentBox>
