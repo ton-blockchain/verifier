@@ -9,8 +9,9 @@ import { Box } from "@mui/system";
 import { NotificationTitle } from "./CompileOutput";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
-import { Fade } from "@mui/material";
+import { CircularProgress, Fade } from "@mui/material";
 import { useFileStore } from "../lib/useFileStore";
+import { AppButton } from "./AppButton";
 
 export function PublishProof() {
   const { data } = useSubmitSources();
@@ -89,14 +90,25 @@ export function PublishProof() {
             </Box>
             <CenteringBox mb={3} sx={{ justifyContent: "center" }}>
               {status !== "success" && (
-                <Button
+                <AppButton
                   disabled={status === "pending" || status === "issued"}
-                  sx={{ width: 140, height: 44 }}
-                  text="Publish"
+                  fontSize={14}
+                  fontWeight={800}
+                  textColor="#fff"
+                  height={44}
+                  width={144}
+                  background="#1976d2"
+                  hoverBackground="#156cc2"
                   onClick={() => {
                     sendTXN();
-                  }}
-                />
+                  }}>
+                  {status === "pending" && (
+                    <CircularProgress
+                      sx={{ color: "#fff", height: "20px !important", width: "20px !important" }}
+                    />
+                  )}
+                  Compile
+                </AppButton>
               )}
               {status === "success" && (
                 <Button
