@@ -57,14 +57,13 @@ function ContractSourceCode() {
   };
 
   const onCopy = useCallback(async (type: CODE) => {
-    // @ts-ignore
-    navigator.clipboard.writeText(
-      document.querySelector(
-        type === CODE.SOURCE
-          ? `#myVerifierContent > pre > code > div.hljs.language-func`
-          : `pre > code > div.hljs.language-fift`,
-      ).innerText,
-    );
+    const element = document.querySelector(
+      type === CODE.SOURCE
+        ? `#myVerifierContent > pre > code > div.hljs.language-func`
+        : `pre > code > div.hljs.language-fift`,
+    ) as HTMLElement;
+    navigator.clipboard.writeText(element?.innerText);
+
     showNotification("Copied to clipboard!", "success");
   }, []);
 
