@@ -56,7 +56,7 @@ function Cells({
 
   return (
     <>
-      <BorderLessCell {...attributes} {...listeners}>
+      <BorderLessCell sx={{ paddingLeft: 1 }} {...attributes} {...listeners}>
         <CenteringBox sx={{ color: "#D8D8D8" }}>
           {pos}.
           <CenteringBox
