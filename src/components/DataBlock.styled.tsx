@@ -1,5 +1,5 @@
 import { styled } from "@mui/system";
-import { CenteringBox, DataBox } from "./common.styled";
+import { CenteringBox, DataBox } from "./Common.styled";
 import { Box, Typography } from "@mui/material";
 
 const DataFlexibleBox = styled(DataBox)({

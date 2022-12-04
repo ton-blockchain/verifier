@@ -5,7 +5,7 @@ import { Box } from "@mui/system";
 import { WalletConnect } from "./WalletConnect";
 import { githubLink } from "../const";
 import github from "../assets/github-dark.svg";
-import { AppLogo, GitLogo, LinkWrapper } from "./topbar.styled";
+import { AppLogo, GitLogo, LinkWrapper } from "./TopBar.styled";
 import icon from "../assets/icon.svg";
 import { useNavigate } from "react-router-dom";
 

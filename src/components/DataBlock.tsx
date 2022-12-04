@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import { IconButton, Link, useMediaQuery } from "@mui/material";
-import { DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
+import { DataBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
 import {
@@ -10,7 +10,7 @@ import {
   DataRowTitle,
   DataRowValue,
   IconsWrapper,
-} from "./dataBlock.styled";
+} from "./DataBlock.styled";
 
 export interface DataRowItem {
   title: string;

@@ -11,7 +11,7 @@ import useNotification from "../lib/useNotification";
 import { SearchResults } from "../components/SearchResults";
 import { DevExamples } from "./DevExamples";
 import { AppButton } from "./AppButton";
-import { CenteringBox } from "./common.styled";
+import { CenteringBox } from "./Common.styled";
 
 const InputWrapper = styled(Box)({
   display: "flex",

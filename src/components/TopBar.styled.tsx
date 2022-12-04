@@ -1,7 +1,7 @@
 import { styled } from "@mui/material/styles";
 import { Box, Link } from "@mui/material";
 import { contentMaxWidth } from "../const";
-import { CenteringBox } from "./common.styled";
+import { CenteringBox } from "./Common.styled";
 
 const expandedHeaderHeight = 250;
 const headerHeight = 188;

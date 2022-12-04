@@ -9,8 +9,8 @@ import {
   Separator,
   SocialsContent,
   SocialsWrapper,
-} from "./footer.styled";
-import { AppLogo, LinkWrapper } from "./topbar.styled";
+} from "./Footer.styled";
+import { AppLogo, LinkWrapper } from "./TopBar.styled";
 import { Typography, useMediaQuery } from "@mui/material";
 import heart from "../assets/heart.svg";
 import telegram from "../assets/telegram.svg";
@@ -20,7 +20,7 @@ import githubHovered from "../assets/github-hover.svg";
 import { HoverableIcon } from "./HoverableIcon";
 import icon from "../assets/icon.svg";
 import { useNavigate } from "react-router-dom";
-import { CenteringBox } from "./common.styled";
+import { CenteringBox } from "./Common.styled";
 
 export const TELEGRAM_SUPPORT_LINK = "https://t.me/tonverifier";
 

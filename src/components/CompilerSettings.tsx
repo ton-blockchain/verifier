@@ -1,13 +1,13 @@
 import { Chip, IconButton, MenuItem, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { FuncCliCompilerVersion, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
 import { Box } from "@mui/system";
-import { CenteringBox } from "./common.styled";
+import { CenteringBox } from "./Common.styled";
 import {
   DirectoryInput,
   CompilerFormControl,
   CompilerLabel,
   CompilerSelect,
-} from "./compilerSetting.styled";
+} from "./CompilerSetting.styled";
 import undo from "../assets/undo.svg";
 import { useSubmitSources } from "../lib/useSubmitSources";
 

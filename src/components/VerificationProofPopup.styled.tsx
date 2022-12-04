@@ -1,9 +1,9 @@
 import { styled } from "@mui/material/styles";
-import { CenteringBox, TitleText } from "./common.styled";
+import { CenteringBox, TitleText } from "./Common.styled";
 import Table from "@mui/material/Table";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { BorderLessCell, HeaderCell } from "./fileTable.styled";
+import { BorderLessCell, HeaderCell } from "./FileTable.styled";
 import { Box, Link, Typography } from "@mui/material";
 
 const PopupTable = styled(Table)({
