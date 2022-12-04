@@ -1,17 +1,15 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import search from "../assets/search.svg";
 import close from "../assets/close.svg";
 import { Backdrop, Box, ClickAwayListener, Fade, IconButton } from "@mui/material";
-import { animationTimeout, SEARCH_HISTORY } from "../const";
-import { useLocalStorage } from "../lib/useLocalStorage";
-import { isValidAddress } from "../utils";
-import useNotification from "../lib/useNotification";
+import { animationTimeout } from "../const";
 import { SearchResults } from "../components/SearchResults";
 import { DevExamples } from "./DevExamples";
 import { AppButton } from "./AppButton";
 import { CenteringBox } from "./Common.styled";
+import { useAddressInput } from "../lib/useAddressInput";
 
 const InputWrapper = styled(Box)({
   display: "flex",
@@ -52,63 +50,24 @@ export interface SearchRequest {
 }
 
 export function AddressInput() {
-  const [value, setValue] = useState("");
-  const [active, setActive] = useState(false);
-  const navigate = useNavigate();
-  const { showNotification } = useNotification();
-  const [searchResults, setSearchResults] = useState<SearchRequest[]>([]);
-  const { storedValue: searchDupResults, setValue: setSearchDupResults } = useLocalStorage<
-    SearchRequest[]
-  >(SEARCH_HISTORY, []);
+  const {
+    onSubmit,
+    onItemDelete,
+    onItemClick,
+    onHistoryClear,
+    onClear,
+    active,
+    searchResults,
+    value,
+    defineActive,
+    defineValue,
+    defineSearchDupResults,
+  } = useAddressInput();
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
 
-  const onClear = useCallback(() => setValue(""), []);
-
-  const onItemClick = useCallback((item: SearchRequest) => {
-    setActive(false);
-    navigate(`/${item.value}`);
-  }, []);
-
-  const onHistoryClear = useCallback(() => {
-    setSearchResults([]);
-  }, []);
-
-  const onItemDelete = useCallback(
-    (e: React.MouseEvent, item: SearchRequest) => {
-      e.stopPropagation();
-      setSearchResults((prev) => prev.filter((result) => result.value !== item.value));
-    },
-    [searchResults],
-  );
-
-  const onSubmit = async () => {
-    const isAlreadyInTheList = searchDupResults.find((item) => {
-      return item.value === value;
-    });
-
-    if (!value) {
-      setValue("");
-      setActive(false);
-      navigate("/");
-      return;
-    }
-
-    if (!isValidAddress(value)) {
-      showNotification("Invalid address", "error");
-      return;
-    }
-
-    !isAlreadyInTheList &&
-      setSearchResults((prevState) => [...prevState, { index: searchDupResults?.length, value }]);
-
-    setValue("");
-    setActive(false);
-    navigate(`/${value}`);
-  };
-
   useEffect(() => {
-    setSearchDupResults(searchResults);
+    defineSearchDupResults(searchResults);
   }, [searchResults]);
 
   useEffect(() => {
@@ -125,7 +84,7 @@ export function AddressInput() {
   }, [value]);
 
   return (
-    <ClickAwayListener onClickAway={() => setActive(false)}>
+    <ClickAwayListener onClickAway={() => defineActive(false)}>
       <>
         <Box sx={{ position: "relative", maxWidth: 1160, width: "100%", zIndex: 3 }}>
           <InputWrapper>
@@ -133,9 +92,9 @@ export function AddressInput() {
             <AppAddressInput
               placeholder="Contract address"
               value={value}
-              onChange={(e) => setValue(e.target.value)}
+              onChange={(e) => defineValue(e.target.value)}
               onSubmit={onSubmit}
-              onFocus={() => setActive(true)}
+              onFocus={() => defineActive(true)}
               spellCheck={false}
             />
             <Fade in={!!value} timeout={animationTimeout}>
@@ -174,7 +133,7 @@ export function AddressInput() {
           }}
           invisible={!searchResults.length}
           open={active}
-          onClick={() => setActive(false)}
+          onClick={() => defineActive(false)}
         />
       </>
     </ClickAwayListener>
