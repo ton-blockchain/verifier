@@ -39,13 +39,16 @@ export const useFileStore = create(
 
     // Actions
     addFiles: async (files) => {
+      // console.log(files, "shahar")
       const modifiedFiles = await Promise.all(
         files.map(async (f) => {
           const content = await f.text();
+          // @ts-ignore
+          const folders = f.path?.split("/").filter((f) => f) ?? [];
           return {
             fileObj: f,
             includeInCommand: true,
-            folder: "",
+            folder: folders.slice(0, folders.length - 1).join("/"),
             hasIncludeDirectives: content.includes("#include"),
             isEntrypoint: /\(\)\s*(recv_internal|main)\s*\(/.test(content),
             isStdlib: /stdlib.(fc|func)/i.test(f.name),

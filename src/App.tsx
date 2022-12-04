@@ -6,7 +6,7 @@ import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
 import { useResetState } from "./lib/useResetState";
 import { styled } from "@mui/system";
-import { Backdrop, Box } from "@mui/material";
+import { Backdrop, Box, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import { useContractAddress } from "./lib/useContractAddress";
 import React, { useEffect, useRef, useState } from "react";
 import { ContractBlock } from "./components/ContractBlock";
@@ -21,14 +21,17 @@ import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 
 const ContentBox = styled(Box)({
   maxWidth: 1160,
-  width: "100%",
   margin: "auto",
 });
 
-const ContractDataBox = styled(Box)({
-  display: "flex",
+interface ContractDataBoxProps {
+  isMobile?: boolean;
+}
+
+const ContractDataBox = styled(Box)((props: ContractDataBoxProps) => ({
+  display: props.isMobile ? "inherit" : "flex",
   gap: 20,
-});
+}));
 
 const OverflowingBox = styled(Box)({
   boxSizing: "border-box",
@@ -44,10 +47,15 @@ const OverflowingBox = styled(Box)({
 function App() {
   const { isLoading, data: proofData, error } = useLoadContractProof();
   const [isDragging, setIsDragging] = useState(false);
+  const theme = useTheme();
   const canOverride = useOverride();
   const { isAddressValid } = useContractAddress();
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const showSkeleton = !error && isLoading && isAddressValid;
 
   useResetState();
 
@@ -67,8 +75,7 @@ function App() {
       />
       <Box ref={scrollToRef} />
       <TopBar />
-      <ContentBox>
-        {!error && isLoading && isAddressValid && <Box sx={{ marginTop: 4 }}>Loading...</Box>}
+      <ContentBox px={headerSpacings ? "20px" : 0}>
         {!!error && (
           <Box mt={4}>
             <AppNotification
@@ -89,8 +96,33 @@ function App() {
             />
           </Box>
         )}
+        {showSkeleton && (
+          <>
+            <Box my={2.5}>
+              <Skeleton
+                width="100%"
+                height={331}
+                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
+              />
+            </Box>
+            <Box my={2.5}>
+              <Skeleton
+                width="100%"
+                height={236}
+                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
+              />
+            </Box>
+            <Box my={2.5}>
+              <Skeleton
+                width="100%"
+                height={500}
+                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
+              />
+            </Box>
+          </>
+        )}
         {!isLoading && (
-          <ContractDataBox>
+          <ContractDataBox isMobile={isSmallScreen}>
             <ContractBlock />
             {proofData?.hasOnchainProof && <CompilerBlock />}
           </ContractDataBox>
@@ -110,7 +142,7 @@ function App() {
         {proofData && <Footer />}
       </ContentBox>
       {!proofData && (
-        <CenteringWrapper sx={{ position: "fixed", bottom: 0, width: "100%" }}>
+        <CenteringWrapper sx={{ position: !showSkeleton ? "fixed" : "", bottom: 0, width: "100%" }}>
           <Footer />
         </CenteringWrapper>
       )}
