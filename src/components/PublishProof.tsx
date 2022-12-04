@@ -1,6 +1,6 @@
 import { usePublishProof } from "../lib/usePublishProof";
 import Button from "./Button";
-import { CenteringBox, DataBox, IconBox, TitleText } from "./common.styled";
+import { CenteringBox, DataBox, IconBox, TitleText } from "./Common.styled";
 import React from "react";
 import publish from "../assets/publish.svg";
 import verified from "../assets/verified-bold.svg";

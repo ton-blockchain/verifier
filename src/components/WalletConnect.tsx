@@ -6,7 +6,7 @@ import { AppButton } from "./AppButton";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
 import { ConnectorPopup, Provider } from "./ConnectorPopup";
-import { DisconnectButton, WalletButtonContent, WalletWrapper } from "./walletconnect.styled";
+import { DisconnectButton, WalletButtonContent, WalletWrapper } from "./WalletConnect.styled";
 import { makeElipsisAddress } from "../utils/textUtils";
 import { AnalyticsAction, sendAnalyticsEvent } from "../lib/googleAnalytics";
 

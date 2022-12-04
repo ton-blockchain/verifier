@@ -14,7 +14,7 @@ import { CompilerBlock } from "./components/CompilerBlock";
 import { AddSourcesBlock } from "./components/AddSourcesBlock";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
-import { CenteringWrapper } from "./components/footer.styled";
+import { CenteringWrapper } from "./components/Footer.styled";
 import { AppNotification, NotificationType } from "./components/AppNotification";
 import { NotificationTitle } from "./components/CompileOutput";
 import { VerificationInfoBlock } from "./components/VerificationInfoBlock";

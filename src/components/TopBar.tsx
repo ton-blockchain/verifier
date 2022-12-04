@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import github from "../assets/github-dark.svg";
 import { AddressInput } from "../components/AddressInput";
-import { CenteringBox } from "./common.styled";
+import { CenteringBox } from "./Common.styled";
 import { githubLink } from "../const";
 import {
   AppLogo,
@@ -15,7 +15,7 @@ import {
   TopBarContent,
   TopBarHeading,
   TopBarWrapper,
-} from "./topbar.styled";
+} from "./TopBar.styled";
 import { IconButton, useMediaQuery, useTheme } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { MobileMenu } from "./MobileMenu";

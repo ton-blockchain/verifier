@@ -1,5 +1,5 @@
 import React from "react";
-import { CenteringBox, DataBox } from "./common.styled";
+import { CenteringBox, DataBox } from "./Common.styled";
 import { useFileStore } from "../lib/useFileStore";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { FileUploaderArea } from "./FileUploaderArea";

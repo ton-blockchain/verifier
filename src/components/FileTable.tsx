@@ -24,10 +24,10 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useHover } from "../lib/useHover";
-import { CenteringBox } from "./common.styled";
+import { CenteringBox } from "./Common.styled";
 import deleteIcon from "../assets/delete.svg";
 import dndIcon from "../assets/dnd.svg";
-import { BorderLessCell, DirectoryBox, HeaderCell, HR } from "./fileTable.styled";
+import { BorderLessCell, DirectoryBox, HeaderCell, HR } from "./FileTable.styled";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { trimDirectory } from "../utils/textUtils";
 

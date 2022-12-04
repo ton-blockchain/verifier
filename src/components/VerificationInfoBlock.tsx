@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, styled } from "@mui/system";
+import { styled } from "@mui/system";
 import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import alert from "../assets/verification-alert.svg";
 import binary from "../assets/verification-binary.svg";
@@ -7,8 +7,8 @@ import bomb from "../assets/verification-bomb.svg";
 import paper from "../assets/verification-paper.svg";
 import show from "../assets/show.svg";
 import verification from "../assets/verification.svg";
-import { CenteringWrapper } from "./footer.styled";
-import { CenteringBox, DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
+import { CenteringWrapper } from "./Footer.styled";
+import { CenteringBox, DataBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import { AppButton } from "./AppButton";
 import { VerificationProofPopup } from "./VerificationProofPopup";
 import { useSearchParams } from "react-router-dom";

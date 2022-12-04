@@ -4,7 +4,7 @@ import React, { useCallback, useState } from "react";
 import { VerifiedSourceCode } from "./VerifiedSourceCode";
 import { DisassembledSourceCode } from "./DisassembledSourceCode";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
-import { CenteringBox, IconBox, TitleBox, TitleText } from "./common.styled";
+import { CenteringBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import verified from "../assets/verified-light.svg";
 import { styled } from "@mui/system";
 import download from "../assets/download.svg";

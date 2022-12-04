@@ -2,7 +2,7 @@ import { AppPopup } from "./AppPopup";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { useLoadVerifierRegistryInfo } from "../lib/useLoadVerifierRegistryInfo";
 import { githubLink } from "../const";
-import { CenteringBox, TitleText } from "./common.styled";
+import { CenteringBox, TitleText } from "./Common.styled";
 import {
   Box,
   ClickAwayListener,
@@ -20,7 +20,7 @@ import close from "../assets/close.svg";
 import verificationPopup from "../assets/verification-popup.svg";
 import React, { ReactNode, useCallback } from "react";
 import TableRow from "@mui/material/TableRow";
-import { BorderLessCell, HR } from "./fileTable.styled";
+import { BorderLessCell, HR } from "./FileTable.styled";
 import TableBody from "@mui/material/TableBody";
 import useNotification from "../lib/useNotification";
 import { downloadJson } from "../utils/jsonUtils";

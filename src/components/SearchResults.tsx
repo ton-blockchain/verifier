@@ -3,8 +3,8 @@ import { IconButton, Typography } from "@mui/material";
 import { AppButton } from "./AppButton";
 import close from "../assets/close.svg";
 import recentSearch from "../assets/recent-search.svg";
-import { CenteringBox } from "./common.styled";
-import { SearchResultsItem, SearchResultsWrapper } from "./searchRusults.styled";
+import { CenteringBox } from "./Common.styled";
+import { SearchResultsItem, SearchResultsWrapper } from "./SearchRusults.styled";
 
 interface HeaderSearchResultsProps {
   searchResults: SearchRequest[];

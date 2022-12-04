@@ -1,15 +1,14 @@
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
-import { usePublishStepsStore } from "./usePublishStepsStore";
 import { Box } from "@mui/system";
 import { AppNotification, NotificationType } from "./AppNotification";
-import { CenteringBox } from "./common.styled";
+import { CenteringBox } from "./Common.styled";
 import puzzle from "../assets/reorder-hint.svg";
 import hint from "../assets/light-bulb.svg";
 import like from "../assets/like.svg";
 import { styled } from "@mui/material/styles";
 import { Typography } from "@mui/material";
-import { DataRowTitle, DataRowValue } from "./dataBlock.styled";
+import { DataRowTitle, DataRowValue } from "./DataBlock.styled";
 import React from "react";
 import { HintItem } from "./HintItem";
 

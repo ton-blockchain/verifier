@@ -2,7 +2,7 @@ import { useFileStore } from "../lib/useFileStore";
 import { useDropzone } from "react-dropzone";
 import React from "react";
 import { Box, useMediaQuery } from "@mui/material";
-import { CenteringBox, IconBox, TitleBox, TitleText } from "./common.styled";
+import { CenteringBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import sourcesDefault from "../assets/sources.svg";
 import sourcesVerified from "../assets/verified-bold.svg";
 import { AppButton } from "./AppButton";
