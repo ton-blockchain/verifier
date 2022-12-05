@@ -69,6 +69,7 @@ export function useAddressInput() {
     const currentAddress = location.pathname.slice(1, location.pathname.length);
 
     if (!isValidAddress(currentAddress)) {
+      setSearchResults(() => []);
       return;
     }
 
