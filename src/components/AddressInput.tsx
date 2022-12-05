@@ -61,14 +61,9 @@ export function AddressInput() {
     value,
     defineActive,
     defineValue,
-    defineSearchDupResults,
   } = useAddressInput();
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
-
-  useEffect(() => {
-    defineSearchDupResults(searchResults);
-  }, [searchResults]);
 
   useEffect(() => {
     const listener = (e: any) => {

@@ -1,27 +1,25 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useLocalStorage } from "./useLocalStorage";
 import { SEARCH_HISTORY } from "../const";
 import { SearchRequest } from "../components/AddressInput";
 import { isValidAddress } from "../utils";
 import useNotification from "./useNotification";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export function useAddressInput() {
   const [value, setValue] = useState("");
   const [active, setActive] = useState(false);
   const { showNotification } = useNotification();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const [searchResults, setSearchResults] = useState<SearchRequest[]>([]);
-  const { storedValue: searchDupResults, setValue: setSearchDupResults } = useLocalStorage<
+  const { storedValue: searchResults, setValue: setSearchResults } = useLocalStorage<
     SearchRequest[]
   >(SEARCH_HISTORY, []);
 
   const defineActive = (value: boolean) => setActive(value);
 
   const defineValue = (value: string) => setValue(value);
-
-  const defineSearchDupResults = (results: SearchRequest[]) => setSearchDupResults(results);
 
   const onClear = useCallback(() => setValue(""), []);
 
@@ -43,7 +41,7 @@ export function useAddressInput() {
   );
 
   const onSubmit = async () => {
-    const isAlreadyInTheList = searchDupResults.find((item) => {
+    const isAlreadyInTheList = searchResults.find((item) => {
       return item.value === value;
     });
 
@@ -60,12 +58,40 @@ export function useAddressInput() {
     }
 
     !isAlreadyInTheList &&
-      setSearchResults((prevState) => [...prevState, { index: searchDupResults?.length, value }]);
+      setSearchResults((prevState) => [...prevState, { index: searchResults?.length, value }]);
 
     setValue("");
     setActive(false);
     navigate(`/${value}`);
   };
+
+  useEffect(() => {
+    const currentAddress = location.pathname.slice(1, location.pathname.length);
+
+    if (!isValidAddress(currentAddress)) {
+      return;
+    }
+
+    setSearchResults(() => [{ index: 0, value: currentAddress }]);
+  }, []);
+
+  useEffect(() => {
+    const currentAddress = location.pathname.slice(1, location.pathname.length);
+
+    if (!isValidAddress(currentAddress)) {
+      return;
+    }
+
+    const isAlreadyInTheList = searchResults.find((item) => {
+      return item.value === currentAddress;
+    });
+
+    !isAlreadyInTheList &&
+      setSearchResults((prevState) => [
+        ...prevState,
+        { index: searchResults?.length, value: currentAddress },
+      ]);
+  }, [location.pathname]);
 
   return {
     onSubmit,
@@ -78,6 +104,5 @@ export function useAddressInput() {
     value,
     defineActive,
     defineValue,
-    defineSearchDupResults,
   };
 }
