@@ -81,7 +81,7 @@ function ContractSourceCode() {
             <IconBox>
               <img src={verified} alt="Block icon" width={41} height={41} />
             </IconBox>
-            <TitleText>Verified Source Code</TitleText>
+            <TitleText>{!!contractProof?.hasOnchainProof && "Verified"} Source Code</TitleText>
           </CenteringBox>
           {value === 0 && (
             <div>
