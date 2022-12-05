@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import search from "../assets/search.svg";
@@ -59,16 +59,21 @@ export function AddressInput() {
     active,
     searchResults,
     value,
-    defineActive,
-    defineValue,
-    defineSearchDupResults,
+    setActive,
+    setValue,
+    onItemAdd,
   } = useAddressInput();
+  const location = useLocation();
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
 
   useEffect(() => {
-    defineSearchDupResults(searchResults);
-  }, [searchResults]);
+    onHistoryClear();
+  }, []);
+
+  useEffect(() => {
+    onItemAdd(location.pathname.slice(1, location.pathname.length));
+  }, [location.pathname]);
 
   useEffect(() => {
     const listener = (e: any) => {
@@ -84,7 +89,7 @@ export function AddressInput() {
   }, [value]);
 
   return (
-    <ClickAwayListener onClickAway={() => defineActive(false)}>
+    <ClickAwayListener onClickAway={() => setActive(false)}>
       <>
         <Box sx={{ position: "relative", maxWidth: 1160, width: "100%", zIndex: 3 }}>
           <InputWrapper>
@@ -92,9 +97,9 @@ export function AddressInput() {
             <AppAddressInput
               placeholder="Contract address"
               value={value}
-              onChange={(e) => defineValue(e.target.value)}
+              onChange={(e) => setValue(e.target.value)}
               onSubmit={onSubmit}
-              onFocus={() => defineActive(true)}
+              onFocus={() => setActive(true)}
               spellCheck={false}
             />
             <Fade in={!!value} timeout={animationTimeout}>
@@ -133,7 +138,7 @@ export function AddressInput() {
           }}
           invisible={!searchResults.length}
           open={active}
-          onClick={() => defineActive(false)}
+          onClick={() => setActive(false)}
         />
       </>
     </ClickAwayListener>
