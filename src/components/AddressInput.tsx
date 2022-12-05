@@ -59,8 +59,8 @@ export function AddressInput() {
     active,
     searchResults,
     value,
-    defineActive,
-    defineValue,
+    setActive,
+    setValue,
   } = useAddressInput();
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
@@ -79,7 +79,7 @@ export function AddressInput() {
   }, [value]);
 
   return (
-    <ClickAwayListener onClickAway={() => defineActive(false)}>
+    <ClickAwayListener onClickAway={() => setActive(false)}>
       <>
         <Box sx={{ position: "relative", maxWidth: 1160, width: "100%", zIndex: 3 }}>
           <InputWrapper>
@@ -87,9 +87,9 @@ export function AddressInput() {
             <AppAddressInput
               placeholder="Contract address"
               value={value}
-              onChange={(e) => defineValue(e.target.value)}
+              onChange={(e) => setValue(e.target.value)}
               onSubmit={onSubmit}
-              onFocus={() => defineActive(true)}
+              onFocus={() => setActive(true)}
               spellCheck={false}
             />
             <Fade in={!!value} timeout={animationTimeout}>
@@ -128,7 +128,7 @@ export function AddressInput() {
           }}
           invisible={!searchResults.length}
           open={active}
-          onClick={() => defineActive(false)}
+          onClick={() => setActive(false)}
         />
       </>
     </ClickAwayListener>

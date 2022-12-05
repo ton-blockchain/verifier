@@ -7,8 +7,8 @@ import useNotification from "./useNotification";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export function useAddressInput() {
-  const [value, setValue] = useState("");
-  const [active, setActive] = useState(false);
+  const [value, _setValue] = useState("");
+  const [active, _setActive] = useState(false);
   const { showNotification } = useNotification();
   const navigate = useNavigate();
   const location = useLocation();
@@ -17,14 +17,14 @@ export function useAddressInput() {
     SearchRequest[]
   >(SEARCH_HISTORY, []);
 
-  const defineActive = (value: boolean) => setActive(value);
+  const setActive = (value: boolean) => _setActive(value);
 
-  const defineValue = (value: string) => setValue(value);
+  const setValue = (value: string) => _setValue(value);
 
-  const onClear = useCallback(() => setValue(""), []);
+  const onClear = useCallback(() => _setValue(""), []);
 
   const onItemClick = useCallback((item: SearchRequest) => {
-    setActive(false);
+    _setActive(false);
     navigate(`/${item.value}`);
   }, []);
 
@@ -46,8 +46,8 @@ export function useAddressInput() {
     });
 
     if (!value) {
-      setValue("");
-      setActive(false);
+      _setValue("");
+      _setActive(false);
       navigate("/");
       return;
     }
@@ -60,8 +60,8 @@ export function useAddressInput() {
     !isAlreadyInTheList &&
       setSearchResults((prevState) => [...prevState, { index: searchResults?.length, value }]);
 
-    setValue("");
-    setActive(false);
+    _setValue("");
+    _setActive(false);
     navigate(`/${value}`);
   };
 
@@ -102,7 +102,7 @@ export function useAddressInput() {
     active,
     searchResults,
     value,
-    defineActive,
-    defineValue,
+    setActive,
+    setValue,
   };
 }
