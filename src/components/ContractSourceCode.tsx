@@ -1,16 +1,22 @@
 import "./ContractSourceCode.css";
-import { Box, Tabs, Tab, IconButton } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Tabs, Tab, IconButton, useMediaQuery } from "@mui/material";
+import React, { useCallback, useState } from "react";
 import { VerifiedSourceCode } from "./VerifiedSourceCode";
 import { DisassembledSourceCode } from "./DisassembledSourceCode";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
-import { CenteringBox, IconBox, TitleBox, TitleText } from "./common.styled";
+import { CenteringBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import verified from "../assets/verified-light.svg";
 import { styled } from "@mui/system";
 import download from "../assets/download.svg";
 import { AppButton } from "./AppButton";
 import copy from "../assets/copy.svg";
 import { downloadSources } from "../lib/downloadSources";
+import useNotification from "../lib/useNotification";
+
+enum CODE {
+  DISASSEMBLED,
+  SOURCE,
+}
 
 const TitleWrapper = styled(CenteringBox)({
   justifyContent: "space-between",
@@ -23,8 +29,8 @@ const ContentBox = styled(Box)({
 
 const CopyBox = styled(Box)({
   position: "absolute",
-  top: "9%",
-  right: "3%",
+  top: "160px",
+  right: "40px",
   zIndex: 3,
 });
 
@@ -43,10 +49,23 @@ const SourceCodeTabs = styled(Tabs)({
 function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();
   const [value, setValue] = useState(!!contractProof?.hasOnchainProof ? 0 : 1);
+  const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
+  const { showNotification } = useNotification();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const onCopy = useCallback(async (type: CODE) => {
+    const element = document.querySelector(
+      type === CODE.SOURCE
+        ? `#myVerifierContent > pre > code > div.hljs.language-func`
+        : `pre > code > div.hljs.language-fift`,
+    ) as HTMLElement;
+    navigator.clipboard.writeText(element?.innerText);
+
+    showNotification("Copied to clipboard!", "success");
+  }, []);
 
   return (
     <Box
@@ -54,10 +73,11 @@ function ContractSourceCode() {
         border: "0.5px solid rgba(114, 138, 150, 0.24)",
         boxShadow: "rgb(114 138 150 / 8%) 0px 2px 16px",
         borderRadius: "20px",
+        position: "relative",
       }}>
       <TitleBox mb={1}>
-        <TitleWrapper>
-          <CenteringBox sx={{ width: "100%" }}>
+        <TitleWrapper sx={{ flexDirection: isExtraSmallScreen ? "column" : "inherit" }}>
+          <CenteringBox mb={isExtraSmallScreen ? 2 : 0} sx={{ width: "100%" }}>
             <IconBox>
               <img src={verified} alt="Block icon" width={41} height={41} />
             </IconBox>
@@ -93,12 +113,12 @@ function ContractSourceCode() {
         </SourceCodeTabs>
         {value === 0 && <VerifiedSourceCode />}
         {value === 1 && <DisassembledSourceCode />}
-        {/*<CopyBox>*/}
-        {/*  <IconButton disabled>*/}
-        {/*    <img alt="Copy Icon" src={copy} width={16} height={16} />*/}
-        {/*  </IconButton>*/}
-        {/*</CopyBox>*/}
       </ContentBox>
+      <CopyBox>
+        <IconButton onClick={() => onCopy(value === 0 ? CODE.SOURCE : CODE.DISASSEMBLED)}>
+          <img alt="Copy Icon" src={copy} width={16} height={16} />
+        </IconButton>
+      </CopyBox>
     </Box>
   );
 }

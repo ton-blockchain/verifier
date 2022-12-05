@@ -1,6 +1,6 @@
 import { usePublishProof } from "../lib/usePublishProof";
 import Button from "./Button";
-import { CenteringBox, DataBox, IconBox, TitleText } from "./common.styled";
+import { CenteringBox, DataBox, IconBox, TitleText } from "./Common.styled";
 import React from "react";
 import publish from "../assets/publish.svg";
 import verified from "../assets/verified-bold.svg";
@@ -9,8 +9,9 @@ import { Box } from "@mui/system";
 import { NotificationTitle } from "./CompileOutput";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
-import { Fade } from "@mui/material";
+import { CircularProgress, Fade } from "@mui/material";
 import { useFileStore } from "../lib/useFileStore";
+import { AppButton } from "./AppButton";
 
 export function PublishProof() {
   const { data } = useSubmitSources();
@@ -89,14 +90,25 @@ export function PublishProof() {
             </Box>
             <CenteringBox mb={3} sx={{ justifyContent: "center" }}>
               {status !== "success" && (
-                <Button
+                <AppButton
                   disabled={status === "pending" || status === "issued"}
-                  sx={{ width: 140, height: 44 }}
-                  text="Publish"
+                  fontSize={14}
+                  fontWeight={800}
+                  textColor="#fff"
+                  height={44}
+                  width={144}
+                  background="#1976d2"
+                  hoverBackground="#156cc2"
                   onClick={() => {
                     sendTXN();
-                  }}
-                />
+                  }}>
+                  {(status === "pending" || status === "issued") && (
+                    <CircularProgress
+                      sx={{ color: "#fff", height: "20px !important", width: "20px !important" }}
+                    />
+                  )}
+                  Publish
+                </AppButton>
               )}
               {status === "success" && (
                 <Button

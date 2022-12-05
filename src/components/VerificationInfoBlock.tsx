@@ -1,22 +1,33 @@
 import React from "react";
 import { styled } from "@mui/system";
-import { Typography } from "@mui/material";
+import { Typography, useMediaQuery, useTheme } from "@mui/material";
 import alert from "../assets/verification-alert.svg";
 import binary from "../assets/verification-binary.svg";
 import bomb from "../assets/verification-bomb.svg";
 import paper from "../assets/verification-paper.svg";
 import show from "../assets/show.svg";
 import verification from "../assets/verification.svg";
-import { CenteringWrapper } from "./footer.styled";
-import { CenteringBox, DataBox, IconBox, TitleBox, TitleText } from "./common.styled";
+import { CenteringWrapper } from "./Footer.styled";
+import { CenteringBox, DataBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import { AppButton } from "./AppButton";
 import { VerificationProofPopup } from "./VerificationProofPopup";
 import { useSearchParams } from "react-router-dom";
 
-const VerificationRules = styled(CenteringBox)({
-  justifyContent: "space-between",
+interface VerificationRulesProps {
+  makeFlexible?: boolean;
+  isMobile: boolean;
+}
+
+const VerificationRules = styled(CenteringBox)(({ theme }) => (props: VerificationRulesProps) => ({
+  flexWrap: props.makeFlexible ? "wrap" : "inherit",
+  gap: props.makeFlexible ? 20 : "inherit",
+  justifyContent: props.makeFlexible ? "center" : "space-between",
   padding: 24,
-});
+  [theme.breakpoints.down("lg")]: {
+    width: "70%",
+    margin: "auto",
+  },
+}));
 
 const VerificationRule = styled(CenteringWrapper)({
   boxSizing: "border-box",
@@ -62,14 +73,23 @@ const verificationRules: Rule[] = [
 export const VerificationInfoBlock = () => {
   const [urlParams] = useSearchParams();
   const [isPopupOpen, setPopupOpen] = React.useState(urlParams.get("showProof") !== null);
+  const theme = useTheme();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
 
   const onClose = () => setPopupOpen(false);
 
   return (
     <DataBox>
       <TitleBox mb={1}>
-        <CenteringBox sx={{ justifyContent: "space-between", width: "100%" }}>
-          <CenteringBox sx={{ width: "100%" }}>
+        <CenteringBox
+          sx={{
+            justifyContent: "space-between",
+            flexDirection: isExtraSmallScreen ? "column" : "inherit",
+            width: "100%",
+          }}>
+          <CenteringBox mb={isExtraSmallScreen ? 2 : 0} sx={{ width: "100%" }}>
             <IconBox>
               <img src={verification} alt="Verification icon" width={41} height={41} />
             </IconBox>
@@ -93,7 +113,7 @@ export const VerificationInfoBlock = () => {
           </div>
         </CenteringBox>
       </TitleBox>
-      <VerificationRules>
+      <VerificationRules makeFlexible={headerSpacings} isMobile={isSmallScreen}>
         {verificationRules.map((rule) => (
           <VerificationRule key={rule.description}>
             <CenteringWrapper sx={{ alignSelf: "flex-start" }} mr={1.5}>

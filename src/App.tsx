@@ -6,7 +6,7 @@ import { useOverride } from "./lib/useOverride";
 import { useFileStore } from "./lib/useFileStore";
 import { useResetState } from "./lib/useResetState";
 import { styled } from "@mui/system";
-import { Backdrop, Box, Skeleton } from "@mui/material";
+import { Backdrop, Box, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import { useContractAddress } from "./lib/useContractAddress";
 import React, { useEffect, useRef, useState } from "react";
 import { ContractBlock } from "./components/ContractBlock";
@@ -14,21 +14,25 @@ import { CompilerBlock } from "./components/CompilerBlock";
 import { AddSourcesBlock } from "./components/AddSourcesBlock";
 import { PublishProof } from "./components/PublishProof";
 import { Footer } from "./components/Footer";
-import { CenteringWrapper } from "./components/footer.styled";
+import { CenteringWrapper } from "./components/Footer.styled";
 import { AppNotification, NotificationType } from "./components/AppNotification";
 import { NotificationTitle } from "./components/CompileOutput";
 import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
+import { CenteringBox } from "./components/Common.styled";
 
 const ContentBox = styled(Box)({
   maxWidth: 1160,
-  width: "100%",
   margin: "auto",
 });
 
-const ContractDataBox = styled(Box)({
-  display: "flex",
+interface ContractDataBoxProps {
+  isMobile?: boolean;
+}
+
+const ContractDataBox = styled(Box)((props: ContractDataBoxProps) => ({
+  display: props.isMobile ? "inherit" : "flex",
   gap: 20,
-});
+}));
 
 const OverflowingBox = styled(Box)({
   boxSizing: "border-box",
@@ -44,10 +48,13 @@ const OverflowingBox = styled(Box)({
 function App() {
   const { isLoading, data: proofData, error } = useLoadContractProof();
   const [isDragging, setIsDragging] = useState(false);
+  const theme = useTheme();
   const canOverride = useOverride();
   const { isAddressValid } = useContractAddress();
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const showSkeleton = !error && isLoading && isAddressValid;
 
@@ -69,7 +76,7 @@ function App() {
       />
       <Box ref={scrollToRef} />
       <TopBar />
-      <ContentBox>
+      <ContentBox px={headerSpacings ? "20px" : 0}>
         {!!error && (
           <Box mt={4}>
             <AppNotification
@@ -91,35 +98,29 @@ function App() {
           </Box>
         )}
         {showSkeleton && (
-          <>
-            <Box my={2.5}>
-              <Skeleton
-                width="100%"
-                height={331}
-                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
-              />
-            </Box>
-            <Box my={2.5}>
-              <Skeleton
-                width="100%"
-                height={236}
-                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
-              />
-            </Box>
-            <Box my={2.5}>
-              <Skeleton
-                width="100%"
-                height={500}
-                sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
-              />
-            </Box>
-          </>
+          <OverflowingBox sx={{ padding: "30px 24px 24px 24px" }} mb={3}>
+            <CenteringBox mb={3}>
+              <Skeleton variant="circular" width={41} height={41} sx={{ marginRight: 2 }} />
+              <Skeleton variant="text" sx={{ fontSize: "20px", width: 200 }} />
+            </CenteringBox>
+            <Skeleton variant="rectangular" width="100%" height={250} />
+          </OverflowingBox>
         )}
+
         {!isLoading && (
-          <ContractDataBox>
+          <ContractDataBox isMobile={isSmallScreen}>
             <ContractBlock />
             {proofData?.hasOnchainProof && <CompilerBlock />}
           </ContractDataBox>
+        )}
+        {showSkeleton && (
+          <OverflowingBox sx={{ padding: "30px 24px 24px 24px" }} mb={3}>
+            <CenteringBox mb={3}>
+              <Skeleton variant="circular" width={41} height={41} sx={{ marginRight: 2 }} />
+              <Skeleton variant="text" sx={{ fontSize: "20px", width: 200 }} />
+            </CenteringBox>
+            <Skeleton variant="rectangular" width="100%" height={250} />
+          </OverflowingBox>
         )}
         {!isLoading && proofData?.hasOnchainProof && <VerificationInfoBlock />}
         {proofData && (!proofData.hasOnchainProof || canOverride) && (
@@ -128,10 +129,22 @@ function App() {
             {hasFiles() && <PublishProof />}
           </>
         )}
-        {proofData && !hasFiles() && (
+        {proofData && !hasFiles() ? (
           <OverflowingBox sx={{ padding: 0 }} mb={5}>
             <ContractSourceCode />
           </OverflowingBox>
+        ) : (
+          <>
+            {showSkeleton && (
+              <OverflowingBox sx={{ padding: "30px 24px 24px 24px" }} mb={5}>
+                <CenteringBox mb={3}>
+                  <Skeleton variant="circular" width={41} height={41} sx={{ marginRight: 2 }} />
+                  <Skeleton variant="text" sx={{ fontSize: "20px", width: 250 }} />
+                </CenteringBox>
+                <Skeleton variant="rectangular" width="100%" height={500} />
+              </OverflowingBox>
+            )}
+          </>
         )}
         {proofData && <Footer />}
       </ContentBox>

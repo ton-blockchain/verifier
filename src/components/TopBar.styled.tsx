@@ -1,21 +1,28 @@
 import { styled } from "@mui/material/styles";
 import { Box, Link } from "@mui/material";
-import { animationTimeout, contentMaxWidth } from "../const";
-import { CenteringBox } from "./common.styled";
+import { contentMaxWidth } from "../const";
+import { CenteringBox } from "./Common.styled";
 
 const expandedHeaderHeight = 250;
 const headerHeight = 188;
 
 interface TopBarWrapperProps {
   showExpanded: boolean;
+  isMobile: boolean;
 }
 
 const TopBarWrapper = styled(Box)(({ theme }) => (props: TopBarWrapperProps) => ({
+  display: props.isMobile ? "flex" : "inherit",
+  alignItems: props.isMobile ? "center" : "inherit",
   fontWight: 700,
   color: "#fff",
-  width: "100%",
-  minHeight: headerHeight,
-  height: props.showExpanded ? expandedHeaderHeight : headerHeight,
+  minHeight: props.isMobile ? 80 : headerHeight,
+  height:
+    props.showExpanded && !props.isMobile
+      ? expandedHeaderHeight
+      : props.isMobile
+      ? 80
+      : headerHeight,
   background: "#fff",
   borderBottomLeftRadius: theme.spacing(6),
   borderBottomRightRadius: theme.spacing(6),

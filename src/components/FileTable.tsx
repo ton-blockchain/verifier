@@ -1,4 +1,4 @@
-import { IconButton, Switch, Typography } from "@mui/material";
+import { IconButton, Switch, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
@@ -24,10 +24,10 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useHover } from "../lib/useHover";
-import { CenteringBox } from "./common.styled";
+import { CenteringBox } from "./Common.styled";
 import deleteIcon from "../assets/delete.svg";
 import dndIcon from "../assets/dnd.svg";
-import { BorderLessCell, DirectoryBox, HeaderCell, HR } from "./fileTable.styled";
+import { BorderLessCell, DirectoryBox, HeaderCell, HR } from "./FileTable.styled";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { trimDirectory } from "../utils/textUtils";
 
@@ -45,6 +45,8 @@ function Cells({
   const { attributes, listeners } = useSortable({
     id: fileName,
   });
+  const theme = useTheme();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
 
   const { setInclueInCommand, setDirectory, removeFile } = useFileStore();
 
@@ -54,7 +56,7 @@ function Cells({
 
   return (
     <>
-      <BorderLessCell {...attributes} {...listeners}>
+      <BorderLessCell sx={{ paddingLeft: 1 }} {...attributes} {...listeners}>
         <CenteringBox sx={{ color: "#D8D8D8" }}>
           {pos}.
           <CenteringBox
@@ -78,7 +80,7 @@ function Cells({
             setDirectory(fileName, e.target.value);
           }}></DirectoryBox>
       </BorderLessCell>
-      <BorderLessCell>
+      <BorderLessCell sx={{ paddingLeft: headerSpacings ? 2 : 0 }}>
         <CenteringBox
           sx={{ flexDirection: "column", justifyContent: "center", alignItems: "flex-start" }}>
           <Typography sx={{ fontSize: 14 }}>{file.fileObj.name}</Typography>
@@ -160,6 +162,8 @@ export function FileTable() {
   const { files, reorderFiles } = useFileStore();
   const { data } = useSubmitSources();
 
+  const theme = useTheme();
+  const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const canPublish = !!data?.result?.msgCell;
 
   const sensors = useSensors(
@@ -193,26 +197,46 @@ export function FileTable() {
               },
             }}>
             <TableRow sx={{ fontWeight: 700 }}>
-              <HeaderCell sx={{ paddingLeft: 0, width: 100 }}>Order</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0 }}>Directory</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, width: 300 }}>File</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, width: 150 }}>Include in command</HeaderCell>
-              <HeaderCell sx={{ paddingLeft: 0, width: 100 }}></HeaderCell>
+              <HeaderCell
+                sx={{ paddingLeft: 0, paddingBottom: headerSpacings ? 0 : 2, width: 100 }}>
+                Order
+              </HeaderCell>
+              <HeaderCell sx={{ paddingLeft: 0, paddingBottom: headerSpacings ? 0 : 2 }}>
+                Directory
+              </HeaderCell>
+              <HeaderCell
+                sx={{
+                  paddingLeft: headerSpacings ? 2 : 0,
+                  width: 300,
+                  paddingBottom: headerSpacings ? 0 : 2,
+                }}>
+                File
+              </HeaderCell>
+              <HeaderCell
+                sx={{ paddingLeft: 0, width: 150, paddingBottom: headerSpacings ? 0 : 2 }}>
+                Include in command
+              </HeaderCell>
+              <HeaderCell
+                sx={{
+                  paddingLeft: 0,
+                  width: 100,
+                  paddingBottom: headerSpacings ? 0 : 2,
+                }}></HeaderCell>
             </TableRow>
             <TableRow>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: headerSpacings ? 0 : 2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: headerSpacings ? 0 : 2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: headerSpacings ? 0 : 2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: headerSpacings ? 0 : 2 }}>
                 <HR />
               </BorderLessCell>
-              <BorderLessCell sx={{ paddingBottom: 2 }}>
+              <BorderLessCell sx={{ paddingBottom: headerSpacings ? 0 : 2 }}>
                 <HR />
               </BorderLessCell>
             </TableRow>
