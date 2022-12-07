@@ -30,6 +30,7 @@ const examples = [
   ["jetton-wallet-fwd-fee", "EQDt0qeoHwip8CtuUeNsaKjK-g0rwL7zUunKAnv0NCTZDSs3"],
   ["nft-auction-v2", "EQCnTg1uvsqc1ZCSgEOl5Yk5LItktG6OOYrSQ8SnJP4FFa58"],
   ["amm-minter", "EQBIzHiopIkaXdXdSZ6Sm57kZV0y_5tZjnGO4fTUsMT0lOUz"],
+  ["config", "Ef9VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVbxn"],
 ];
 
 export function DevExamples() {
