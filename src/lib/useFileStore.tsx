@@ -59,7 +59,7 @@ export const useFileStore = create(
       set((state) => {
         const filesToAdd = modifiedFiles.filter(
           (f) =>
-            f.fileObj.name.match(/.*\.(fc|func)/) &&
+            f.fileObj.name.match(/.*\.(fc|func|fif)/) &&
             !state.files.find((existingF) => existingF.fileObj.name === f.fileObj.name),
         );
 

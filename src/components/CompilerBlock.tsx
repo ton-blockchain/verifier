@@ -23,13 +23,13 @@ export function CompilerBlock() {
     });
     dataRows.push({
       title: "Version",
-      value: `${compilerSettings?.funcVersion}`,
+      value: compilerSettings?.funcVersion,
       color: "#0088CC",
       customLink: compilerSettings?.funcVersion && funcVersionToLink(compilerSettings.funcVersion),
     });
     dataRows.push({
       title: "Command",
-      value: compilerSettings?.commandLine!,
+      value: compilerSettings?.commandLine,
       showIcon: true,
     });
     dataRows.push({

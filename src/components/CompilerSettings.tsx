@@ -12,7 +12,7 @@ import undo from "../assets/undo.svg";
 import { useSubmitSources } from "../lib/useSubmitSources";
 
 function CompilerSettings() {
-  const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler } =
+  const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler, setCompiler } =
     useCompilerSettingsStore();
   const { data } = useSubmitSources();
   const theme = useTheme();
@@ -34,8 +34,13 @@ function CompilerSettings() {
         <CenteringBox mb={isSmallScreen ? 1 : 0} sx={{ width: isSmallScreen ? "100%" : "inherit" }}>
           <CompilerFormControl>
             <CompilerLabel>Compiler</CompilerLabel>
-            <CompilerSelect disabled value={compiler}>
+            <CompilerSelect
+              value={compiler}
+              onChange={(e) => {
+                setCompiler(e.target.value);
+              }}>
               <MenuItem value={"func"}>func</MenuItem>
+              <MenuItem value={"fift"}>fift</MenuItem>
             </CompilerSelect>
           </CompilerFormControl>
         </CenteringBox>
