@@ -1,5 +1,4 @@
 import { useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import search from "../assets/search.svg";
 import close from "../assets/close.svg";
@@ -50,49 +49,42 @@ export interface SearchRequest {
 }
 
 export function AddressInput() {
-  const {
-    onSubmit,
-    onItemDelete,
-    onItemClick,
-    onHistoryClear,
-    onClear,
-    active,
-    searchResults,
-    value,
-    setActive,
-    setValue,
-  } = useAddressInput();
+  const { onSubmit, onItemDelete, onItemClick, onHistoryClear, onClear, searchBar, setSearchBar } =
+    useAddressInput();
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
 
-  useEffect(() => {
-    const listener = (e: any) => {
-      if (e.code === "Enter" || e.code === "NumpadEnter") {
-        onSubmit();
-        e.target.blur();
-      }
-    };
-    document.addEventListener("keydown", listener);
-    return () => {
-      document.removeEventListener("keydown", listener);
-    };
-  }, [value]);
-
   return (
-    <ClickAwayListener onClickAway={() => setActive(false)}>
+    <ClickAwayListener
+      onClickAway={() =>
+        setSearchBar((old) => ({
+          ...old,
+          active: false,
+        }))
+      }>
       <>
         <Box sx={{ position: "relative", maxWidth: 1160, width: "100%", zIndex: 3 }}>
           <InputWrapper>
             <img width={24} height={24} src={search} alt="Search icon" />
             <AppAddressInput
               placeholder="Contract address"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
+              value={searchBar.value}
+              onChange={(e) =>
+                setSearchBar((old) => ({
+                  ...old,
+                  value: e.target.value,
+                }))
+              }
               onSubmit={onSubmit}
-              onFocus={() => setActive(true)}
+              onFocus={() =>
+                setSearchBar((old) => ({
+                  ...old,
+                  active: true,
+                }))
+              }
               spellCheck={false}
             />
-            <Fade in={!!value} timeout={animationTimeout}>
+            <Fade in={!!searchBar.value} timeout={animationTimeout}>
               <CenteringBox>
                 <IconButton onClick={onClear}>
                   <img src={close} width={16} height={16} alt="Close icon" />
@@ -110,15 +102,15 @@ export function AddressInput() {
               </CenteringBox>
             </Fade>
           </InputWrapper>
-          {active && !!searchResults.length && (
+          {searchBar.active && !!searchBar.searchResults?.length && (
             <SearchResults
-              searchResults={searchResults}
+              searchResults={searchBar?.searchResults}
               onItemClick={onItemClick}
               onItemDelete={onItemDelete}
               onHistoryClear={onHistoryClear}
             />
           )}
-          {(showDevExamples || import.meta.env.DEV) && active && <DevExamples />}
+          {(showDevExamples || import.meta.env.DEV) && searchBar.active && <DevExamples />}
         </Box>
         <Backdrop
           sx={{
@@ -126,9 +118,14 @@ export function AddressInput() {
             zIndex: 1,
             overflow: "hidden",
           }}
-          invisible={!searchResults.length}
-          open={active}
-          onClick={() => setActive(false)}
+          invisible={!searchBar.searchResults?.length}
+          open={searchBar.active}
+          onClick={() =>
+            setSearchBar((old) => ({
+              ...old,
+              active: false,
+            }))
+          }
         />
       </>
     </ClickAwayListener>

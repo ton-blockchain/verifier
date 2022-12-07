@@ -10,24 +10,27 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { Admin } from "./components/admin/Admin";
 import { initGA } from "./lib/googleAnalytics";
+import { RecoilRoot } from "recoil";
 
 const queryClient = new QueryClient();
 
 initGA();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <SnackbarProvider maxSnack={3}>
-    <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <Routes>
-            <Route path="/interact" element={<ContractInteract />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/:contractAddress" element={<App />} />
-            <Route path="/" element={<App />} />
-          </Routes>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </ThemeProvider>
-  </SnackbarProvider>,
+  <RecoilRoot>
+    <SnackbarProvider maxSnack={3}>
+      <ThemeProvider theme={theme}>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <Routes>
+              <Route path="/interact" element={<ContractInteract />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/:contractAddress" element={<App />} />
+              <Route path="/" element={<App />} />
+            </Routes>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </ThemeProvider>
+    </SnackbarProvider>
+  </RecoilRoot>,
 );

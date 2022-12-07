@@ -1,98 +1,141 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useLocalStorage } from "./useLocalStorage";
-import { SEARCH_HISTORY } from "../const";
+import React, { useCallback, useEffect } from "react";
 import { SearchRequest } from "../components/AddressInput";
-import { isValidAddress } from "../utils";
+import { useNavigate } from "react-router-dom";
+import { useContractAddress } from "./useContractAddress";
+import { atom, useRecoilState } from "recoil";
 import useNotification from "./useNotification";
-import { useLocation, useNavigate } from "react-router-dom";
+import { isValidAddress } from "../utils/validation";
+
+interface SearchBarAtomProps {
+  value: string;
+  active: boolean;
+  searchResults: SearchRequest[];
+}
+
+const searchBarAtom = atom<SearchBarAtomProps>({
+  key: "searchBar",
+  default: {
+    value: "",
+    active: false,
+    searchResults: [],
+  },
+});
 
 export function useAddressInput() {
-  const [value, _setValue] = useState("");
-  const [active, _setActive] = useState(false);
+  const [searchBar, setSearchBar] = useRecoilState(searchBarAtom);
+
   const { showNotification } = useNotification();
   const navigate = useNavigate();
-  const location = useLocation();
+  const address = useContractAddress();
 
-  const { storedValue: searchResults, setValue: setSearchResults } = useLocalStorage<
-    SearchRequest[]
-  >(SEARCH_HISTORY, []);
-
-  const setActive = (value: boolean) => _setActive(value);
-
-  const setValue = (value: string) => _setValue(value);
-
-  const onClear = useCallback(() => _setValue(""), []);
-
-  const onItemClick = useCallback((item: SearchRequest) => {
-    _setActive(false);
-    navigate(`/${item.value}`);
+  const onClear = useCallback(() => {
+    setSearchBar((old) => ({
+      ...old,
+      value: "",
+    }));
   }, []);
 
   const onHistoryClear = useCallback(() => {
-    setSearchResults([]);
+    setSearchBar((old) => ({
+      ...old,
+      searchResults: [],
+    }));
+  }, []);
+
+  const onItemClick = useCallback((item: SearchRequest) => {
+    setSearchBar((old) => ({
+      ...old,
+      value: "",
+      active: false,
+    }));
+
+    navigate(`/${item.value}`);
   }, []);
 
   const onItemDelete = useCallback(
     (e: React.MouseEvent, item: SearchRequest) => {
       e.stopPropagation();
-      setSearchResults((prev) => prev.filter((result) => result.value !== item.value));
+      setSearchBar((old) => ({
+        ...old,
+        searchResults: searchBar.searchResults.filter((prevItem) => prevItem.value !== item.value),
+      }));
     },
-    [searchResults],
+    [searchBar.searchResults],
   );
 
   const onSubmit = async () => {
-    const isAlreadyInTheList = searchResults.find((item) => {
-      return item.value === value;
+    const isAlreadyInTheList = searchBar.searchResults.find((item) => {
+      return item.value === searchBar.value;
     });
 
-    if (!value) {
-      _setValue("");
-      _setActive(false);
-      navigate("/");
+    if (!searchBar.value) {
       return;
     }
 
-    if (!isValidAddress(value)) {
-      showNotification("Invalid address", "error");
+    if (!isValidAddress(searchBar.value)) {
+      showNotification("Invalid jetton address", "error");
       return;
     }
 
     !isAlreadyInTheList &&
-      setSearchResults((prevState) => [...prevState, { index: searchResults?.length, value }]);
+      setSearchBar((old) => ({
+        ...old,
+        searchResults: [
+          ...searchBar.searchResults,
+          { index: searchBar.searchResults?.length, value: searchBar.value },
+        ],
+      }));
 
-    _setValue("");
-    _setActive(false);
-    navigate(`/${value}`);
+    setSearchBar((old) => ({
+      ...old,
+      value: "",
+      active: false,
+    }));
+
+    navigate(`/${searchBar.value}`);
   };
 
   useEffect(() => {
-    const currentAddress = location.pathname.slice(1, location.pathname.length);
+    const listener = (event: any) => {
+      if (event.code === "Enter" || event.code === "NumpadEnter") {
+        event.preventDefault();
+        event.target.blur();
+        onSubmit();
+      }
+    };
+    document.addEventListener("keydown", listener);
+    return () => {
+      document.removeEventListener("keydown", listener);
+    };
+  }, [searchBar.value, onSubmit]);
 
-    if (!isValidAddress(currentAddress)) {
-      setSearchResults(() => []);
-      return;
+  useEffect(() => {
+    if (address.contractAddress && address.isAddressValid) {
+      const isAlreadyInTheList = searchBar.searchResults.find((item) => {
+        return item.value === address.contractAddress;
+      });
+
+      !isAlreadyInTheList &&
+        setSearchBar((old) => ({
+          ...old,
+          searchResults: [
+            ...searchBar.searchResults,
+            { index: searchBar.searchResults?.length, value: address.contractAddress || "" },
+          ],
+        }));
     }
+  }, [address.contractAddress]);
 
-    setSearchResults(() => [{ index: 0, value: currentAddress }]);
+  useEffect(() => {
+    setSearchBar((old) => ({
+      ...old,
+      searchResults: JSON.parse(window.localStorage.getItem("searchBarResults") || "[]"),
+    }));
   }, []);
 
   useEffect(() => {
-    const currentAddress = location.pathname.slice(1, location.pathname.length);
-
-    if (!isValidAddress(currentAddress)) {
-      return;
-    }
-
-    const isAlreadyInTheList = searchResults.find((item) => {
-      return item.value === currentAddress;
-    });
-
-    !isAlreadyInTheList &&
-      setSearchResults((prevState) => [
-        ...prevState,
-        { index: searchResults?.length, value: currentAddress },
-      ]);
-  }, [location.pathname]);
+    window.localStorage.setItem("searchBarResults", JSON.stringify(searchBar.searchResults));
+  }, [searchBar.searchResults]);
 
   return {
     onSubmit,
@@ -100,10 +143,7 @@ export function useAddressInput() {
     onHistoryClear,
     onItemClick,
     onItemDelete,
-    active,
-    searchResults,
-    value,
-    setActive,
-    setValue,
+    searchBar,
+    setSearchBar,
   };
 }
