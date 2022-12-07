@@ -1,28 +1,25 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { SearchRequest } from "../components/AddressInput";
 import { useNavigate } from "react-router-dom";
-import { useContractAddress } from "./useContractAddress";
-import { atom, useRecoilState } from "recoil";
+import { validateAddress, useContractAddress } from "./useContractAddress";
 import useNotification from "./useNotification";
-import { isValidAddress } from "../utils/validation";
 
 interface SearchBarAtomProps {
   value: string;
   active: boolean;
+  initialRender: boolean;
   searchResults: SearchRequest[];
 }
 
-const searchBarAtom = atom<SearchBarAtomProps>({
-  key: "searchBar",
-  default: {
-    value: "",
-    active: false,
-    searchResults: [],
-  },
-});
+const searchBarState: SearchBarAtomProps = {
+  value: "",
+  active: false,
+  initialRender: true,
+  searchResults: [],
+};
 
 export function useAddressInput() {
-  const [searchBar, setSearchBar] = useRecoilState(searchBarAtom);
+  const [searchBar, setSearchBar] = useState(searchBarState);
 
   const { showNotification } = useNotification();
   const navigate = useNavigate();
@@ -72,8 +69,8 @@ export function useAddressInput() {
       return;
     }
 
-    if (!isValidAddress(searchBar.value)) {
-      showNotification("Invalid jetton address", "error");
+    if (!validateAddress(searchBar.value)) {
+      showNotification("Invalid address", "error");
       return;
     }
 
@@ -110,12 +107,24 @@ export function useAddressInput() {
   }, [searchBar.value, onSubmit]);
 
   useEffect(() => {
+    setSearchBar((old) => ({
+      ...old,
+      initialRender: false,
+      searchResults: JSON.parse(window.localStorage.getItem("searchBarResults") || "[]"),
+    }));
+  }, []);
+
+  useEffect(() => {
     if (address.contractAddress && address.isAddressValid) {
       const isAlreadyInTheList = searchBar.searchResults.find((item) => {
         return item.value === address.contractAddress;
       });
 
-      !isAlreadyInTheList &&
+      if (isAlreadyInTheList) {
+        return;
+      }
+
+      if (!searchBar.initialRender) {
         setSearchBar((old) => ({
           ...old,
           searchResults: [
@@ -123,18 +132,14 @@ export function useAddressInput() {
             { index: searchBar.searchResults?.length, value: address.contractAddress || "" },
           ],
         }));
+      }
     }
   }, [address.contractAddress]);
 
   useEffect(() => {
-    setSearchBar((old) => ({
-      ...old,
-      searchResults: JSON.parse(window.localStorage.getItem("searchBarResults") || "[]"),
-    }));
-  }, []);
-
-  useEffect(() => {
-    window.localStorage.setItem("searchBarResults", JSON.stringify(searchBar.searchResults));
+    if (!searchBar.initialRender) {
+      window.localStorage.setItem("searchBarResults", JSON.stringify([...searchBar.searchResults]));
+    }
   }, [searchBar.searchResults]);
 
   return {

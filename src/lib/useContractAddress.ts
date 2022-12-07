@@ -6,7 +6,7 @@ export function useContractAddress() {
   let isAddressValid = true;
 
   try {
-    Address.parse(contractAddress ?? "");
+    validateAddress(contractAddress ?? "");
   } catch (e) {
     isAddressValid = false;
   }
@@ -16,3 +16,5 @@ export function useContractAddress() {
     isAddressValid,
   };
 }
+
+export const validateAddress = (address: string) => !!Address.parse(address);
