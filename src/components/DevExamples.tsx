@@ -11,10 +11,10 @@ const examples_not_verified = [
   ["wallet v3r1", "EQAY_2_A88HD43S96hbVGbCLB21e6_k1nbaqICwS3ZCrMBaZ"],
   ["wallet v3r2", "EQALgHQ-KpmkwftbsdeZdA4DvVDCYkKvria9llb7_RMeZj_8"],
   ["system", "Ef8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAU"],
-  ["restricted (wallet?)", "Ef90OvMkpTFDt1uQ5OPa4cRqDtKvc6CCt3pMVidDBX7waNnO"],
 ];
 
 const examples = [
+  ["restricted (wallet?)", "Ef90OvMkpTFDt1uQ5OPa4cRqDtKvc6CCt3pMVidDBX7waNnO"],
   ["dns-root", "Ef_lZ1T4NCb2mwkme9h2rJfESCE0W34ma9lWp7-_uY3zXDvq"],
   ["wallet-v4", "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ"],
   ["dns-collection", "EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz"],
