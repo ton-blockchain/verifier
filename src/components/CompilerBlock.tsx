@@ -1,11 +1,11 @@
-import React from "react";
 import compilerIcon from "../assets/compiler.svg";
 import { DataBlock, DataRowItem } from "./DataBlock";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-import { fiftVersionToLink, funcVersionToLink, fiftLibVersionToLink } from "../utils/linkUtils";
+import { funcVersionToLink, fiftVersionToLink } from "../utils/linkUtils";
+import { FiftCliCompileSettings, FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -21,12 +21,24 @@ export function CompilerBlock() {
       title: "Compiler",
       value: `${data!.compiler!}`,
     });
-    dataRows.push({
-      title: "Version",
-      value: compilerSettings?.funcVersion,
-      color: "#0088CC",
-      customLink: compilerSettings?.funcVersion && funcVersionToLink(compilerSettings.funcVersion),
-    });
+
+    if (data.compiler === "func") {
+      const funcVersion = (compilerSettings as FuncCompilerSettings).funcVersion;
+      dataRows.push({
+        title: "Version",
+        value: funcVersion,
+        color: "#0088CC",
+        customLink: funcVersion && funcVersionToLink(funcVersion),
+      });
+    } else if (data.compiler === "fift") {
+      const fiftVersion = (compilerSettings as FiftCliCompileSettings).fiftVersion;
+      dataRows.push({
+        title: "Version",
+        value: fiftVersion,
+        color: "#0088CC",
+        customLink: fiftVersionToLink(fiftVersion),
+      });
+    }
     dataRows.push({
       title: "Command",
       value: compilerSettings?.commandLine,

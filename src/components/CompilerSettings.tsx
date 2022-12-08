@@ -1,5 +1,9 @@
 import { Chip, IconButton, MenuItem, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { FuncCliCompilerVersion, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
+import {
+  Compiler,
+  FuncCliCompilerVersion,
+  useCompilerSettingsStore,
+} from "../lib/useCompilerSettingsStore";
 import { Box } from "@mui/system";
 import { CenteringBox } from "./Common.styled";
 import {
@@ -35,9 +39,10 @@ function CompilerSettings() {
           <CompilerFormControl>
             <CompilerLabel>Compiler</CompilerLabel>
             <CompilerSelect
+              disabled={!import.meta.env.VITE_ALLOW_FIFT}
               value={compiler}
               onChange={(e) => {
-                setCompiler(e.target.value);
+                setCompiler(e.target.value as Compiler);
               }}>
               <MenuItem value={"func"}>func</MenuItem>
               <MenuItem value={"fift"}>fift</MenuItem>

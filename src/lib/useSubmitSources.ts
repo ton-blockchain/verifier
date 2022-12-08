@@ -5,7 +5,6 @@ import { useCustomMutation } from "./useCustomMutation";
 import { Cell } from "ton";
 import { useContractAddress } from "./useContractAddress";
 import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
-import { TELEGRAM_SUPPORT_LINK } from "../components/Footer";
 import { useWalletConnect } from "./useWalletConnect";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
 
@@ -109,8 +108,6 @@ export function useSubmitSources() {
     }
 
     if (result.compileResult.result !== "similar") {
-      /* hints.push(Hints.FIFT);
-      hints.push(Hints.FIFTLIB); TODO restore if we come to conclusion user can benefit from this */
       hints.push(Hints.SUPPORT_GROUP);
     }
 
@@ -134,8 +131,6 @@ export function useSubmitSources() {
 export enum Hints {
   STDLIB_ORDER,
   STDLIB_MISSING,
-  FIFTLIB,
-  FIFT,
   NOT_SIMILAR,
   COMPILER_VERSION,
   REQUIRED_FILES,
