@@ -49,42 +49,36 @@ export interface SearchRequest {
 }
 
 export function AddressInput() {
-  const { onSubmit, onItemDelete, onItemClick, onHistoryClear, onClear, searchBar, setSearchBar } =
-    useAddressInput();
+  const {
+    onSubmit,
+    onClear,
+    setActive,
+    setValue,
+    active,
+    value,
+    results,
+    onHistoryClear,
+    onItemClick,
+    onItemDelete,
+  } = useAddressInput();
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
 
   return (
-    <ClickAwayListener
-      onClickAway={() =>
-        setSearchBar((old) => ({
-          ...old,
-          active: false,
-        }))
-      }>
+    <ClickAwayListener onClickAway={() => setActive(false)}>
       <>
         <Box sx={{ position: "relative", maxWidth: 1160, width: "100%", zIndex: 3 }}>
           <InputWrapper>
             <img width={24} height={24} src={search} alt="Search icon" />
             <AppAddressInput
               placeholder="Contract address"
-              value={searchBar.value}
-              onChange={(e) =>
-                setSearchBar((old) => ({
-                  ...old,
-                  value: e.target.value,
-                }))
-              }
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
               onSubmit={onSubmit}
-              onFocus={() =>
-                setSearchBar((old) => ({
-                  ...old,
-                  active: true,
-                }))
-              }
+              onFocus={() => setActive(true)}
               spellCheck={false}
             />
-            <Fade in={!!searchBar.value} timeout={animationTimeout}>
+            <Fade in={!!value} timeout={animationTimeout}>
               <CenteringBox>
                 <IconButton onClick={onClear}>
                   <img src={close} width={16} height={16} alt="Close icon" />
@@ -102,15 +96,15 @@ export function AddressInput() {
               </CenteringBox>
             </Fade>
           </InputWrapper>
-          {searchBar.active && !!searchBar.searchResults?.length && (
+          {active && !!results.length && (
             <SearchResults
-              searchResults={searchBar?.searchResults}
+              searchResults={results}
               onItemClick={onItemClick}
               onItemDelete={onItemDelete}
               onHistoryClear={onHistoryClear}
             />
           )}
-          {(showDevExamples || import.meta.env.DEV) && searchBar.active && <DevExamples />}
+          {(showDevExamples || import.meta.env.DEV) && active && <DevExamples />}
         </Box>
         <Backdrop
           sx={{
@@ -118,14 +112,9 @@ export function AddressInput() {
             zIndex: 1,
             overflow: "hidden",
           }}
-          invisible={!searchBar.searchResults?.length}
-          open={searchBar.active}
-          onClick={() =>
-            setSearchBar((old) => ({
-              ...old,
-              active: false,
-            }))
-          }
+          invisible={!results.length}
+          open={active}
+          onClick={() => setActive(false)}
         />
       </>
     </ClickAwayListener>
