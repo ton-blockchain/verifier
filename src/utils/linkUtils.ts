@@ -1,10 +1,8 @@
-import { FuncCompilerVersion } from "@ton-community/contract-verifier-sdk";
-
-export const fiftLibVersionToLink = (version: string) =>
-  `https://github.com/ton-blockchain/ton/tree/${version}/crypto/fift/lib`;
-
-export const fiftVersionToLink = (version: string) =>
-  `https://github.com/ton-blockchain/ton/tree/${version}/crypto/fift`;
+import { FiftVersion, FuncCompilerVersion } from "@ton-community/contract-verifier-sdk";
 
 export const funcVersionToLink = (version: FuncCompilerVersion) =>
-  `https://github.com/ton-blockchain/ton/releases/tag/func-${version}`;
+  `https://github.com/ton-blockchain/ton/tree/func-${version}/crypto/func`;
+
+// Fift is tied to a FunC version
+export const fiftVersionToLink = (version: FiftVersion) =>
+  `https://github.com/ton-blockchain/ton/tree/func-${version}/crypto/fift`;

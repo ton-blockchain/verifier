@@ -1,7 +1,6 @@
 import { Link } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { CompileResult, Hints, useSubmitSources } from "../lib/useSubmitSources";
-import { fiftLibVersionToLink, fiftVersionToLink } from "../utils/linkUtils";
 import { TELEGRAM_SUPPORT_LINK } from "./Footer";
 
 const _HintItem = styled("li")({
@@ -19,36 +18,6 @@ function hintToElem(hint: Hints, compileResult: CompileResult | undefined) {
       return "stdlib.fc should usually be the first file in the list (unless it's imported from another file)";
     case Hints.STDLIB_MISSING:
       return "You can try to add stdlib.fc to your sources.";
-    case Hints.FIFTLIB:
-      return (
-        <div>
-          Fiftlib version used:{" "}
-          <Link
-            target="_blank"
-            href={fiftLibVersionToLink(compileResult?.compilerSettings.fiftlibVersion ?? "")}
-            sx={{
-              textDecoration: "none",
-              cursor: "pointer",
-            }}>
-            {compileResult?.compilerSettings.fiftlibVersion ?? ""}
-          </Link>
-        </div>
-      );
-    case Hints.FIFT:
-      return (
-        <div>
-          Fift version used:{" "}
-          <Link
-            target="_blank"
-            href={fiftVersionToLink(compileResult?.compilerSettings.fiftVersion ?? "")}
-            sx={{
-              textDecoration: "none",
-              cursor: "pointer",
-            }}>
-            {compileResult?.compilerSettings.fiftVersion ?? ""}
-          </Link>
-        </div>
-      );
     case Hints.NOT_SIMILAR:
       return "Source code compiles correctly but does not match the on-chain contract hash. Make sure you are using the correct compiler version, command line and file order.";
     case Hints.FILE_ORDER:

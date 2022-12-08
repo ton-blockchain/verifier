@@ -14,7 +14,7 @@ import {
 
 export interface DataRowItem {
   title: string;
-  value: string;
+  value?: string;
   showIcon?: boolean;
   color?: string;
   customLink?: string;

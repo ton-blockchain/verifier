@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { download } from "../utils/jsonUtils";
 import { AppButton } from "./AppButton";
 const examples_not_verified = [
-  ["wallet v1r1", "EQAAQ-CfIZkUjmZ6ES9D_keK2yHz10U1ba49K0S86Whva74Z"],
-  ["wallet v1r2", "EQAAVd4c_2pMb4Bp8BxumyV8jutdwJ9R-q0dBqQj7tj_W8SX"],
   ["wallet v1r3", "EQAAEgdraul87g9zvm5Lxtd9FNoebifojeyT90uG6zrWBvRh"],
   ["wallet v2r1", "EQAAC2tOLQxG4KuFcS_pb2Rta1MDdgx8wAtZnGf5bIEIMLft"],
   ["wallet v2r2", "EQAAnU-irJsuuljRAWBRUhdvFB-rvGRHbdQSWXPSQYND6MVb"],
@@ -15,6 +13,8 @@ const examples_not_verified = [
 ];
 
 const examples = [
+  ["wallet v1r1", "EQAAQ-CfIZkUjmZ6ES9D_keK2yHz10U1ba49K0S86Whva74Z"],
+  ["wallet v1r2", "EQAAVd4c_2pMb4Bp8BxumyV8jutdwJ9R-q0dBqQj7tj_W8SX"],
   ["dns-root", "Ef_lZ1T4NCb2mwkme9h2rJfESCE0W34ma9lWp7-_uY3zXDvq"],
   ["wallet-v4", "EQDerEPTIh0O8lBdjWc6aLaJs5HYqlfBN2Ruj1lJQH_6vcaZ"],
   ["dns-collection", "EQC3dNlesgVD8YbAazcauIrXBPfiVhMMr5YYk2in0Mtsz0Bz"],
@@ -25,6 +25,7 @@ const examples = [
   ["jetton-wallet", "EQAhuLHxOcrBwwMHKDnCUMYefuHwJ2iTOFKHWYQlDD-dgb__"],
   ["single-nominator", "Ef_BLbagjGnqZEkpURP96guu7M9aICAYe5hKB_P5Ng5Gju5Y"],
   ["sources-registry", "EQD-BJSVUJviud_Qv7Ymfd3qzXdrmV525e3YDzWQoHIAiInL"],
+  ["source-item", "EQAXUJjoC9RUnBgTJdpp_XXebYUbq-sibaYnZ1C6Rojesz8w"],
   ["nominator-pool", "Ef8iu8EiNOP2MczVvHseFi-CrGO1C4v6MkSSOgVZcESNGfT7"],
   ["telemint-item", "EQAwC64h_7B6YrmGlsto39tBcFWjjakGzSvV7QaMwXiMKy20"],
   ["telemint-collection", "EQCA14o1-VWhS2efqoh_9M1b_A9DtKTuoqfmkn83AbJzwnPi"],
