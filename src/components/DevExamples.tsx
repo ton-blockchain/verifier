@@ -120,8 +120,6 @@ function exportExamples() {
     `[https://tonverifier.live/${address}]\t\t// ${name} ${comment ?? ""}`;
 
   const content = ["# Verified Examples"];
-  // .concat(examples.map(mapExample))
-  // .join("\n\n");
 
   examples.forEach(({ category, contracts }) => {
     content.push(`## ${category}`);
