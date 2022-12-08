@@ -3,6 +3,10 @@ import create from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
 
+export const acceptedFileExtensions = import.meta.env.VITE_ALLOW_FIFT
+  ? ["fc", "func", "fif", "fift"]
+  : ["fc", "func"];
+
 export type FileToUpload = {
   fileObj: File;
   includeInCommand: boolean;
@@ -59,7 +63,7 @@ export const useFileStore = create(
       set((state) => {
         const filesToAdd = modifiedFiles.filter(
           (f) =>
-            f.fileObj.name.match(/.*\.(fc|func)/) &&
+            f.fileObj.name.match(new RegExp(`.*\.(${acceptedFileExtensions.join("|")})$`)) &&
             !state.files.find((existingF) => existingF.fileObj.name === f.fileObj.name),
         );
 

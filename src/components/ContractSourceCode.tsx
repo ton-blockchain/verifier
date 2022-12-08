@@ -59,7 +59,7 @@ function ContractSourceCode() {
   const onCopy = useCallback(async (type: CODE) => {
     const element = document.querySelector(
       type === CODE.SOURCE
-        ? `#myVerifierContent > pre > code > div.hljs.language-func`
+        ? `#myVerifierContent > pre > code > .contract-verifier-code-content`
         : `pre > code > div.hljs.language-fift`,
     ) as HTMLElement;
     navigator.clipboard.writeText(element?.innerText);
