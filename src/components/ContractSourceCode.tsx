@@ -69,7 +69,7 @@ function ContractSourceCode() {
 
   useEffect(() => {
     setValue(!!contractProof?.hasOnchainProof ? 0 : 1);
-  }, []);
+  }, [contractProof]);
 
   return (
     <Box
