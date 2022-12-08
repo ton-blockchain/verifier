@@ -58,3 +58,14 @@
     border-bottom: 1px solid #e8e8e8;
   }
 }
+@media screen and (max-width: 700px) {
+  #myVerifierContent code {
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  #myVerifierContent code {
+    font-size: 10px;
+  }
+}
