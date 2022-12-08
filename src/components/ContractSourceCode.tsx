@@ -1,6 +1,6 @@
 import "./ContractSourceCode.css";
 import { Box, Tabs, Tab, IconButton, useMediaQuery } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { VerifiedSourceCode } from "./VerifiedSourceCode";
 import { DisassembledSourceCode } from "./DisassembledSourceCode";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
@@ -48,7 +48,7 @@ const SourceCodeTabs = styled(Tabs)({
 
 function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();
-  const [value, setValue] = useState(!!contractProof?.hasOnchainProof ? 0 : 1);
+  const [value, setValue] = useState<number | undefined>(undefined);
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
   const { showNotification } = useNotification();
 
@@ -67,6 +67,10 @@ function ContractSourceCode() {
     showNotification("Copied to clipboard!", "success");
   }, []);
 
+  useEffect(() => {
+    setValue(!!contractProof?.hasOnchainProof ? 0 : 1);
+  }, [contractProof]);
+
   return (
     <Box
       sx={{
@@ -81,7 +85,7 @@ function ContractSourceCode() {
             <IconBox>
               <img src={verified} alt="Block icon" width={41} height={41} />
             </IconBox>
-            <TitleText>Verified Source Code</TitleText>
+            <TitleText>{!!contractProof?.hasOnchainProof && "Verified"} Source Code</TitleText>
           </CenteringBox>
           {value === 0 && (
             <div>
