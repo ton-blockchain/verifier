@@ -6,6 +6,7 @@ import {
   FooterTextBoxLeft,
   FooterTextBoxRight,
   FooterWrapper,
+  GradientLink,
   Separator,
   SocialsContent,
   SocialsWrapper,
@@ -63,27 +64,15 @@ export function Footer() {
           <Typography variant="body2">© 2022 orbs.com</Typography>
         </FooterTextBoxLeft>
         <ContributedWrapper>
-          <Typography
-            variant="body2"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-            }}>
+          <CenteringBox>
             Powered by
             <CenteringBox mx={0.4}>
               <img src={heart} alt="Orbs logo" width={12} height={12} />
             </CenteringBox>
-            <FooterLink
-              sx={{
-                background: "linear-gradient(to right, #DA88DE 0%, #6F9BEA 50%, #5E75E8 100%)",
-                backgroundClip: "text",
-                fill: "transparent",
-              }}
-              target="_blank"
-              href="https://orbs.com/">
+            <GradientLink target="_blank" href="https://orbs.com/">
               Orbs
-            </FooterLink>
-          </Typography>
+            </GradientLink>
+          </CenteringBox>
         </ContributedWrapper>
         <FooterTextBoxRight>
           <FooterLink target="_blank" href={TELEGRAM_SUPPORT_LINK}>
