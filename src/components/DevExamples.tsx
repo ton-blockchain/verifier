@@ -85,7 +85,6 @@ export function DevExamples() {
         padding: 20,
         background: "#000000",
         borderRadius: 20,
-        zIndex: 1000,
         height: 300,
         top: 60,
         overflow: "auto",

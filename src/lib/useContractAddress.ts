@@ -1,15 +1,11 @@
 import { Address } from "ton";
 import { useParams } from "react-router-dom";
+import { SearchRequest } from "../components/AddressInput";
 
-export function useContractAddress() {
+function useContractAddress() {
   const { contractAddress } = useParams();
-  let isAddressValid = true;
 
-  try {
-    validateAddress(contractAddress ?? "");
-  } catch (e) {
-    isAddressValid = false;
-  }
+  let isAddressValid = validateAddress(contractAddress);
 
   return {
     contractAddress,
@@ -17,4 +13,22 @@ export function useContractAddress() {
   };
 }
 
-export const validateAddress = (address: string) => !!Address.parse(address);
+function validateAddress(contractAddress: string | undefined) {
+  let isAddressValid = true;
+
+  try {
+    Address.parse(contractAddress ?? "");
+  } catch (e) {
+    isAddressValid = false;
+  }
+
+  return isAddressValid;
+}
+
+function checkForDuplicatedValues(results: SearchRequest[], address: string) {
+  return results.find((item) => {
+    return item.value === address;
+  });
+}
+
+export { useContractAddress, validateAddress, checkForDuplicatedValues };
