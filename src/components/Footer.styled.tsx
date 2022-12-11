@@ -88,15 +88,8 @@ const FooterTextBoxRight = styled(FooterTextBox)(({ theme }) => ({
   },
 }));
 
-const GradientLink = styled(FooterLink)({
-  background: "linear-gradient(to right, #DA88DE 0%, #6F9BEA 50%, #5E75E8 100%)",
-  backgroundClip: "text",
-  fill: "transparent",
-});
-
 export {
   FooterLink,
-  GradientLink,
   ContributedWrapper,
   FooterTextBox,
   FooterTextBoxLeft,

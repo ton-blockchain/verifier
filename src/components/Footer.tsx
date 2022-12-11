@@ -6,7 +6,6 @@ import {
   FooterTextBoxLeft,
   FooterTextBoxRight,
   FooterWrapper,
-  GradientLink,
   Separator,
   SocialsContent,
   SocialsWrapper,
@@ -69,9 +68,9 @@ export function Footer() {
             <CenteringBox mx={0.4}>
               <img src={heart} alt="Orbs logo" width={12} height={12} />
             </CenteringBox>
-            <GradientLink target="_blank" href="https://orbs.com/">
+            <FooterLink sx={{ color: "#5E75E8" }} target="_blank" href="https://orbs.com/">
               Orbs
-            </GradientLink>
+            </FooterLink>
           </CenteringBox>
         </ContributedWrapper>
         <FooterTextBoxRight>
