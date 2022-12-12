@@ -10,6 +10,7 @@ import { AppButton } from "./AppButton";
 import { CenteringBox } from "./Common.styled";
 import { useAddressInput } from "../lib/useAddressInput";
 import { useAddressHistory } from "../lib/useAddressHistory";
+import { useLocalStorage } from "../lib/useLocalStorage";
 
 const InputWrapper = styled(Box)({
   display: "flex",
@@ -51,10 +52,11 @@ export interface SearchRequest {
 
 export function AddressInput() {
   const { onSubmit, onClear, setActive, setValue, active, value } = useAddressInput();
-  const { results, onItemDelete, onItemClick, onHistoryClear } = useAddressHistory();
+  const { onItemDelete, onItemClick, onHistoryClear } = useAddressHistory();
+  const { results } = useLocalStorage();
+
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
-
   return (
     <ClickAwayListener onClickAway={() => setActive(false)}>
       <>

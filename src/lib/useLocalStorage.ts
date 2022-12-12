@@ -1,13 +1,15 @@
 import { useState } from "react";
+import { SearchRequest } from "../components/AddressInput";
 
-export function useLocalStorage<T>(key: string, initialValue: T) {
-  const [storedValue, setStoredValue] = useState<T>(() => {
+export function useLocalStorage() {
+  const initialValue: SearchRequest[] = [];
+  const [results, _setResults] = useState<SearchRequest[]>(() => {
     if (typeof window === "undefined") {
       return initialValue;
     }
 
     try {
-      const item = window.localStorage.getItem(key);
+      const item = window.localStorage.getItem("searchResults");
       return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       console.log(error);
@@ -15,16 +17,16 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   });
 
-  const setValue = (value: T | ((val: T) => T)) => {
+  const setResults = (value: SearchRequest[] | ((val: SearchRequest[]) => SearchRequest[])) => {
     try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      setStoredValue(valueToStore);
+      const valueToStore = value instanceof Function ? value(results) : value;
+      _setResults(valueToStore);
       if (typeof window !== "undefined") {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        window.localStorage.setItem("searchResults", JSON.stringify(valueToStore));
       }
     } catch (error) {
       console.log(error);
     }
   };
-  return { storedValue, setValue };
+  return { results, setResults };
 }

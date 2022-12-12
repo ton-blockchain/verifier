@@ -1,3 +1,6 @@
+import { Address } from "ton";
+import { SearchRequest } from "../components/AddressInput";
+
 const makeElipsisAddress = (address?: string | null, padding?: number): string => {
   const paddingValue = padding || 10;
   if (!address) return "";
@@ -12,4 +15,22 @@ const trimDirectory = (str: string): string =>
     .replace(/^\/[^\/]/, "")
     .replace(/\/$/, "");
 
-export { makeElipsisAddress, trimDirectory };
+function validateAddress(contractAddress: string | undefined) {
+  let isAddressValid = true;
+
+  try {
+    Address.parse(contractAddress ?? "");
+  } catch (e) {
+    isAddressValid = false;
+  }
+
+  return isAddressValid;
+}
+
+function checkForDuplicatedValues(results: SearchRequest[], address: string) {
+  return results.find((item) => {
+    return item.value === address;
+  });
+}
+
+export { makeElipsisAddress, trimDirectory, validateAddress, checkForDuplicatedValues };

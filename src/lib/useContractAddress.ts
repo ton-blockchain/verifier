@@ -1,11 +1,18 @@
-import { Address } from "ton";
 import { useParams } from "react-router-dom";
-import { SearchRequest } from "../components/AddressInput";
+import { useEffect } from "react";
+import { useLocalStorage } from "./useLocalStorage";
+import { checkForDuplicatedValues, validateAddress } from "../utils/textUtils";
 
 function useContractAddress() {
   const { contractAddress } = useParams();
-
+  const { results, setResults } = useLocalStorage();
   let isAddressValid = validateAddress(contractAddress);
+
+  useEffect(() => {
+    if (contractAddress && isAddressValid && !checkForDuplicatedValues(results, contractAddress)) {
+      setResults([...results, { index: results.length, value: contractAddress }]);
+    }
+  }, [contractAddress]);
 
   return {
     contractAddress,
@@ -13,22 +20,4 @@ function useContractAddress() {
   };
 }
 
-function validateAddress(contractAddress: string | undefined) {
-  let isAddressValid = true;
-
-  try {
-    Address.parse(contractAddress ?? "");
-  } catch (e) {
-    isAddressValid = false;
-  }
-
-  return isAddressValid;
-}
-
-function checkForDuplicatedValues(results: SearchRequest[], address: string) {
-  return results.find((item) => {
-    return item.value === address;
-  });
-}
-
-export { useContractAddress, validateAddress, checkForDuplicatedValues };
+export { useContractAddress };
