@@ -82,7 +82,7 @@ export function AddressInput() {
               </CenteringBox>
             </Fade>
           </InputWrapper>
-          {active && !!addressHistory.length && (
+          {active && !!addressHistory?.length && (
             <SearchResults
               searchResults={addressHistory}
               onItemClick={onItemClick}
@@ -98,7 +98,7 @@ export function AddressInput() {
             zIndex: 1,
             overflow: "hidden",
           }}
-          invisible={!addressHistory.length}
+          invisible={!addressHistory?.length}
           open={active}
           onClick={() => setActive(false)}
         />

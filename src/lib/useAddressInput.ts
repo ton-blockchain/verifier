@@ -1,13 +1,27 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateAddress } from "./useContractAddress";
 import useNotification from "./useNotification";
+import create from "zustand";
+
+interface Props {
+  value: string;
+  active: boolean;
+  setValue: (val: string) => void;
+  setActive: (act: boolean) => void;
+}
+
+const useAddressStore = create<Props>((set) => ({
+  value: "",
+  active: false,
+  setValue: (val: string) => set({ value: val }),
+  setActive: (act: boolean) => set({ active: act }),
+}));
 
 export function useAddressInput() {
-  const [value, setValue] = useState<string | undefined>(undefined);
-  const [active, setActive] = useState(false);
   const { showNotification } = useNotification();
   const navigate = useNavigate();
+  const { value, setValue, active, setActive } = useAddressStore((state) => state);
 
   const onClear = useCallback(() => {
     setValue("");
@@ -43,9 +57,9 @@ export function useAddressInput() {
   return {
     onSubmit,
     onClear,
-    setActive,
-    setValue,
-    active,
-    value,
+    setActive: setActive,
+    setValue: setValue,
+    active: active,
+    value: value,
   };
 }
