@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { Address } from "ton";
-import { SearchRequest } from "../components/AddressInput";
 
 function useContractAddress() {
   const { contractAddress } = useParams();
@@ -24,9 +23,9 @@ function validateAddress(contractAddress: string | undefined) {
   return isAddressValid;
 }
 
-function checkForDuplicatedValues(results: SearchRequest[], address: string) {
+function checkForDuplicatedValues(results: string[], address: string) {
   return results.find((item) => {
-    return item.value === address;
+    return item === address;
   });
 }
 

@@ -44,14 +44,9 @@ const AppAddressInput = styled("input")(({ theme }) => ({
   },
 }));
 
-export interface SearchRequest {
-  index: number;
-  value: string;
-}
-
 export function AddressInput() {
   const { onSubmit, onClear, setActive, setValue, active, value } = useAddressInput();
-  const { onItemDelete, onItemClick, onHistoryClear, storedValue } = useAddressHistory();
+  const { onItemDelete, onItemClick, onHistoryClear, addressHistory } = useAddressHistory();
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
 
@@ -87,9 +82,9 @@ export function AddressInput() {
               </CenteringBox>
             </Fade>
           </InputWrapper>
-          {active && !!storedValue.length && (
+          {active && !!addressHistory.length && (
             <SearchResults
-              searchResults={storedValue}
+              searchResults={addressHistory}
               onItemClick={onItemClick}
               onItemDelete={onItemDelete}
               onHistoryClear={onHistoryClear}
@@ -103,7 +98,7 @@ export function AddressInput() {
             zIndex: 1,
             overflow: "hidden",
           }}
-          invisible={!storedValue.length}
+          invisible={!addressHistory.length}
           open={active}
           onClick={() => setActive(false)}
         />

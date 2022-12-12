@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect } from "react";
-import { SearchRequest } from "../components/AddressInput";
 import { useNavigate } from "react-router-dom";
 import { useAddressInput } from "./useAddressInput";
 import { useLocalStorage } from "./useLocalStorage";
@@ -8,10 +7,7 @@ import { useContractAddress, checkForDuplicatedValues } from "./useContractAddre
 export function useAddressHistory() {
   const navigate = useNavigate();
   const { setValue, setActive } = useAddressInput();
-  const { storedValue, setValue: setResults } = useLocalStorage<SearchRequest[]>(
-    "searchBarResults",
-    [],
-  );
+  const { storedValue, setValue: setResults } = useLocalStorage<string[]>("searchBarResults", []);
   const { contractAddress, isAddressValid } = useContractAddress();
 
   const onHistoryClear = useCallback(() => {
@@ -19,18 +15,18 @@ export function useAddressHistory() {
   }, [storedValue, setResults]);
 
   const onItemClick = useCallback(
-    (item: SearchRequest) => {
+    (item: string) => {
       setValue("");
       setActive(false);
-      navigate(`/${item.value}`);
+      navigate(`/${item}`);
     },
     [storedValue, setResults],
   );
 
   const onItemDelete = useCallback(
-    (e: React.MouseEvent, item: SearchRequest) => {
+    (e: React.MouseEvent, item: string) => {
       e.stopPropagation();
-      setResults(storedValue.filter((prevItem) => prevItem.value !== item.value));
+      setResults(storedValue.filter((prevItem) => prevItem !== item));
     },
     [storedValue, setResults],
   );
@@ -41,9 +37,9 @@ export function useAddressHistory() {
       isAddressValid &&
       !checkForDuplicatedValues(storedValue, contractAddress)
     ) {
-      setResults([...storedValue, { index: storedValue.length, value: contractAddress }]);
+      setResults([...storedValue, contractAddress]);
     }
   }, [contractAddress]);
 
-  return { onHistoryClear, onItemClick, onItemDelete, storedValue };
+  return { onHistoryClear, onItemClick, onItemDelete, addressHistory: storedValue };
 }
