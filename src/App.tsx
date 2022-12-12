@@ -19,6 +19,7 @@ import { AppNotification, NotificationType } from "./components/AppNotification"
 import { NotificationTitle } from "./components/CompileOutput";
 import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 import { CenteringBox } from "./components/Common.styled";
+import { useAddressHistory } from "./lib/useAddressHistory";
 
 const ContentBox = styled(Box)({
   maxWidth: 1160,
@@ -55,9 +56,9 @@ function App() {
   const scrollToRef = useRef();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
-
   const showSkeleton = !error && isLoading && isAddressValid;
 
+  useAddressHistory();
   useResetState();
 
   useEffect(() => {

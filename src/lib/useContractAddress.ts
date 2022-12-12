@@ -1,8 +1,17 @@
-import { Address } from "ton";
 import { useParams } from "react-router-dom";
+import { Address } from "ton";
 
-export function useContractAddress() {
+function useContractAddress() {
   const { contractAddress } = useParams();
+  let isAddressValid = validateAddress(contractAddress);
+
+  return {
+    contractAddress,
+    isAddressValid,
+  };
+}
+
+function validateAddress(contractAddress: string | undefined) {
   let isAddressValid = true;
 
   try {
@@ -11,8 +20,7 @@ export function useContractAddress() {
     isAddressValid = false;
   }
 
-  return {
-    contractAddress,
-    isAddressValid,
-  };
+  return isAddressValid;
 }
+
+export { useContractAddress, validateAddress };
