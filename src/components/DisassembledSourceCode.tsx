@@ -21,7 +21,7 @@ export function DisassembledSourceCode() {
     <pre
       style={{
         overflow: "auto",
-        maxHeight: 800,
+        height: 800,
         marginTop: 0,
         lineHeight: "25px",
         fontSize: 14,
