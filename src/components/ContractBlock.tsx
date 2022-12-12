@@ -5,6 +5,7 @@ import contractIcon from "../assets/contract.svg";
 import { DataBlock, DataRowItem } from "./DataBlock";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { workchainForAddress } from "../lib/workchainForAddress";
+import { formatBalance } from "../utils/numberUtils";
 
 export function ContractBlock() {
   const { contractAddress } = useContractAddress();
@@ -16,7 +17,10 @@ export function ContractBlock() {
     dataRows.push({ title: "Address", value: contractAddress || "", showIcon: true });
     dataRows.push({ title: "Workchain", value: workchainForAddress(contractAddress || "") });
     dataRows.push({ title: "Code Hash", value: data.hash, showIcon: true });
-    dataRows.push({ title: "Balance", value: `${parseFloat(data.balance).toFixed(4)} TON` });
+    dataRows.push({
+      title: "Balance",
+      value: `${formatBalance.format(parseFloat(data.balance))} TON`,
+    });
   }
 
   return (

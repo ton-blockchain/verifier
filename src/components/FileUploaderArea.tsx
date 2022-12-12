@@ -1,4 +1,4 @@
-import { useFileStore } from "../lib/useFileStore";
+import { useFileStore, acceptedFileExtensions } from "../lib/useFileStore";
 import { useDropzone } from "react-dropzone";
 import React from "react";
 import { Box, useMediaQuery } from "@mui/material";
@@ -37,7 +37,7 @@ export function FileUploaderArea() {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "text/plain": [".fc", ".func"] },
+    accept: { "text/plain": acceptedFileExtensions.map((ext) => `.${ext}`) },
     // noClick: true,
   });
 
@@ -80,7 +80,9 @@ export function FileUploaderArea() {
       <Box sx={{ padding: "15px 30px" }}>
         <Box sx={{ position: "relative", zIndex: 5 }}>
           {!hasFiles() && (
-            <FilesDropzone {...getRootProps()}>Drop sources (.fc, .func) here</FilesDropzone>
+            <FilesDropzone {...getRootProps()}>
+              Drop sources ({acceptedFileExtensions.map((ext) => `.${ext}`).join(", ")}) here
+            </FilesDropzone>
           )}
         </Box>
 
@@ -95,7 +97,7 @@ export function FileUploaderArea() {
           id="fileUpload"
           type="file"
           multiple
-          accept=".fc,.func"
+          accept=".fc,.func,.fif"
           // ref={inputRef}
           // @ts-ignore
         />

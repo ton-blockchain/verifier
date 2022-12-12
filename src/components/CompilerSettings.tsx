@@ -1,5 +1,9 @@
 import { Chip, IconButton, MenuItem, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { FuncCliCompilerVersion, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
+import {
+  Compiler,
+  FuncCliCompilerVersion,
+  useCompilerSettingsStore,
+} from "../lib/useCompilerSettingsStore";
 import { Box } from "@mui/system";
 import { CenteringBox } from "./Common.styled";
 import {
@@ -12,7 +16,7 @@ import undo from "../assets/undo.svg";
 import { useSubmitSources } from "../lib/useSubmitSources";
 
 function CompilerSettings() {
-  const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler } =
+  const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler, setCompiler } =
     useCompilerSettingsStore();
   const { data } = useSubmitSources();
   const theme = useTheme();
@@ -34,8 +38,14 @@ function CompilerSettings() {
         <CenteringBox mb={isSmallScreen ? 1 : 0} sx={{ width: isSmallScreen ? "100%" : "inherit" }}>
           <CompilerFormControl>
             <CompilerLabel>Compiler</CompilerLabel>
-            <CompilerSelect disabled value={compiler}>
+            <CompilerSelect
+              disabled={!import.meta.env.VITE_ALLOW_FIFT}
+              value={compiler}
+              onChange={(e) => {
+                setCompiler(e.target.value as Compiler);
+              }}>
               <MenuItem value={"func"}>func</MenuItem>
+              <MenuItem value={"fift"}>fift</MenuItem>
             </CompilerSelect>
           </CompilerFormControl>
         </CenteringBox>

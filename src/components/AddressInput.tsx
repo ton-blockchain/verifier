@@ -1,17 +1,15 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import search from "../assets/search.svg";
 import close from "../assets/close.svg";
 import { Backdrop, Box, ClickAwayListener, Fade, IconButton } from "@mui/material";
-import { animationTimeout, SEARCH_HISTORY } from "../const";
-import { useLocalStorage } from "../lib/useLocalStorage";
-import { isValidAddress } from "../utils";
-import useNotification from "../lib/useNotification";
+import { animationTimeout } from "../const";
 import { SearchResults } from "../components/SearchResults";
 import { DevExamples } from "./DevExamples";
 import { AppButton } from "./AppButton";
 import { CenteringBox } from "./Common.styled";
+import { useAddressInput } from "../lib/useAddressInput";
+import { useAddressHistory } from "../lib/useAddressHistory";
 
 const InputWrapper = styled(Box)({
   display: "flex",
@@ -46,83 +44,11 @@ const AppAddressInput = styled("input")(({ theme }) => ({
   },
 }));
 
-export interface SearchRequest {
-  index: number;
-  value: string;
-}
-
 export function AddressInput() {
-  const [value, setValue] = useState("");
-  const [active, setActive] = useState(false);
-  const navigate = useNavigate();
-  const { showNotification } = useNotification();
-  const [searchResults, setSearchResults] = useState<SearchRequest[]>([]);
-  const { storedValue: searchDupResults, setValue: setSearchDupResults } = useLocalStorage<
-    SearchRequest[]
-  >(SEARCH_HISTORY, []);
+  const { onSubmit, onClear, setActive, setValue, active, value } = useAddressInput();
+  const { onItemDelete, onItemClick, onHistoryClear, addressHistory } = useAddressHistory();
   const [urlParams] = useSearchParams();
   const showDevExamples = urlParams.get("devExamples") !== null;
-
-  const onClear = useCallback(() => setValue(""), []);
-
-  const onItemClick = useCallback((item: SearchRequest) => {
-    setActive(false);
-    navigate(`/${item.value}`);
-  }, []);
-
-  const onHistoryClear = useCallback(() => {
-    setSearchResults([]);
-  }, []);
-
-  const onItemDelete = useCallback(
-    (e: React.MouseEvent, item: SearchRequest) => {
-      e.stopPropagation();
-      setSearchResults((prev) => prev.filter((result) => result.value !== item.value));
-    },
-    [searchResults],
-  );
-
-  const onSubmit = async () => {
-    const isAlreadyInTheList = searchDupResults.find((item) => {
-      return item.value === value;
-    });
-
-    if (!value) {
-      setValue("");
-      setActive(false);
-      navigate("/");
-      return;
-    }
-
-    if (!isValidAddress(value)) {
-      showNotification("Invalid address", "error");
-      return;
-    }
-
-    !isAlreadyInTheList &&
-      setSearchResults((prevState) => [...prevState, { index: searchDupResults?.length, value }]);
-
-    setValue("");
-    setActive(false);
-    navigate(`/${value}`);
-  };
-
-  useEffect(() => {
-    setSearchDupResults(searchResults);
-  }, [searchResults]);
-
-  useEffect(() => {
-    const listener = (e: any) => {
-      if (e.code === "Enter" || e.code === "NumpadEnter") {
-        onSubmit();
-        e.target.blur();
-      }
-    };
-    document.addEventListener("keydown", listener);
-    return () => {
-      document.removeEventListener("keydown", listener);
-    };
-  }, [value]);
 
   return (
     <ClickAwayListener onClickAway={() => setActive(false)}>
@@ -156,9 +82,9 @@ export function AddressInput() {
               </CenteringBox>
             </Fade>
           </InputWrapper>
-          {active && !!searchResults.length && (
+          {active && !!addressHistory?.length && (
             <SearchResults
-              searchResults={searchResults}
+              searchResults={addressHistory}
               onItemClick={onItemClick}
               onItemDelete={onItemDelete}
               onHistoryClear={onHistoryClear}
@@ -172,7 +98,7 @@ export function AddressInput() {
             zIndex: 1,
             overflow: "hidden",
           }}
-          invisible={!searchResults.length}
+          invisible={!addressHistory?.length}
           open={active}
           onClick={() => setActive(false)}
         />

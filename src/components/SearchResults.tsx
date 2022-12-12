@@ -1,4 +1,3 @@
-import { SearchRequest } from "./AddressInput";
 import { IconButton, Typography } from "@mui/material";
 import { AppButton } from "./AppButton";
 import close from "../assets/close.svg";
@@ -7,9 +6,9 @@ import { CenteringBox } from "./Common.styled";
 import { SearchResultsItem, SearchResultsWrapper } from "./SearchRusults.styled";
 
 interface HeaderSearchResultsProps {
-  searchResults: SearchRequest[];
-  onItemClick: (item: SearchRequest) => void;
-  onItemDelete: (e: React.MouseEvent, item: SearchRequest) => void;
+  searchResults: string[];
+  onItemClick: (item: string) => void;
+  onItemDelete: (e: React.MouseEvent, item: string) => void;
   onHistoryClear: () => void;
 }
 
@@ -27,7 +26,7 @@ export const SearchResults: React.FC<HeaderSearchResultsProps> = ({
             <CenteringBox mr={1.5}>
               <img width={18} height={18} src={recentSearch} alt="Search Icon" />
             </CenteringBox>
-            <Typography>{result.value}</Typography>
+            <Typography>{result}</Typography>
           </CenteringBox>
           <IconButton onClick={(e) => onItemDelete(e, result)}>
             <img src={close} alt="Close Icon" width={16} height={16} />

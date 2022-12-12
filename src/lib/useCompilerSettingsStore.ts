@@ -3,7 +3,7 @@ import { immer } from "zustand/middleware/immer";
 import { useFileStore } from "./useFileStore";
 
 export type FuncCliCompilerVersion = "0.2.0" | "0.3.0";
-export type Compiler = "func";
+export type Compiler = "func" | "fift";
 
 export type UserProvidedFuncCompileSettings = {
   funcVersion: FuncCliCompilerVersion;
@@ -22,6 +22,7 @@ type Actions = {
   setCompilerSettings: (settings: UserProvidedFuncCompileSettings) => void;
   setOverrideCommandLine: (overrideCommandLine: string | null) => void;
   setFuncCliVersion: (funcVersion: FuncCliCompilerVersion) => void;
+  setCompiler: (compiler: Compiler) => void;
 };
 
 const _useCompilerSettingsStore = create(
@@ -55,6 +56,12 @@ const _useCompilerSettingsStore = create(
           throw new Error("not func compiler");
         }
         (state.compilerSettings as UserProvidedFuncCompileSettings).funcVersion = funcVersion;
+      });
+    },
+
+    setCompiler: (compiler: Compiler) => {
+      set((state) => {
+        state.compiler = compiler;
       });
     },
   })),
