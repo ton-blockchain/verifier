@@ -23,10 +23,4 @@ function validateAddress(contractAddress: string | undefined) {
   return isAddressValid;
 }
 
-function checkForDuplicatedValues(results: string[], address: string) {
-  return results.find((item) => {
-    return item === address;
-  });
-}
-
-export { useContractAddress, validateAddress, checkForDuplicatedValues };
+export { useContractAddress, validateAddress };

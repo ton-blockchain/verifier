@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAddressInput } from "./useAddressInput";
 import { useLocalStorage } from "./useLocalStorage";
-import { useContractAddress, checkForDuplicatedValues } from "./useContractAddress";
+import { useContractAddress } from "./useContractAddress";
 
 export function useAddressHistory() {
   const navigate = useNavigate();
@@ -35,7 +35,7 @@ export function useAddressHistory() {
     if (
       contractAddress &&
       isAddressValid &&
-      !checkForDuplicatedValues(storedValue, contractAddress)
+      !storedValue.find((item) => item === contractAddress)
     ) {
       setResults([...storedValue, contractAddress]);
     }
