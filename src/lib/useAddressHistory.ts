@@ -1,15 +1,22 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { SearchRequest } from "../components/AddressInput";
 import { useNavigate } from "react-router-dom";
 import { useAddressInput } from "./useAddressInput";
+import { useLocalStorage } from "./useLocalStorage";
+import { useContractAddress, checkForDuplicatedValues } from "./useContractAddress";
 
 export function useAddressHistory() {
   const navigate = useNavigate();
-  const { setValue, setActive, setResults, results } = useAddressInput();
+  const { setValue, setActive } = useAddressInput();
+  const { storedValue, setValue: setResults } = useLocalStorage<SearchRequest[]>(
+    "searchBarResults",
+    [],
+  );
+  const { contractAddress, isAddressValid } = useContractAddress();
 
   const onHistoryClear = useCallback(() => {
     setResults([]);
-  }, [results, setResults]);
+  }, [storedValue, setResults]);
 
   const onItemClick = useCallback(
     (item: SearchRequest) => {
@@ -17,16 +24,26 @@ export function useAddressHistory() {
       setActive(false);
       navigate(`/${item.value}`);
     },
-    [results, setResults],
+    [storedValue, setResults],
   );
 
   const onItemDelete = useCallback(
     (e: React.MouseEvent, item: SearchRequest) => {
       e.stopPropagation();
-      setResults(results.filter((prevItem) => prevItem.value !== item.value));
+      setResults(storedValue.filter((prevItem) => prevItem.value !== item.value));
     },
-    [results, setResults],
+    [storedValue, setResults],
   );
 
-  return { onHistoryClear, onItemClick, onItemDelete, results };
+  useEffect(() => {
+    if (
+      contractAddress &&
+      isAddressValid &&
+      !checkForDuplicatedValues(storedValue, contractAddress)
+    ) {
+      setResults([...storedValue, { index: storedValue.length, value: contractAddress }]);
+    }
+  }, [contractAddress]);
+
+  return { onHistoryClear, onItemClick, onItemDelete, storedValue };
 }

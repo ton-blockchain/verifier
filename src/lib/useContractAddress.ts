@@ -1,10 +1,9 @@
-import { Address } from "ton";
 import { useParams } from "react-router-dom";
+import { Address } from "ton";
 import { SearchRequest } from "../components/AddressInput";
 
 function useContractAddress() {
   const { contractAddress } = useParams();
-
   let isAddressValid = validateAddress(contractAddress);
 
   return {

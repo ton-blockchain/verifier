@@ -1,24 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import { SearchRequest } from "../components/AddressInput";
 import { useNavigate } from "react-router-dom";
-import {
-  checkForDuplicatedValues,
-  useContractAddress,
-  validateAddress,
-} from "./useContractAddress";
+import { validateAddress } from "./useContractAddress";
 import useNotification from "./useNotification";
-import { useLocalStorage } from "./useLocalStorage";
 
 export function useAddressInput() {
-  const { storedValue: results, setValue: setResults } = useLocalStorage<SearchRequest[]>(
-    "searchResults",
-    [],
-  );
   const [value, setValue] = useState<string | undefined>(undefined);
   const [active, setActive] = useState(false);
   const { showNotification } = useNotification();
   const navigate = useNavigate();
-  const address = useContractAddress();
 
   const onClear = useCallback(() => {
     setValue("");
@@ -51,16 +40,6 @@ export function useAddressInput() {
     };
   }, [value, onSubmit]);
 
-  useEffect(() => {
-    if (
-      address.contractAddress &&
-      address.isAddressValid &&
-      !checkForDuplicatedValues(results, address.contractAddress)
-    ) {
-      setResults([...results, { index: results.length, value: address.contractAddress }]);
-    }
-  }, [address.contractAddress]);
-
   return {
     onSubmit,
     onClear,
@@ -68,7 +47,5 @@ export function useAddressInput() {
     setValue,
     active,
     value,
-    results,
-    setResults,
   };
 }
