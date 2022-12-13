@@ -4,7 +4,6 @@ import { useAddressInput } from "./useAddressInput";
 import { persist } from "zustand/middleware";
 import create from "zustand";
 import { useContractAddress } from "./useContractAddress";
-import { Address } from "ton";
 
 interface AddressHistoryState {
   addresses: string[];
@@ -61,7 +60,7 @@ export function useAddressHistory() {
 
   useEffect(() => {
     if (contractAddress && isAddressValid) {
-      addAddress(Address.parse(contractAddress ?? "").toFriendly());
+      addAddress(contractAddress);
     }
   }, [contractAddress]);
 

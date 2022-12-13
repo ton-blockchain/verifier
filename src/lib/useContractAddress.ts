@@ -7,14 +7,16 @@ function useContractAddress() {
   const { contractAddress } = useParams();
   let isAddressValid = validateAddress(contractAddress);
 
+  let verifiedAddress = isAddressValid ? Address.parse(contractAddress ?? "").toFriendly() : "";
+
   useEffect(() => {
     if (isAddressValid) {
-      navigate(`/${Address.parse(contractAddress ?? "").toFriendly()}`, { replace: true });
+      navigate(`/${verifiedAddress}`, { replace: true });
     }
   }, [contractAddress]);
 
   return {
-    contractAddress,
+    contractAddress: verifiedAddress,
     isAddressValid,
   };
 }
