@@ -7,7 +7,7 @@ function useContractAddress() {
   const { contractAddress } = useParams();
   let isAddressValid = validateAddress(contractAddress);
 
-  let verifiedAddress = isAddressValid ? Address.parse(contractAddress ?? "").toFriendly() : null;
+  let verifiedAddress = isAddressValid ? Address.parse(contractAddress!).toFriendly() : null;
 
   useEffect(() => {
     if (verifiedAddress !== contractAddress) {
