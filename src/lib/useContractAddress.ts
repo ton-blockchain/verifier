@@ -7,7 +7,7 @@ function useContractAddress() {
   const { contractAddress } = useParams();
   let isAddressValid = validateAddress(contractAddress);
 
-  let verifiedAddress = isAddressValid ? Address.parse(contractAddress ?? "").toFriendly() : "";
+  let verifiedAddress = isAddressValid ? Address.parse(contractAddress ?? "").toFriendly() : null;
 
   useEffect(() => {
     if (isAddressValid) {
@@ -17,7 +17,6 @@ function useContractAddress() {
 
   return {
     contractAddress: verifiedAddress,
-    isAddressValid,
   };
 }
 
@@ -25,7 +24,7 @@ function validateAddress(contractAddress: string | undefined) {
   let isAddressValid = true;
 
   try {
-    Address.parse(contractAddress ?? "").toFriendly();
+    Address.parse(contractAddress ?? "");
   } catch (e) {
     isAddressValid = false;
   }

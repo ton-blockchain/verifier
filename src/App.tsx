@@ -51,12 +51,12 @@ function App() {
   const [isDragging, setIsDragging] = useState(false);
   const theme = useTheme();
   const canOverride = useOverride();
-  const { isAddressValid } = useContractAddress();
+  const { contractAddress } = useContractAddress();
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const showSkeleton = !error && isLoading && isAddressValid;
+  const showSkeleton = !error && isLoading && contractAddress;
 
   useAddressHistory();
   useResetState();
