@@ -14,13 +14,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import verified from "../assets/verified.svg";
-import copy from "../assets/copy.svg";
 import close from "../assets/close.svg";
 import verificationPopup from "../assets/verification-popup.svg";
 import React, { ReactNode, useCallback } from "react";
-import TableRow from "@mui/material/TableRow";
-import { BorderLessCell, HR } from "./FileTable.styled";
 import TableBody from "@mui/material/TableBody";
 import useNotification from "../lib/useNotification";
 import { downloadJson } from "../utils/jsonUtils";
@@ -29,16 +25,14 @@ import {
   CommandEllipsisLabel,
   PopupLink,
   PopupTable,
-  PopupTableBodyCell,
-  PopupTableHead,
-  PopupTableHeadCell,
-  PopupTableHeadPaddingCell,
-  PopupTableHeadRow,
   PopupTableTitle,
-  PopupTableTypography,
   PopupWrapper,
-  VerifiedTag,
 } from "./VerificationProofPopup.styled";
+import {
+  VerificationProofPopupTableDataRow,
+  VerificationProofPopupTableHead,
+  VerificationProofPopupTableSkeletonRow,
+} from "./VerificationProofPopupTable";
 
 function ProofTable() {
   const {
@@ -64,86 +58,34 @@ function ProofTable() {
     navigator.clipboard.writeText(value);
     showNotification("Copied to clipboard!", "success");
   }, []);
+
   return (
     <Box sx={{ overflow: "scroll", borderRadius: "5px" }}>
-      {contractProofData && verifierConfig && (
-        <PopupTable sx={{ minWidth: 900 }}>
-          <PopupTableHead>
-            <PopupTableHeadRow>
-              <PopupTableHeadCell sx={{ width: 80, paddingLeft: 3 }}>Status</PopupTableHeadCell>
-              <PopupTableHeadCell sx={{ width: 370 }}>Public Key</PopupTableHeadCell>
-              <PopupTableHeadCell sx={{ width: 35 }}></PopupTableHeadCell>
-              <PopupTableHeadCell sx={{ width: 105 }}>IP</PopupTableHeadCell>
-              <PopupTableHeadCell sx={{ width: 150 }}>Verification date</PopupTableHeadCell>
-              <PopupTableHeadCell sx={{ width: 100 }}>Verifier</PopupTableHeadCell>
-            </PopupTableHeadRow>
-            <TableRow>
-              <PopupTableHeadPaddingCell>
-                <HR />
-              </PopupTableHeadPaddingCell>
-              <PopupTableHeadPaddingCell>
-                <HR />
-              </PopupTableHeadPaddingCell>
-              <PopupTableHeadPaddingCell>
-                <HR />
-              </PopupTableHeadPaddingCell>
-              <PopupTableHeadPaddingCell>
-                <HR />
-              </PopupTableHeadPaddingCell>
-              <PopupTableHeadPaddingCell>
-                <HR />
-              </PopupTableHeadPaddingCell>
-              <PopupTableHeadPaddingCell>
-                <HR />
-              </PopupTableHeadPaddingCell>
-            </TableRow>
-          </PopupTableHead>
-          <TableBody>
-            {Object.entries(verifierConfig.pubKeyEndpoints).map(([pubKey, endpoint]) => {
+      <PopupTable sx={{ minWidth: 900 }}>
+        <VerificationProofPopupTableHead />
+        <TableBody>
+          {isLoadingProof || isLoadingVerifierRegistry || !verifierConfig || !contractProofData ? (
+            <>
+              <VerificationProofPopupTableSkeletonRow />
+              <VerificationProofPopupTableSkeletonRow />
+            </>
+          ) : (
+            Object.entries(verifierConfig.pubKeyEndpoints).map(([pubKey, endpoint]) => {
               return (
-                <TableRow key={pubKey}>
-                  <BorderLessCell sx={{ paddingLeft: 3, paddingBottom: 2 }}>
-                    <VerifiedTag px={1}>
-                      <img src={verified} alt="Verified icon" width={11} height={11} />
-                      Verified
-                    </VerifiedTag>
-                  </BorderLessCell>
-                  <PopupTableBodyCell>
-                    <PopupTableTypography>{pubKey}</PopupTableTypography>
-                  </PopupTableBodyCell>
-                  <PopupTableBodyCell>
-                    <IconButton onClick={() => onCopy(pubKey)} sx={{ padding: 0.5 }}>
-                      <img src={copy} alt="Copy icon" width={16} height={16} />
-                    </IconButton>
-                  </PopupTableBodyCell>
-                  <PopupTableBodyCell>
-                    <PopupTableTypography>{endpoint}</PopupTableTypography>
-                  </PopupTableBodyCell>
-                  <PopupTableBodyCell>
-                    <PopupTableTypography>
-                      {contractProofData?.verificationDate?.toLocaleDateString()}
-                    </PopupTableTypography>
-                  </PopupTableBodyCell>
-                  <BorderLessCell sx={{ paddingRight: 3, paddingBottom: 2 }}>
-                    <CenteringBox>
-                      <PopupLink target="_blank" href={verifierConfig.url}>
-                        {verifierConfig.name}
-                      </PopupLink>
-                    </CenteringBox>
-                  </BorderLessCell>
-                </TableRow>
+                <VerificationProofPopupTableDataRow
+                  key={pubKey}
+                  pubKey={pubKey}
+                  onCopy={onCopy}
+                  url={verifierConfig.url}
+                  date={contractProofData?.verificationDate?.toLocaleDateString() || ""}
+                  endpoint={endpoint}
+                  name={verifierConfig.name}
+                />
               );
-            })}
-          </TableBody>
-        </PopupTable>
-      )}
-      {(isLoadingProof || isLoadingVerifierRegistry) && (
-        <Skeleton
-          width="100%"
-          height={100}
-          sx={{ transform: "none", borderRadius: "20px", background: "#e6e8eb" }}
-        />
-      )}
+            })
+          )}
+        </TableBody>
+      </PopupTable>
       {(!!errorProof || !!errorVerifierRegistry) &&
         `${errorProof} ${errorVerifierRegistry} (App notification)`}
     </Box>
