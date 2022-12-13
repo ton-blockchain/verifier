@@ -64,12 +64,14 @@ function ProofTable() {
       <PopupTable sx={{ minWidth: 900 }}>
         <VerificationProofPopupTableHead />
         <TableBody>
-          {isLoadingProof || isLoadingVerifierRegistry || !verifierConfig || !contractProofData ? (
+          {isLoadingProof || isLoadingVerifierRegistry ? (
             <>
               <VerificationProofPopupTableSkeletonRow />
               <VerificationProofPopupTableSkeletonRow />
             </>
           ) : (
+            verifierConfig &&
+            contractProofData &&
             Object.entries(verifierConfig.pubKeyEndpoints).map(([pubKey, endpoint]) => {
               return (
                 <VerificationProofPopupTableDataRow
