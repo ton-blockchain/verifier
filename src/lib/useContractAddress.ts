@@ -15,7 +15,9 @@ function validateAddress(contractAddress: string | undefined) {
   let isAddressValid = true;
 
   try {
-    Address.parse(contractAddress ?? "");
+    if (contractAddress?.includes(" ")) {
+      location.pathname = `/${Address.parse(contractAddress ?? "").toFriendly()}`;
+    }
   } catch (e) {
     isAddressValid = false;
   }
