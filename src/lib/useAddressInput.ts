@@ -28,8 +28,8 @@ export function useAddressInput() {
   }, []);
 
   const onSubmit = () => {
-    const trimmedValue = value?.trim();
-    if (!validateAddress(trimmedValue)) {
+    let isAddressValid = validateAddress(value);
+    if (!isAddressValid) {
       showNotification("Invalid address", "error");
       return;
     }
@@ -37,7 +37,7 @@ export function useAddressInput() {
     setValue("");
     setActive(false);
 
-    navigate(`/${trimmedValue}`);
+    navigate(`/${value}`);
   };
 
   useEffect(() => {
