@@ -1,9 +1,17 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { Address } from "ton";
+import { useEffect } from "react";
 
 function useContractAddress() {
+  const navigate = useNavigate();
   const { contractAddress } = useParams();
   let isAddressValid = validateAddress(contractAddress);
+
+  useEffect(() => {
+    if (isAddressValid) {
+      navigate(`/${Address.parse(contractAddress ?? "").toFriendly()}`, { replace: true });
+    }
+  }, [contractAddress]);
 
   return {
     contractAddress,
@@ -12,13 +20,10 @@ function useContractAddress() {
 }
 
 function validateAddress(contractAddress: string | undefined) {
-  const navigate = useNavigate();
   let isAddressValid = true;
 
   try {
-    if (contractAddress !== Address.parse(contractAddress ?? "").toFriendly()) {
-      navigate(`/${Address.parse(contractAddress ?? "").toFriendly()}`, { replace: true });
-    }
+    Address.parse(contractAddress ?? "").toFriendly();
   } catch (e) {
     isAddressValid = false;
   }
