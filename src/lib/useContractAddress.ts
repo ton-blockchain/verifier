@@ -10,7 +10,7 @@ function useContractAddress() {
   let verifiedAddress = isAddressValid ? Address.parse(contractAddress ?? "").toFriendly() : null;
 
   useEffect(() => {
-    if (isAddressValid) {
+    if (verifiedAddress !== contractAddress) {
       navigate(`/${verifiedAddress}`, { replace: true });
     }
   }, [contractAddress]);
