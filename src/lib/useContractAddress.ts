@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Address } from "ton";
 
 function useContractAddress() {
@@ -12,11 +12,12 @@ function useContractAddress() {
 }
 
 function validateAddress(contractAddress: string | undefined) {
+  const navigate = useNavigate();
   let isAddressValid = true;
 
   try {
-    if (contractAddress?.includes(" ")) {
-      location.pathname = `/${Address.parse(contractAddress ?? "").toFriendly()}`;
+    if (contractAddress !== Address.parse(contractAddress ?? "").toFriendly()) {
+      navigate(`/${Address.parse(contractAddress ?? "").toFriendly()}`, { replace: true });
     }
   } catch (e) {
     isAddressValid = false;
