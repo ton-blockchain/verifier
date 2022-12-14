@@ -12,7 +12,8 @@ import {
 } from "./Footer.styled";
 import { AppLogo, LinkWrapper } from "./TopBar.styled";
 import { Typography, useMediaQuery } from "@mui/material";
-import heart from "../assets/orbs.svg";
+import heart from "../assets/heart.svg";
+import orbsLogo from "../assets/orbs.svg";
 import telegram from "../assets/telegram.svg";
 import telegramHovered from "../assets/telegram-hover.svg";
 import github from "../assets/github-footer.svg";
@@ -60,13 +61,17 @@ export function Footer() {
       <Separator />
       <CredentialsWrapper>
         <FooterTextBoxLeft>
-          <Typography variant="body2">© 2022 orbs.com</Typography>
+          <Typography variant="body2">© 2022</Typography>
         </FooterTextBoxLeft>
         <ContributedWrapper>
-          <CenteringBox>
-            Powered by
+          <CenteringBox sx={{ gap: 0.1 }}>
+            Contributed with
             <CenteringBox mx={0.4}>
-              <img src={heart} alt="Orbs logo" width={12} height={12} />
+              <img src={heart} alt="Heart" width={12} height={12} />
+            </CenteringBox>
+            by
+            <CenteringBox mx={0.4}>
+              <img src={orbsLogo} alt="Orbs logo" width={12} height={12} />
             </CenteringBox>
             <FooterLink sx={{ color: "#5E75E8" }} target="_blank" href="https://orbs.com/">
               Orbs
