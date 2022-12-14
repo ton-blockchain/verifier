@@ -9,6 +9,7 @@ import { AppButton } from "./AppButton";
 import upload from "../assets/upload.svg";
 import { styled } from "@mui/system";
 import { STEPS, usePublishStore } from "../lib/usePublishSteps";
+import { useAddressInput } from "../lib/useAddressInput";
 
 const FilesDropzone = styled(CenteringBox)({
   justifyContent: "center",
@@ -30,6 +31,7 @@ export function FileUploaderArea() {
   const { addFiles, hasFiles } = useFileStore();
   const { step } = usePublishStore();
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
+  const { active } = useAddressInput();
 
   const onDrop = (acceptedFiles: any) => {
     addFiles(acceptedFiles);
@@ -78,7 +80,12 @@ export function FileUploaderArea() {
         </CenteringBox>
       </TitleBox>
       <Box sx={{ padding: "15px 30px" }}>
-        <Box sx={{ position: "relative", zIndex: 5 }}>
+        <Box
+          sx={{
+            position: "relative",
+            zIndex: active ? 0 : 4,
+            transition: active ? "" : "1.5s z-index",
+          }}>
           {!hasFiles() && (
             <FilesDropzone {...getRootProps()}>
               Drop sources ({acceptedFileExtensions.map((ext) => `.${ext}`).join(", ")}) here
