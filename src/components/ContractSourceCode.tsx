@@ -12,7 +12,6 @@ import { AppButton } from "./AppButton";
 import copy from "../assets/copy.svg";
 import { downloadSources } from "../lib/downloadSources";
 import useNotification from "../lib/useNotification";
-import { useContractAddress } from "../lib/useContractAddress";
 
 enum CODE {
   DISASSEMBLED,
@@ -50,7 +49,6 @@ const SourceCodeTabs = styled(Tabs)({
 function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();
   const [value, setValue] = useState<number | undefined>(undefined);
-  const { contractAddress } = useContractAddress();
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
   const { showNotification } = useNotification();
 
@@ -71,7 +69,7 @@ function ContractSourceCode() {
 
   useEffect(() => {
     setValue(!!contractProof?.hasOnchainProof ? 0 : 1);
-  }, [contractAddress]);
+  }, [contractProof?.hasOnchainProof]);
 
   return (
     <Box
