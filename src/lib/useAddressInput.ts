@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { validateAddress } from "./useContractAddress";
 import useNotification from "./useNotification";
@@ -39,20 +39,6 @@ export function useAddressInput() {
 
     navigate(`/${value}`);
   };
-
-  useEffect(() => {
-    const listener = (event: any) => {
-      if (event.code === "Enter" || event.code === "NumpadEnter") {
-        event.preventDefault();
-        event.target.blur();
-        onSubmit();
-      }
-    };
-    document.addEventListener("keydown", listener);
-    return () => {
-      document.removeEventListener("keydown", listener);
-    };
-  }, [value, onSubmit]);
 
   return {
     onSubmit,
