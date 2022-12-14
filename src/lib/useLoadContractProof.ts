@@ -21,7 +21,7 @@ export async function getProofIpfsLink(hash: string): Promise<string | null> {
 }
 
 export function useLoadContractProof() {
-  const { contractAddress, isAddressValid } = useContractAddress();
+  const { contractAddress } = useContractAddress();
   const { data: contractInfo, error: contractError } = useLoadContractInfo();
   const { status: publishProofStatus } = usePublishProof();
   const { isLoading, error, data, refetch } = useQuery<
@@ -31,7 +31,7 @@ export function useLoadContractProof() {
   >(
     [contractAddress, "proof"],
     async () => {
-      if (!isAddressValid) {
+      if (!contractAddress) {
         return {
           hasOnchainProof: false,
         };

@@ -38,7 +38,7 @@ export function useAddressHistory() {
   const navigate = useNavigate();
   const { setValue, setActive } = useAddressInput();
   const { addresses, addAddress, clear, removeItem } = useAddressHistoryStore();
-  const { contractAddress, isAddressValid } = useContractAddress();
+  const { contractAddress } = useContractAddress();
 
   const onHistoryClear = useCallback(() => {
     clear();
@@ -59,7 +59,7 @@ export function useAddressHistory() {
   );
 
   useEffect(() => {
-    if (contractAddress && isAddressValid) {
+    if (contractAddress) {
       addAddress(contractAddress);
     }
   }, [contractAddress]);

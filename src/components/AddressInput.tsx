@@ -57,6 +57,12 @@ export function AddressInput() {
           <InputWrapper>
             <img width={24} height={24} src={search} alt="Search icon" />
             <AppAddressInput
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  onSubmit();
+                }
+              }}
               placeholder="Contract address"
               value={value}
               onChange={(e) => setValue(e.target.value)}
