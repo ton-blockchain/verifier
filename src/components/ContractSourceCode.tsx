@@ -27,18 +27,12 @@ const ContentBox = styled(Box)({
   position: "relative",
 });
 
-const CopyBox = styled(Box)(({ theme }) => ({
+const CopyBox = styled(Box)({
   position: "absolute",
-  top: "160px",
+  top: "80px",
   right: "40px",
   zIndex: 3,
-  [theme.breakpoints.down(901)]: {
-    top: "110px",
-  },
-  [theme.breakpoints.down(451)]: {
-    top: "145px",
-  },
-}));
+});
 
 const SourceCodeTabs = styled(Tabs)({
   borderBottom: "1px solid #E8E8E8",
@@ -130,16 +124,33 @@ function ContractSourceCode() {
           />
           <Tab sx={{ textTransform: "none" }} label="Disassembled" />
         </SourceCodeTabs>
-        {value === 0 && <VerifiedSourceCode />}
-        {value === 1 && <DisassembledSourceCode />}
+        {value === 0 && (
+          <VerifiedSourceCode button={<CopyButton onCopy={onCopy} copyText={CODE.SOURCE} />} />
+        )}
+        {value === 1 && (
+          <DisassembledSourceCode
+            button={<CopyButton onCopy={onCopy} copyText={CODE.DISASSEMBLED} />}
+          />
+        )}
       </ContentBox>
-      <CopyBox>
-        <IconButton onClick={() => onCopy(value === 0 ? CODE.SOURCE : CODE.DISASSEMBLED)}>
-          <img alt="Copy Icon" src={copy} width={16} height={16} />
-        </IconButton>
-      </CopyBox>
     </Box>
   );
 }
+
+const CopyButton = ({
+  copyText,
+  onCopy,
+}: {
+  copyText: CODE;
+  onCopy: (type: CODE) => Promise<void>;
+}) => {
+  return (
+    <CopyBox>
+      <IconButton onClick={() => onCopy(copyText)}>
+        <img alt="Copy Icon" src={copy} width={16} height={16} />
+      </IconButton>
+    </CopyBox>
+  );
+};
 
 export default ContractSourceCode;
