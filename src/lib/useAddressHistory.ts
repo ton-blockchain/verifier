@@ -17,12 +17,9 @@ export const useAddressHistoryStore = create<AddressHistoryState>()(
     (set, get) => ({
       addresses: [],
       addAddress: (address: string) => {
-        if (get().addresses.includes(address)) {
-          return set({
-            addresses: [address, ...get().addresses.filter((a) => a !== address)].slice(0, 20),
-          });
-        }
-        return set({ addresses: [address, ...get().addresses].slice(0, 20) });
+        return set({
+          addresses: [address, ...get().addresses.filter((a) => a !== address)].slice(0, 20),
+        });
       },
       clear: () => set({ addresses: [] }),
       removeItem: (address: string) => {
