@@ -51,7 +51,7 @@ function App() {
   const [isDragging, setIsDragging] = useState(false);
   const theme = useTheme();
   const canOverride = useOverride();
-  const { contractAddress } = useContractAddress();
+  const { contractAddress, isAddressEmpty } = useContractAddress();
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
@@ -77,6 +77,9 @@ function App() {
       />
       <Box ref={scrollToRef} />
       <TopBar />
+      {contractAddress === null && !isAddressEmpty && (
+        <div>Replace this with INVALID ADDRESS ERRROR</div>
+      )}
       <ContentBox px={headerSpacings ? "20px" : 0}>
         {!!error && (
           <Box mt={4}>
