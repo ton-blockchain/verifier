@@ -78,7 +78,19 @@ function App() {
       <Box ref={scrollToRef} />
       <TopBar />
       {contractAddress === null && !isAddressEmpty && (
-        <div>Replace this with INVALID ADDRESS ERRROR</div>
+        <Box m={4}>
+          <AppNotification
+            singleLine
+            type={NotificationType.ERROR}
+            title={
+              <CenteringBox sx={{ height: 42 }}>
+                <span style={{ color: "#FC5656", marginRight: 4 }}>Error: </span>
+                Invalid address
+              </CenteringBox>
+            }
+            notificationBody={<Box />}
+          />
+        </Box>
       )}
       <ContentBox px={headerSpacings ? "20px" : 0}>
         {!!error && (
