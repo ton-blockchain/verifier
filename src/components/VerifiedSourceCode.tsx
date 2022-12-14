@@ -11,9 +11,9 @@ export function VerifiedSourceCode({ button }: VerifiedSourceCodeProps) {
   return (
     <div id="myVerifierContainer" style={{ color: "black" }}>
       <div id="myVerifierFiles"></div>
-      <div style={{ position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "relative", overflow: "hidden", width: "100%" }}>
         <div id="myVerifierContent"></div>
-        <div style={{ position: "absolute", top: -74, right: -25 }}>{button}</div>
+        <div style={{ position: "absolute", top: -74, right: -25, zIndex: 3 }}>{button}</div>
       </div>
     </div>
   );
