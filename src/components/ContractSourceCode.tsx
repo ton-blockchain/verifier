@@ -27,12 +27,18 @@ const ContentBox = styled(Box)({
   position: "relative",
 });
 
-const CopyBox = styled(Box)({
+const CopyBox = styled(Box)(({ theme }) => ({
   position: "absolute",
   top: "160px",
   right: "40px",
   zIndex: 3,
-});
+  [theme.breakpoints.down(901)]: {
+    top: "110px",
+  },
+  [theme.breakpoints.down(451)]: {
+    top: "145px",
+  },
+}));
 
 const SourceCodeTabs = styled(Tabs)({
   borderBottom: "1px solid #E8E8E8",
@@ -50,6 +56,7 @@ function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();
   const [value, setValue] = useState<number | undefined>(undefined);
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
+  const modifiedCodeBlock = useMediaQuery("(max-width: 900px)");
   const { showNotification } = useNotification();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -80,29 +87,32 @@ function ContractSourceCode() {
         position: "relative",
       }}>
       <TitleBox mb={1}>
-        <TitleWrapper sx={{ flexDirection: isExtraSmallScreen ? "column" : "inherit" }}>
+        <TitleWrapper>
           <CenteringBox mb={isExtraSmallScreen ? 2 : 0} sx={{ width: "100%" }}>
             <IconBox>
               <img src={verified} alt="Block icon" width={41} height={41} />
             </IconBox>
-            <TitleText>{!!contractProof?.hasOnchainProof && "Verified"} Source Code</TitleText>
+            <TitleText>
+              {!!contractProof?.hasOnchainProof && "Verified"} Source {isExtraSmallScreen && <br />}{" "}
+              Code
+            </TitleText>
           </CenteringBox>
           {value === 0 && (
-            <div>
+            <Box sx={{ alignSelf: "baseline", position: "relative", top: "5px" }}>
               <AppButton
                 fontSize={12}
                 fontWeight={500}
                 hoverBackground="#F5F5F5"
                 background="#F2F2F2"
-                height={37}
-                width={167}
+                height={modifiedCodeBlock ? 30 : 37}
+                width={modifiedCodeBlock ? 30 : 167}
                 onClick={() => {
                   contractProof?.files?.length && downloadSources(contractProof.files);
                 }}>
                 <img src={download} alt="Download icon" width={19} height={19} />
-                Download sources
+                {modifiedCodeBlock ? "" : "Download sources"}
               </AppButton>
-            </div>
+            </Box>
           )}
         </TitleWrapper>
       </TitleBox>
