@@ -44,7 +44,7 @@ const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
 const DataRowTitle = styled(Typography)({
   fontSize: 14,
   color: "#000",
-  minWidth: 110,
+  minWidth: 90,
   fontWeight: 800,
 });
 
