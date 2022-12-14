@@ -56,7 +56,7 @@ function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();
   const [value, setValue] = useState<number | undefined>(undefined);
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
-  const modifiedCodeBlock = useMediaQuery("(max-width: 900px)");
+  const modifiedCodeBlock = useMediaQuery("(max-width: 600px)");
   const { showNotification } = useNotification();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -98,7 +98,12 @@ function ContractSourceCode() {
             </TitleText>
           </CenteringBox>
           {value === 0 && (
-            <Box sx={{ alignSelf: "baseline", position: "relative", top: "5px" }}>
+            <Box
+              sx={{
+                alignSelf: "baseline",
+                position: "relative",
+                top: !modifiedCodeBlock ? "3px" : "5px",
+              }}>
               <AppButton
                 fontSize={12}
                 fontWeight={500}
