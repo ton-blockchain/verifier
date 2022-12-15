@@ -17,8 +17,9 @@ export const useAddressHistoryStore = create<AddressHistoryState>()(
     (set, get) => ({
       addresses: [],
       addAddress: (address: string) => {
-        if (get().addresses.includes(address)) return;
-        return set({ addresses: [address, ...get().addresses].slice(0, 20) });
+        return set({
+          addresses: [address, ...get().addresses.filter((a) => a !== address)].slice(0, 20),
+        });
       },
       clear: () => set({ addresses: [] }),
       removeItem: (address: string) => {
@@ -38,7 +39,7 @@ export function useAddressHistory() {
   const navigate = useNavigate();
   const { setValue, setActive } = useAddressInput();
   const { addresses, addAddress, clear, removeItem } = useAddressHistoryStore();
-  const { contractAddress, isAddressValid } = useContractAddress();
+  const { contractAddress } = useContractAddress();
 
   const onHistoryClear = useCallback(() => {
     clear();
@@ -59,7 +60,7 @@ export function useAddressHistory() {
   );
 
   useEffect(() => {
-    if (contractAddress && isAddressValid) {
+    if (contractAddress) {
       addAddress(contractAddress);
     }
   }, [contractAddress]);

@@ -12,7 +12,7 @@ interface StyledButtonProps {
   textColor?: string;
 }
 
-const StyledButton = styled(Button)((props: StyledButtonProps) => ({
+const StyledButton = styled(Button)((props: StyledButtonProps) => ({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -39,6 +39,10 @@ const StyledButton = styled(Button)((props: StyledButtonProps) => ({
   },
   "&:disabled": {
     background: "#D9D9D9",
+  },
+  [theme.breakpoints.down(900)]: {
+    padding: 0,
+    minWidth: 25,
   },
 }));
 

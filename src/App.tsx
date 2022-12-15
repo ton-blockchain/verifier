@@ -51,12 +51,12 @@ function App() {
   const [isDragging, setIsDragging] = useState(false);
   const theme = useTheme();
   const canOverride = useOverride();
-  const { isAddressValid } = useContractAddress();
+  const { contractAddress, isAddressEmpty } = useContractAddress();
   const { hasFiles } = useFileStore();
   const scrollToRef = useRef();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const showSkeleton = !error && isLoading && isAddressValid;
+  const showSkeleton = !error && isLoading && contractAddress;
 
   useAddressHistory();
   useResetState();
@@ -77,6 +77,21 @@ function App() {
       />
       <Box ref={scrollToRef} />
       <TopBar />
+      {contractAddress === null && !isAddressEmpty && (
+        <Box m={4}>
+          <AppNotification
+            singleLine
+            type={NotificationType.ERROR}
+            title={
+              <CenteringBox sx={{ height: 42 }}>
+                <span style={{ color: "#FC5656", marginRight: 4 }}>Error: </span>
+                Invalid address
+              </CenteringBox>
+            }
+            notificationBody={<Box />}
+          />
+        </Box>
+      )}
       <ContentBox px={headerSpacings ? "20px" : 0}>
         {!!error && (
           <Box mt={4}>
