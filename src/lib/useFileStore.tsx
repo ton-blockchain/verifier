@@ -4,8 +4,8 @@ import { immer } from "zustand/middleware/immer";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
 
 export const acceptedFileExtensions = import.meta.env.VITE_ALLOW_FIFT
-  ? ["fc", "func", "fif", "fift"]
-  : ["fc", "func"];
+  ? ["fc", "func", "fif", "fift", "tact"]
+  : ["fc", "func", "tact"];
 
 export type FileToUpload = {
   fileObj: File;
