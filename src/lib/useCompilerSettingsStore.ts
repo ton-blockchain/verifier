@@ -1,9 +1,10 @@
+import { useEffect } from "react";
 import create from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { useFileStore } from "./useFileStore";
 
 export type FuncCliCompilerVersion = "0.2.0" | "0.3.0";
-export type Compiler = "func" | "fift";
+export type Compiler = "func" | "fift" | "tact";
 
 export type UserProvidedFuncCompileSettings = {
   funcVersion: FuncCliCompilerVersion;
@@ -80,6 +81,12 @@ export function useCompilerSettingsStore() {
     if (!files) return "";
     return `-SPA ${cmd}`;
   }
+
+  useEffect(() => {
+    if (files.some((f) => f.fileObj.name.endsWith(".tact"))) {
+      compilerStore.setCompiler("tact");
+    }
+  }, [files]);
 
   const additionalCompilerSettings: Partial<UserProvidedFuncCompileSettings> = {};
 
