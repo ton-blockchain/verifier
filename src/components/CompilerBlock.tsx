@@ -4,8 +4,12 @@ import { useLoadContractProof } from "../lib/useLoadContractProof";
 
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en";
-import { funcVersionToLink, fiftVersionToLink } from "../utils/linkUtils";
-import { FiftCliCompileSettings, FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
+import { funcVersionToLink, fiftVersionToLink, tactVersionToLink } from "../utils/linkUtils";
+import {
+  FiftCliCompileSettings,
+  FuncCompilerSettings,
+  TactCliCompileSettings,
+} from "@ton-community/contract-verifier-sdk";
 
 TimeAgo.addDefaultLocale(en);
 
@@ -38,12 +42,23 @@ export function CompilerBlock() {
         color: "#0088CC",
         customLink: fiftVersionToLink(fiftVersion),
       });
+    } else if (data.compiler === "tact") {
+      const tactVersion = (compilerSettings as TactCliCompileSettings).tactVersion;
+      dataRows.push({
+        title: "Version",
+        value: tactVersion,
+        color: "#0088CC",
+        customLink: tactVersionToLink(tactVersion),
+      });
     }
-    dataRows.push({
-      title: "Command",
-      value: compilerSettings?.commandLine,
-      showIcon: true,
-    });
+    if (data.compiler !== "tact") {
+      dataRows.push({
+        title: "Command",
+        // @ts-ignore
+        value: compilerSettings?.commandLine,
+        showIcon: true,
+      });
+    }
     dataRows.push({
       title: "Verified on",
       value: data.verificationDate?.toLocaleDateString() ?? "",

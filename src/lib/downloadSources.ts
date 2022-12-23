@@ -5,7 +5,6 @@ export function downloadSources(
   files: {
     name: string;
     content: string;
-    isEntrypoint: boolean;
   }[],
 ) {
   const zip = new JSZip();

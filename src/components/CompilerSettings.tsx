@@ -39,13 +39,13 @@ function CompilerSettings() {
           <CompilerFormControl>
             <CompilerLabel>Compiler</CompilerLabel>
             <CompilerSelect
-              disabled={!import.meta.env.VITE_ALLOW_FIFT}
               value={compiler}
               onChange={(e) => {
                 setCompiler(e.target.value as Compiler);
               }}>
               <MenuItem value={"func"}>func</MenuItem>
-              <MenuItem value={"fift"}>fift</MenuItem>
+              <MenuItem value={"tact"}>tact</MenuItem>
+              {import.meta.env.VITE_ALLOW_FIFT && <MenuItem value={"fift"}>fift</MenuItem>}
             </CompilerSelect>
           </CompilerFormControl>
         </CenteringBox>

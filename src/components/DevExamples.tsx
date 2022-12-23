@@ -107,7 +107,10 @@ const examples = [
   },
   {
     category: "Other",
-    contracts: [["counter", "EQC-QTihJV_B4f8M2nynateMLynaRT_uwNYnnuyy87kam-G7"]],
+    contracts: [
+      ["counter", "EQC-QTihJV_B4f8M2nynateMLynaRT_uwNYnnuyy87kam-G7"],
+      ["tact-example", "EQA7c2RpiXxH1X52lvOxLFrVj4MukLeuCENcM86rHYcQdbha"],
+    ],
   },
   {
     category: "Unverified",
