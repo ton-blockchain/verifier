@@ -11,7 +11,7 @@ import { makeElipsisAddress } from "../utils/textUtils";
 import { AnalyticsAction, sendAnalyticsEvent } from "../lib/googleAnalytics";
 
 export interface Adapter {
-  provider: string;
+  provider: Provider;
   icon: string;
   title: string;
   description: string;
