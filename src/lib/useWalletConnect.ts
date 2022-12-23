@@ -64,45 +64,28 @@ const useWalletAddressStore = create<{
   setWalletAddress: (address: string | null) => set({ walletAddress: address }),
 }));
 
-let tonWalletProvider: TonWalletProvider | null = null;
-
-const xuseSessionStore = create<{
-  session: any;
-  setSession: (session: any) => void;
-  disconnect: () => void;
-}>((set) => ({
-  session: JSON.parse(localStorage.getItem("tonhubSession") ?? "null"),
-  setSession: (session: any) => {
-    localStorage.setItem("tonhubSession", JSON.stringify(session));
-    set({ session });
-  },
-  disconnect: () => {
-    localStorage.removeItem("tonhubSession");
-    set({ session: null });
-  },
-}));
-
 export function useWalletConnect() {
   const { setProvider, provider } = useProviderStore();
   const { walletAddress, setWalletAddress } = useWalletAddressStore();
 
   useEffect(() => {
-    if (provider && !tonWalletProvider) {
+    if (provider && !walletAddress) {
       (async () => {
-        tonWalletProvider = await makeProvider(provider, (l) => {});
-        tonConnection.setProvider(tonWalletProvider);
+        const tonWalletProvider = await makeProvider(provider, (l) => {});
         const wallet = await tonWalletProvider.connect();
-        setWalletAddress(wallet.address);
+        if (wallet) {
+          setWalletAddress(wallet.address);
+          tonConnection.setProvider(tonWalletProvider);
+        }
       })();
     }
-  }, [provider]);
+  }, [provider, walletAddress]);
 
   return {
     connect: async (provider: Provider, onLinkReady: (link: string) => void) => {
-      // TODO restore con
-      if (!tonWalletProvider) {
+      if (!walletAddress) {
         setProvider(provider);
-        tonWalletProvider = await makeProvider(provider, onLinkReady);
+        const tonWalletProvider = await makeProvider(provider, onLinkReady);
         tonConnection.setProvider(tonWalletProvider);
         const wallet = await tonWalletProvider.connect();
         setWalletAddress(wallet.address);
@@ -123,8 +106,6 @@ export function useWalletConnect() {
     },
     walletAddress: walletAddress,
     disconnect: () => {
-      tonWalletProvider = null;
-      // @ts-ignore TODO fix
       tonConnection.setProvider(null);
       setWalletAddress(null);
       setProvider(null);

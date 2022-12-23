@@ -21,8 +21,8 @@ export interface Adapter {
 export function WalletConnect() {
   const [showDisconnect, setShowDisconnect] = useState(false);
   const [showConnect, setShowConnect] = useState(false);
-  const { connect, walletAddress, disconnect } = useWalletConnect();
   const [qrLink, setQRLink] = useState<null | string>(null);
+  const { connect, walletAddress, disconnect } = useWalletConnect();
 
   const onDisconnect = () => {
     setShowDisconnect(false);
