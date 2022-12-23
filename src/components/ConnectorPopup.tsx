@@ -26,24 +26,23 @@ const StyledContainer = styled(Box)({
 
 const options: Adapter[] = [
   {
-    provider: Provider.CHROME,
-    icon: chromeExtension,
-    title: "Google Chrome Plugin",
-    description: "TON Wallet Plugin for Google Chrome",
-    disabled: true,
-  },
-  {
     provider: Provider.TONKEEPER,
     icon: tonKeeper,
     title: "Tonkeeper",
     description: "A Non-custodial cryptocurrency wallet",
-    disabled: true,
   },
   {
     provider: Provider.TONHUB,
     icon: qrExtension,
     title: "Tonhub",
     description: "A mobile wallet in your pocket",
+  },
+  {
+    provider: Provider.CHROME,
+    icon: chromeExtension,
+    title: "Google Chrome Plugin",
+    description: "TON Wallet Plugin for Google Chrome",
+    disabled: true,
   },
 ];
 

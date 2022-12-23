@@ -49,12 +49,10 @@ export function WalletConnect() {
     sendAnalyticsEvent(AnalyticsAction.CONNECT_WALLET_POPUP);
   };
 
-  const onSelect = (provider: string) => {
-    if (provider === Provider.TONHUB) {
-      connect((link: string) => {
-        setQRLink(link);
-      });
-    }
+  const onSelect = (provider: Provider) => {
+    connect(provider, (link: string) => {
+      setQRLink(link);
+    });
   };
 
   useEffect(() => {
