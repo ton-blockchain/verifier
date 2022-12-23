@@ -52,7 +52,7 @@ interface ConnectorPopupProps {
   qrLink: string | null;
   onCancel: () => void;
   onClose: () => void;
-  onSelect: (provider: string) => void;
+  onSelect: (provider: Provider) => void;
 }
 
 export function ConnectorPopup({

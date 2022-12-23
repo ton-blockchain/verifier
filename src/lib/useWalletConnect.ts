@@ -1,12 +1,6 @@
 import BN from "bn.js";
-import { useState } from "react";
 import { Address, Cell } from "ton";
-import {
-  TonhubConnector,
-  TonhubCreatedSession,
-  TonhubSessionAwaited,
-  TonhubWalletConfig,
-} from "ton-x";
+import { TonhubConnector } from "ton-x";
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import { Provider } from "../components/ConnectorPopup";
@@ -18,7 +12,7 @@ import {
   TonkeeperProvider,
   TonWalletProvider,
 } from "@ton-defi.org/ton-connection";
-import TonConnect from "@tonconnect/sdk";
+import { useEffect } from "react";
 
 const tonConnection = new TonConnection();
 
@@ -62,8 +56,15 @@ export const useProviderStore = create<{
   ),
 );
 
+const useWalletAddressStore = create<{
+  walletAddress: string | null;
+  setWalletAddress: (address: string | null) => void;
+}>((set) => ({
+  walletAddress: null,
+  setWalletAddress: (address: string | null) => set({ walletAddress: address }),
+}));
+
 let tonWalletProvider: TonWalletProvider | null = null;
-let walletAddress: string | null = null;
 
 const xuseSessionStore = create<{
   session: any;
@@ -83,6 +84,18 @@ const xuseSessionStore = create<{
 
 export function useWalletConnect() {
   const { setProvider, provider } = useProviderStore();
+  const { walletAddress, setWalletAddress } = useWalletAddressStore();
+
+  useEffect(() => {
+    if (provider && !tonWalletProvider) {
+      (async () => {
+        tonWalletProvider = await makeProvider(provider, (l) => {});
+        tonConnection.setProvider(tonWalletProvider);
+        const wallet = await tonWalletProvider.connect();
+        setWalletAddress(wallet.address);
+      })();
+    }
+  }, [provider]);
 
   return {
     connect: async (provider: Provider, onLinkReady: (link: string) => void) => {
@@ -92,21 +105,28 @@ export function useWalletConnect() {
         tonWalletProvider = await makeProvider(provider, onLinkReady);
         tonConnection.setProvider(tonWalletProvider);
         const wallet = await tonWalletProvider.connect();
-        walletAddress = wallet.address;
+        setWalletAddress(wallet.address);
       }
     },
-    requestTXN: async (to: string, value: BN, message: Cell) => {
-      tonConnection.requestTransaction({
-        to: Address.parse(to),
-        value,
-        message,
-      });
+    requestTXN: async (to: string, value: BN, message: Cell): Promise<"issued" | "rejected"> => {
+      try {
+        await tonConnection.requestTransaction({
+          to: Address.parse(to),
+          value,
+          message,
+        });
+        return "issued";
+      } catch (e) {
+        console.error(e);
+        return "rejected";
+      }
     },
     walletAddress: walletAddress,
     disconnect: () => {
       tonWalletProvider = null;
       // @ts-ignore TODO fix
       tonConnection.setProvider(null);
+      setWalletAddress(null);
       setProvider(null);
     },
   };

@@ -39,7 +39,7 @@ export function PublishProof() {
       text = "Transaction rejected, please retry.";
       break;
     case "pending":
-      text = "Check your tonhub wallet for a pending transaction.";
+      text = "Check your wallet for a pending transaction.";
       break;
     case "issued":
       text = "Transaction issued, monitoring proof deployment on-chain.";

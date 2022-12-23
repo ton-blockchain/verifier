@@ -14,6 +14,7 @@ export function useOverride() {
 
   useEffect(() => {
     (async () => {
+      if (!walletAddress || !contractAddress) return;
       if (urlParams.get("override") !== null) {
         const tc = await getClient();
         const admin = await getAdmin(Address.parse(import.meta.env.VITE_SOURCES_REGISTRY), tc);

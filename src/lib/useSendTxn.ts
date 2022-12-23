@@ -45,7 +45,7 @@ export function useSendTXN(key: string, monitorSuccess: (count: number) => Promi
 
       let i = 1;
 
-      if (status?.type === "success") {
+      if (status === "issued") {
         updateTxn(key, "issued");
         const _id = setInterval(async () => {
           const txnStatus = await monitorSuccess(i);
@@ -55,10 +55,8 @@ export function useSendTXN(key: string, monitorSuccess: (count: number) => Promi
             clearInterval(_id);
           }
         }, 2000);
-      } else if (status?.type === "rejected") {
+      } else if (status === "rejected") {
         updateTxn(key, "rejected");
-      } else if (status?.type === "expired") {
-        updateTxn(key, "expired");
       }
     },
     data: { status: txns[key] },

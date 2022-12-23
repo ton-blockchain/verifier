@@ -33,7 +33,7 @@ export function QrConnector({ open, onClose, link }: QrConnectorProps) {
     <>
       <Fade in>
         <StyledContainer>
-          <ConnectorHeader title="Connect to Tonhub" onClose={onClose} />
+          <ConnectorHeader title="Connect" onClose={onClose} />
           <StyledQrBox>{link && <QRCode value={link!} />}</StyledQrBox>
         </StyledContainer>
       </Fade>
