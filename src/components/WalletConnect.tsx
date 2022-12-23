@@ -11,7 +11,7 @@ import { makeElipsisAddress } from "../utils/textUtils";
 import { AnalyticsAction, sendAnalyticsEvent } from "../lib/googleAnalytics";
 
 export interface Adapter {
-  provider: string;
+  provider: Provider;
   icon: string;
   title: string;
   description: string;
@@ -21,8 +21,8 @@ export interface Adapter {
 export function WalletConnect() {
   const [showDisconnect, setShowDisconnect] = useState(false);
   const [showConnect, setShowConnect] = useState(false);
-  const { connect, walletAddress, disconnect } = useWalletConnect();
   const [qrLink, setQRLink] = useState<null | string>(null);
+  const { connect, walletAddress, disconnect } = useWalletConnect();
 
   const onDisconnect = () => {
     setShowDisconnect(false);
@@ -49,12 +49,10 @@ export function WalletConnect() {
     sendAnalyticsEvent(AnalyticsAction.CONNECT_WALLET_POPUP);
   };
 
-  const onSelect = (provider: string) => {
-    if (provider === Provider.TONHUB) {
-      connect((link: string) => {
-        setQRLink(link);
-      });
-    }
+  const onSelect = (provider: Provider) => {
+    connect(provider, (link: string) => {
+      setQRLink(link);
+    });
   };
 
   useEffect(() => {

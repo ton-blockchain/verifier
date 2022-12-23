@@ -1,99 +1,114 @@
 import BN from "bn.js";
-import { useState } from "react";
 import { Address, Cell } from "ton";
-import {
-  TonhubConnector,
-  TonhubCreatedSession,
-  TonhubSessionAwaited,
-  TonhubWalletConfig,
-} from "ton-x";
+import { TonhubConnector } from "ton-x";
 import create from "zustand";
+import { persist } from "zustand/middleware";
+import { Provider } from "../components/ConnectorPopup";
 const connector = new TonhubConnector({});
 
-const useSessionStore = create<{
-  session: any;
-  setSession: (session: any) => void;
-  disconnect: () => void;
+import {
+  TonConnection,
+  TonhubProvider,
+  TonkeeperProvider,
+  TonWalletProvider,
+} from "@ton-defi.org/ton-connection";
+import { useEffect } from "react";
+
+const tonConnection = new TonConnection();
+
+// TODO use TonConnect getWallets, when it becomes de-facto standard
+async function makeProvider(
+  provider: Provider,
+  onLinkReady: (link: string) => void,
+): Promise<TonWalletProvider> {
+  if (provider === Provider.TONKEEPER) {
+    return new TonkeeperProvider({
+      connectionDetails: {
+        bridgeUrl: "https://bridge.tonapi.io/bridge",
+        universalLink: "https://app.tonkeeper.com/ton-connect",
+      },
+      manifestUrl: "https://tonverifier.live/tonconnect-manifest.json",
+      onSessionLinkReady: onLinkReady,
+    });
+  } else if (provider === Provider.TONHUB) {
+    return new TonhubProvider({
+      onSessionLinkReady: onLinkReady,
+      persistenceProvider: localStorage,
+    });
+  } else {
+    throw new Error("Unsupported provider");
+  }
+}
+
+export const useProviderStore = create<{
+  provider: Provider | null;
+  setProvider: (provider: Provider | null) => void;
+}>()(
+  persist(
+    (set, get) => ({
+      provider: null,
+      setProvider: (provider: Provider | null) => set({ provider }),
+    }),
+    {
+      name: "connectProvider",
+      getStorage: () => localStorage,
+    },
+  ),
+);
+
+const useWalletAddressStore = create<{
+  walletAddress: string | null;
+  setWalletAddress: (address: string | null) => void;
 }>((set) => ({
-  session: JSON.parse(localStorage.getItem("tonhubSession") ?? "null"),
-  setSession: (session: any) => {
-    localStorage.setItem("tonhubSession", JSON.stringify(session));
-    set({ session });
-  },
-  disconnect: () => {
-    localStorage.removeItem("tonhubSession");
-    set({ session: null });
-  },
+  walletAddress: null,
+  setWalletAddress: (address: string | null) => set({ walletAddress: address }),
 }));
 
 export function useWalletConnect() {
-  const { session, setSession, disconnect } = useSessionStore();
+  const { setProvider, provider } = useProviderStore();
+  const { walletAddress, setWalletAddress } = useWalletAddressStore();
+
+  useEffect(() => {
+    if (provider && !walletAddress) {
+      (async () => {
+        const tonWalletProvider = await makeProvider(provider, (l) => {});
+        const wallet = await tonWalletProvider.connect();
+        if (wallet) {
+          setWalletAddress(wallet.address);
+          tonConnection.setProvider(tonWalletProvider);
+        }
+      })();
+    }
+  }, [provider, walletAddress]);
 
   return {
-    connect: async (onLinkReady: (link: string) => void) => {
-      if (session) return;
-
-      let createdSession: TonhubCreatedSession = await connector.createNewSession({
-        name: "TON Contract Verifier",
-        url: "https://ton.org", // TODO
-      });
-
-      // Session ID, Seed and Auth Link
-      const sessionId = createdSession.id;
-      const sessionSeed = createdSession.seed;
-      const sessionLink = createdSession.link;
-
-      onLinkReady(sessionLink);
-
-      const awaitedSession: TonhubSessionAwaited = await connector.awaitSessionReady(
-        sessionId,
-        5 * 60 * 1000,
-      ); // 5 min timeout
-
-      if (awaitedSession.state === "revoked" || awaitedSession.state === "expired") {
-        // Handle revoked or expired awaitedSession
-      } else if (awaitedSession.state === "ready") {
-        // Handle awaitedSession
-        const walletConfig: TonhubWalletConfig = awaitedSession.wallet;
-
-        // You need to persist this values to work with this connection:
-        // * sessionId
-        // * sessionSeed
-        // * walletConfig
-
-        // You can check signed wallet config on backend using TonhubConnector.verifyWalletConfig.
-        // walletConfig is cryptographically signed for specific session and other parameters
-        // you can safely use it as authentication proof without the need to sign something.
-        const correctConfig: boolean = TonhubConnector.verifyWalletConfig(sessionId, walletConfig);
-
-        if (correctConfig) {
-          const toPersit = {
-            ...createdSession,
-            walletConfig,
-          };
-          localStorage.setItem("tonhubSession", JSON.stringify(toPersit));
-          setSession(toPersit);
-        }
-
-        // ...
-      } else {
-        throw new Error("Impossible");
+    connect: async (provider: Provider, onLinkReady: (link: string) => void) => {
+      if (!walletAddress) {
+        setProvider(provider);
+        const tonWalletProvider = await makeProvider(provider, onLinkReady);
+        tonConnection.setProvider(tonWalletProvider);
+        const wallet = await tonWalletProvider.connect();
+        setWalletAddress(wallet.address);
       }
     },
-    // TODO add txn monitoring
-    requestTXN: async (to: string, value: BN, message: Cell) => {
-      if (!session) return;
-
-      return connector.requestTransaction({
-        seed: session.seed,
-        appPublicKey: session.walletConfig.appPublicKey,
-        to: to,
-        value: value.toString(),
-        payload: message.toBoc().toString("base64"),
-        timeout: 5 * 60 * 1000,
-      });
+    requestTXN: async (to: string, value: BN, message: Cell): Promise<"issued" | "rejected"> => {
+      try {
+        await tonConnection.requestTransaction({
+          to: Address.parse(to),
+          value,
+          message,
+        });
+        return "issued";
+      } catch (e) {
+        console.error(e);
+        return "rejected";
+      }
     },
-    walletAddress: session?.walletConfig.address,
-    disconnect,
+    walletAddress: walletAddress,
+    disconnect: () => {
+      tonConnection.setProvider(null);
+      setWalletAddress(null);
+      setProvider(null);
+    },
   };
 }

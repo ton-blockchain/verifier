@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import { Box, Typography } from "@mui/material";
 import { Adapter } from "./WalletConnect";
 import { ConnectorHeader } from "./ConnectorHeader";
+import { Provider } from "./ConnectorPopup";
 
 const ConnectionOption = styled(Box)({
   display: "flex",
@@ -25,7 +26,7 @@ const DisabledOption = styled(Box)({
 interface AdaptersListProps {
   adapters: Adapter[];
   onClose: () => void;
-  select: (provider: string) => void;
+  select: (provider: Provider) => void;
 }
 
 export function AdaptersList({ adapters, select, onClose }: AdaptersListProps) {
