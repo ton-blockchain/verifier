@@ -20,6 +20,7 @@ import { NotificationTitle } from "./components/CompileOutput";
 import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 import { CenteringBox } from "./components/Common.styled";
 import { useAddressHistory } from "./lib/useAddressHistory";
+import { useWalletConnect } from "./lib/useWalletConnect";
 
 const ContentBox = styled(Box)({
   maxWidth: 1160,
@@ -57,6 +58,11 @@ function App() {
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const showSkeleton = !error && isLoading && contractAddress;
+  const { restoreConnection } = useWalletConnect();
+
+  useEffect(() => {
+    restoreConnection();
+  }, []);
 
   useAddressHistory();
   useResetState();
