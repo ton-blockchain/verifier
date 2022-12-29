@@ -1,7 +1,7 @@
 import { ClickAwayListener, Typography } from "@mui/material";
 import { useWalletConnect } from "../lib/useWalletConnect";
 import { ArrowDropUp } from "@mui/icons-material";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AppButton } from "./AppButton";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
@@ -9,6 +9,7 @@ import { ConnectorPopup, Provider } from "./ConnectorPopup";
 import { DisconnectButton, WalletButtonContent, WalletWrapper } from "./WalletConnect.styled";
 import { makeElipsisAddress } from "../utils/textUtils";
 import { AnalyticsAction, sendAnalyticsEvent } from "../lib/googleAnalytics";
+import { isMobile } from "react-device-detect";
 
 export interface Adapter {
   provider: Provider;
@@ -24,9 +25,9 @@ export function WalletConnect() {
   const [qrLink, setQRLink] = useState<null | string>(null);
   const { connect, walletAddress, disconnect } = useWalletConnect();
 
-  const onDisconnect = () => {
+  const onDisconnect = async () => {
     setShowDisconnect(false);
-    disconnect();
+    await disconnect();
   };
 
   const onClickAway = () => {
@@ -51,7 +52,12 @@ export function WalletConnect() {
 
   const onSelect = (provider: Provider) => {
     connect(provider, (link: string) => {
-      setQRLink(link);
+      if (isMobile) {
+        // @ts-ignore
+        window.location = link;
+      } else {
+        setQRLink(link);
+      }
     });
   };
 

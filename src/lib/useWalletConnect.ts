@@ -1,10 +1,8 @@
 import BN from "bn.js";
 import { Address, Cell } from "ton";
-import { TonhubConnector } from "ton-x";
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import { Provider } from "../components/ConnectorPopup";
-const connector = new TonhubConnector({});
 
 import {
   TonConnection,
@@ -23,10 +21,6 @@ async function makeProvider(
 ): Promise<TonWalletProvider> {
   if (provider === Provider.TONKEEPER) {
     return new TonkeeperProvider({
-      connectionDetails: {
-        bridgeUrl: "https://bridge.tonapi.io/bridge",
-        universalLink: "https://app.tonkeeper.com/ton-connect",
-      },
       manifestUrl: "https://tonverifier.live/tonconnect-manifest.json",
       onSessionLinkReady: onLinkReady,
     });
@@ -68,28 +62,24 @@ export function useWalletConnect() {
   const { setProvider, provider } = useProviderStore();
   const { walletAddress, setWalletAddress } = useWalletAddressStore();
 
-  useEffect(() => {
-    if (provider && !walletAddress) {
-      (async () => {
-        const tonWalletProvider = await makeProvider(provider, (l) => {});
-        const wallet = await tonWalletProvider.connect();
-        if (wallet) {
-          setWalletAddress(wallet.address);
-          tonConnection.setProvider(tonWalletProvider);
-        }
-      })();
+  async function connect(provider: Provider, onLinkReady: (link: string) => void) {
+    if (!walletAddress) {
+      setProvider(provider);
+      const tonWalletProvider = await makeProvider(provider, onLinkReady);
+      tonConnection.setProvider(tonWalletProvider);
+      const wallet = await tonWalletProvider.connect();
+      setWalletAddress(wallet.address);
     }
-  }, [provider, walletAddress]);
+  }
 
   return {
-    connect: async (provider: Provider, onLinkReady: (link: string) => void) => {
-      if (!walletAddress) {
-        setProvider(provider);
-        const tonWalletProvider = await makeProvider(provider, onLinkReady);
-        tonConnection.setProvider(tonWalletProvider);
-        const wallet = await tonWalletProvider.connect();
-        setWalletAddress(wallet.address);
+    restoreConnection: async () => {
+      if (provider) {
+        connect(provider, () => {});
       }
+    },
+    connect: async (provider: Provider, onLinkReady: (link: string) => void) => {
+      connect(provider, onLinkReady);
     },
     requestTXN: async (to: string, value: BN, message: Cell): Promise<"issued" | "rejected"> => {
       try {
@@ -105,10 +95,10 @@ export function useWalletConnect() {
       }
     },
     walletAddress: walletAddress,
-    disconnect: () => {
-      tonConnection.setProvider(null);
+    disconnect: async () => {
       setWalletAddress(null);
       setProvider(null);
+      await tonConnection.disconnect();
     },
   };
 }
