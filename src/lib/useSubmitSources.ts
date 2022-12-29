@@ -7,7 +7,11 @@ import { useContractAddress } from "./useContractAddress";
 import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
 import { useWalletConnect } from "./useWalletConnect";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
-import { randomFromArray, useSignatureStore } from "./useCollectSignatures";
+import create from "zustand";
+
+export function randomFromArray<T>(arr: T[]) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
 
 export type VerifyResult = {
   compileResult: CompileResult;
@@ -32,12 +36,23 @@ function jsonToBlob(json: Record<string, any>): Blob {
 
 export const backends: string[] = import.meta.env.VITE_BACKEND_URL!.split(",");
 
+const useSubmitSourcesStatusStore = create<{
+  status: string | null;
+  setStatus: (status: string) => void;
+  clear: () => void;
+}>((set) => ({
+  status: null,
+  setStatus: (status) => set({ status }),
+  clear: () => set({ status: null }),
+}));
+
 export function useSubmitSources() {
   const { contractAddress } = useContractAddress();
   const { data: contractInfo } = useLoadContractInfo();
   const { hasFiles, files } = useFileStore();
   const { compiler, compilerSettings } = useCompilerSettingsStore();
   const { walletAddress } = useWalletConnect();
+  const { clear, setStatus, status } = useSubmitSourcesStatusStore();
 
   const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;
@@ -46,6 +61,13 @@ export function useSubmitSources() {
     if (!walletAddress) {
       throw new Error("Wallet is not connected");
     }
+
+    clear();
+
+    const totalSignatures = 2;
+    let remainingSignatures = totalSignatures;
+
+    let msgCell: Buffer | undefined;
 
     sendAnalyticsEvent(AnalyticsAction.COMPILE_SUBMIT);
 
@@ -123,22 +145,25 @@ export function useSubmitSources() {
     let queryId;
 
     if (result.msgCell) {
+      remainingSignatures--;
       const signatures = new Set([backend]);
 
-      let remainingSignatures = 1; // TODO
-      let msgCell = result.msgCell!;
-
-      console.log(msgCell);
+      msgCell = result.msgCell!;
 
       while (remainingSignatures) {
-        const nextBackend = randomFromArray(backends.filter((b) => signatures.has(b)));
+        setStatus(
+          `Compile successful. Collected ${
+            totalSignatures - remainingSignatures
+          }/${totalSignatures}`,
+        );
+        const nextBackend = randomFromArray(backends.filter((b) => !signatures.has(b)));
         if (!nextBackend) {
           throw new Error("Not enough backends to collect signatures");
         }
 
         console.log("Backends used: " + [...signatures], "; next backend", nextBackend);
 
-        const response = await fetch(`${nextBackend}/sign`, {
+        const response: Response = await fetch(`${nextBackend}/sign`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -148,21 +173,31 @@ export function useSubmitSources() {
           }),
         });
 
-        console.log(response);
+        const resp = await response.json();
 
-        throw new Error("SHAKSHUKA");
-
+        msgCell = resp.msgCell;
         remainingSignatures--;
       }
+      setStatus(
+        `Compile successful. Collected ${totalSignatures - remainingSignatures}/${totalSignatures}`,
+      );
 
       const s = Cell.fromBoc(Buffer.from(result.msgCell))[0].beginParse();
       queryId = s.readUint(64);
     }
 
-    return { result, hints, queryId };
+    return {
+      result: {
+        ...result,
+        msgCell,
+      },
+      hints,
+      queryId,
+      status,
+    };
   });
 
-  return mutation;
+  return { ...mutation, compileStatus: status };
 }
 
 export enum Hints {
