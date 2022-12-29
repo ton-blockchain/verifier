@@ -7,6 +7,7 @@ import { useContractAddress } from "./useContractAddress";
 import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
 import { useWalletConnect } from "./useWalletConnect";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
+import { randomFromArray, useSignatureStore } from "./useCollectSignatures";
 
 export type VerifyResult = {
   compileResult: CompileResult;
@@ -28,6 +29,8 @@ function jsonToBlob(json: Record<string, any>): Blob {
     type: "application/json",
   });
 }
+
+export const backends: string[] = import.meta.env.VITE_BACKEND_URL!.split(",");
 
 export function useSubmitSources() {
   const { contractAddress } = useContractAddress();
@@ -70,7 +73,9 @@ export function useSubmitSources() {
       }),
     );
 
-    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/source`, {
+    const backend = backends[Math.floor(Math.random() * backends.length)];
+
+    const response = await fetch(`${backend}/source`, {
       method: "POST",
       body: formData,
     });
@@ -118,6 +123,38 @@ export function useSubmitSources() {
     let queryId;
 
     if (result.msgCell) {
+      const signatures = new Set([backend]);
+
+      let remainingSignatures = 1; // TODO
+      let msgCell = result.msgCell!;
+
+      console.log(msgCell);
+
+      while (remainingSignatures) {
+        const nextBackend = randomFromArray(backends.filter((b) => signatures.has(b)));
+        if (!nextBackend) {
+          throw new Error("Not enough backends to collect signatures");
+        }
+
+        console.log("Backends used: " + [...signatures], "; next backend", nextBackend);
+
+        const response = await fetch(`${nextBackend}/sign`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            messageCell: msgCell,
+          }),
+        });
+
+        console.log(response);
+
+        throw new Error("SHAKSHUKA");
+
+        remainingSignatures--;
+      }
+
       const s = Cell.fromBoc(Buffer.from(result.msgCell))[0].beginParse();
       queryId = s.readUint(64);
     }
