@@ -51,6 +51,7 @@ export function WalletConnect() {
   };
 
   const onSelect = (provider: Provider) => {
+    sendAnalyticsEvent(AnalyticsAction.SELECT_WALLET, provider);
     connect(provider, (link: string) => {
       if (isMobile) {
         // @ts-ignore
