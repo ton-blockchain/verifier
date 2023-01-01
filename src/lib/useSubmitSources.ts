@@ -104,7 +104,7 @@ export function useSubmitSources() {
 
     if (response.status !== 200) {
       sendAnalyticsEvent(AnalyticsAction.COMPILE_SERVER_ERROR);
-      throw new Error(await response.text());
+      throw new Error(`Error compiling on ${backend} ${await response.text()}`);
     }
 
     const result = (await response.json()) as VerifyResult;
@@ -173,11 +173,20 @@ export function useSubmitSources() {
           }),
         });
 
-        const resp = await response.json();
+        if (response.status !== 200) {
+          sendAnalyticsEvent(AnalyticsAction.SIGN_SERVER_ERROR);
+          throw new Error(
+            `Error collecting signatures from ${nextBackend} ${await response.text()}`,
+          );
+        }
 
-        msgCell = resp.msgCell;
+        sendAnalyticsEvent(AnalyticsAction.SIGN_SERVER_SUCCESS);
+        const json = await response.json();
+
+        msgCell = json.msgCell;
         remainingSignatures--;
       }
+
       setStatus(
         `Compile successful. Collected ${totalSignatures - remainingSignatures}/${totalSignatures}`,
       );

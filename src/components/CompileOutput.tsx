@@ -137,9 +137,9 @@ export function CompileOutput() {
           }
           notificationBody={
             <Box sx={{ overflow: "auto", maxHeight: 300 }}>
-              <pre>
+              <div>
                 <code>{error.toString()}</code>
-              </pre>
+              </div>
             </Box>
           }
         />
