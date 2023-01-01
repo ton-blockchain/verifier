@@ -24,8 +24,6 @@ export function AddSourcesBlock() {
   const { step, proceedToPublish, toggleSection, currentSection } = usePublishStore();
   const { mutate, data, error, isLoading, compileStatus } = useSubmitSources();
 
-  console.log("Shahar2", compileStatus);
-
   const canPublish = !!data?.result?.msgCell;
 
   const onSectionExpand = () => toggleSection(SECTIONS.SOURCES);
