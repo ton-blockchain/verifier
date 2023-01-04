@@ -72,7 +72,7 @@ function UpdateVerifier({ verifier }: { verifier: VerifierConfig }) {
     <>
       <Button
         style={{ marginTop: 8 }}
-        text={"sgoko"}
+        text={"Update config"}
         onClick={() => {
           setOpen(true);
         }}
