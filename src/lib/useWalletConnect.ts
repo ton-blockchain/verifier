@@ -5,12 +5,13 @@ import { persist } from "zustand/middleware";
 import { Provider } from "../components/ConnectorPopup";
 
 import {
+  MnemonicProvider,
   TonConnection,
   TonhubProvider,
   TonkeeperProvider,
   TonWalletProvider,
 } from "@ton-defi.org/ton-connection";
-import { useEffect } from "react";
+import { getClient } from "./getClient";
 
 const tonConnection = new TonConnection();
 
@@ -29,6 +30,10 @@ async function makeProvider(
       onSessionLinkReady: onLinkReady,
       persistenceProvider: localStorage,
     });
+  } else if (provider == Provider.MNEMONIC) {
+    const seed = window.prompt("Seed")!;
+    const client = await getClient();
+    return new MnemonicProvider(seed.split(" "), client, "v3r2");
   } else {
     throw new Error("Unsupported provider");
   }
