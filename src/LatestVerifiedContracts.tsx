@@ -3,14 +3,17 @@ import { useLoadLatestVerified } from "./lib/useLoadLatestVerified";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
 
-const Contract = styled(Box)({
+const Contract = styled(Box)(({ theme }) => ({
   background: "white",
   padding: "16px 20px",
   borderRadius: 10,
   boxShadow: "rgb(114 138 150 / 8%) 0px 2px 16px",
   border: "0.5px solid rgba(114, 138, 150, 0.24)",
   cursor: "pointer",
-});
+  [theme.breakpoints.down("sm")]: {
+    width: 280,
+  },
+}));
 
 export function LatestVerifiedContracts() {
   const { data: latestVerifiedContracts, isLoading } = useLoadLatestVerified();
@@ -37,8 +40,10 @@ export function LatestVerifiedContracts() {
           margin: "0 auto",
           justifyContent: "left",
           overflow: "auto",
+
           maxHeight: 600,
           marginTop: 3,
+          "-webkit-text-size-adjust": "100%",
         }}>
         {isLoading &&
           skeletons.current.map((width: number) => (
@@ -59,7 +64,7 @@ export function LatestVerifiedContracts() {
               cursor: "pointer",
             }}>
             <Typography
-              style={{
+              sx={{
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
