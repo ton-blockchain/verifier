@@ -1,6 +1,7 @@
 import { Box, Skeleton, styled, Typography } from "@mui/material";
 import { useLoadLatestVerified } from "./lib/useLoadLatestVerified";
 import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
 
 const Contract = styled(Box)({
   background: "white",
@@ -14,6 +15,7 @@ const Contract = styled(Box)({
 export function LatestVerifiedContracts() {
   const { data: latestVerifiedContracts, isLoading } = useLoadLatestVerified();
   const navigate = useNavigate();
+  const skeletons = useRef(new Array(30).fill(null).map((_) => Math.random() * 100));
 
   return (
     <div
@@ -39,15 +41,13 @@ export function LatestVerifiedContracts() {
           marginTop: 3,
         }}>
         {isLoading &&
-          new Array(30)
-            .fill(null)
-            .map((_) => (
-              <Skeleton
-                sx={{ borderRadius: 4 }}
-                variant="rectangular"
-                width={300 + Math.random() * 100}
-                height={50}></Skeleton>
-            ))}
+          skeletons.current.map((width: number) => (
+            <Skeleton
+              sx={{ borderRadius: 4 }}
+              variant="rectangular"
+              width={300 + width}
+              height={50}></Skeleton>
+          ))}
         {latestVerifiedContracts?.map((contract) => (
           <Contract
             style={{
