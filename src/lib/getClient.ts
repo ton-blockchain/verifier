@@ -1,5 +1,5 @@
 import { TonClient } from "ton";
-import { getHttpEndpoint } from "@orbs-network/ton-gateway";
+import { getHttpEndpoint } from "@orbs-network/ton-access";
 
 const endpointP = getHttpEndpoint();
 
