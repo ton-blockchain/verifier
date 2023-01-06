@@ -10,7 +10,11 @@ export function useLoadLatestVerified() {
       method: "GET",
     });
 
-    const latestVerified = (await response.json()) as string[];
+    const latestVerified = (await response.json()) as {
+      address: string;
+      mainFile: string;
+      compiler: string;
+    }[];
 
     return latestVerified;
   });
