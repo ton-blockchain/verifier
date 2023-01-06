@@ -21,6 +21,8 @@ import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 import { CenteringBox } from "./components/Common.styled";
 import { useAddressHistory } from "./lib/useAddressHistory";
 import { useWalletConnect } from "./lib/useWalletConnect";
+import { useLoadLatestVerified } from "./lib/useLoadLatestVerified";
+import { LatestVerifiedContracts } from "./LatestVerifiedContracts";
 
 const ContentBox = styled(Box)({
   maxWidth: 1160,
@@ -83,6 +85,7 @@ function App() {
       />
       <Box ref={scrollToRef} />
       <TopBar />
+      {contractAddress === null && isAddressEmpty && <LatestVerifiedContracts />}
       {contractAddress === null && !isAddressEmpty && (
         <Box m={4}>
           <AppNotification
@@ -171,7 +174,7 @@ function App() {
         {proofData && <Footer />}
       </ContentBox>
       {!proofData && (
-        <CenteringWrapper sx={{ position: !showSkeleton ? "fixed" : "", bottom: 0, width: "100%" }}>
+        <CenteringWrapper sx={{ bottom: 0, width: "100%" }}>
           <Footer />
         </CenteringWrapper>
       )}
