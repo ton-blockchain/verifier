@@ -1,4 +1,4 @@
-import { Box, Skeleton, styled, Typography } from "@mui/material";
+import { Box, Chip, Skeleton, styled, Typography } from "@mui/material";
 import { useLoadLatestVerified } from "./lib/useLoadLatestVerified";
 import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
@@ -48,10 +48,10 @@ export function LatestVerifiedContracts() {
         {isLoading &&
           skeletons.current.map((width: number) => (
             <Skeleton
-              sx={{ borderRadius: 4 }}
+              sx={{ borderRadius: 2 }}
               variant="rectangular"
-              width={300 + width}
-              height={50}></Skeleton>
+              width={400 + width}
+              height={70}></Skeleton>
           ))}
         {latestVerifiedContracts?.map((contract) => (
           <Contract
@@ -62,6 +62,9 @@ export function LatestVerifiedContracts() {
               boxShadow: "rgb(114 138 150 / 8%) 0px 2px 16px",
               border: "0.5px solid rgba(114, 138, 150, 0.24)",
               cursor: "pointer",
+            }}
+            onClick={(e) => {
+              navigate(`/${contract.address}`);
             }}>
             <Typography
               sx={{
@@ -70,12 +73,29 @@ export function LatestVerifiedContracts() {
                 whiteSpace: "nowrap",
                 fontSize: 16,
                 color: "#728A96",
-              }}
-              onClick={(e) => {
-                navigate(`/${contract}`);
               }}>
-              {contract}
+              {contract.address}
             </Typography>
+            <div style={{ display: "flex", alignItems: "center", marginTop: 6.5 }}>
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  color: "#728A9699",
+                }}>
+                {contract.mainFile}
+              </Typography>
+              <Typography
+                sx={{
+                  marginLeft: "auto",
+                  fontSize: 14,
+                  background: "#F0F0F099",
+                  color: "#728A9699",
+                  padding: "2px 12px",
+                  borderRadius: 4,
+                }}>
+                {contract.compiler}
+              </Typography>
+            </div>
           </Contract>
         ))}
       </Box>
