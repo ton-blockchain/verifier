@@ -27,7 +27,7 @@ export function CompilerBlock() {
     });
 
     if (data.compiler === "func") {
-      const funcVersion = (compilerSettings as FuncCompilerSettings).funcVersion;
+      const funcVersion = (compilerSettings as FuncCompilerSettings)?.funcVersion;
       dataRows.push({
         title: "Version",
         value: funcVersion,
@@ -35,7 +35,7 @@ export function CompilerBlock() {
         customLink: funcVersion && funcVersionToLink(funcVersion),
       });
     } else if (data.compiler === "fift") {
-      const fiftVersion = (compilerSettings as FiftCliCompileSettings).fiftVersion;
+      const fiftVersion = (compilerSettings as FiftCliCompileSettings)?.fiftVersion;
       dataRows.push({
         title: "Version",
         value: fiftVersion,
@@ -43,7 +43,7 @@ export function CompilerBlock() {
         customLink: fiftVersionToLink(fiftVersion),
       });
     } else if (data.compiler === "tact") {
-      const tactVersion = (compilerSettings as TactCliCompileSettings).tactVersion;
+      const tactVersion = (compilerSettings as TactCliCompileSettings)?.tactVersion;
       dataRows.push({
         title: "Version",
         value: tactVersion,
