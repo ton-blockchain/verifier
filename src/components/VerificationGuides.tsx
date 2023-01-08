@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, Link, List, ListItem, Typography } from "@mui/material";
 import { CommandEllipsisLabel, CommandLabel, PopupLink } from "./VerificationProofPopup.styled";
 import { downloadJson } from "../utils/jsonUtils";
@@ -10,7 +10,6 @@ import {
   isWebAssemblySupported,
   verifyCompilerVersion,
 } from "../utils/generalUtils";
-import { AppNotification, NotificationType } from "./AppNotification";
 import { CenteringBox } from "./Common.styled";
 import { NotificationTitle } from "./CompileOutput";
 
@@ -73,64 +72,48 @@ export function ManualVerificationGuide() {
   );
 }
 
+const isVerificationEnabled = (data: any) =>
+  !(!isWebAssemblySupported() || !verifyCompilerVersion() || data.compiler !== "func");
+
 export function InBrowserVerificationGuide() {
-  const [isVerificationEnabled, setIsVerificationEnabled] = useState(true);
   const { data: contractProofData } = useLoadContractProof();
 
-  useEffect(() => {
-    !isWebAssemblySupported() && setIsVerificationEnabled(false);
-    !isOnLocalHost() && setIsVerificationEnabled(false);
-    !verifyCompilerVersion() && setIsVerificationEnabled(false);
-    //@ts-ignore
-    contractProofData.compiler !== "func" && setIsVerificationEnabled(false);
-  }, []);
-
   return (
-    <Box sx={{ height: "117px", overflowY: "scroll" }} p={2}>
-      <Box sx={{ height: "100%" }}>
-        <Typography sx={{ fontSize: 14 }}>
-          You can verify this contract by compiling the contract with a wasm binding of the{" "}
-          <Link
-            sx={{ textDecoration: "none" }}
-            href={"https://github.com/ton-community/func-js"}
-            target="_blank">
-            compiler
-          </Link>
-          {window.location.hostname === "localhost" && (
-            <Box>
-              <AppNotification
-                type={NotificationType.INFO}
-                title={<></>}
-                notificationBody={
-                  <CenteringBox sx={{ overflow: "auto", maxHeight: 300 }}>
-                    <NotificationTitle sx={{ margin: 0 }}>
-                      For maximum safety, fork this{" "}
-                      <Link
-                        sx={{ textDecoration: "none" }}
-                        href="https://github.com/ton-community/ton-contract-verifier"
-                        target="_blank">
-                        project{" "}
-                      </Link>
-                      and run it locally
-                    </NotificationTitle>
-                  </CenteringBox>
-                }
-              />
-            </Box>
-          )}
-        </Typography>
-        <AppButton
-          disabled={!isVerificationEnabled}
-          fontSize={14}
-          fontWeight={800}
-          textColor="#fff"
-          height={44}
-          width={144}
-          background="#1976d2"
-          hoverBackground="#156cc2">
-          Verify in Browser
-        </AppButton>
-      </Box>
+    <Box sx={{ height: "100%" }} p={2}>
+      <Typography sx={{ fontSize: 14 }}>
+        You can verify this contract by compiling the contract with a wasm binding of the{" "}
+        <Link
+          sx={{ textDecoration: "none" }}
+          href={"https://github.com/ton-community/func-js"}
+          target="_blank">
+          compiler
+        </Link>
+        {!isOnLocalHost() && (
+          <CenteringBox mt={1} sx={{ overflow: "auto", maxHeight: 300 }}>
+            <NotificationTitle sx={{ margin: 0 }}>
+              For maximum safety, fork this{" "}
+              <Link
+                sx={{ textDecoration: "none" }}
+                href="https://github.com/ton-community/ton-contract-verifier"
+                target="_blank">
+                project{" "}
+              </Link>
+              and run it locally
+            </NotificationTitle>
+          </CenteringBox>
+        )}
+      </Typography>
+      <AppButton
+        disabled={!isVerificationEnabled(contractProofData)}
+        fontSize={14}
+        fontWeight={800}
+        textColor="#fff"
+        height={44}
+        width={144}
+        background="#1976d2"
+        hoverBackground="#156cc2">
+        Verify in Browser
+      </AppButton>
     </Box>
   );
 }
