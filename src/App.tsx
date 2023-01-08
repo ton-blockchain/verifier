@@ -21,8 +21,7 @@ import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 import { CenteringBox } from "./components/Common.styled";
 import { useAddressHistory } from "./lib/useAddressHistory";
 import { useWalletConnect } from "./lib/useWalletConnect";
-import { useLoadLatestVerified } from "./lib/useLoadLatestVerified";
-import { LatestVerifiedContracts } from "./LatestVerifiedContracts";
+import { LatestVerifiedContracts } from "./components/LatestVerifiedContracts";
 
 const ContentBox = styled(Box)({
   maxWidth: 1160,
