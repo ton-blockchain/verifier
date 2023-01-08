@@ -5,13 +5,10 @@ import { downloadJson } from "../utils/jsonUtils";
 import { githubLink } from "../const";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { AppButton } from "./AppButton";
-import {
-  isOnLocalHost,
-  isWebAssemblySupported,
-  verifyCompilerVersion,
-} from "../utils/generalUtils";
+import { isOnLocalHost } from "../utils/generalUtils";
 import { CenteringBox } from "./Common.styled";
 import { NotificationTitle } from "./CompileOutput";
+import { useInBrowserCompilation } from "../lib/useInBrowserCompilation";
 
 export function ManualVerificationGuide() {
   const { data: contractProofData } = useLoadContractProof();
@@ -72,11 +69,8 @@ export function ManualVerificationGuide() {
   );
 }
 
-const isVerificationEnabled = (data: any) =>
-  !(!isWebAssemblySupported() || !verifyCompilerVersion() || data.compiler !== "func");
-
 export function InBrowserVerificationGuide() {
-  const { data: contractProofData } = useLoadContractProof();
+  const { verifyContract, isVerificationEnabled } = useInBrowserCompilation();
 
   return (
     <Box sx={{ height: "100%" }} p={2}>
@@ -104,7 +98,8 @@ export function InBrowserVerificationGuide() {
         )}
       </Typography>
       <AppButton
-        disabled={!isVerificationEnabled(contractProofData)}
+        onClick={() => verifyContract()}
+        disabled={!isVerificationEnabled()}
         fontSize={14}
         fontWeight={800}
         textColor="#fff"
