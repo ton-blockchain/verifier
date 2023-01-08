@@ -61,7 +61,7 @@ export function Footer() {
       <Separator />
       <CredentialsWrapper>
         <FooterTextBoxLeft>
-          <Typography variant="body2">© 2022</Typography>
+          <Typography variant="body2">© 2023</Typography>
         </FooterTextBoxLeft>
         <ContributedWrapper>
           <CenteringBox sx={{ gap: 0.1 }}>
