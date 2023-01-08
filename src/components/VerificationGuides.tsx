@@ -81,6 +81,7 @@ export function InBrowserVerificationGuide() {
     !isWebAssemblySupported() && setIsVerificationEnabled(false);
     !isOnLocalHost() && setIsVerificationEnabled(false);
     !verifyCompilerVersion() && setIsVerificationEnabled(false);
+    //@ts-ignore
     contractProofData.compiler !== "func" && setIsVerificationEnabled(false);
   }, []);
 
