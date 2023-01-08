@@ -13,6 +13,7 @@ export enum Provider {
   CHROME = "CHROME",
   TONHUB = "TONHUB",
   TONKEEPER = "TONKEEPER",
+  MNEMONIC = "MNEMONIC",
 }
 
 const StyledContainer = styled(Box)({
@@ -45,6 +46,15 @@ const options: Adapter[] = [
     disabled: true,
   },
 ];
+
+if (import.meta.env.DEV) {
+  options.push({
+    description: "Mnemonic-based",
+    icon: chromeExtension,
+    title: "Mnemonic",
+    provider: Provider.MNEMONIC,
+  });
+}
 
 interface ConnectorPopupProps {
   showConnect: boolean;

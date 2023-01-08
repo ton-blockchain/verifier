@@ -12,6 +12,7 @@ import { useWalletConnect } from "../lib/useWalletConnect";
 import { WalletConnect } from "./WalletConnect";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { CircularProgress, Fade } from "@mui/material";
+import { AppNotification, NotificationType } from "./AppNotification";
 
 const ContentBox = styled(Box)({
   padding: "15px 24px",
@@ -21,7 +22,7 @@ export function AddSourcesBlock() {
   const { walletAddress } = useWalletConnect();
   const { hasFiles } = useFileStore();
   const { step, proceedToPublish, toggleSection, currentSection } = usePublishStore();
-  const { mutate, data, error, isLoading } = useSubmitSources();
+  const { mutate, data, error, isLoading, compileStatus } = useSubmitSources();
 
   const canPublish = !!data?.result?.msgCell;
 

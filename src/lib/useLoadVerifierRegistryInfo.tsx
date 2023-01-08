@@ -9,6 +9,16 @@ function num2ip(num: BN) {
   return [d[0].toString(), d[1].toString(), d[2].toString(), d[3].toString()].join(".");
 }
 
+export type VerifierConfig = {
+  admin: string;
+  quorum: string;
+  pubKeyEndpoints: {
+    [k: string]: string;
+  };
+  name: string;
+  url: string;
+};
+
 export function useLoadVerifierRegistryInfo() {
   const address = Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY);
   return useQuery(["verifierRegistry", address], async () => {
@@ -32,6 +42,6 @@ export function useLoadVerifierRegistryInfo() {
       tc,
     );
 
-    return Array.from(verifierConfig.values());
+    return Array.from(verifierConfig.values()) as VerifierConfig[];
   });
 }
