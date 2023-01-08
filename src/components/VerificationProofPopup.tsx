@@ -32,9 +32,9 @@ export function VerificationProofPopup({ onClose }: VerificationProofPopupProps)
             </TitleText>
           </CenteringBox>
           <VerificationProofTable />
-          {/*<CenteringBox mt={3}>*/}
-          {/*  <VerificationProof />*/}
-          {/*</CenteringBox>*/}
+          <CenteringBox mt={3}>
+            <VerificationProof />
+          </CenteringBox>
         </Box>
       </ClickAwayListener>
     </AppPopup>

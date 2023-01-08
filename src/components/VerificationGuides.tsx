@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Link, List, ListItem, Typography } from "@mui/material";
 import { CommandEllipsisLabel, CommandLabel, PopupLink } from "./VerificationProofPopup.styled";
 import { downloadJson } from "../utils/jsonUtils";
 import { githubLink } from "../const";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { AppButton } from "./AppButton";
+import { isOnLocalHost, isWebAssemblySupported } from "../utils/generalUtils";
+import { AppNotification, NotificationType } from "./AppNotification";
+import { CenteringBox } from "./Common.styled";
+import { NotificationTitle } from "./CompileOutput";
 
 export function ManualVerificationGuide() {
   const { data: contractProofData } = useLoadContractProof();
@@ -66,12 +70,17 @@ export function ManualVerificationGuide() {
 }
 
 export function InBrowserVerificationGuide() {
+  const [isVerificationEnabled, setIsVerificationEnabled] = useState(true);
+  const { data: contractProofData } = useLoadContractProof();
+  useEffect(() => {
+    !isWebAssemblySupported() && setIsVerificationEnabled(false);
+    !isOnLocalHost() && setIsVerificationEnabled(false);
+    contractProofData.compiler !== "func" && setIsVerificationEnabled(false);
+  }, []);
+
   return (
     <Box sx={{ height: "117px" }} p={2}>
-      <Typography
-        sx={{
-          fontSize: 14,
-        }}>
+      <Typography sx={{ fontSize: 14 }}>
         You can verify this contract by compiling the contract with a wasm binding of the{" "}
         <Link
           sx={{ textDecoration: "none" }}
@@ -79,8 +88,31 @@ export function InBrowserVerificationGuide() {
           target="_blank">
           compiler
         </Link>
+        {window.location.hostname === "localhost" && (
+          <Box>
+            <AppNotification
+              type={NotificationType.INFO}
+              title={<></>}
+              notificationBody={
+                <CenteringBox sx={{ overflow: "auto", maxHeight: 300 }}>
+                  <NotificationTitle sx={{ margin: 0 }}>
+                    For maximum safety, fork this{" "}
+                    <Link
+                      sx={{ textDecoration: "none" }}
+                      href="https://github.com/ton-community/ton-contract-verifier"
+                      target="_blank">
+                      project{" "}
+                    </Link>
+                    and run it locally
+                  </NotificationTitle>
+                </CenteringBox>
+              }
+            />
+          </Box>
+        )}
       </Typography>
       <AppButton
+        disabled={!isVerificationEnabled}
         fontSize={14}
         fontWeight={800}
         textColor="#fff"
