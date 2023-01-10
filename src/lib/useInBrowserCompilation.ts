@@ -70,8 +70,8 @@ export function useInBrowserCompilation() {
     !(!isWebAssemblySupported() || !verifyCompilerVersion() || data?.compiler !== "func");
 
   const verifyCompilerVersion = () => {
-    //@ts-ignore
     return !!compilerSupportedVersions.find(
+      //@ts-ignore
       (v) => v === data?.compilerSettings?.funcVersion.slice(2, 3),
     );
   };
