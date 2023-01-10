@@ -69,8 +69,10 @@ export function useInBrowserCompilation() {
   const isVerificationEnabled = () =>
     !(!isWebAssemblySupported() || !verifyCompilerVersion() || data?.compiler !== "func");
 
-  const verifyCompilerVersion = () =>
+  const verifyCompilerVersion = () => {
+    //@ts-ignore
     compilerSupportedVersions.find((v) => v === data?.compilerSettings?.funcVersion.slice(2, 3));
+  };
 
   return { verifyContract, isVerificationEnabled, loading, error, hash };
 }
