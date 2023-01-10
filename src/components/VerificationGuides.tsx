@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Link, List, ListItem, Typography } from "@mui/material";
+import { Box, CircularProgress, Link, List, ListItem, Tooltip, Typography } from "@mui/material";
 import { CommandEllipsisLabel, CommandLabel, PopupLink } from "./VerificationProofPopup.styled";
 import { downloadJson } from "../utils/jsonUtils";
 import { githubLink } from "../const";
@@ -16,7 +16,7 @@ import {
   OutputTitle,
   SuccessTitle,
 } from "./CompileOutput";
-import { useInBrowserCompilation } from "../lib/useInBrowserCompilation";
+import { useInBrowserCompilation, VerificationResults } from "../lib/useInBrowserCompilation";
 import { AppNotification, NotificationType } from "./AppNotification";
 import like from "../assets/like.svg";
 import puzzle from "../assets/reorder-hint.svg";
@@ -88,13 +88,14 @@ export function InBrowserVerificationGuide() {
   return (
     <Box p={2}>
       <Typography sx={{ fontSize: 14 }}>
-        You can verify this contract by compiling the contract with a wasm binding of the{" "}
+        Verify this contract by compiling the contract with a wasm binding of the{" "}
         <Link
           sx={{ textDecoration: "none" }}
           href={"https://github.com/ton-community/func-js"}
           target="_blank">
           compiler
-        </Link>
+        </Link>{" "}
+        using your browser
         {!isOnLocalHost() && (
           <CenteringBox mt={1} sx={{ overflow: "auto", maxHeight: 300 }}>
             <NotificationTitle sx={{ margin: 0 }}>
@@ -110,20 +111,52 @@ export function InBrowserVerificationGuide() {
           </CenteringBox>
         )}
       </Typography>
-      <AppButton
-        onClick={() => verifyContract()}
-        disabled={!isVerificationEnabled() || loading || !!hash}
-        fontSize={14}
-        fontWeight={800}
-        textColor="#fff"
-        height={44}
-        width={144}
-        background="#1976d2"
-        hoverBackground="#156cc2">
-        Verify in Browser
-      </AppButton>
+      {isVerificationEnabled() !== VerificationResults.VALID ? (
+        <Tooltip
+          arrow
+          title={<Typography sx={{ fontSize: 13 }}>{isVerificationEnabled()}</Typography>}
+          placement="top">
+          <Box sx={{ width: 144, margin: "auto" }}>
+            <AppButton
+              onClick={() => verifyContract()}
+              disabled={isVerificationEnabled() !== VerificationResults.VALID || loading || !!hash}
+              fontSize={14}
+              fontWeight={800}
+              textColor="#fff"
+              height={44}
+              width={144}
+              background="#1976d2"
+              hoverBackground="#156cc2">
+              Verify
+            </AppButton>
+          </Box>
+        </Tooltip>
+      ) : (
+        <AppButton
+          onClick={() => verifyContract()}
+          disabled={isVerificationEnabled() !== VerificationResults.VALID || loading || !!hash}
+          fontSize={14}
+          fontWeight={800}
+          textColor="#fff"
+          height={44}
+          width={144}
+          background="#1976d2"
+          hoverBackground="#156cc2">
+          {loading && (
+            <CircularProgress
+              sx={{
+                color: "#fff",
+                height: "20px !important",
+                width: "20px !important",
+              }}
+            />
+          )}
+          Verify
+        </AppButton>
+      )}
       {error && (
         <AppNotification
+          noBottomMargin
           type={NotificationType.ERROR}
           title={
             <CenteringBox>
@@ -150,6 +183,7 @@ export function InBrowserVerificationGuide() {
       )}
       {!!hash && (
         <AppNotification
+          noBottomMargin
           singleLine
           type={NotificationType.SUCCESS}
           title={

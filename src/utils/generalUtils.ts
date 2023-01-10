@@ -13,4 +13,5 @@ export const isWebAssemblySupported = () => {
   })();
 };
 
-export const isOnLocalHost = () => window.location.hostname === "localhost";
+export const isOnLocalHost = () =>
+  window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";

@@ -5,6 +5,13 @@ import { useLoadContractProof } from "./useLoadContractProof";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useState } from "react";
 
+export enum VerificationResults {
+  VALID = "VALID",
+  WASM = "WebAssembly is not supported",
+  COMPILER = "Only func contracts can be verified",
+  VERSION = "Contract version is not supported",
+}
+
 const compilerSupportedVersions = ["2", "3"];
 
 export function useInBrowserCompilation() {
@@ -66,13 +73,24 @@ export function useInBrowserCompilation() {
       setHash(codeCell.hash().toString("base64"));
   };
 
-  const isVerificationEnabled = () =>
-    !(!isWebAssemblySupported() || !verifyCompilerVersion() || data?.compiler !== "func");
+  const isVerificationEnabled = () => {
+    if (!isWebAssemblySupported()) {
+      return VerificationResults.WASM;
+    }
+    if (!verifyCompilerVersion()) {
+      return VerificationResults.VERSION;
+    }
+    if (data?.compiler !== "func") {
+      return VerificationResults.COMPILER;
+    }
+    return VerificationResults.VALID;
+    //!(!isWebAssemblySupported() || !verifyCompilerVersion() || data?.compiler !== "func")
+  };
 
   const verifyCompilerVersion = () => {
     return !!compilerSupportedVersions.find(
       //@ts-ignore
-      (v) => v === data?.compilerSettings?.funcVersion.slice(2, 3),
+      (v) => v === data?.compilerSettings?.funcVersion?.slice(2, 3),
     );
   };
 
