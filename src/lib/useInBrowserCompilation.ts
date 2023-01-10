@@ -4,15 +4,16 @@ import { isWebAssemblySupported } from "../utils/generalUtils";
 import { useLoadContractProof } from "./useLoadContractProof";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useState } from "react";
+import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
 
 export enum VerificationResults {
   VALID = "VALID",
   WASM = "WebAssembly is not supported",
-  COMPILER = "Only func contracts can be verified",
-  VERSION = "Contract version is not supported",
+  COMPILER = "Only FunC contracts can be verified",
+  VERSION = "FunC version is not supported",
 }
 
-const compilerSupportedVersions = ["2", "3"];
+const compilerSupportedVersions = ["0.2.0", "0.3.0"];
 
 export function useInBrowserCompilation() {
   const { data } = useLoadContractProof();
@@ -77,20 +78,18 @@ export function useInBrowserCompilation() {
     if (!isWebAssemblySupported()) {
       return VerificationResults.WASM;
     }
-    if (!verifyCompilerVersion()) {
-      return VerificationResults.VERSION;
-    }
     if (data?.compiler !== "func") {
       return VerificationResults.COMPILER;
     }
+    if (!verifyCompilerVersion()) {
+      return VerificationResults.VERSION;
+    }
     return VerificationResults.VALID;
-    //!(!isWebAssemblySupported() || !verifyCompilerVersion() || data?.compiler !== "func")
   };
 
   const verifyCompilerVersion = () => {
-    return !!compilerSupportedVersions.find(
-      //@ts-ignore
-      (v) => v === data?.compilerSettings?.funcVersion?.slice(2, 3),
+    return compilerSupportedVersions.some(
+      (v) => v === (data?.compilerSettings as FuncCompilerSettings)?.funcVersion,
     );
   };
 

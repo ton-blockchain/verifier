@@ -14,7 +14,7 @@ export function VerificationProof() {
     <Box sx={{ width: "100%" }}>
       {contractProofData && !isLoadingVerifierRegistry && (
         <PopupWrapper pt={3} pb={1}>
-          <PopupTableTitle>How to verify manually by yourself?</PopupTableTitle>
+          <PopupTableTitle>Verify manually by yourself</PopupTableTitle>
           <VerificationPanel />
         </PopupWrapper>
       )}
@@ -53,7 +53,7 @@ function VerificationPanel() {
       <Box sx={{ width: "100%", borderBottom: "1px solid #E8E8E8" }}>
         <VerificationPanelTabs value={value} onChange={handleChange}>
           <Tab label="In-browser" value={0} sx={{ textTransform: "none" }} />
-          <Tab label="Docker" value={1} sx={{ textTransform: "none" }} />
+          <Tab label="Docker (coming soon)" disabled value={1} sx={{ textTransform: "none" }} />
         </VerificationPanelTabs>
       </Box>
       {value === 0 && <InBrowserVerificationGuide />}
