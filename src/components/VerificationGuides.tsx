@@ -7,15 +7,7 @@ import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { AppButton } from "./AppButton";
 import { isOnLocalHost } from "../utils/generalUtils";
 import { CenteringBox } from "./Common.styled";
-import {
-  ErrorRow,
-  ErrorRowSeparator,
-  ErrorRowTitle,
-  ErrorRowValue,
-  NotificationTitle,
-  OutputTitle,
-  SuccessTitle,
-} from "./CompileOutput";
+import { NotificationTitle, OutputTitle, SuccessTitle } from "./CompileOutput";
 import { useInBrowserCompilation, VerificationResults } from "../lib/useInBrowserCompilation";
 import { AppNotification, NotificationType } from "./AppNotification";
 import like from "../assets/like.svg";
@@ -83,7 +75,6 @@ export function ManualVerificationGuide() {
 
 export function InBrowserVerificationGuide() {
   const { verifyContract, isVerificationEnabled, error, loading, hash } = useInBrowserCompilation();
-  const { data: contractData } = useLoadContractInfo();
 
   return (
     <Box p={2}>
@@ -163,22 +154,10 @@ export function InBrowserVerificationGuide() {
               <CenteringBox mr={1}>
                 <img src={puzzle} alt="Reorder icon" width={39} height={26} />
               </CenteringBox>
-              <OutputTitle>Hashes are not similar</OutputTitle>
+              <OutputTitle>{error}</OutputTitle>
             </CenteringBox>
           }
-          notificationBody={
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <ErrorRow>
-                <ErrorRowTitle>Contract hash</ErrorRowTitle>
-                <ErrorRowValue>{contractData?.hash ?? "-"}</ErrorRowValue>
-              </ErrorRow>
-              <ErrorRowSeparator />
-              <ErrorRow>
-                <ErrorRowTitle>Compile output hash</ErrorRowTitle>
-                <ErrorRowValue>{hash ?? "-"}</ErrorRowValue>
-              </ErrorRow>
-            </Box>
-          }
+          notificationBody={<Box />}
         />
       )}
       {!!hash && (
