@@ -52,12 +52,12 @@ function VerificationPanel() {
     <Box sx={{ width: "100%" }}>
       <Box sx={{ width: "100%", borderBottom: "1px solid #E8E8E8" }}>
         <VerificationPanelTabs value={value} onChange={handleChange}>
-          <Tab label="Docker" value={0} sx={{ textTransform: "none" }} />
-          <Tab label="In Browser" value={1} sx={{ textTransform: "none" }} />
+          <Tab label="In-Browser" value={0} sx={{ textTransform: "none" }} />
+          <Tab label="Docker" value={1} sx={{ textTransform: "none" }} />
         </VerificationPanelTabs>
       </Box>
-      {value === 0 && <ManualVerificationGuide />}
-      {value === 1 && <InBrowserVerificationGuide />}
+      {value === 0 && <InBrowserVerificationGuide />}
+      {value === 1 && <ManualVerificationGuide />}
     </Box>
   );
 }

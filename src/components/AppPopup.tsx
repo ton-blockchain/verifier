@@ -67,7 +67,13 @@ export function AppPopup({
           backgroundColor,
         },
       }}>
-      <Box>
+      <Box
+        sx={{
+          overflow: "scroll",
+          "::-webkit-scrollbar": {
+            display: "none",
+          },
+        }}>
         {!hideCloseButton && (
           <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
             <StyledClose onClick={onClose}>

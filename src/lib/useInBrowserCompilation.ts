@@ -1,38 +1,76 @@
-import { compileFunc, compilerVersion, SourceEntry } from "@ton-community/func-js";
+import { SourceEntry, FuncCompiler } from "@ton-community/func-js";
 import { Cell } from "ton";
-import { isWebAssemblySupported, verifyCompilerVersion } from "../utils/generalUtils";
+import { isWebAssemblySupported } from "../utils/generalUtils";
 import { useLoadContractProof } from "./useLoadContractProof";
+import { useLoadContractInfo } from "./useLoadContractInfo";
+import { useState } from "react";
+
+const compilerSupportedVersions = ["2", "3"];
 
 export function useInBrowserCompilation() {
   const { data } = useLoadContractProof();
-
-  const getVersion = async () => await compilerVersion();
+  const { data: contractData } = useLoadContractInfo();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [hash, setHash] = useState<string | null>(null);
 
   const verifyContract = async () => {
+    setError(null);
+    setLoading(true);
     const sources: SourceEntry[] = [];
 
-    data?.files?.forEach((file, i) => {
-      sources.push({ filename: file.name, content: file.content.slice(0, 50) });
+    data?.files?.forEach((file) => {
+      sources.push({ filename: file.name, content: file.content });
     });
 
-    console.log(sources);
+    //@ts-ignore
+    const funcVersion: string = data?.compilerSettings?.funcVersion.slice(2, 3);
 
-    let result = await compileFunc({
+    if (!funcVersion) {
+      setError(`func is not available for in-browser verification`);
+      setLoading(false);
+      return;
+    }
+
+    let compilerInstance: any;
+
+    switch (funcVersion) {
+      case "2": {
+        let { object: instance } = await import("func-js-bin-2");
+        compilerInstance = instance;
+        break;
+      }
+      case "3": {
+        let { object: instance } = await import("func-js-bin-3");
+        compilerInstance = instance;
+        break;
+      }
+    }
+
+    const funcCompiler = new FuncCompiler(compilerInstance);
+
+    let result = await funcCompiler.compileFunc({
       sources: sources.reverse(),
     });
 
     if (result.status === "error") {
-      console.error(result.message);
+      setError(result.message);
+      setLoading(false);
       return;
     }
 
-    let codeCell = Cell.fromBoc(Buffer.from(result.codeBoc, "base64"))[0];
+    const codeCell = Cell.fromBoc(Buffer.from(result.codeBoc, "base64"))[0];
+    setLoading(false);
 
-    console.log(codeCell);
+    contractData?.hash === codeCell.hash().toString("base64") &&
+      setHash(codeCell.hash().toString("base64"));
   };
 
   const isVerificationEnabled = () =>
     !(!isWebAssemblySupported() || !verifyCompilerVersion() || data?.compiler !== "func");
 
-  return { getVersion, verifyContract, isVerificationEnabled };
+  const verifyCompilerVersion = () =>
+    compilerSupportedVersions.find((v) => v === data?.compilerSettings?.funcVersion.slice(2, 3));
+
+  return { verifyContract, isVerificationEnabled, loading, error, hash };
 }

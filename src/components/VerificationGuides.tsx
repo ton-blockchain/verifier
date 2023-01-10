@@ -7,8 +7,20 @@ import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { AppButton } from "./AppButton";
 import { isOnLocalHost } from "../utils/generalUtils";
 import { CenteringBox } from "./Common.styled";
-import { NotificationTitle } from "./CompileOutput";
+import {
+  ErrorRow,
+  ErrorRowSeparator,
+  ErrorRowTitle,
+  ErrorRowValue,
+  NotificationTitle,
+  OutputTitle,
+  SuccessTitle,
+} from "./CompileOutput";
 import { useInBrowserCompilation } from "../lib/useInBrowserCompilation";
+import { AppNotification, NotificationType } from "./AppNotification";
+import like from "../assets/like.svg";
+import puzzle from "../assets/reorder-hint.svg";
+import { useLoadContractInfo } from "../lib/useLoadContractInfo";
 
 export function ManualVerificationGuide() {
   const { data: contractProofData } = useLoadContractProof();
@@ -70,10 +82,11 @@ export function ManualVerificationGuide() {
 }
 
 export function InBrowserVerificationGuide() {
-  const { verifyContract, isVerificationEnabled } = useInBrowserCompilation();
+  const { verifyContract, isVerificationEnabled, error, loading, hash } = useInBrowserCompilation();
+  const { data: contractData } = useLoadContractInfo();
 
   return (
-    <Box sx={{ height: "100%" }} p={2}>
+    <Box p={2}>
       <Typography sx={{ fontSize: 14 }}>
         You can verify this contract by compiling the contract with a wasm binding of the{" "}
         <Link
@@ -99,7 +112,7 @@ export function InBrowserVerificationGuide() {
       </Typography>
       <AppButton
         onClick={() => verifyContract()}
-        disabled={!isVerificationEnabled()}
+        disabled={!isVerificationEnabled() || loading || !!hash}
         fontSize={14}
         fontWeight={800}
         textColor="#fff"
@@ -109,6 +122,50 @@ export function InBrowserVerificationGuide() {
         hoverBackground="#156cc2">
         Verify in Browser
       </AppButton>
+      {error && (
+        <AppNotification
+          type={NotificationType.ERROR}
+          title={
+            <CenteringBox>
+              <CenteringBox mr={1}>
+                <img src={puzzle} alt="Reorder icon" width={39} height={26} />
+              </CenteringBox>
+              <OutputTitle>Hashes are not similar</OutputTitle>
+            </CenteringBox>
+          }
+          notificationBody={
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <ErrorRow>
+                <ErrorRowTitle>Contract hash</ErrorRowTitle>
+                <ErrorRowValue>{contractData?.hash ?? "-"}</ErrorRowValue>
+              </ErrorRow>
+              <ErrorRowSeparator />
+              <ErrorRow>
+                <ErrorRowTitle>Compile output hash</ErrorRowTitle>
+                <ErrorRowValue>{hash ?? "-"}</ErrorRowValue>
+              </ErrorRow>
+            </Box>
+          }
+        />
+      )}
+      {!!hash && (
+        <AppNotification
+          singleLine
+          type={NotificationType.SUCCESS}
+          title={
+            <CenteringBox sx={{ height: 42 }}>
+              <CenteringBox mr={1}>
+                <img src={like} alt="Like icon" width={31} height={31} />
+              </CenteringBox>
+              <SuccessTitle>
+                {" "}
+                <b>Great!</b> Compile output hash matches this on-chain contract
+              </SuccessTitle>
+            </CenteringBox>
+          }
+          notificationBody={<Box />}
+        />
+      )}
     </Box>
   );
 }

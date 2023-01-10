@@ -14,7 +14,3 @@ export const isWebAssemblySupported = () => {
 };
 
 export const isOnLocalHost = () => window.location.hostname === "localhost";
-
-export const verifyCompilerVersion = () => {
-  return true;
-};
