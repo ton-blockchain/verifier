@@ -15,12 +15,20 @@ const Contract = styled(Box)(({ theme }) => ({
   },
 }));
 
-const ContractsWrapper = styled(Box)({
+const ContractsWrapper = styled(Box)(({ theme }) => ({
   maxWidth: 1160,
   width: "calc(100% - 50px)",
   paddingTop: 20,
   margin: "0 auto",
-});
+  height: "calc(100vh - 420px)",
+  overflow: "auto",
+  "::-webkit-scrollbar": {
+    display: "none",
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: "calc(100vh - 280px)",
+  },
+}));
 
 const ContractsList = styled(Box)({
   display: "flex",
@@ -30,8 +38,6 @@ const ContractsList = styled(Box)({
   margin: "0 auto",
   justifyContent: "left",
   overflow: "auto",
-
-  maxHeight: 600,
   marginTop: 24,
   "-webkit-text-size-adjust": "100%",
 });
