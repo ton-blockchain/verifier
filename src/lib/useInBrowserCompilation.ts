@@ -4,7 +4,7 @@ import { isWebAssemblySupported } from "../utils/generalUtils";
 import { useLoadContractProof } from "./useLoadContractProof";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useState } from "react";
-import { FuncCompilerSettings, FuncSource } from "@ton-community/contract-verifier-sdk";
+import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
 
 export enum VerificationResults {
   VALID = "VALID",
@@ -26,10 +26,7 @@ export function useInBrowserCompilation() {
     setError(null);
     setLoading(true);
     const sources: SourceEntry[] =
-      data?.files
-        ?.slice()
-        .reverse()
-        .map((file) => ({ filename: file.name, content: file.content })) ?? [];
+      data?.files?.map((file) => ({ filename: file.name, content: file.content })) ?? [];
 
     const funcVersion = (data?.compilerSettings as FuncCompilerSettings)?.funcVersion;
 

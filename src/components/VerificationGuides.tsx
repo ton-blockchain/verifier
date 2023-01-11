@@ -7,12 +7,10 @@ import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { AppButton } from "./AppButton";
 import { isOnLocalHost } from "../utils/generalUtils";
 import { CenteringBox } from "./Common.styled";
-import { NotificationTitle, OutputTitle, SuccessTitle } from "./CompileOutput";
+import { NotificationTitle, SuccessTitle } from "./CompileOutput";
 import { useInBrowserCompilation, VerificationResults } from "../lib/useInBrowserCompilation";
 import { AppNotification, NotificationType } from "./AppNotification";
 import like from "../assets/like.svg";
-import puzzle from "../assets/reorder-hint.svg";
-import { useLoadContractInfo } from "../lib/useLoadContractInfo";
 
 export function ManualVerificationGuide() {
   const { data: contractProofData } = useLoadContractProof();
@@ -146,19 +144,38 @@ export function InBrowserVerificationGuide() {
         </AppButton>
       )}
       {error && (
-        <AppNotification
-          noBottomMargin
-          type={NotificationType.ERROR}
-          title={
-            <CenteringBox>
-              <CenteringBox mr={1}>
-                <img src={puzzle} alt="Reorder icon" width={39} height={26} />
-              </CenteringBox>
-              <OutputTitle>{error}</OutputTitle>
-            </CenteringBox>
-          }
-          notificationBody={<Box />}
-        />
+        <>
+          <AppNotification
+            noBottomMargin
+            type={NotificationType.ERROR}
+            title={
+              <NotificationTitle>
+                <span style={{ color: "#FC5656" }}>Error: </span>
+                Compile error
+              </NotificationTitle>
+            }
+            notificationBody={
+              <Box sx={{ overflow: "auto", maxHeight: 300 }}>
+                <div>
+                  <code>{error}</code>
+                </div>
+              </Box>
+            }
+          />
+          <Typography sx={{ marginTop: 1, fontSize: 13 }}>
+            You can ask for help in our{" "}
+            <Link
+              sx={{
+                textDecoration: "none",
+                cursor: "pointer",
+                color: "#0088CC",
+              }}
+              href="https://t.me/tonverifier"
+              target="_blank">
+              Telegram support group
+            </Link>
+          </Typography>
+        </>
       )}
       {!!hash && (
         <AppNotification
