@@ -28,7 +28,7 @@ interface DataBlockProps {
   isLoading?: boolean;
 }
 
-const renderRowValue = (value?: string, customLink?: string, title?: string) => {
+const renderRowValue = (value?: string, customLink?: string, withTooltip?: string) => {
   if (customLink && !!value) {
     return (
       <Link
@@ -41,7 +41,8 @@ const renderRowValue = (value?: string, customLink?: string, title?: string) => 
         {value}
       </Link>
     );
-  } else if (title === "Command") {
+  }
+  if (withTooltip) {
     return (
       <Tooltip placement="top-start" title={value}>
         <span>{value}</span>
@@ -81,7 +82,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
               isShrinked={!isFlexibleWrapper}>
               <DataRowTitle>{title}</DataRowTitle>
               <DataRowValue sx={{ color: color }}>
-                {renderRowValue(value, customLink, title)}
+                {renderRowValue(value, customLink, title === "Command")}
               </DataRowValue>
               {showIcon && (
                 <IconsWrapper>
