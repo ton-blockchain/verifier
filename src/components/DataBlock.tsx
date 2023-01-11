@@ -28,7 +28,7 @@ interface DataBlockProps {
   isLoading?: boolean;
 }
 
-const renderRowValue = (value?: string, customLink?: string, withTooltip?: string) => {
+const renderRowValue = (value?: string, customLink?: string, withTooltip?: boolean) => {
   if (customLink && !!value) {
     return (
       <Link
