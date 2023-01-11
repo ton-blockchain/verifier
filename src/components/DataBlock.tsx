@@ -18,6 +18,7 @@ export interface DataRowItem {
   showIcon?: boolean;
   color?: string;
   customLink?: string;
+  tooltip?: boolean;
 }
 
 interface DataBlockProps {
@@ -74,7 +75,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
         <TitleText>{title}</TitleText>
       </TitleBox>
       <DataRowsBox mt={2.5} isShrinked={!isFlexibleWrapper} isExtraSmallScreen={isExtraSmallScreen}>
-        {dataRows.map(({ title, value, showIcon, color, customLink }) => {
+        {dataRows.map(({ title, value, showIcon, color, customLink, tooltip }) => {
           return (
             <DataRow
               isExtraSmallScreen={isExtraSmallScreen}
@@ -82,7 +83,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
               isShrinked={!isFlexibleWrapper}>
               <DataRowTitle>{title}</DataRowTitle>
               <DataRowValue sx={{ color: color }}>
-                {renderRowValue(value, customLink, title === "Command")}
+                {renderRowValue(value, customLink, tooltip)}
               </DataRowValue>
               {showIcon && (
                 <IconsWrapper>
