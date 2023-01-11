@@ -1,10 +1,26 @@
 import React from "react";
-import { Box, Link, List, ListItem, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Link,
+  List,
+  ListItem,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { CommandEllipsisLabel, CommandLabel, PopupLink } from "./VerificationProofPopup.styled";
 import { downloadJson } from "../utils/jsonUtils";
 import { githubLink } from "../const";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { AppButton } from "./AppButton";
+import { isOnLocalHost } from "../utils/generalUtils";
+import { CenteringBox } from "./Common.styled";
+import { NotificationTitle, SuccessTitle } from "./CompileOutput";
+import { useInBrowserCompilation, VerificationResults } from "../lib/useInBrowserCompilation";
+import { AppNotification, NotificationType } from "./AppNotification";
+import like from "../assets/like.svg";
 
 export function ManualVerificationGuide() {
   const { data: contractProofData } = useLoadContractProof();
@@ -66,30 +82,132 @@ export function ManualVerificationGuide() {
 }
 
 export function InBrowserVerificationGuide() {
+  const { verifyContract, isVerificationEnabled, error, loading, hash } = useInBrowserCompilation();
+  const theme = useTheme();
+  const notificationsSize = useMediaQuery(theme.breakpoints.down("md"));
+
   return (
-    <Box sx={{ height: "117px" }} p={2}>
-      <Typography
-        sx={{
-          fontSize: 14,
-        }}>
-        You can verify this contract by compiling the contract with a wasm binding of the{" "}
+    <Box p={2}>
+      <Typography sx={{ fontSize: 14 }}>
+        Verify this contract by compiling the contract with a wasm binding of the{" "}
         <Link
           sx={{ textDecoration: "none" }}
           href={"https://github.com/ton-community/func-js"}
           target="_blank">
           compiler
-        </Link>
+        </Link>{" "}
+        using your browser
+        {!isOnLocalHost() && (
+          <CenteringBox mt={1} sx={{ overflow: "auto", maxHeight: 300 }}>
+            <NotificationTitle sx={{ margin: 0 }}>
+              For maximum safety, fork this{" "}
+              <Link
+                sx={{ textDecoration: "none" }}
+                href="https://github.com/ton-community/ton-contract-verifier"
+                target="_blank">
+                project{" "}
+              </Link>
+              and run it locally
+            </NotificationTitle>
+          </CenteringBox>
+        )}
       </Typography>
-      <AppButton
-        fontSize={14}
-        fontWeight={800}
-        textColor="#fff"
-        height={44}
-        width={144}
-        background="#1976d2"
-        hoverBackground="#156cc2">
-        Verify in Browser
-      </AppButton>
+      {isVerificationEnabled() !== VerificationResults.VALID ? (
+        <Tooltip
+          arrow
+          title={<Typography sx={{ fontSize: 13 }}>{isVerificationEnabled()}</Typography>}
+          placement="top">
+          <Box sx={{ width: 144, margin: "auto" }}>
+            <AppButton
+              onClick={() => verifyContract()}
+              disabled={isVerificationEnabled() !== VerificationResults.VALID || loading || !!hash}
+              fontSize={14}
+              fontWeight={800}
+              textColor="#fff"
+              height={44}
+              width={144}
+              background="#1976d2"
+              hoverBackground="#156cc2">
+              Verify
+            </AppButton>
+          </Box>
+        </Tooltip>
+      ) : (
+        <AppButton
+          onClick={() => verifyContract()}
+          disabled={isVerificationEnabled() !== VerificationResults.VALID || loading || !!hash}
+          fontSize={14}
+          fontWeight={800}
+          textColor="#fff"
+          height={44}
+          width={144}
+          background="#1976d2"
+          hoverBackground="#156cc2">
+          {loading && (
+            <CircularProgress
+              sx={{
+                color: "#fff",
+                height: "20px !important",
+                width: "20px !important",
+              }}
+            />
+          )}
+          Verify
+        </AppButton>
+      )}
+      {error && (
+        <>
+          <AppNotification
+            noBottomMargin
+            type={NotificationType.ERROR}
+            title={
+              <NotificationTitle>
+                <span style={{ color: "#FC5656" }}>Error: </span>
+                Compile error
+              </NotificationTitle>
+            }
+            notificationBody={
+              <Box sx={{ overflow: "auto", maxHeight: 300 }}>
+                <div>
+                  <code>{error}</code>
+                </div>
+              </Box>
+            }
+          />
+          <Typography sx={{ marginTop: 1, fontSize: 13 }}>
+            You can ask for help in our{" "}
+            <Link
+              sx={{
+                textDecoration: "none",
+                cursor: "pointer",
+                color: "#0088CC",
+              }}
+              href="https://t.me/tonverifier"
+              target="_blank">
+              Telegram support group
+            </Link>
+          </Typography>
+        </>
+      )}
+      {!!hash && (
+        <AppNotification
+          noBottomMargin
+          singleLine={!notificationsSize}
+          type={NotificationType.SUCCESS}
+          title={
+            <CenteringBox sx={{ height: 42 }}>
+              <CenteringBox mr={1}>
+                <img src={like} alt="Like icon" width={31} height={31} />
+              </CenteringBox>
+              <SuccessTitle>
+                {" "}
+                <b>Great!</b> Compile output hash matches this on-chain contract
+              </SuccessTitle>
+            </CenteringBox>
+          }
+          notificationBody={<Box />}
+        />
+      )}
     </Box>
   );
 }

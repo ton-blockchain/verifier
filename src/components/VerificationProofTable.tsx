@@ -22,7 +22,6 @@ export function VerificationProofTable() {
     isLoading: isLoadingVerifierRegistry,
     error: errorVerifierRegistry,
   } = useLoadVerifierRegistryInfo();
-  // contractProofData?.verificationDate
   const { showNotification } = useNotification();
 
   // TODO this supports a single verifier Id for now.

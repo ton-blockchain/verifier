@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { IconButton, Link, useMediaQuery } from "@mui/material";
+import { IconButton, Link, useMediaQuery, Tooltip } from "@mui/material";
 import { DataBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
@@ -18,6 +18,7 @@ export interface DataRowItem {
   showIcon?: boolean;
   color?: string;
   customLink?: string;
+  tooltip?: boolean;
 }
 
 interface DataBlockProps {
@@ -27,6 +28,33 @@ interface DataBlockProps {
   dataRows: DataRowItem[];
   isLoading?: boolean;
 }
+
+const renderRowValue = (value?: string, customLink?: string, withTooltip?: boolean) => {
+  if (customLink && !!value) {
+    return (
+      <Link
+        target="_blank"
+        href={customLink}
+        sx={{
+          textDecoration: "none",
+          cursor: "pointer",
+        }}>
+        {value}
+      </Link>
+    );
+  }
+  if (withTooltip) {
+    return (
+      <Tooltip placement="top-start" title={value}>
+        <span>{value}</span>
+      </Tooltip>
+    );
+  } else if (!!value) {
+    return value;
+  }
+
+  return "-";
+};
 
 export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading }: DataBlockProps) {
   const Wrapper = isFlexibleWrapper ? DataFlexibleBox : DataBox;
@@ -47,7 +75,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
         <TitleText>{title}</TitleText>
       </TitleBox>
       <DataRowsBox mt={2.5} isShrinked={!isFlexibleWrapper} isExtraSmallScreen={isExtraSmallScreen}>
-        {dataRows.map(({ title, value, showIcon, color, customLink }) => {
+        {dataRows.map(({ title, value, showIcon, color, customLink, tooltip }) => {
           return (
             <DataRow
               isExtraSmallScreen={isExtraSmallScreen}
@@ -55,19 +83,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
               isShrinked={!isFlexibleWrapper}>
               <DataRowTitle>{title}</DataRowTitle>
               <DataRowValue sx={{ color: color }}>
-                {customLink && !!value ? (
-                  <Link
-                    target="_blank"
-                    href={customLink}
-                    sx={{
-                      textDecoration: "none",
-                      cursor: "pointer",
-                    }}>
-                    {value}
-                  </Link>
-                ) : (
-                  value ?? "-"
-                )}
+                {renderRowValue(value, customLink, tooltip)}
               </DataRowValue>
               {showIcon && (
                 <IconsWrapper>

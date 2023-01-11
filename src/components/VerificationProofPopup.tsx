@@ -32,9 +32,11 @@ export function VerificationProofPopup({ onClose }: VerificationProofPopupProps)
             </TitleText>
           </CenteringBox>
           <VerificationProofTable />
-          {/*<CenteringBox mt={3}>*/}
-          {/*  <VerificationProof />*/}
-          {/*</CenteringBox>*/}
+          {import.meta.env.VITE_SHOW_MANUAL_VERIFICATION && (
+            <CenteringBox mt={3}>
+              <VerificationProof />
+            </CenteringBox>
+          )}
         </Box>
       </ClickAwayListener>
     </AppPopup>
