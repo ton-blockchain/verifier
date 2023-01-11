@@ -31,11 +31,10 @@ export function useInBrowserCompilation() {
       sources.push({ filename: file.name, content: file.content });
     });
 
-    //@ts-ignore
-    const funcVersion: string = data?.compilerSettings?.funcVersion.slice(2, 3);
+    const funcVersion = (data?.compilerSettings as FuncCompilerSettings)?.funcVersion;
 
     if (!funcVersion) {
-      setError(`func is not available for in-browser verification`);
+      setError(`FunC is not available for in-browser verification`);
       setLoading(false);
       return;
     }
@@ -43,13 +42,13 @@ export function useInBrowserCompilation() {
     let compilerInstance: any;
 
     switch (funcVersion) {
-      case "2": {
-        let { object: instance } = await import("func-js-bin-2");
+      case "0.2.0": {
+        let { object: instance } = await import("func-js-bin-0.2.0");
         compilerInstance = instance;
         break;
       }
-      case "3": {
-        let { object: instance } = await import("func-js-bin-3");
+      case "0.3.0": {
+        let { object: instance } = await import("func-js-bin-0.3.0");
         compilerInstance = instance;
         break;
       }
