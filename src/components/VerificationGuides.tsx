@@ -1,5 +1,15 @@
 import React from "react";
-import { Box, CircularProgress, Link, List, ListItem, Tooltip, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  Link,
+  List,
+  ListItem,
+  Tooltip,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { CommandEllipsisLabel, CommandLabel, PopupLink } from "./VerificationProofPopup.styled";
 import { downloadJson } from "../utils/jsonUtils";
 import { githubLink } from "../const";
@@ -73,6 +83,8 @@ export function ManualVerificationGuide() {
 
 export function InBrowserVerificationGuide() {
   const { verifyContract, isVerificationEnabled, error, loading, hash } = useInBrowserCompilation();
+  const theme = useTheme();
+  const notificationsSize = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <Box p={2}>
@@ -180,7 +192,7 @@ export function InBrowserVerificationGuide() {
       {!!hash && (
         <AppNotification
           noBottomMargin
-          singleLine
+          singleLine={!notificationsSize}
           type={NotificationType.SUCCESS}
           title={
             <CenteringBox sx={{ height: 42 }}>
