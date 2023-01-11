@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { IconButton, Link, useMediaQuery } from "@mui/material";
+import { IconButton, Link, useMediaQuery, Tooltip } from "@mui/material";
 import { DataBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
@@ -28,6 +28,32 @@ interface DataBlockProps {
   isLoading?: boolean;
 }
 
+const renderRowValue = (value?: string, customLink?: string, title?: string) => {
+  if (customLink && !!value) {
+    return (
+      <Link
+        target="_blank"
+        href={customLink}
+        sx={{
+          textDecoration: "none",
+          cursor: "pointer",
+        }}>
+        {value}
+      </Link>
+    );
+  } else if (title === "Command") {
+    return (
+      <Tooltip placement="top-start" title={value}>
+        <span>{value}</span>
+      </Tooltip>
+    );
+  } else if (!!value) {
+    return value;
+  }
+
+  return "-";
+};
+
 export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading }: DataBlockProps) {
   const Wrapper = isFlexibleWrapper ? DataFlexibleBox : DataBox;
   const { showNotification } = useNotification();
@@ -55,19 +81,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
               isShrinked={!isFlexibleWrapper}>
               <DataRowTitle>{title}</DataRowTitle>
               <DataRowValue sx={{ color: color }}>
-                {customLink && !!value ? (
-                  <Link
-                    target="_blank"
-                    href={customLink}
-                    sx={{
-                      textDecoration: "none",
-                      cursor: "pointer",
-                    }}>
-                    {value}
-                  </Link>
-                ) : (
-                  value ?? "-"
-                )}
+                {renderRowValue(value, customLink, title)}
               </DataRowValue>
               {showIcon && (
                 <IconsWrapper>
