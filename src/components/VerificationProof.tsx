@@ -14,7 +14,7 @@ export function VerificationProof() {
     <Box sx={{ width: "100%" }}>
       {contractProofData && !isLoadingVerifierRegistry && (
         <PopupWrapper pt={3} pb={1}>
-          <PopupTableTitle>Verify manually by yourself</PopupTableTitle>
+          <PopupTableTitle>Verify manually</PopupTableTitle>
           <VerificationPanel />
         </PopupWrapper>
       )}
@@ -42,22 +42,23 @@ const VerificationPanelTabs = styled(Tabs)({
 });
 
 function VerificationPanel() {
-  const [value, setValue] = useState(0);
+  // const [value, setValue] = useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+  // const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  //   setValue(newValue);
+  // };
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box sx={{ width: "100%", borderBottom: "1px solid #E8E8E8" }}>
+      {/* <Box sx={{ width: "100%", borderBottom: "1px solid #E8E8E8" }}>
         <VerificationPanelTabs value={value} onChange={handleChange}>
           <Tab label="In-browser" value={0} sx={{ textTransform: "none" }} />
           <Tab label="Docker (coming soon)" disabled value={1} sx={{ textTransform: "none" }} />
         </VerificationPanelTabs>
       </Box>
       {value === 0 && <InBrowserVerificationGuide />}
-      {value === 1 && <ManualVerificationGuide />}
+      {value === 1 && <ManualVerificationGuide />} */}
+      <InBrowserVerificationGuide />
     </Box>
   );
 }
