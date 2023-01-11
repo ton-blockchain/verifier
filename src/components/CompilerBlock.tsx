@@ -57,6 +57,7 @@ export function CompilerBlock() {
         // @ts-ignore
         value: compilerSettings?.commandLine,
         showIcon: true,
+        tooltip: true,
       });
     }
     dataRows.push({
