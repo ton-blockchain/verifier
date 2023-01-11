@@ -18,17 +18,17 @@ export const NotificationTitle = styled(Typography)({
   marginBottom: "10px",
 });
 
-const OutputTitle = styled(Typography)({
+export const OutputTitle = styled(Typography)({
   fontSize: 14,
   fontWeight: 700,
 });
 
-const SuccessTitle = styled(Typography)({
+export const SuccessTitle = styled(Typography)({
   fontSize: 14,
   fontWeight: 400,
 });
 
-const ErrorRow = styled(CenteringBox)({
+export const ErrorRow = styled(CenteringBox)({
   padding: "20px 30px",
   paddingLeft: 0,
   "&:hover": {
@@ -36,17 +36,17 @@ const ErrorRow = styled(CenteringBox)({
   },
 });
 
-const ErrorRowTitle = styled(DataRowTitle)({
+export const ErrorRowTitle = styled(DataRowTitle)({
   minWidth: 200,
   fontSize: 14,
   fontWeight: 600,
 });
 
-const ErrorRowSeparator = styled(Box)({
+export const ErrorRowSeparator = styled(Box)({
   borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
 });
 
-const ErrorRowValue = styled(DataRowValue)({
+export const ErrorRowValue = styled(DataRowValue)({
   color: "#000",
   fontSize: 14,
   fontWeight: 400,
