@@ -48,6 +48,13 @@ const OverflowingBox = styled(Box)({
   color: "#000",
 });
 
+const generateErrorMessage = (error: string, address: string) => {
+  if (error === "TypeError: Cannot read properties of null (reading 'length')") {
+    return "No contract deployed at address " + address;
+  }
+  return error;
+};
+
 function App() {
   const { isLoading, data: proofData, error } = useLoadContractProof();
   const [isDragging, setIsDragging] = useState(false);
@@ -114,7 +121,7 @@ function App() {
               notificationBody={
                 <Box sx={{ overflow: "auto", maxHeight: 300 }}>
                   <pre>
-                    <code>{error.toString()}</code>
+                    <code>{generateErrorMessage(error.toString(), contractAddress || "")}</code>
                   </pre>
                 </Box>
               }
