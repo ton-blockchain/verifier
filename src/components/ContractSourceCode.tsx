@@ -124,14 +124,14 @@ function ContractSourceCode() {
           />
           <Tab sx={{ textTransform: "none" }} label="Disassembled" />
         </SourceCodeTabs>
-        {value === 0 && (
-          <VerifiedSourceCode button={<CopyButton onCopy={onCopy} copyText={CODE.SOURCE} />} />
-        )}
-        {value === 1 && (
+        <Box sx={{ display: value ? "block" : "none" }}>
           <DisassembledSourceCode
             button={<CopyButton onCopy={onCopy} copyText={CODE.DISASSEMBLED} />}
           />
-        )}
+        </Box>
+        <Box sx={{ display: !value ? "block" : "none" }}>
+          <VerifiedSourceCode button={<CopyButton onCopy={onCopy} copyText={CODE.SOURCE} />} />
+        </Box>
       </ContentBox>
     </Box>
   );
