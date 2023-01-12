@@ -78,7 +78,7 @@ export const AppButton: React.FC<AppButtonProps> = ({
       background={background}
       textColor={textColor}
       hoverBackground={hoverBackground}
-      className={children !== "Update metadata" ? "base-button" : ""}
+      className="base-button"
       type={type}
       onClick={onClick ? onClick : () => {}}
       variant={transparent ? "outlined" : "contained"}
