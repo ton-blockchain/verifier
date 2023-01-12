@@ -1,4 +1,4 @@
-import { SourceEntry, FuncCompiler } from "@ton-community/func-js";
+import { SourceEntry } from "@ton-community/func-js";
 import { Cell } from "ton";
 import { isWebAssemblySupported } from "../utils/generalUtils";
 import { useLoadContractProof } from "./useLoadContractProof";
@@ -25,6 +25,9 @@ export function useInBrowserCompilation() {
   const verifyContract = async () => {
     setError(null);
     setLoading(true);
+
+    const { FuncCompiler } = await import("@ton-community/func-js");
+
     const sources: SourceEntry[] =
       data?.files?.map((file) => ({ filename: file.name, content: file.content })) ?? [];
 
