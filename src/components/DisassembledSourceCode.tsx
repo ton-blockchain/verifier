@@ -5,6 +5,7 @@ import hljsDefine from "highlightjs-func";
 import React, { useEffect, useRef } from "react";
 import "highlight.js/styles/atom-one-light.css";
 import { useMediaQuery, useTheme } from "@mui/material";
+
 hljsDefine(hljs);
 
 interface DisassembledSourceCodeProps {
