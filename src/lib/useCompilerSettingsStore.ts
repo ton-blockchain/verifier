@@ -3,7 +3,7 @@ import create from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { useFileStore } from "./useFileStore";
 
-export type FuncCliCompilerVersion = "0.2.0" | "0.3.0";
+export type FuncCliCompilerVersion = "0.2.0" | "0.3.0" | "0.4.0";
 export type Compiler = "func" | "fift" | "tact";
 
 export type UserProvidedFuncCompileSettings = {
@@ -30,7 +30,7 @@ const _useCompilerSettingsStore = create(
   immer<State & DerivedState & Actions>((set, get) => ({
     // State
     compiler: "func" as Compiler,
-    compilerSettings: { funcVersion: "0.3.0", commandLine: "" } as UserProvidedFuncCompileSettings,
+    compilerSettings: { funcVersion: "0.4.0", commandLine: "" } as UserProvidedFuncCompileSettings,
 
     // Derived
 
