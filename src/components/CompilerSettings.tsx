@@ -61,8 +61,9 @@ function CompilerSettings() {
                   onChange={(e) => {
                     setFuncCliVersion(e.target.value as FuncCliCompilerVersion);
                   }}>
-                  <MenuItem value={"0.2.0"}>0.2.0</MenuItem>
+                  <MenuItem value={"0.4.0"}>0.4.0</MenuItem>
                   <MenuItem value={"0.3.0"}>0.3.0</MenuItem>
+                  <MenuItem value={"0.2.0"}>0.2.0</MenuItem>
                 </CompilerSelect>
               </CompilerFormControl>
             </CenteringBox>
