@@ -25,8 +25,11 @@ export function useLoadContractInfo() {
       decompiled = e?.toString();
     }
 
+    const hash = codeCell.hash();
+
     return {
-      hash: codeCell.hash().toString("base64"),
+      hash: hash.toString("base64"),
+      hashHex: hash.toString("hex"),
       decompiled,
       balance: fromNano(b),
     };
