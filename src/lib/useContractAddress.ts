@@ -5,18 +5,21 @@ import { useEffect } from "react";
 function useContractAddress() {
   const navigate = useNavigate();
   const { contractAddress } = useParams();
-  let isAddressValid = validateAddress(contractAddress);
+  const isAddressValid = validateAddress(contractAddress);
+  const verifiedAddress = isAddressValid ? Address.parse(contractAddress!) : null;
 
-  let verifiedAddress = isAddressValid ? Address.parse(contractAddress!).toFriendly() : null;
+  const verifiedAddressStr = verifiedAddress?.toFriendly();
+  const verifiedAddresssHex = verifiedAddress?.toString();
 
   useEffect(() => {
-    if (contractAddress && verifiedAddress && verifiedAddress !== contractAddress) {
-      navigate(`/${verifiedAddress}`, { replace: true });
+    if (contractAddress && verifiedAddress && verifiedAddressStr !== contractAddress) {
+      navigate(`/${verifiedAddressStr}`, { replace: true });
     }
   }, [contractAddress]);
 
   return {
-    contractAddress: verifiedAddress,
+    contractAddress: verifiedAddressStr,
+    contractAddressHex: verifiedAddresssHex,
     isAddressEmpty: !contractAddress,
   };
 }
