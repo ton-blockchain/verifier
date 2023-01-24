@@ -8,8 +8,8 @@ function useContractAddress() {
   const isAddressValid = validateAddress(contractAddress);
   const verifiedAddress = isAddressValid ? Address.parse(contractAddress!) : null;
 
-  const verifiedAddressStr = verifiedAddress?.toFriendly();
-  const verifiedAddresssHex = verifiedAddress?.toString();
+  const verifiedAddressStr = verifiedAddress?.toFriendly() ?? null;
+  const verifiedAddresssHex = verifiedAddress?.toString() ?? null;
 
   useEffect(() => {
     if (contractAddress && verifiedAddress && verifiedAddressStr !== contractAddress) {
