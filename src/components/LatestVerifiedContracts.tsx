@@ -20,7 +20,7 @@ const ContractsWrapper = styled(Box)(({ theme }) => ({
   width: "calc(100% - 50px)",
   paddingTop: 20,
   margin: "0 auto",
-  height: "calc(100vh - 420px)",
+  height: "100vh",
   overflow: "auto",
   "::-webkit-scrollbar": {
     display: "none",
