@@ -20,9 +20,6 @@ const ContractsWrapper = styled(Box)(({ theme }) => ({
   width: "calc(100% - 50px)",
   paddingTop: 20,
   margin: "0 auto",
-  [theme.breakpoints.down("sm")]: {
-    height: "calc(100vh - 280px)",
-  },
 }));
 
 const ContractsList = styled(Box)({
