@@ -35,10 +35,17 @@
       content="TON Contract Verifier Beta - A tool to verify your contracts on the Ton blockchain"
     />
     <title>TON Contract Verifier Beta</title>
+    <script type="module">
+      if (import.meta.env.VITE_REDIRECT && window.location.hostname === "tonverifier.live") {
+        window.location.replace(
+          window.location.href.replace("tonverifier.live", "verifier.ton.org"),
+        );
+      }
+    </script>
+    <script type="module" src="/src/polyfills.ts"></script>
+    <script type="module" src="/src/main.tsx"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/polyfills.ts"></script>
-    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
