@@ -11,10 +11,6 @@ import { theme } from "./theme";
 import { Admin } from "./components/admin/Admin";
 import { initGA } from "./lib/googleAnalytics";
 
-if (import.meta.env.VITE_REDIRECT && window.location.hostname === "tonverifier.live") {
-  window.location.replace(window.location.href.replace("tonverifier.live", "verifier.ton.org"));
-}
-
 const queryClient = new QueryClient();
 
 initGA();
