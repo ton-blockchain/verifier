@@ -44,6 +44,7 @@
     "source-map-explorer": "^2.5.3",
     "ton": "^12.1.5",
     "tvm-disassembler": "https://github.com/shaharyakir/disassembler/tarball/temp",
+    "web-tree-sitter": "^0.20.7",
     "zustand": "^4.1.3"
   },
   "devDependencies": {

@@ -12,6 +12,8 @@ import { AppButton } from "./AppButton";
 import copy from "../assets/copy.svg";
 import { downloadSources } from "../lib/downloadSources";
 import useNotification from "../lib/useNotification";
+import { useParseGetters } from "../lib/parser/parser";
+import { CompilerLabel, DirectoryInput } from "./CompilerSetting.styled";
 
 enum CODE {
   DISASSEMBLED,
@@ -69,8 +71,10 @@ function ContractSourceCode() {
   }, []);
 
   useEffect(() => {
-    setValue(!!contractProof?.hasOnchainProof ? 0 : 1);
+    setValue(!!contractProof?.hasOnchainProof ? 2 : 1); // TODO restore to 0
   }, [contractProof?.hasOnchainProof]);
+
+  const getterConfig = useParseGetters();
 
   return (
     <Box
@@ -123,17 +127,48 @@ function ContractSourceCode() {
             label="Sources"
           />
           <Tab sx={{ textTransform: "none" }} label="Disassembled" />
+          <Tab
+            sx={{ textTransform: "none" }}
+            disabled={!contractProof?.hasOnchainProof}
+            label="Getters"
+          />
         </SourceCodeTabs>
-        <Box sx={{ display: value ? "block" : "none" }}>
+        <Box sx={{ display: value === 0 ? "block" : "none" }}>
+          <VerifiedSourceCode button={<CopyButton onCopy={onCopy} copyText={CODE.SOURCE} />} />
+        </Box>
+        <Box sx={{ display: value === 1 ? "block" : "none" }}>
           <DisassembledSourceCode
             button={<CopyButton onCopy={onCopy} copyText={CODE.DISASSEMBLED} />}
           />
         </Box>
-        <Box sx={{ display: !value ? "block" : "none" }}>
-          <VerifiedSourceCode button={<CopyButton onCopy={onCopy} copyText={CODE.SOURCE} />} />
+        <Box sx={{ display: value === 2 ? "block" : "none" }}>
+          <Getters />
         </Box>
       </ContentBox>
     </Box>
+  );
+}
+
+function Getters() {
+  const getters = useParseGetters();
+  return (
+    <div>
+      {getters?.map((g) => (
+        <Box sx={{ width: "100%", position: "relative", mt: 2 }}>
+          <CompilerLabel sx={{ display: "block" }}>
+            {g.name}: {g.returnTypes.join(",")}
+          </CompilerLabel>
+          {g.parameters.map((param: any) => {
+            return (
+              <div>
+                <CompilerLabel sx={{ display: "block" }}>{JSON.stringify(param)}</CompilerLabel>
+                <DirectoryInput />
+              </div>
+            );
+          })}
+        </Box>
+      ))}
+    </div>
   );
 }
 
