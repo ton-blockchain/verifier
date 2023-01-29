@@ -98,9 +98,10 @@ export const VerificationInfoBlock = () => {
           <div>
             <AppButton
               fontSize={12}
-              fontWeight={500}
-              hoverBackground="#F5F5F5"
-              background="#F2F2F2"
+              fontWeight={800}
+              textColor="#fff"
+              background="#1976d2"
+              hoverBackground="#156cc2"
               height={37}
               width={132}
               onClick={() => {
