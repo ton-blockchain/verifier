@@ -216,6 +216,9 @@ function Response({
   );
 }
 
+// Problematic examples:
+// Ef9NXAIQs12t2qIZ-sRZ26D977H65Ol6DQeXc5_gUNaUys5r
+
 function GetterComponent({ getter }: { getter: Getter }) {
   const { data, isLoading, mutate, error } = useQueryGetter(getter.name);
 
