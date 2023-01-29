@@ -173,7 +173,7 @@ function Request({ getter }: { getter: Getter }) {
             />
           </FlexBox>
         ))}
-        {(getter.parameters.length ?? 0) === 0 && <Box>(No params)</Box>}
+        {(getter.parameters.length ?? 0) === 0 && <Box sx={{ color: "#949597" }}>(No params)</Box>}
       </FlexBox>
     </Box>
   );
@@ -208,7 +208,7 @@ function Response({
       {values.length === 0 && isLoading && (
         <FlexBox sx={{ gap: 1 }}>
           {returnTypes.map((_) => (
-            <Skeleton variant="rounded" height={30} />
+            <Skeleton variant="rounded" height={20} />
           ))}
         </FlexBox>
       )}
