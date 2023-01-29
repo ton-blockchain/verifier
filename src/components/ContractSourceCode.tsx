@@ -13,7 +13,7 @@ import copy from "../assets/copy.svg";
 import { downloadSources } from "../lib/downloadSources";
 import useNotification from "../lib/useNotification";
 import { useParseGetters } from "../lib/parser/parser";
-import { CompilerLabel, DirectoryInput } from "./CompilerSetting.styled";
+import { Getters } from "./Getters";
 
 enum CODE {
   DISASSEMBLED,
@@ -146,29 +146,6 @@ function ContractSourceCode() {
         </Box>
       </ContentBox>
     </Box>
-  );
-}
-
-function Getters() {
-  const getters = useParseGetters();
-  return (
-    <div>
-      {getters?.map((g) => (
-        <Box sx={{ width: "100%", position: "relative", mt: 2 }}>
-          <CompilerLabel sx={{ display: "block" }}>
-            {g.name}: {g.returnTypes.join(",")}
-          </CompilerLabel>
-          {g.parameters.map((param: any) => {
-            return (
-              <div>
-                <CompilerLabel sx={{ display: "block" }}>{JSON.stringify(param)}</CompilerLabel>
-                <DirectoryInput />
-              </div>
-            );
-          })}
-        </Box>
-      ))}
-    </div>
   );
 }
 

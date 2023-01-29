@@ -24,10 +24,15 @@ export const createParser = () => {
   return parser;
 };
 
-type Getter = {
+export type GetterParameter = {
+  type: string;
+  name: string;
+};
+
+export type Getter = {
   returnTypes: string[];
   name: string;
-  parameters: any;
+  parameters: GetterParameter[];
 };
 
 async function parseGetters(code: string): Promise<Getter[]> {
@@ -53,7 +58,10 @@ async function parseGetters(code: string): Promise<Getter[]> {
     const parameters = f.children
       .find((n) => n.type === "parameter_list")!
       .children.filter((c) => c.type === "parameter_declaration")
-      .map((c) => c.children.map((c) => c.text));
+      .map((c) => ({
+        type: c.child(0)!.text,
+        name: c.child(1)!.text,
+      }));
 
     return {
       returnTypes,
