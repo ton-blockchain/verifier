@@ -27,6 +27,7 @@ function _parseGetMethodCall(stack: [["num" | "cell" | "list", any]]): GetRespon
         if (val.elements.length === 0) {
           return null;
         } else {
+          console.log(val, "Shahar");
           throw new Error("list parsing not supported");
         }
       default:

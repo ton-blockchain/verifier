@@ -12,8 +12,8 @@ import { AppButton } from "./AppButton";
 import copy from "../assets/copy.svg";
 import { downloadSources } from "../lib/downloadSources";
 import useNotification from "../lib/useNotification";
-import { useParseGetters } from "../lib/parser/parser";
 import { Getters } from "./Getters";
+import { useGetters } from "../lib/getterParser";
 
 enum CODE {
   DISASSEMBLED,
@@ -71,10 +71,10 @@ function ContractSourceCode() {
   }, []);
 
   useEffect(() => {
-    setValue(!!contractProof?.hasOnchainProof ? 2 : 1); // TODO restore to 0
+    setValue(!!contractProof?.hasOnchainProof ? 0 : 1);
   }, [contractProof?.hasOnchainProof]);
 
-  const getterConfig = useParseGetters();
+  const { getters } = useGetters();
 
   return (
     <Box
@@ -129,8 +129,8 @@ function ContractSourceCode() {
           <Tab sx={{ textTransform: "none" }} label="Disassembled" />
           <Tab
             sx={{ textTransform: "none" }}
-            disabled={!contractProof?.hasOnchainProof}
-            label="Getters"
+            disabled={!contractProof?.hasOnchainProof || (getters?.length ?? 0) === 0}
+            label={`Getters (${getters?.length ?? 0})`}
           />
         </SourceCodeTabs>
         <Box sx={{ display: value === 0 ? "block" : "none" }}>
