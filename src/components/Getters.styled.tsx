@@ -1,4 +1,4 @@
-import { Box, styled, Typography } from "@mui/material";
+import { Box, styled, TableCell, Typography } from "@mui/material";
 
 export const TitleText = styled(Typography)({
   fontSize: 14,
@@ -38,6 +38,11 @@ export const ContentBox = styled(FlexBoxColumn)({
   fontSize: 14,
 });
 
+export const TableCellStyled = styled(TableCell)({
+  padding: "10px 6px",
+  borderBottom: 0,
+});
+
 export const TypeChip = styled(Box)({
   border: "1px solid #D8D8D8",
   background: "white",
@@ -49,11 +54,13 @@ export const TypeChip = styled(Box)({
 });
 
 export const ValueBox = styled(Box)({
-  borderRadius: 2,
-  background: "#f8f8f8",
+  borderRadius: 10,
   padding: "10px 14px",
   whiteSpace: "break-spaces",
   wordBreak: "break-all",
+  "&:hover": {
+    background: "#f8f8f8",
+  },
 });
 
 export const ParameterInput = styled("input")({

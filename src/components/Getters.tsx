@@ -1,7 +1,7 @@
 import {
   ContentBox,
   FlexBoxColumn,
-  FlexBoxRow,
+  TableCellStyled,
   GetterBox,
   ParameterInput,
   TitleBox,
@@ -10,7 +10,7 @@ import {
   TypeChip,
   ValueBox,
 } from "./Getters.styled";
-import { Box, Skeleton, Tooltip } from "@mui/material";
+import { Box, IconButton, Skeleton, Table, TableBody, TableRow } from "@mui/material";
 import {
   Getter,
   GetterParameter,
@@ -21,6 +21,8 @@ import {
 import { AppButton } from "./AppButton";
 import { AppNotification, NotificationType } from "./AppNotification";
 import { useState } from "react";
+import copy from "../assets/copy.svg";
+import useNotification from "../lib/useNotification";
 
 function Request({ getter }: { getter: Getter }) {
   const { setValue } = useGetters();
@@ -52,14 +54,15 @@ function Request({ getter }: { getter: Getter }) {
 
 function ResponseValue({ type, value }: { type: string | null; value: GetterResponseValue[] }) {
   const [currIdx, setIdx] = useState(0);
+  const { showNotification } = useNotification();
 
   return (
-    <FlexBoxRow
+    <TableRow
       sx={{ gap: 1, cursor: value.length > 1 ? "pointer" : "initial" }}
       onClick={() => {
         setIdx((currIdx + 1) % value.length);
       }}>
-      <Box sx={{ minWidth: 80 }}>
+      <TableCellStyled>
         <TypeChip>
           {type === "_" || !type
             ? "unknown"
@@ -67,9 +70,22 @@ function ResponseValue({ type, value }: { type: string | null; value: GetterResp
             ? type
             : value[currIdx]!.type}
         </TypeChip>
-      </Box>
-      <ValueBox>{value[currIdx].value}</ValueBox>
-    </FlexBoxRow>
+      </TableCellStyled>
+      <TableCellStyled width="100%">
+        <ValueBox>{value[currIdx].value}</ValueBox>
+      </TableCellStyled>
+      <TableCellStyled>
+        <IconButton
+          sx={{ padding: 0, opacity: 0.8 }}
+          onClick={(e) => {
+            e.stopPropagation();
+            navigator.clipboard.writeText(value[currIdx].value);
+            showNotification("Copied to clipboard!", "success");
+          }}>
+          <img src={copy} alt="Copy icon" width={15} height={15} />
+        </IconButton>
+      </TableCellStyled>
+    </TableRow>
   );
 }
 
@@ -91,9 +107,13 @@ function Response({
       )}
       {values.length > 0 && (
         <FlexBoxColumn sx={{ gap: 1.5 }}>
-          {values.map((value, i) => (
-            <ResponseValue type={returnTypes[i]} value={value} />
-          ))}
+          <Table>
+            <TableBody>
+              {values.map((value, i) => (
+                <ResponseValue type={returnTypes[i]} value={value} />
+              ))}
+            </TableBody>
+          </Table>
         </FlexBoxColumn>
       )}
       {values.length === 0 && isLoading && (

@@ -136,7 +136,7 @@ export function useGetters() {
   return { setValue, getters: getterConfig, getterParams };
 }
 
-type PossibleRepresentation = "address" | "coins" | "raw" | "boc";
+type PossibleRepresentation = "address" | "coins" | "base64" | "boc" | "int" | "raw" | "hex";
 
 export type GetterResponseValue = { type: PossibleRepresentation; value: string };
 
@@ -176,13 +176,18 @@ export function useQueryGetter(name: string) {
             }
 
             possibleRepresentations.push({
-              type: "raw",
+              type: "base64",
               value: value.toBoc().toString("base64"),
             });
             possibleRepresentations.push({ type: "boc", value: value.toDebugString() });
           } else if (value instanceof BN) {
-            possibleRepresentations.push({ type: "raw", value: value.toString() });
+            possibleRepresentations.push({ type: "int", value: value.toString() });
             possibleRepresentations.push({ type: "coins", value: fromNano(value) });
+            possibleRepresentations.push({ type: "hex", value: value.toString("hex") });
+            possibleRepresentations.push({
+              type: "base64",
+              value: Buffer.from(value.toString("hex"), "hex").toString("base64"),
+            });
           } else {
             possibleRepresentations.push({ type: "raw", value: String(value) });
           }
