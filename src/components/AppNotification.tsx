@@ -13,11 +13,13 @@ interface NotificationBoxProps {
   backgroundColor?: string;
   singleLine?: boolean;
   noBottomMargin?: boolean;
+  noTopMargin?: boolean;
 }
 
 const NotificationBox = styled(Box)((props: NotificationBoxProps) => ({
   padding: `${props.singleLine ? 0 : 15}px 25px`,
-  margin: props.noBottomMargin ? "24px 0 0 0" : "24px 0",
+  marginBottom: props.noBottomMargin ? 0 : 24,
+  marginTop: props.noTopMargin ? 0 : 24,
   background: props.backgroundColor || "",
   border: `1px solid ${props.borderColor || "#D8D8D8"}`,
   borderRadius: 12,
@@ -29,6 +31,8 @@ interface CompilationNotificationProps {
   notificationBody: React.ReactNode;
   singleLine?: boolean;
   noBottomMargin?: boolean;
+  noTopMargin?: boolean;
+  noMargin?: boolean;
 }
 
 export function AppNotification({
@@ -37,6 +41,7 @@ export function AppNotification({
   notificationBody,
   singleLine,
   noBottomMargin,
+  noTopMargin,
 }: CompilationNotificationProps) {
   let borderColor;
   let backgroundColor;
@@ -62,7 +67,8 @@ export function AppNotification({
       singleLine={singleLine}
       borderColor={borderColor}
       backgroundColor={backgroundColor}
-      noBottomMargin={noBottomMargin}>
+      noBottomMargin={noBottomMargin}
+      noTopMargin={noTopMargin}>
       {title}
       {notificationBody}
     </NotificationBox>
