@@ -11,7 +11,9 @@ import { theme } from "./theme";
 import { Admin } from "./components/admin/Admin";
 import { initGA } from "./lib/googleAnalytics";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { refetchOnWindowFocus: false } },
+});
 
 initGA();
 
