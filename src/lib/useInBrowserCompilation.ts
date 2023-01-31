@@ -5,6 +5,7 @@ import { useLoadContractProof } from "./useLoadContractProof";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useState } from "react";
 import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
+import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
 
 export enum VerificationResults {
   VALID = "VALID",
@@ -23,6 +24,7 @@ export function useInBrowserCompilation() {
   const [hash, setHash] = useState<string | null>(null);
 
   const verifyContract = async () => {
+    sendAnalyticsEvent(AnalyticsAction.IN_BROWSER_COMPILE_START);
     setError(null);
     setLoading(true);
 
@@ -71,6 +73,7 @@ export function useInBrowserCompilation() {
     if (result.status === "error") {
       setError(result.message);
       setLoading(false);
+      sendAnalyticsEvent(AnalyticsAction.IN_BROWSER_COMPILE_ERROR);
       return;
     }
 
@@ -79,6 +82,8 @@ export function useInBrowserCompilation() {
 
     contractData?.hash === codeCell.hash().toString("base64") &&
       setHash(codeCell.hash().toString("base64"));
+
+    sendAnalyticsEvent(AnalyticsAction.IN_BROWSER_COMPILE_SUCCESS);
   };
 
   const isVerificationEnabled = () => {
