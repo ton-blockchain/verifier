@@ -6,6 +6,7 @@ import Parser from "web-tree-sitter";
 import { create } from "zustand";
 import { isWebAssemblySupported } from "../utils/generalUtils";
 import { getClient } from "./getClient";
+import { sendAnalyticsEvent, AnalyticsAction } from "./googleAnalytics";
 import { makeGetCall } from "./makeGetCall";
 import { useContractAddress } from "./useContractAddress";
 import { useLoadContractProof } from "./useLoadContractProof";
@@ -47,6 +48,8 @@ async function parseGetters(code: string): Promise<Getter[]> {
   if (!isWebAssemblySupported()) {
     return [];
   }
+
+  sendAnalyticsEvent(AnalyticsAction.GETTER_PARSE_START);
 
   await initParser("./tree-sitter.wasm", "./tree-sitter-func.wasm");
   const p = createParser();
@@ -148,6 +151,8 @@ export function useQueryGetter(name: string) {
     const tc = await getClient();
     if (!contractAddress) return;
     if (!getters) return;
+
+    sendAnalyticsEvent(AnalyticsAction.RUN_GETTER);
 
     const resp = makeGetCall(
       Address.parse(contractAddress),
