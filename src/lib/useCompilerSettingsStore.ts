@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import create from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { useFileStore } from "./useFileStore";
+import { FuncCompilerVersion } from "@ton-community/contract-verifier-sdk";
 
-export type FuncCliCompilerVersion = "0.2.0" | "0.3.0" | "0.4.0";
 export type Compiler = "func" | "fift" | "tact";
 
 export type UserProvidedFuncCompileSettings = {
-  funcVersion: FuncCliCompilerVersion;
+  funcVersion: FuncCompilerVersion;
   commandLine: string;
   overrideCommandLine: string | null;
 };
@@ -22,7 +22,7 @@ type DerivedState = {};
 type Actions = {
   setCompilerSettings: (settings: UserProvidedFuncCompileSettings) => void;
   setOverrideCommandLine: (overrideCommandLine: string | null) => void;
-  setFuncCliVersion: (funcVersion: FuncCliCompilerVersion) => void;
+  setFuncCliVersion: (funcVersion: FuncCompilerVersion) => void;
   setCompiler: (compiler: Compiler) => void;
 };
 
@@ -30,7 +30,7 @@ const _useCompilerSettingsStore = create(
   immer<State & DerivedState & Actions>((set, get) => ({
     // State
     compiler: "func" as Compiler,
-    compilerSettings: { funcVersion: "0.4.0", commandLine: "" } as UserProvidedFuncCompileSettings,
+    compilerSettings: { funcVersion: "0.4.1", commandLine: "" } as UserProvidedFuncCompileSettings,
 
     // Derived
 
@@ -51,7 +51,7 @@ const _useCompilerSettingsStore = create(
       });
     },
 
-    setFuncCliVersion: (funcVersion: FuncCliCompilerVersion) => {
+    setFuncCliVersion: (funcVersion: FuncCompilerVersion) => {
       set((state) => {
         if (state.compiler !== "func") {
           throw new Error("not func compiler");

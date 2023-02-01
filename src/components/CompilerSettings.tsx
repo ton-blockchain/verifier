@@ -1,9 +1,5 @@
 import { Chip, IconButton, MenuItem, Typography, useMediaQuery, useTheme } from "@mui/material";
-import {
-  Compiler,
-  FuncCliCompilerVersion,
-  useCompilerSettingsStore,
-} from "../lib/useCompilerSettingsStore";
+import { Compiler, useCompilerSettingsStore } from "../lib/useCompilerSettingsStore";
 import { Box } from "@mui/system";
 import { CenteringBox } from "./Common.styled";
 import {
@@ -14,6 +10,7 @@ import {
 } from "./CompilerSetting.styled";
 import undo from "../assets/undo.svg";
 import { useSubmitSources } from "../lib/useSubmitSources";
+import { FuncCompilerVersion } from "@ton-community/contract-verifier-sdk";
 
 function CompilerSettings() {
   const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler, setCompiler } =
@@ -59,8 +56,9 @@ function CompilerSettings() {
                 <CompilerSelect
                   value={compilerSettings.funcVersion}
                   onChange={(e) => {
-                    setFuncCliVersion(e.target.value as FuncCliCompilerVersion);
+                    setFuncCliVersion(e.target.value as FuncCompilerVersion);
                   }}>
+                  <MenuItem value={"0.4.1"}>0.4.1</MenuItem>
                   <MenuItem value={"0.4.0"}>0.4.0</MenuItem>
                   <MenuItem value={"0.3.0"}>0.3.0</MenuItem>
                   <MenuItem value={"0.2.0"}>0.2.0</MenuItem>
