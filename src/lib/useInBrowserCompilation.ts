@@ -14,7 +14,7 @@ export enum VerificationResults {
   VERSION = "FunC version is not supported",
 }
 
-const compilerSupportedVersions = ["0.2.0", "0.3.0", "0.4.0"];
+const compilerSupportedVersions = ["0.2.0", "0.3.0", "0.4.0", "0.4.1"];
 
 export function useInBrowserCompilation() {
   const { data } = useLoadContractProof();
@@ -56,6 +56,11 @@ export function useInBrowserCompilation() {
       }
       case "0.4.0": {
         let { object: instance } = await import("func-js-bin-0.4.0");
+        compilerInstance = instance;
+        break;
+      }
+      case "0.4.1": {
+        let { object: instance } = await import("func-js-bin-0.4.1");
         compilerInstance = instance;
         break;
       }
