@@ -89,25 +89,24 @@ export function InBrowserVerificationGuide() {
   return (
     <Box p={2}>
       <Typography sx={{ fontSize: 14 }}>
-        Verify this contract by compiling the contract with a wasm binding of the{" "}
+      You are not required to rely on third-party validators. You can now verify this contract by yourself by having your browser download the sources and compile them locally in-browser using{" "}
         <Link
           sx={{ textDecoration: "none" }}
           href={"https://github.com/ton-community/func-js"}
           target="_blank">
-          compiler
-        </Link>{" "}
-        using your browser
+          WASM
+        </Link>.
         {!isOnLocalHost() && (
           <CenteringBox mt={1} sx={{ overflow: "auto", maxHeight: 300 }}>
             <NotificationTitle sx={{ margin: 0 }}>
-              For maximum safety, fork this{" "}
+            The web page you're looking at is{" "}
               <Link
                 sx={{ textDecoration: "none" }}
-                href="https://github.com/ton-community/ton-contract-verifier"
+                href="https://github.com/ton-community/contract-verifier"
                 target="_blank">
-                project{" "}
+                open source
               </Link>
-              and run it locally
+              ,  you can also fork or run it locally if you wish to have absolute control.
             </NotificationTitle>
           </CenteringBox>
         )}
