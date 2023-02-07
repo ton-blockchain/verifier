@@ -25,7 +25,14 @@ export function ContractBlock() {
   const dataRows: DataRowItem[] = [];
 
   const [displayAddress, toggleDisplayAddress] = useToggle(contractAddress, contractAddressHex);
-  const [displayCodeCellHash, toggleDisplayCodeCellHash] = useToggle(data?.hash, data?.hashHex);
+  const [displayCodeCellHash, toggleDisplayCodeCellHash] = useToggle(
+    data?.codeCellHash.base64,
+    data?.codeCellHash.hex,
+  );
+  const [displayDataCellHash, toggleDisplayDataCellHash] = useToggle(
+    data?.dataCellHash.base64,
+    data?.dataCellHash.hex,
+  );
 
   if (data) {
     dataRows.push({
@@ -36,14 +43,23 @@ export function ContractBlock() {
         toggleDisplayAddress();
       },
       tooltip: true,
+      subtitle: workchainForAddress(contractAddress || ""),
     });
-    dataRows.push({ title: "Workchain", value: workchainForAddress(contractAddress || "") });
     dataRows.push({
       title: "Code Hash",
       value: displayCodeCellHash ?? "",
       showIcon: true,
       onClick: () => {
         toggleDisplayCodeCellHash();
+      },
+      tooltip: true,
+    });
+    dataRows.push({
+      title: "Data Hash",
+      value: displayDataCellHash ?? "",
+      showIcon: true,
+      onClick: () => {
+        toggleDisplayDataCellHash();
       },
       tooltip: true,
     });

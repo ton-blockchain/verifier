@@ -95,7 +95,7 @@ export function CompileOutput() {
             <Box sx={{ display: "flex", flexDirection: "column" }}>
               <ErrorRow>
                 <ErrorRowTitle>Contract hash</ErrorRowTitle>
-                <ErrorRowValue>{contractInfoData?.hash ?? "-"}</ErrorRowValue>
+                <ErrorRowValue>{contractInfoData?.codeCellHash.base64 ?? "-"}</ErrorRowValue>
               </ErrorRow>
               <ErrorRowSeparator />
               <ErrorRow>

@@ -3,6 +3,7 @@ import { IconButton, Link, useMediaQuery, Tooltip } from "@mui/material";
 import { DataBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
+import { FlexBoxColumn, FlexBoxRow } from "./Getters.styled";
 import {
   DataFlexibleBox,
   DataRow,
@@ -20,6 +21,7 @@ export interface DataRowItem {
   customLink?: string;
   tooltip?: boolean;
   onClick?: () => void;
+  subtitle?: string;
 }
 
 interface DataBlockProps {
@@ -30,9 +32,14 @@ interface DataBlockProps {
   isLoading?: boolean;
 }
 
-const renderRowValue = (value?: string, customLink?: string, withTooltip?: boolean) => {
-  if (customLink && !!value) {
-    return (
+const renderRowValue = (
+  value?: string,
+  customLink?: string,
+  withTooltip?: boolean,
+  subtitle?: string,
+) => {
+  const WrappingLink = ({ children }: { children: any }) =>
+    customLink && !!value ? (
       <Link
         target="_blank"
         href={customLink}
@@ -40,21 +47,33 @@ const renderRowValue = (value?: string, customLink?: string, withTooltip?: boole
           textDecoration: "none",
           cursor: "pointer",
         }}>
-        {value}
+        {children}
       </Link>
+    ) : (
+      <>{children}</>
     );
-  }
-  if (withTooltip) {
-    return (
-      <Tooltip placement="top-start" title={value}>
-        <span>{value}</span>
-      </Tooltip>
-    );
-  } else if (!!value) {
-    return value;
-  }
 
-  return "-";
+  const WrappingTooltip = ({ children }: { children: any }) =>
+    withTooltip ? (
+      <Tooltip placement="top-start" title={value}>
+        <span>{children}</span>
+      </Tooltip>
+    ) : (
+      <>{children}</>
+    );
+
+  return (
+    <WrappingTooltip>
+      <FlexBoxColumn>
+        <FlexBoxRow>
+          <WrappingLink>
+            <DataRowValue>{value ?? "-"}</DataRowValue>
+          </WrappingLink>
+        </FlexBoxRow>
+        <FlexBoxRow sx={{ fontSize: 12, opacity: 0.8 }}>{subtitle ?? ""}</FlexBoxRow>
+      </FlexBoxColumn>
+    </WrappingTooltip>
+  );
 };
 
 export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading }: DataBlockProps) {
@@ -76,30 +95,32 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
         <TitleText>{title}</TitleText>
       </TitleBox>
       <DataRowsBox mt={2.5} isShrinked={!isFlexibleWrapper} isExtraSmallScreen={isExtraSmallScreen}>
-        {dataRows.map(({ title, value, showIcon, color, customLink, tooltip, onClick }) => {
-          return (
-            <DataRow
-              isExtraSmallScreen={isExtraSmallScreen}
-              key={title}
-              isShrinked={!isFlexibleWrapper}>
-              <DataRowTitle>{title}</DataRowTitle>
-              <DataRowValue
-                sx={{ color: color, cursor: !!onClick ? "pointer" : "initial" }}
-                onClick={onClick}>
-                {renderRowValue(value, customLink, tooltip)}
-              </DataRowValue>
-              {showIcon && (
-                <IconsWrapper>
-                  {value && (
-                    <IconButton sx={{ padding: 0 }} onClick={() => onCopy(value)}>
-                      <img src={copy} alt="Copy icon" width={15} height={15} />
-                    </IconButton>
-                  )}
-                </IconsWrapper>
-              )}
-            </DataRow>
-          );
-        })}
+        {dataRows.map(
+          ({ title, value, showIcon, color, customLink, tooltip, onClick, subtitle }) => {
+            return (
+              <DataRow
+                isExtraSmallScreen={isExtraSmallScreen}
+                key={title}
+                isShrinked={!isFlexibleWrapper}>
+                <DataRowTitle>{title}</DataRowTitle>
+                <DataRowValue
+                  sx={{ color: color, cursor: !!onClick ? "pointer" : "initial" }}
+                  onClick={onClick}>
+                  {renderRowValue(value, customLink, tooltip, subtitle)}
+                </DataRowValue>
+                {showIcon && (
+                  <IconsWrapper>
+                    {value && (
+                      <IconButton sx={{ padding: 0 }} onClick={() => onCopy(value)}>
+                        <img src={copy} alt="Copy icon" width={15} height={15} />
+                      </IconButton>
+                    )}
+                  </IconsWrapper>
+                )}
+              </DataRow>
+            );
+          },
+        )}
       </DataRowsBox>
     </Wrapper>
   );
