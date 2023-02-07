@@ -6,7 +6,7 @@ import { sendAnalyticsEvent, AnalyticsAction } from "../googleAnalytics";
 import { makeGetCall } from "../makeGetCall";
 import { useContractAddress } from "../useContractAddress";
 import { useGetters } from "./useGetters";
-import { beginCell } from "ton/dist";
+import { beginCell } from "ton";
 
 export type PossibleRepresentation = "address" | "coins" | "base64" | "boc" | "int" | "raw" | "hex";
 
