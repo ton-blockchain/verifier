@@ -1,4 +1,4 @@
-import { Box, styled, TableCell, Typography } from "@mui/material";
+import { Box, Select, styled, TableCell, Typography } from "@mui/material";
 
 export const TitleText = styled(Typography)({
   fontSize: 14,
@@ -51,6 +51,9 @@ export const TypeChip = styled(Box)({
   fontSize: 12,
   textAlign: "center",
   display: "inline-block",
+  "&:hover": {
+    border: "1px solid #b0b0b0",
+  },
 });
 
 export const ValueBox = styled(Box)({
