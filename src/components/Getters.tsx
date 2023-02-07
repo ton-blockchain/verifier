@@ -11,22 +11,50 @@ import {
   ValueBox,
 } from "./Getters.styled";
 import { Box, IconButton, Skeleton, Table, TableBody, TableRow } from "@mui/material";
-import {
-  Getter,
-  GetterParameter,
-  GetterResponseValue,
-  useGetters,
-  useQueryGetter,
-} from "../lib/getterParser";
+import { Getter, GetterParameter } from "../lib/getter/getterParser";
+import { useGetters } from "../lib/getter/useGetters";
+import { GetterResponseValue, useQueryGetter } from "../lib/getter/useQueryGetter";
 import { AppButton } from "./AppButton";
 import { AppNotification, NotificationType } from "./AppNotification";
 import { useState } from "react";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
 
-function Request({ getter }: { getter: Getter }) {
-  const { setValue } = useGetters();
+function GetterParameterComponent({
+  getter,
+  getterParameter,
+  index,
+}: {
+  getter: Getter;
+  getterParameter: GetterParameter;
+  index: number;
+}) {
+  const { setValue, getterParams, nextType } = useGetters();
 
+  const filledParam = getterParams[getter.name]?.[index];
+
+  return (
+    <FlexBoxColumn sx={{ gap: 1 }}>
+      <FlexBoxColumn sx={{ gap: 0.5, flexDirection: "row" }}>
+        <Box>{getterParameter?.name}</Box>
+        <TypeChip
+          sx={{ cursor: filledParam?.possibleTypes.length > 1 ? "pointer" : "inherit" }}
+          onClick={() => {
+            nextType(getter.name, index);
+          }}>
+          {filledParam?.possibleTypes[filledParam.selectedTypeIdx]}
+        </TypeChip>
+      </FlexBoxColumn>
+      <ParameterInput
+        onChange={(e) => {
+          setValue(getter.name, index, e.target.value);
+        }}
+      />
+    </FlexBoxColumn>
+  );
+}
+
+function Request({ getter }: { getter: Getter }) {
   return (
     <Box>
       <Box sx={{ mb: 1 }}>
@@ -34,17 +62,7 @@ function Request({ getter }: { getter: Getter }) {
       </Box>
       <FlexBoxColumn sx={{ gap: 2 }}>
         {getter.parameters.map((p: GetterParameter, i) => (
-          <FlexBoxColumn sx={{ gap: 1 }}>
-            <FlexBoxColumn sx={{ gap: 0.5, flexDirection: "row" }}>
-              <Box>{p.name}</Box>
-              <TypeChip>{p.type}</TypeChip>
-            </FlexBoxColumn>
-            <ParameterInput
-              onChange={(e) => {
-                setValue(getter.name, i, e.target.value);
-              }}
-            />
-          </FlexBoxColumn>
+          <GetterParameterComponent key={p.name} getter={getter} getterParameter={p} index={i} />
         ))}
         {(getter.parameters.length ?? 0) === 0 && <Box sx={{ color: "#949597" }}>(No params)</Box>}
       </FlexBoxColumn>
@@ -52,34 +70,41 @@ function Request({ getter }: { getter: Getter }) {
   );
 }
 
-function ResponseValue({ type, value }: { type: string | null; value: GetterResponseValue[] }) {
+function useTypeChip({ type, value }: { type: string | null; value: GetterResponseValue[] }) {
   const [currIdx, setIdx] = useState(0);
+
+  return {
+    onClick: () => {
+      setIdx((currIdx + 1) % value.length);
+    },
+    type:
+      type === "_" || !type
+        ? "unknown"
+        : value[currIdx]!.type === "raw"
+        ? type
+        : value[currIdx]!.type,
+    value: value[currIdx].value,
+  };
+}
+
+function ResponseValue({ type, value }: { type: string | null; value: GetterResponseValue[] }) {
+  const { type: currType, value: currValue, onClick } = useTypeChip({ type, value });
   const { showNotification } = useNotification();
 
   return (
-    <TableRow
-      sx={{ gap: 1, cursor: value.length > 1 ? "pointer" : "initial" }}
-      onClick={() => {
-        setIdx((currIdx + 1) % value.length);
-      }}>
+    <TableRow sx={{ gap: 1, cursor: value.length > 1 ? "pointer" : "initial" }} onClick={onClick}>
       <TableCellStyled>
-        <TypeChip>
-          {type === "_" || !type
-            ? "unknown"
-            : value[currIdx]!.type === "raw"
-            ? type
-            : value[currIdx]!.type}
-        </TypeChip>
+        <TypeChip>{currType}</TypeChip>
       </TableCellStyled>
       <TableCellStyled width="100%">
-        <ValueBox>{value[currIdx].value}</ValueBox>
+        <ValueBox>{currValue}</ValueBox>
       </TableCellStyled>
       <TableCellStyled>
         <IconButton
           sx={{ padding: 0, opacity: 0.8 }}
           onClick={(e) => {
             e.stopPropagation();
-            navigator.clipboard.writeText(value[currIdx].value);
+            navigator.clipboard.writeText(currValue);
             showNotification("Copied to clipboard!", "success");
           }}>
           <img src={copy} alt="Copy icon" width={15} height={15} />

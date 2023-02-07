@@ -13,7 +13,7 @@ import copy from "../assets/copy.svg";
 import { downloadSources } from "../lib/downloadSources";
 import useNotification from "../lib/useNotification";
 import { Getters } from "./Getters";
-import { useGetters } from "../lib/getterParser";
+import { useGetters } from "../lib/getter/useGetters";
 
 enum CODE {
   DISASSEMBLED,
