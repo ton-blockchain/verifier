@@ -120,13 +120,11 @@ export function useGetters() {
 
   useEffect(() => {
     (async () => {
+      const _getterConfig = [];
       for (const f of data?.files ?? []) {
-        const _getterConfig = await parseGetters(f.content);
-        if (_getterConfig.length > 0) {
-          setGetterConfig(_getterConfig);
-          break;
-        }
+        _getterConfig.push(...(await parseGetters(f.content)));
       }
+      setGetterConfig(_getterConfig);
     })();
   }, [data?.files]);
 
