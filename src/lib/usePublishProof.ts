@@ -11,7 +11,7 @@ export function usePublishProof() {
   const { data: contractInfo } = useLoadContractInfo();
 
   const { sendTXN, data, clearTXN } = useSendTXN("publishProof", async (count: number) => {
-    const ipfsLink = await getProofIpfsLink(contractInfo!.hash);
+    const ipfsLink = await getProofIpfsLink(contractInfo!.codeCellHash.base64);
 
     if (count > 20) {
       return "error";

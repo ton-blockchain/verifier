@@ -56,7 +56,7 @@ export function useSubmitSources() {
 
   const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;
-    if (!contractInfo?.hash) return;
+    if (!contractInfo?.codeCellHash.base64) return;
     if (!hasFiles()) return;
     if (!walletAddress) {
       throw new Error("Wallet is not connected");
@@ -83,7 +83,7 @@ export function useSubmitSources() {
         compiler,
         compilerSettings,
         knownContractAddress: contractAddress,
-        knownContractHash: contractInfo.hash,
+        knownContractHash: contractInfo.codeCellHash.base64,
         sources: files.map((u) => ({
           includeInCommand: u.includeInCommand,
           isEntrypoint: u.isEntrypoint,

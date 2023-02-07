@@ -37,7 +37,7 @@ export function useLoadContractProof() {
         };
       }
 
-      const ipfsLink = await getProofIpfsLink(contractInfo!.hash);
+      const ipfsLink = await getProofIpfsLink(contractInfo!.codeCellHash.base64);
 
       if (!ipfsLink) {
         return { hasOnchainProof: false, ipfsLink };
@@ -50,7 +50,10 @@ export function useLoadContractProof() {
       };
     },
     {
-      enabled: !!contractAddress && !!contractInfo?.hash && publishProofStatus === "initial",
+      enabled:
+        !!contractAddress &&
+        !!contractInfo?.codeCellHash.base64 &&
+        publishProofStatus === "initial",
     },
   );
 

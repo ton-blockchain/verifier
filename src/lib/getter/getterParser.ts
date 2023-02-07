@@ -1,6 +1,4 @@
-import { toNano } from "ton";
 import Parser from "web-tree-sitter";
-import { create } from "zustand";
 import { isWebAssemblySupported } from "../../utils/generalUtils";
 import { sendAnalyticsEvent, AnalyticsAction } from "../googleAnalytics";
 
@@ -47,8 +45,6 @@ export async function parseGetters(code: string): Promise<Getter[]> {
   await initParser("./tree-sitter.wasm", "./tree-sitter-func.wasm");
   const p = createParser();
   const parsed = p.parse(code);
-
-  language = p.getLanguage();
 
   const getters = parsed.rootNode.children.filter(
     (c) =>
