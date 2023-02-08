@@ -24,7 +24,7 @@ export const createParser = () => {
   return parser;
 };
 
-export type GetterParameter = {
+type GetterParameter = {
   type: string;
   name: string;
 };

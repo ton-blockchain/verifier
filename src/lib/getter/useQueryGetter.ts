@@ -5,18 +5,18 @@ import { getClient } from "../getClient";
 import { sendAnalyticsEvent, AnalyticsAction } from "../googleAnalytics";
 import { makeGetCall } from "../makeGetCall";
 import { useContractAddress } from "../useContractAddress";
-import { useGetters } from "./useGetters";
+import { useGetters, StateGetter } from "./useGetters";
 import { beginCell } from "ton";
 
 export type PossibleRepresentation = "address" | "coins" | "base64" | "boc" | "int" | "raw" | "hex";
 
 export type GetterResponseValue = { type: PossibleRepresentation; value: string };
 
-export function useQueryGetter(name: string) {
+export function useQueryGetter(getter: StateGetter) {
   const { contractAddress } = useContractAddress();
-  const { getters, getterParams } = useGetters();
+  const { getters } = useGetters();
 
-  return useMutation(["getter", name], async () => {
+  return useMutation(["getter", getter.name], async () => {
     const tc = await getClient();
     if (!contractAddress) return;
     if (!getters) return;
@@ -25,8 +25,8 @@ export function useQueryGetter(name: string) {
 
     const resp = makeGetCall(
       Address.parse(contractAddress),
-      name,
-      getterParams[name].map((param, i) => {
+      getter.name,
+      getter.parameters.map((param) => {
         const type = param.possibleTypes[param.selectedTypeIdx];
         switch (type) {
           case "int":

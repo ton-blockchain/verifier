@@ -11,8 +11,13 @@ import {
   ValueBox,
 } from "./Getters.styled";
 import { Box, IconButton, Skeleton, Table, TableBody, TableRow } from "@mui/material";
-import { Getter, GetterParameter } from "../lib/getter/getterParser";
-import { useGetters } from "../lib/getter/useGetters";
+import { Getter } from "../lib/getter/getterParser";
+import {
+  useGetters,
+  useGetterParameter,
+  useCustomGetter,
+  StateGetter,
+} from "../lib/getter/useGetters";
 import { GetterResponseValue, useQueryGetter } from "../lib/getter/useQueryGetter";
 import { AppButton } from "./AppButton";
 import { AppNotification, NotificationType } from "./AppNotification";
@@ -22,47 +27,47 @@ import useNotification from "../lib/useNotification";
 
 function GetterParameterComponent({
   getter,
-  getterParameter,
-  index,
+  parameterName,
 }: {
-  getter: Getter;
-  getterParameter: GetterParameter;
-  index: number;
+  getter: StateGetter;
+  parameterName: string;
 }) {
-  const { setValue, getterParams, nextType } = useGetters();
+  // const { setValue, getterParams, nextType } = useGetters();
+  const { setValue, type, selectedTypeIdx, value, possibleTypes, toggleNextType } =
+    useGetterParameter(getter.name, parameterName);
 
-  const filledParam = getterParams[getter.name]?.[index];
+  // const filledParam = getterParams[getter.name]?.[index];
 
   return (
     <FlexBoxColumn sx={{ gap: 1 }}>
       <FlexBoxColumn sx={{ gap: 0.5, flexDirection: "row" }}>
-        <Box>{getterParameter?.name}</Box>
+        <Box>{parameterName}</Box>
         <TypeChip
-          sx={{ cursor: filledParam?.possibleTypes.length > 1 ? "pointer" : "inherit" }}
+          sx={{ cursor: possibleTypes.length > 1 ? "pointer" : "inherit" }}
           onClick={() => {
-            nextType(getter.name, index);
+            toggleNextType();
           }}>
-          {filledParam?.possibleTypes[filledParam.selectedTypeIdx]}
+          {type()}
         </TypeChip>
       </FlexBoxColumn>
       <ParameterInput
         onChange={(e) => {
-          setValue(getter.name, index, e.target.value);
+          setValue(e.target.value);
         }}
       />
     </FlexBoxColumn>
   );
 }
 
-function Request({ getter }: { getter: Getter }) {
+function Request({ getter }: { getter: StateGetter }) {
   return (
     <Box>
       <Box sx={{ mb: 1 }}>
         <b>Request</b>
       </Box>
       <FlexBoxColumn sx={{ gap: 2 }}>
-        {getter.parameters.map((p: GetterParameter, i) => (
-          <GetterParameterComponent key={p.name} getter={getter} getterParameter={p} index={i} />
+        {getter.parameters.map((p, i) => (
+          <GetterParameterComponent key={p.name} getter={getter} parameterName={p.name} />
         ))}
         {(getter.parameters.length ?? 0) === 0 && <Box sx={{ color: "#949597" }}>(No params)</Box>}
       </FlexBoxColumn>
@@ -152,15 +157,15 @@ function Response({
   );
 }
 
-function GetterComponent({ getter }: { getter: Getter }) {
-  const { data, isLoading, mutate, error } = useQueryGetter(getter.name);
+function GetterComponent({ getter }: { getter: StateGetter }) {
+  const { data, isLoading, mutate, error } = useQueryGetter(getter);
 
   return (
     <GetterBox>
       <TitleBox>
         <Box sx={{ flexGrow: 1 }}>
           <TitleText>
-            {getter.name}({getter.parameters.map((p) => p.type).join(", ")})
+            {getter.name}({getter.parameters.map((p) => p.type()).join(", ")})
           </TitleText>
           <TitleSubtext>
             <b>returns</b> {getter.returnTypes.join(", ")}
@@ -201,11 +206,15 @@ function GetterComponent({ getter }: { getter: Getter }) {
 
 export function Getters() {
   const { getters } = useGetters();
+
+  const customGetter = useCustomGetter();
+
   return (
     <Box sx={{ display: "flex", gap: 4, flexDirection: "column", mt: 2 }}>
       {getters?.map((g) => (
         <GetterComponent getter={g} />
       ))}
+      <GetterComponent getter={customGetter} />
     </Box>
   );
 }
