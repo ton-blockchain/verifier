@@ -6,9 +6,14 @@ import { DataBlock, DataRowItem } from "./DataBlock";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { workchainForAddress } from "../lib/workchainForAddress";
 import { formatBalance } from "../utils/numberUtils";
+import { useEffect } from "react";
 
 function useToggle<T>(valA: T, valB: T): [T, () => void] {
   const [state, setState] = useState(valA);
+
+  useEffect(() => {
+    setState(valA);
+  }, [valA, valB]);
 
   return [
     state,
