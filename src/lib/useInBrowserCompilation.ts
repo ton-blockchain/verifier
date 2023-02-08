@@ -85,7 +85,7 @@ export function useInBrowserCompilation() {
     const codeCell = Cell.fromBoc(Buffer.from(result.codeBoc, "base64"))[0];
     setLoading(false);
 
-    contractData?.hash === codeCell.hash().toString("base64") &&
+    contractData?.codeCellHash.base64 === codeCell.hash().toString("base64") &&
       setHash(codeCell.hash().toString("base64"));
 
     sendAnalyticsEvent(AnalyticsAction.IN_BROWSER_COMPILE_SUCCESS);
