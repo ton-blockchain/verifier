@@ -6,6 +6,7 @@ export type CustomStateGetter = StateGetter & {
   parameters: CustomParameter[];
   setName: (val: string) => void;
   addParameter: () => void;
+  removeParameter: () => void;
   clear: () => void;
 };
 
@@ -58,6 +59,11 @@ export const _useCustomGetter = create(
       });
     },
     returnTypes: [],
+    removeParameter: () => {
+      set((state) => {
+        state.parameters.pop();
+      });
+    },
     clear: () => {
       set((state) => {
         state.name = "";

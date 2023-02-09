@@ -21,13 +21,7 @@ import { useState } from "react";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
 
-function GetterParameterComponent({
-  getter,
-  parameter,
-}: {
-  getter: StateGetter;
-  parameter: Parameter;
-}) {
+function GetterParameterComponent({ parameter }: { parameter: Parameter }) {
   return (
     <FlexBoxColumn sx={{ gap: 1 }}>
       <FlexBoxColumn sx={{ gap: 0.5, flexDirection: "row" }}>
@@ -57,7 +51,7 @@ function Request({ getter }: { getter: StateGetter }) {
       </Box>
       <FlexBoxColumn sx={{ gap: 2 }}>
         {getter.parameters.map((p, i) => (
-          <GetterParameterComponent key={p.name} getter={getter} parameter={p} />
+          <GetterParameterComponent key={p.name} parameter={p} />
         ))}
         {(getter.parameters.length ?? 0) === 0 && <Box sx={{ color: "#949597" }}>(No params)</Box>}
       </FlexBoxColumn>
@@ -65,7 +59,7 @@ function Request({ getter }: { getter: StateGetter }) {
   );
 }
 
-function useTypeChip({ type, value }: { type: string | null; value: GetterResponseValue[] }) {
+function useTypeChip({ value }: { value: GetterResponseValue[] }) {
   const [currIdx, setIdx] = useState(0);
 
   return {
@@ -78,7 +72,7 @@ function useTypeChip({ type, value }: { type: string | null; value: GetterRespon
 }
 
 function ResponseValue({ type, value }: { type: string | null; value: GetterResponseValue[] }) {
-  const { type: currType, value: currValue, onClick } = useTypeChip({ type, value });
+  const { type: currType, value: currValue, onClick } = useTypeChip({ value });
   const { showNotification } = useNotification();
 
   return (
@@ -219,17 +213,30 @@ function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
       </TitleBox>
       <ContentBox sx={{ padding: "10px 20px", gap: 2 }}>
         <Request getter={getter} />
-        <AppButton
-          fontSize={12}
-          fontWeight={700}
-          height={32}
-          textColor="#50A7EA"
-          transparent
-          onClick={() => {
-            getter.addParameter();
-          }}>
-          Add parameter
-        </AppButton>
+        <div style={{ width: 300, display: "flex", gap: 10 }}>
+          <AppButton
+            fontSize={12}
+            fontWeight={700}
+            height={32}
+            textColor="#50A7EA"
+            transparent
+            onClick={() => {
+              getter.addParameter();
+            }}>
+            Add parameter
+          </AppButton>
+          <AppButton
+            fontSize={12}
+            fontWeight={700}
+            height={32}
+            textColor="#50A7EA"
+            transparent
+            onClick={() => {
+              getter.removeParameter();
+            }}>
+            Remove parameter
+          </AppButton>
+        </div>
         <Response returnTypes={getter.returnTypes} values={data ?? []} isLoading={isLoading} />
         {!!error && (
           <AppNotification
