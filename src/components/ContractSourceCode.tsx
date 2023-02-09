@@ -127,11 +127,7 @@ function ContractSourceCode() {
             label="Sources"
           />
           <Tab sx={{ textTransform: "none" }} label="Disassembled" />
-          <Tab
-            sx={{ textTransform: "none" }}
-            disabled={!contractProof?.hasOnchainProof || (getters?.length ?? 0) === 0}
-            label={`Getters (${getters?.length ?? 0})`}
-          />
+          <Tab sx={{ textTransform: "none" }} label={`Getters (${getters?.length ?? 0})`} />
         </SourceCodeTabs>
         <Box sx={{ display: value === 0 ? "block" : "none" }}>
           <VerifiedSourceCode button={<CopyButton onCopy={onCopy} copyText={CODE.SOURCE} />} />

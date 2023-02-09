@@ -6,9 +6,14 @@ import { DataBlock, DataRowItem } from "./DataBlock";
 import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { workchainForAddress } from "../lib/workchainForAddress";
 import { formatBalance } from "../utils/numberUtils";
+import { useEffect } from "react";
 
 function useToggle<T>(valA: T, valB: T): [T, () => void] {
   const [state, setState] = useState(valA);
+
+  useEffect(() => {
+    setState(valA);
+  }, [valA, valB]);
 
   return [
     state,
@@ -46,6 +51,10 @@ export function ContractBlock() {
       subtitle: workchainForAddress(contractAddress || ""),
     });
     dataRows.push({
+      title: "Balance",
+      value: `${formatBalance.format(parseFloat(data.balance))} TON`,
+    });
+    dataRows.push({
       title: "Code Hash",
       value: displayCodeCellHash ?? "",
       showIcon: true,
@@ -63,10 +72,6 @@ export function ContractBlock() {
       },
       tooltip: true,
     });
-    dataRows.push({
-      title: "Balance",
-      value: `${formatBalance.format(parseFloat(data.balance))} TON`,
-    });
   }
 
   return (
@@ -75,7 +80,7 @@ export function ContractBlock() {
       icon={contractIcon}
       dataRows={dataRows}
       isLoading={isLoading}
-      isFlexibleWrapper={proofData && proofData.hasOnchainProof}
+      isFlexibleWrapper={!!proofData?.hasOnchainProof}
     />
   );
 }

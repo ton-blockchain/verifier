@@ -1,79 +1,121 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
+import { useContractAddress } from "../useContractAddress";
 import { useLoadContractProof } from "../useLoadContractProof";
-import { Getter, GetterParameter, parseGetters } from "./getterParser";
+import { Getter, parseGetters } from "./getterParser";
+import { useCustomGetter } from "./useCustomGetter";
 
-type FilledGetterParameter = {
+type ParameterType = "address" | "cell" | "slice" | "int";
+
+export type Parameter = {
   name: string;
   value: string;
-  possibleTypes: ("address" | "cell" | "slice" | "int")[]; // TODO add more
+  possibleTypes: ParameterType[]; // TODO add more
   selectedTypeIdx: number;
+  toggleNextType: () => void;
+  type: () => ParameterType;
+  setValue: (value: string) => void;
+  originalType: () => ParameterType;
 };
 
-const _useGetterParameters = create<{
-  getterParams: Record<string, FilledGetterParameter[]>;
-  nextType: (getterName: string, index: number) => void;
-  setValue: (getterName: string, index: number, value: string) => void;
-  setGetters: (getter: Getter[]) => void;
-}>((set, get) => ({
-  getterParams: {},
-  nextType(getterName: string, index) {
-    const { getterParams } = get();
+export type StateGetter = {
+  name: string;
+  parameters: Parameter[];
+  returnTypes: string[];
+};
 
-    const param = getterParams[getterName][index];
+const parameterByName = (getters: StateGetter[], getterName: string, parameterName: string) =>
+  getters.find((_g) => _g.name === getterName)!.parameters.find((_p) => _p.name === parameterName)!;
 
-    param.selectedTypeIdx = (param.selectedTypeIdx + 1) % param.possibleTypes.length;
-    set({ getterParams });
-  },
-  setValue(getterName: string, index: number, value: string) {
-    const { getterParams } = get();
+type GetterState = {
+  getters: StateGetter[];
+  setGetters: (getters: Getter[]) => void;
+};
 
-    getterParams[getterName][index].value = value;
-    set({ getterParams });
-  },
-  setGetters(getters: Getter[]) {
-    const getterParams = Object.fromEntries(
-      getters.map((g) => [
-        g.name,
-        g.parameters.map((p) => {
-          const possibleTypes = [p.type as "address" | "cell" | "slice" | "int"];
-          const selectedTypeIdx = 0;
+const _useGetters = create(
+  immer<GetterState>((set, get) => ({
+    getters: [],
 
-          if (p.type === "slice" || p.type === "cell") {
-            possibleTypes.push("address");
-          }
+    setGetters: (getters: Getter[]) => {
+      set((state) => {
+        const stateGetters: StateGetter[] = getters.map((g) => {
+          return {
+            name: g.name,
+            parameters: g.parameters.map((p) => {
+              const possibleTypes = [p.type as ParameterType];
+              if (["cell", "slice"].includes(p.type)) {
+                possibleTypes.push("address");
+              }
+              return {
+                name: p.name,
+                value: "",
+                possibleTypes,
+                selectedTypeIdx: 0,
 
-          return { ...p, value: "", possibleTypes, selectedTypeIdx };
-        }),
-      ]),
-    );
-    set({ getterParams });
-  },
-  clear() {
-    // TODO
-  },
-}));
+                toggleNextType: () => {
+                  set((state) => {
+                    const param = parameterByName(state.getters, g.name, p.name);
+                    param.selectedTypeIdx =
+                      (param.selectedTypeIdx + 1) % param.possibleTypes.length;
+                  });
+                },
+
+                type: () => {
+                  const param = parameterByName(get().getters, g.name, p.name);
+                  return param.possibleTypes[param.selectedTypeIdx];
+                },
+
+                originalType: () => {
+                  const param = parameterByName(get().getters, g.name, p.name);
+                  return param.possibleTypes[0];
+                },
+
+                setValue: (value: string) => {
+                  set((state) => {
+                    const param = parameterByName(state.getters, g.name, p.name);
+                    param.value = value;
+                  });
+                },
+              };
+            }),
+            returnTypes: g.returnTypes,
+          };
+        });
+
+        state.getters = stateGetters;
+      });
+    },
+  })),
+);
 
 export function useGetters() {
+  const { getters } = _useGetters();
+  return { getters };
+}
+
+export function useInitializeGetters() {
   const { data } = useLoadContractProof();
 
-  const [getterConfig, setGetterConfig] = useState<Getter[] | null>(null);
+  const { setGetters } = _useGetters();
+  const { clear } = useCustomGetter();
+
+  const { contractAddress } = useContractAddress();
+
+  useEffect(() => {
+    setGetters([]);
+    clear();
+  }, [contractAddress]);
 
   useEffect(() => {
     (async () => {
+      console.log("DOING THIS!");
       const _getterConfig = [];
       for (const f of data?.files ?? []) {
         _getterConfig.push(...(await parseGetters(f.content)));
       }
-      setGetterConfig(_getterConfig);
+      setGetters(_getterConfig);
+      clear();
     })();
   }, [data?.files]);
-
-  const { setGetters, setValue, getterParams, nextType } = _useGetterParameters();
-  useEffect(() => {
-    if (!getterConfig) return;
-    setGetters(getterConfig);
-  }, [getterConfig]);
-
-  return { setValue, getters: getterConfig, getterParams, nextType };
 }
