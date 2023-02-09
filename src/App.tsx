@@ -22,6 +22,7 @@ import { CenteringBox } from "./components/Common.styled";
 import { useAddressHistory } from "./lib/useAddressHistory";
 import { useWalletConnect } from "./lib/useWalletConnect";
 import { LatestVerifiedContracts } from "./components/LatestVerifiedContracts";
+import { useInitializeGetters } from "./lib/getter/useGetters";
 
 const ContentBox = styled(Box)({
   maxWidth: 1160,
@@ -67,6 +68,7 @@ function App() {
 
   useAddressHistory();
   useResetState();
+  useInitializeGetters();
 
   useEffect(() => {
     window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });

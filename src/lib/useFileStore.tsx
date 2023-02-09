@@ -43,7 +43,6 @@ export const useFileStore = create(
 
     // Actions
     addFiles: async (files) => {
-      // console.log(files, "shahar")
       const modifiedFiles = await Promise.all(
         files.map(async (f) => {
           const content = await f.text();

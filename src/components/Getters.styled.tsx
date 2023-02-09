@@ -1,4 +1,4 @@
-import { Box, Select, styled, TableCell, Typography } from "@mui/material";
+import { Box, styled, TableCell, Typography } from "@mui/material";
 
 export const TitleText = styled(Typography)({
   fontSize: 14,
@@ -73,6 +73,26 @@ export const ParameterInput = styled("input")({
   width: "100%",
   boxSizing: "border-box",
   height: 40,
+  background: "#FFFFFF",
+  border: "1px solid #D8D8D8",
+  borderRadius: "12px",
+  fontSize: 14,
+  fontFamily: "Mulish",
+  outline: "none",
+  "&:hover": {
+    border: "1px solid #b0b0b0",
+  },
+  "&:focus": {
+    border: "1px solid #807e7e",
+  },
+});
+
+export const CustomGetterInput = styled("input")({
+  display: "flex",
+  alignItems: "center",
+  paddingLeft: 14,
+  boxSizing: "border-box",
+  height: 34,
   background: "#FFFFFF",
   border: "1px solid #D8D8D8",
   borderRadius: "12px",

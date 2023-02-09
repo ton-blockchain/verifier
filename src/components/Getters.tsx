@@ -9,10 +9,11 @@ import {
   TitleText,
   TypeChip,
   ValueBox,
+  CustomGetterInput,
 } from "./Getters.styled";
 import { Box, IconButton, Skeleton, Table, TableBody, TableRow } from "@mui/material";
-import { Getter, GetterParameter } from "../lib/getter/getterParser";
-import { useGetters } from "../lib/getter/useGetters";
+import { useGetters, StateGetter, Parameter } from "../lib/getter/useGetters";
+import { CustomStateGetter, useCustomGetter } from "../lib/getter/useCustomGetter";
 import { GetterResponseValue, useQueryGetter } from "../lib/getter/useQueryGetter";
 import { AppButton } from "./AppButton";
 import { AppNotification, NotificationType } from "./AppNotification";
@@ -20,49 +21,37 @@ import { useState } from "react";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
 
-function GetterParameterComponent({
-  getter,
-  getterParameter,
-  index,
-}: {
-  getter: Getter;
-  getterParameter: GetterParameter;
-  index: number;
-}) {
-  const { setValue, getterParams, nextType } = useGetters();
-
-  const filledParam = getterParams[getter.name]?.[index];
-
+function GetterParameterComponent({ parameter }: { parameter: Parameter }) {
   return (
     <FlexBoxColumn sx={{ gap: 1 }}>
       <FlexBoxColumn sx={{ gap: 0.5, flexDirection: "row" }}>
-        <Box>{getterParameter?.name}</Box>
+        <Box>{parameter.name}</Box>
         <TypeChip
-          sx={{ cursor: filledParam?.possibleTypes.length > 1 ? "pointer" : "inherit" }}
+          sx={{ cursor: parameter.possibleTypes.length > 1 ? "pointer" : "inherit" }}
           onClick={() => {
-            nextType(getter.name, index);
+            parameter.toggleNextType();
           }}>
-          {filledParam?.possibleTypes[filledParam.selectedTypeIdx]}
+          {parameter.type()}
         </TypeChip>
       </FlexBoxColumn>
       <ParameterInput
         onChange={(e) => {
-          setValue(getter.name, index, e.target.value);
+          parameter.setValue(e.target.value);
         }}
       />
     </FlexBoxColumn>
   );
 }
 
-function Request({ getter }: { getter: Getter }) {
+function Request({ getter }: { getter: StateGetter }) {
   return (
     <Box>
       <Box sx={{ mb: 1 }}>
         <b>Request</b>
       </Box>
       <FlexBoxColumn sx={{ gap: 2 }}>
-        {getter.parameters.map((p: GetterParameter, i) => (
-          <GetterParameterComponent key={p.name} getter={getter} getterParameter={p} index={i} />
+        {getter.parameters.map((p, i) => (
+          <GetterParameterComponent key={p.name} parameter={p} />
         ))}
         {(getter.parameters.length ?? 0) === 0 && <Box sx={{ color: "#949597" }}>(No params)</Box>}
       </FlexBoxColumn>
@@ -70,25 +59,20 @@ function Request({ getter }: { getter: Getter }) {
   );
 }
 
-function useTypeChip({ type, value }: { type: string | null; value: GetterResponseValue[] }) {
+function useTypeChip({ value }: { value: GetterResponseValue[] }) {
   const [currIdx, setIdx] = useState(0);
 
   return {
     onClick: () => {
       setIdx((currIdx + 1) % value.length);
     },
-    type:
-      type === "_" || !type
-        ? "unknown"
-        : value[currIdx]!.type === "raw"
-        ? type
-        : value[currIdx]!.type,
+    type: value[currIdx]?.type ?? "unknown",
     value: value[currIdx].value,
   };
 }
 
 function ResponseValue({ type, value }: { type: string | null; value: GetterResponseValue[] }) {
-  const { type: currType, value: currValue, onClick } = useTypeChip({ type, value });
+  const { type: currType, value: currValue, onClick } = useTypeChip({ value });
   const { showNotification } = useNotification();
 
   return (
@@ -152,15 +136,15 @@ function Response({
   );
 }
 
-function GetterComponent({ getter }: { getter: Getter }) {
-  const { data, isLoading, mutate, error } = useQueryGetter(getter.name);
+function ParsedGetterComponent({ getter }: { getter: StateGetter }) {
+  const { data, isLoading, mutate, error } = useQueryGetter(getter);
 
   return (
     <GetterBox>
       <TitleBox>
         <Box sx={{ flexGrow: 1 }}>
           <TitleText>
-            {getter.name}({getter.parameters.map((p) => p.type).join(", ")})
+            {getter.name}({getter.parameters.map((p) => p.originalType()).join(", ")})
           </TitleText>
           <TitleSubtext>
             <b>returns</b> {getter.returnTypes.join(", ")}
@@ -199,13 +183,85 @@ function GetterComponent({ getter }: { getter: Getter }) {
   );
 }
 
+function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
+  const { data, isLoading, mutate, error } = useQueryGetter(getter);
+
+  return (
+    <GetterBox>
+      <TitleBox>
+        <Box sx={{ flexGrow: 1 }}>
+          <CustomGetterInput
+            value={getter.name}
+            placeholder="Get method name"
+            onChange={(e) => getter.setName(e.target.value)}></CustomGetterInput>
+        </Box>
+        <Box>
+          <AppButton
+            fontSize={12}
+            fontWeight={800}
+            textColor="#fff"
+            height={32}
+            width={60}
+            background="#1976d2"
+            hoverBackground="#156cc2"
+            onClick={() => {
+              mutate();
+            }}>
+            Run
+          </AppButton>
+        </Box>
+      </TitleBox>
+      <ContentBox sx={{ padding: "10px 20px", gap: 2 }}>
+        <Request getter={getter} />
+        <div style={{ width: 300, display: "flex", gap: 10 }}>
+          <AppButton
+            fontSize={12}
+            fontWeight={700}
+            height={32}
+            textColor="#50A7EA"
+            transparent
+            onClick={() => {
+              getter.addParameter();
+            }}>
+            Add parameter
+          </AppButton>
+          <AppButton
+            fontSize={12}
+            fontWeight={700}
+            height={32}
+            textColor="#50A7EA"
+            transparent
+            onClick={() => {
+              getter.removeParameter();
+            }}>
+            Remove parameter
+          </AppButton>
+        </div>
+        <Response returnTypes={getter.returnTypes} values={data ?? []} isLoading={isLoading} />
+        {!!error && (
+          <AppNotification
+            noBottomMargin
+            noTopMargin
+            title={<Box>{error.toString()}</Box>}
+            type={NotificationType.ERROR}
+            notificationBody={<Box />}
+          />
+        )}
+      </ContentBox>
+    </GetterBox>
+  );
+}
+
 export function Getters() {
   const { getters } = useGetters();
+  const customGetter = useCustomGetter();
+
   return (
     <Box sx={{ display: "flex", gap: 4, flexDirection: "column", mt: 2 }}>
       {getters?.map((g) => (
-        <GetterComponent getter={g} />
+        <ParsedGetterComponent getter={g} />
       ))}
+      <CustomGetterComponent getter={customGetter} />
     </Box>
   );
 }
