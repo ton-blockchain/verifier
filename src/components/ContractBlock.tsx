@@ -46,6 +46,10 @@ export function ContractBlock() {
       subtitle: workchainForAddress(contractAddress || ""),
     });
     dataRows.push({
+      title: "Balance",
+      value: `${formatBalance.format(parseFloat(data.balance))} TON`,
+    });
+    dataRows.push({
       title: "Code Hash",
       value: displayCodeCellHash ?? "",
       showIcon: true,
@@ -63,10 +67,6 @@ export function ContractBlock() {
       },
       tooltip: true,
     });
-    dataRows.push({
-      title: "Balance",
-      value: `${formatBalance.format(parseFloat(data.balance))} TON`,
-    });
   }
 
   return (
@@ -75,7 +75,7 @@ export function ContractBlock() {
       icon={contractIcon}
       dataRows={dataRows}
       isLoading={isLoading}
-      isFlexibleWrapper={proofData && proofData.hasOnchainProof}
+      isFlexibleWrapper={!!proofData?.hasOnchainProof}
     />
   );
 }
