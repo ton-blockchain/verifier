@@ -66,9 +66,7 @@ const renderRowValue = (
     <WrappingTooltip>
       <FlexBoxColumn>
         <FlexBoxRow>
-          <WrappingLink>
-            <DataRowValue>{value ?? "-"}</DataRowValue>
-          </WrappingLink>
+          <WrappingLink>{value ?? "-"}</WrappingLink>
         </FlexBoxRow>
         <FlexBoxRow sx={{ fontSize: 12, opacity: 0.8 }}>{subtitle ?? ""}</FlexBoxRow>
       </FlexBoxColumn>
@@ -103,9 +101,7 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
                 key={title}
                 isShrinked={!isFlexibleWrapper}>
                 <DataRowTitle>{title}</DataRowTitle>
-                <DataRowValue
-                  sx={{ color: color, cursor: !!onClick ? "pointer" : "initial" }}
-                  onClick={onClick}>
+                <DataRowValue sx={{ cursor: !!onClick ? "pointer" : "initial" }} onClick={onClick}>
                   {renderRowValue(value, customLink, tooltip, subtitle)}
                 </DataRowValue>
                 {showIcon && (
