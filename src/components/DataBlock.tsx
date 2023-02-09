@@ -1,9 +1,8 @@
 import React, { useCallback } from "react";
-import { IconButton, Link, useMediaQuery, Tooltip } from "@mui/material";
+import { IconButton, Link, useMediaQuery, Tooltip, Box } from "@mui/material";
 import { DataBox, IconBox, TitleBox, TitleText } from "./Common.styled";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
-import { FlexBoxColumn, FlexBoxRow } from "./Getters.styled";
 import {
   DataFlexibleBox,
   DataRow,
@@ -64,12 +63,8 @@ const renderRowValue = (
 
   return (
     <WrappingTooltip>
-      <FlexBoxColumn>
-        <FlexBoxRow>
-          <WrappingLink>{value ?? "-"}</WrappingLink>
-        </FlexBoxRow>
-        <FlexBoxRow sx={{ fontSize: 12, opacity: 0.8 }}>{subtitle ?? ""}</FlexBoxRow>
-      </FlexBoxColumn>
+      <WrappingLink>{value ?? "-"}</WrappingLink>
+      <Box sx={{ fontSize: 12, opacity: 0.8 }}>{subtitle ?? ""}</Box>
     </WrappingTooltip>
   );
 };
