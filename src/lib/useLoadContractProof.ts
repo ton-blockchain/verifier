@@ -13,7 +13,6 @@ export const toSha256Buffer = (s: string) => {
 };
 
 export async function getProofIpfsLink(hash: string): Promise<string | null> {
-  console.log("yo");
   return ContractVerifier.getSourcesJsonUrl(hash, {
     verifier: import.meta.env.VITE_VERIFIER_ID,
   });
