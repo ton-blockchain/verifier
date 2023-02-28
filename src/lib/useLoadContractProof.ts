@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { Sha256 } from "@aws-crypto/sha256-js";
-import { getEndpoint } from "./getClient";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import "@ton-community/contract-verifier-sdk";
 import { SourcesData } from "@ton-community/contract-verifier-sdk";
@@ -14,8 +13,8 @@ export const toSha256Buffer = (s: string) => {
 };
 
 export async function getProofIpfsLink(hash: string): Promise<string | null> {
+  console.log("yo");
   return ContractVerifier.getSourcesJsonUrl(hash, {
-    httpApiEndpoint: await getEndpoint(),
     verifier: import.meta.env.VITE_VERIFIER_ID,
   });
 }
