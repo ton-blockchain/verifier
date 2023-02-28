@@ -98,8 +98,11 @@ export function TactDeployer() {
       <TopBar />
       <div>{name}</div>
       <div>{code?.slice(0, 100)}</div>
+      <div>{codeCell.hash().toString("base64")}</div>
       <div>{status}</div>
-      <div>{addr.toFriendly()}</div>
+      <div>
+        <a href={addr.toFriendly()}>{addr.toFriendly()}</a>
+      </div>
       <button
         onClick={() => {
           sendTXN();

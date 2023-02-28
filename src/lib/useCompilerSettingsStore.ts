@@ -83,7 +83,7 @@ export function useCompilerSettingsStore() {
   }
 
   useEffect(() => {
-    if (files.some((f) => f.fileObj.name.endsWith(".tact"))) {
+    if (files.some((f) => f.fileObj.name.endsWith(".pkg"))) {
       compilerStore.setCompiler("tact");
     }
   }, [files]);
