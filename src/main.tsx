@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Routes>
             <Route path="/interact" element={<ContractInteract />} />
             <Route path="/admin" element={<Admin />} />
-            <Route path="/tactDeployer" element={<TactDeployer />} />
+            {/* <Route path="/tactDeployer" element={<TactDeployer />} /> */}
             <Route path="/:contractAddress" element={<App />} />
             <Route path="/" element={<App />} />
           </Routes>

@@ -52,8 +52,6 @@ export async function parseGetters(code: string): Promise<Getter[]> {
       c.children.find((n) => n.type === "specifiers_list")?.text.includes("method_id"),
   );
 
-  console.log(getters.map((g) => g.text));
-
   const gettersParsed = getters.map((f) => {
     const returnTypes = f.children[0].children
       .filter((c) => !c.type.match(/[,()]/)) // TODO types are slice, primitive_type, ",", "(", ")"
