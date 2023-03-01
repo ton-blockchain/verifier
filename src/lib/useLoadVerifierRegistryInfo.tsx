@@ -11,7 +11,7 @@ function num2ip(num: BN) {
 
 export type VerifierConfig = {
   admin: string;
-  quorum: string;
+  quorum: number;
   pubKeyEndpoints: {
     [k: string]: string;
   };
@@ -30,7 +30,7 @@ export function useLoadVerifierRegistryInfo() {
       (s) =>
         (s[0] as Cell).beginParse().readDict(256, (s) => ({
           admin: s.readAddress()!.toFriendly(),
-          quorum: s.readInt(8).toString(),
+          quorum: s.readIntNumber(8),
           pubKeyEndpoints: Object.fromEntries(
             Array.from(s.readDict(256, (pkE) => num2ip(pkE.readUint(32))).entries()).map(
               ([k, v]) => [new BN(k).toBuffer().toString("base64"), v.toString()],
