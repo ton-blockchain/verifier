@@ -1,6 +1,6 @@
 import BN from "bn.js";
 import { useEffect } from "react";
-import { Address, Cell } from "ton";
+import { Address, Cell, StateInit } from "ton";
 import create from "zustand";
 import { useWalletConnect } from "./useWalletConnect";
 
@@ -39,9 +39,9 @@ export function useSendTXN(key: string, monitorSuccess: (count: number) => Promi
   }, []);
 
   return {
-    sendTXN: async (to: Address, value: BN, message: Cell) => {
+    sendTXN: async (to: Address, value: BN, message: Cell, stateInit?: StateInit) => {
       updateTxn(key, "pending");
-      const status = await requestTXN(to.toFriendly(), value, message);
+      const status = await requestTXN(to.toFriendly(), value, message, stateInit);
 
       let i = 1;
 

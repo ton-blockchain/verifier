@@ -109,7 +109,7 @@ function UpdateVerifier({ verifier }: { verifier: VerifierConfig }) {
                 toNano(0.01),
                 updateVerifier({
                   id: sha256BN(val.name),
-                  quorum: parseInt(val.quorum),
+                  quorum: val.quorum,
                   endpoints: new Map<BN, number>(
                     Object.entries(val.pubKeyEndpoints).map(([pubKey, ip]) => [
                       new BN(Buffer.from(pubKey, "base64")),
@@ -152,7 +152,7 @@ export function VerifierRegistry() {
                 style={{ background: "#00000011", padding: "2px 20px", marginTop: 10 }}>
                 <h3>{v.name}</h3>
                 <InfoPiece label="Admin" data={v.admin} />
-                <InfoPiece label="Quorum" data={v.quorum} />
+                <InfoPiece label="Quorum" data={String(v.quorum)} />
                 <InfoPiece label="Url" data={v.url} />
                 <br />
                 <div>Public Key Endpoints</div>

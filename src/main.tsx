@@ -10,6 +10,7 @@ import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { Admin } from "./components/admin/Admin";
 import { initGA } from "./lib/googleAnalytics";
+import { TactDeployer } from "./components/tactDeployer/TactDeployer";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
           <Routes>
             <Route path="/interact" element={<ContractInteract />} />
             <Route path="/admin" element={<Admin />} />
+            {/* <Route path="/tactDeployer" element={<TactDeployer />} /> */}
             <Route path="/:contractAddress" element={<App />} />
             <Route path="/" element={<App />} />
           </Routes>

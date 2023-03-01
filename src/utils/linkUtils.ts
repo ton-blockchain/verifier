@@ -12,4 +12,4 @@ export const fiftVersionToLink = (version: FiftVersion) =>
   `https://github.com/ton-blockchain/ton/tree/func-${version}/crypto/fift`;
 
 export const tactVersionToLink = (version: TactVersion) =>
-  `https://github.com/ton-community/tact/tree/v${version}`;
+  `https://github.com/tact-lang/tact/tree/v${version}`;

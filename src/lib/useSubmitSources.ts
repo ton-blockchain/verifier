@@ -8,6 +8,7 @@ import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
 import { useWalletConnect } from "./useWalletConnect";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
 import create from "zustand";
+import { useLoadVerifierRegistryInfo } from "./useLoadVerifierRegistryInfo";
 
 export function randomFromArray<T>(arr: T[]) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -53,18 +54,24 @@ export function useSubmitSources() {
   const { compiler, compilerSettings } = useCompilerSettingsStore();
   const { walletAddress } = useWalletConnect();
   const { clear, setStatus, status } = useSubmitSourcesStatusStore();
+  const { data: verifierRegistryData } = useLoadVerifierRegistryInfo();
+
+  const verifierRegistryConfig = verifierRegistryData?.find(
+    (v) => v.name === import.meta.env.VITE_VERIFIER_ID,
+  );
 
   const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;
     if (!contractInfo?.codeCellHash.base64) return;
     if (!hasFiles()) return;
+    if (!verifierRegistryConfig) return;
     if (!walletAddress) {
       throw new Error("Wallet is not connected");
     }
 
     clear();
 
-    const totalSignatures = 2;
+    const totalSignatures = verifierRegistryConfig.quorum;
     let remainingSignatures = totalSignatures;
 
     let msgCell: Buffer | undefined;
