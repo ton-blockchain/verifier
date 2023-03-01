@@ -109,9 +109,9 @@ export function useInitializeGetters() {
 
   useEffect(() => {
     (async () => {
-      console.log("DOING THIS!");
       const _getterConfig = [];
       for (const f of data?.files ?? []) {
+        if (!f.name.match(/\.(fc|func)/)) continue;
         _getterConfig.push(...(await parseGetters(f.content)));
       }
       setGetters(_getterConfig);
