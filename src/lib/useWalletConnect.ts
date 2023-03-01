@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { Address, Cell } from "ton";
+import { Address, Cell, StateInit } from "ton";
 import create from "zustand";
 import { persist } from "zustand/middleware";
 import { Provider } from "../components/ConnectorPopup";
@@ -86,12 +86,18 @@ export function useWalletConnect() {
     connect: async (provider: Provider, onLinkReady: (link: string) => void) => {
       connect(provider, onLinkReady);
     },
-    requestTXN: async (to: string, value: BN, message: Cell): Promise<"issued" | "rejected"> => {
+    requestTXN: async (
+      to: string,
+      value: BN,
+      message: Cell,
+      stateInit?: StateInit,
+    ): Promise<"issued" | "rejected"> => {
       try {
         await tonConnection.requestTransaction({
           to: Address.parse(to),
           value,
           message,
+          stateInit,
         });
         return "issued";
       } catch (e) {
