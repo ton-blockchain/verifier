@@ -9,7 +9,7 @@ import { useQuery } from "@tanstack/react-query";
 
 const IPFS_GW = "https://tact-deployer.infura-ipfs.io";
 
-async function fetchFromIpfs(hash) {
+async function fetchFromIpfs(hash: string) {
   return fetch(`${IPFS_GW}/ipfs/${hash}`);
 }
 
@@ -17,6 +17,7 @@ function useTactDeployer({ workchain }: { workchain: 0 | -1 }) {
   const { ipfsHash } = useParams();
 
   const { data, error } = useQuery(["tactDeploy", ipfsHash], async () => {
+    if (!ipfsHash) return null;
     const content = await fetchFromIpfs(ipfsHash).then((res) => res.json());
     const pkg = await fetchFromIpfs(content.pkg).then((res) => res.json());
     const dataCell = await fetchFromIpfs(content.dataCell)
@@ -94,6 +95,7 @@ export function TactDeployer() {
       <TopBar />
       <div style={{ margin: "20px auto", maxWidth: 1160 }}>
         <h1>Tact Deployer - alpha (use at your own risk)</h1>
+        {error && <div style={{ margin: "4px 0", color: "red" }}>{`${error}`}</div>}
         <div>Name: {data?.pkg.name}</div>
         <div>
           Will be deployed to:{" "}
