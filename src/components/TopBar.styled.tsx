@@ -52,10 +52,13 @@ const TopBarContent = styled(CenteringBox)(({ theme }) => ({
   gap: 10,
 }));
 
-const AppLogo = styled("h4")(() => ({
+const AppLogo = styled("h4")(({ theme }) => ({
   color: "#000",
   fontSize: 20,
   fontWeight: 800,
+  [theme.breakpoints.down("sm")]: {
+    fontSize: 16,
+  },
 }));
 const GitLogo = styled("h5")(() => ({
   color: "#000",

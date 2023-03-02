@@ -24,7 +24,7 @@ import { useWalletConnect } from "./lib/useWalletConnect";
 import { LatestVerifiedContracts } from "./components/LatestVerifiedContracts";
 import { useInitializeGetters } from "./lib/getter/useGetters";
 
-const ContentBox = styled(Box)({
+export const ContentBox = styled(Box)({
   maxWidth: 1160,
   margin: "auto",
 });
@@ -33,7 +33,7 @@ interface ContractDataBoxProps {
   isMobile?: boolean;
 }
 
-const ContractDataBox = styled(Box)((props: ContractDataBoxProps) => ({
+export const ContractDataBox = styled(Box)((props: ContractDataBoxProps) => ({
   display: props.isMobile ? "inherit" : "flex",
   gap: 20,
 }));
