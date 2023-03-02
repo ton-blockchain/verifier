@@ -89,7 +89,7 @@ export function useWalletConnect() {
     requestTXN: async (
       to: string,
       value: BN,
-      message: Cell,
+      message?: Cell,
       stateInit?: StateInit,
     ): Promise<"issued" | "rejected"> => {
       try {
