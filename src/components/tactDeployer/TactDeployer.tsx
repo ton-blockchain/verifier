@@ -69,7 +69,6 @@ function useDeployContract(stateInit?: StateInit, address?: Address) {
   //   }
   // }, [data.status]);
 
-  // TODO remove the cell
   return {
     sendTXN: () => {
       if (!address) return;
