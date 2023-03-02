@@ -95,7 +95,7 @@ export function TactDeployer() {
       <TopBar />
       <div style={{ margin: "20px auto", maxWidth: 1160 }}>
         <h1>Tact Deployer - alpha (use at your own risk)</h1>
-        {error && <div style={{ margin: "4px 0", color: "red" }}>{`${error}`}</div>}
+        {!!error && <div style={{ margin: "4px 0", color: "red" }}>{`${error}`}</div>}
         <div>Name: {data?.pkg.name}</div>
         <div>
           Will be deployed to:{" "}
