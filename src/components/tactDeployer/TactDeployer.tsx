@@ -73,7 +73,7 @@ function useDeployContract(stateInit?: StateInit, address?: Address) {
   return {
     sendTXN: () => {
       if (!address) return;
-      sendTXN(address, import.meta.env.DEV ? toNano(0.4) : toNano(0.5), new Cell(), stateInit);
+      sendTXN(address, import.meta.env.DEV ? toNano(0.4) : toNano(0.5), undefined, stateInit);
     },
     status: data.status,
     clearTXN,
@@ -94,6 +94,7 @@ export function TactDeployer() {
     <div>
       <TopBar />
       <div style={{ margin: "20px auto", maxWidth: 1160 }}>
+        <h1>Tact Deployer - alpha (use at your own risk)</h1>
         <div>Name: {data?.pkg.name}</div>
         <div>
           Will be deployed to:{" "}

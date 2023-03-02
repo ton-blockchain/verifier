@@ -39,7 +39,7 @@ export function useSendTXN(key: string, monitorSuccess: (count: number) => Promi
   }, []);
 
   return {
-    sendTXN: async (to: Address, value: BN, message: Cell, stateInit?: StateInit) => {
+    sendTXN: async (to: Address, value: BN, message?: Cell, stateInit?: StateInit) => {
       updateTxn(key, "pending");
       const status = await requestTXN(to.toFriendly(), value, message, stateInit);
 
