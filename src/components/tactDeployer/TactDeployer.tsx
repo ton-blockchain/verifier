@@ -5,7 +5,7 @@ import { useWalletConnect } from "../../lib/useWalletConnect";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Box, CircularProgress, Skeleton, styled, useMediaQuery, useTheme } from "@mui/material";
+import { Box, CircularProgress, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import contractIcon from "../../assets/contract.svg";
 import { ContentBox, ContractDataBox } from "../../App";
 import { DataBlock, DataRowItem } from "../DataBlock";
@@ -18,6 +18,9 @@ import { FlexBoxColumn, FlexBoxRow } from "../Getters.styled";
 import { AppButton } from "../AppButton";
 import { workchainForAddress } from "../../lib/workchainForAddress";
 import { getProofIpfsLink } from "../../lib/useLoadContractProof";
+import { useFileStore } from "../../lib/useFileStore";
+import { usePreload } from "../../lib/useResetState";
+import { CustomValueInput } from "./TactDeployer.styled";
 
 const IPFS_GW = "https://tact-deployer.infura-ipfs.io";
 
@@ -41,6 +44,7 @@ function useTactDeployer({ workchain }: { workchain: 0 | -1 }) {
     const address = contractAddress({ workchain, initialCode: codeCell, initialData: dataCell });
     const stateInit = new StateInit({ code: codeCell, data: dataCell });
 
+    const dataCellHash = dataCell.hash().toString("base64");
     const codeCellHash = codeCell.hash().toString("base64");
 
     const isDeployed = await tc.isContractDeployed(address);
@@ -51,6 +55,7 @@ function useTactDeployer({ workchain }: { workchain: 0 | -1 }) {
       stateInit,
       pkg,
       codeCellHash,
+      dataCellHash,
       isDeployed,
       hasProof,
     };
@@ -59,7 +64,7 @@ function useTactDeployer({ workchain }: { workchain: 0 | -1 }) {
   return { data, error, isLoading };
 }
 
-function useDeployContract(stateInit?: StateInit, address?: Address) {
+function useDeployContract(value: string, stateInit?: StateInit, address?: Address) {
   const { sendTXN, data, clearTXN } = useSendTXN("deployContract", async (count: number) => {
     if (!address) throw new Error("No address");
     const tc = await getClient();
@@ -75,7 +80,7 @@ function useDeployContract(stateInit?: StateInit, address?: Address) {
   return {
     sendTXN: () => {
       if (!address) return;
-      sendTXN(address, import.meta.env.DEV ? toNano(0.4) : toNano(0.5), undefined, stateInit);
+      sendTXN(address, toNano(value), undefined, stateInit);
     },
     status: data.status,
     clearTXN,
@@ -101,6 +106,10 @@ export function ContractBlock() {
       value: data.codeCellHash,
     });
     dataRows.push({
+      title: "Data Hash",
+      value: data.dataCellHash,
+    });
+    dataRows.push({
       title: "Workchain",
       value: workchainForAddress(data.address.toFriendly()),
     });
@@ -122,8 +131,10 @@ export function ContractBlock() {
 function DeployBlock() {
   const [value, setValue] = useState("0.5");
   const { data, error } = useTactDeployer({ workchain: 0 });
-  const { sendTXN, status } = useDeployContract(data?.stateInit, data?.address);
+  const { sendTXN, status } = useDeployContract(value, data?.stateInit, data?.address);
+  const { markPreloaded } = usePreload();
   const navigate = useNavigate();
+  const file = useFileStore();
 
   let statusText: string | JSX.Element = "";
 
@@ -139,7 +150,7 @@ function DeployBlock() {
   } else {
     switch (status) {
       case "initial":
-        statusText = "";
+        statusText = "Contract is ready for deployment";
         break;
       case "pending":
         statusText = "Please approve the transaction in your wallet";
@@ -185,7 +196,7 @@ function DeployBlock() {
     </AppButton>
   );
 
-  if (data?.isDeployed && !data.hasProof) {
+  if (status === "success" || (data?.isDeployed && !data.hasProof)) {
     button = (
       <AppButton
         fontSize={14}
@@ -196,7 +207,11 @@ function DeployBlock() {
         background="#1976d2"
         hoverBackground="#156cc2"
         onClick={() => {
-          navigate("/" + data.address.toFriendly());
+          markPreloaded();
+          navigate("/" + data!.address.toFriendly());
+          file.addFiles([
+            new File([JSON.stringify(data!.pkg)], data!.pkg.name + ".pkg", { type: "text/plain" }),
+          ]);
         }}>
         Verify
       </AppButton>
@@ -220,9 +235,10 @@ function DeployBlock() {
             </FlexBoxColumn>
             <FlexBoxColumn>
               <CustomValueInput
+                disabled={!!data?.isDeployed || status === "issued" || status == "pending"}
                 value={value}
                 type="number"
-                onChange={(e) => {
+                onChange={(e: any) => {
                   setValue(e.target.value);
                 }}
               />
@@ -259,26 +275,6 @@ function DeployBlock() {
     </DataBox>
   );
 }
-
-export const CustomValueInput = styled("input")({
-  display: "flex",
-  alignItems: "center",
-  paddingLeft: 14,
-  boxSizing: "border-box",
-  height: 34,
-  background: "#FFFFFF",
-  border: "1px solid #D8D8D8",
-  borderRadius: "12px",
-  fontSize: 14,
-  fontFamily: "Mulish",
-  outline: "none",
-  "&:hover": {
-    border: "1px solid #b0b0b0",
-  },
-  "&:focus": {
-    border: "1px solid #807e7e",
-  },
-});
 
 export function TactDeployer() {
   const theme = useTheme();
