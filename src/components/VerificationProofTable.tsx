@@ -26,9 +26,7 @@ export function VerificationProofTable() {
 
   // TODO this supports a single verifier Id for now.
   // when we wish to support multiple verifiers, load contract proof would have to address that
-  const verifierConfig = verifierRegistryInfo?.find(
-    (v) => v.name === import.meta.env.VITE_VERIFIER_ID,
-  );
+  const verifierConfig = verifierRegistryInfo?.find((v) => v.name === window.verifierId);
 
   const onCopy = useCallback(async (value: string) => {
     navigator.clipboard.writeText(value);
