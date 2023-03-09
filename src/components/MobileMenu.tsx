@@ -7,7 +7,7 @@ import { githubLink } from "../const";
 import github from "../assets/github-dark.svg";
 import { AppLogo, GitLogo, LinkWrapper } from "./TopBar.styled";
 import icon from "../assets/icon.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
 
 interface MobileMenuProps {
   closeMenu?: () => void;
@@ -15,7 +15,7 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
 
   return (
     <Drawer anchor="left" open={showMenu} onClose={closeMenu}>

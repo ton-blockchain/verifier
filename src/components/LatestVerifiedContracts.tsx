@@ -1,7 +1,7 @@
 import { Box, Skeleton, styled, Typography } from "@mui/material";
 import { useLoadLatestVerified } from "../lib/useLoadLatestVerified";
-import { useNavigate } from "react-router-dom";
 import { useRef } from "react";
+import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
 
 const Contract = styled(Box)(({ theme }) => ({
   background: "white",
@@ -53,7 +53,7 @@ const CompilerText = styled(Box)({
 
 export function LatestVerifiedContracts() {
   const { data: latestVerifiedContracts, isLoading } = useLoadLatestVerified();
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
   const skeletons = useRef(new Array(30).fill(null).map((_) => Math.random() * 100));
 
   return (

@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAddressInput } from "./useAddressInput";
 import { persist } from "zustand/middleware";
 import create from "zustand";
 import { useContractAddress } from "./useContractAddress";
+import { useNavigatePreserveQuery } from "./useNavigatePreserveQuery";
 
 interface AddressHistoryState {
   addresses: string[];
@@ -36,7 +36,7 @@ export const useAddressHistoryStore = create<AddressHistoryState>()(
 );
 
 export function useAddressHistory() {
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
   const { setValue, setActive } = useAddressInput();
   const { addresses, addAddress, clear, removeItem } = useAddressHistoryStore();
   const { contractAddress } = useContractAddress();

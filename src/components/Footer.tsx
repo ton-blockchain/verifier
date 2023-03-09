@@ -20,14 +20,14 @@ import github from "../assets/github-footer.svg";
 import githubHovered from "../assets/github-hover.svg";
 import { HoverableIcon } from "./HoverableIcon";
 import icon from "../assets/icon.svg";
-import { useNavigate } from "react-router-dom";
 import { CenteringBox } from "./Common.styled";
+import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
 
 export const TELEGRAM_SUPPORT_LINK = "https://t.me/tonverifier";
 
 export function Footer() {
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
 
   return (
     <FooterWrapper>

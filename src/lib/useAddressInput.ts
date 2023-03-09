@@ -1,8 +1,8 @@
 import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { validateAddress } from "./useContractAddress";
 import useNotification from "./useNotification";
 import create from "zustand";
+import { useNavigatePreserveQuery } from "./useNavigatePreserveQuery";
 
 interface Props {
   value: string;
@@ -20,7 +20,7 @@ const useAddressStore = create<Props>((set) => ({
 
 export function useAddressInput() {
   const { showNotification } = useNotification();
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
   const { value, setValue, active, setActive } = useAddressStore((state) => state);
 
   const onClear = useCallback(() => {

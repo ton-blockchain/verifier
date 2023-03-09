@@ -15,6 +15,7 @@ export const toSha256Buffer = (s: string) => {
 export async function getProofIpfsLink(hash: string): Promise<string | null> {
   return ContractVerifier.getSourcesJsonUrl(hash, {
     verifier: import.meta.env.VITE_VERIFIER_ID,
+    testnet: window.isTestnet,
   });
 }
 
@@ -35,13 +36,15 @@ export function useLoadContractProof() {
         };
       }
 
-      const ipfsLink = await getProofIpfsLink(contractInfo!.codeCellHash.base64);
+      let ipfsLink = await getProofIpfsLink(contractInfo!.codeCellHash.base64);
 
       if (!ipfsLink) {
         return { hasOnchainProof: false, ipfsLink };
       }
 
-      const sourcesData = await ContractVerifier.getSourcesData(ipfsLink);
+      const sourcesData = await ContractVerifier.getSourcesData(ipfsLink, {
+        testnet: window.isTestnet,
+      });
       return {
         hasOnchainProof: true,
         ...sourcesData,
@@ -52,6 +55,7 @@ export function useLoadContractProof() {
         !!contractAddress &&
         !!contractInfo?.codeCellHash.base64 &&
         publishProofStatus === "initial",
+      retry: 2,
     },
   );
 
