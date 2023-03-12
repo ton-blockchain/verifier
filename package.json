@@ -21,7 +21,7 @@
     "@mui/material": "^5.10.10",
     "@orbs-network/ton-access": "^2.3.0",
     "@tanstack/react-query": "^4.13.0",
-    "@ton-community/contract-verifier-sdk": "^0.5.0",
+    "@ton-community/contract-verifier-sdk": "^1.1.0",
     "@ton-community/func-js": "^0.3.0",
     "@ton-defi.org/ton-connection": "^0.8.1",
     "bn.js": "^5.2.1",

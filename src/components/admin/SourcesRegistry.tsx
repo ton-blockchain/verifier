@@ -11,7 +11,7 @@ import BN from "bn.js";
 import { getAdmin } from "../../lib/getAdmin";
 
 function useLoadSourcesRegistryInfo() {
-  const address = Address.parse(import.meta.env.VITE_SOURCES_REGISTRY);
+  const address = Address.parse(window.sourcesRegistryAddress);
   return useQuery(["sourcesRegistry", address], async () => {
     const tc = await getClient();
     const admin = await getAdmin(address, tc);

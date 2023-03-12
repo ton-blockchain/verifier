@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
 import { download } from "../utils/jsonUtils";
 import { AppButton } from "./AppButton";
 
@@ -133,7 +133,7 @@ function exportExamples() {
 }
 
 export function DevExamples() {
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
 
   return (
     <div

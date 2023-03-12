@@ -23,6 +23,7 @@ import { useAddressHistory } from "./lib/useAddressHistory";
 import { useWalletConnect } from "./lib/useWalletConnect";
 import { LatestVerifiedContracts } from "./components/LatestVerifiedContracts";
 import { useInitializeGetters } from "./lib/getter/useGetters";
+import { TestnetBar } from "./components/TestnetBar";
 
 export const ContentBox = styled(Box)({
   maxWidth: 1160,
@@ -85,6 +86,7 @@ function App() {
         onDragEnd={() => setIsDragging(false)}
       />
       <Box ref={scrollToRef} />
+      {window.isTestnet && <TestnetBar />}
       <TopBar />
       {contractAddress === null && isAddressEmpty && <LatestVerifiedContracts />}
       {contractAddress === null && !isAddressEmpty && (
