@@ -51,8 +51,7 @@ export function TopBar() {
           <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} width={30} height={30} alt="App icon" />
             <AppLogo>
-              TON VERIFIER
-              <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
+              TON VERIFIER <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
             </AppLogo>
           </LinkWrapper>
           <ContentColumn>
