@@ -51,7 +51,7 @@ export function TopBar() {
           <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} width={30} height={30} alt="App icon" />
             <AppLogo>
-              TON VERIFIER{window.isTestnet ? " - Testnet" : ""}{" "}
+              TON VERIFIER
               <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
             </AppLogo>
           </LinkWrapper>

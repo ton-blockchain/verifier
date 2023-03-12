@@ -22,12 +22,14 @@ import { HoverableIcon } from "./HoverableIcon";
 import icon from "../assets/icon.svg";
 import { CenteringBox } from "./Common.styled";
 import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
+import { useSwitchNetwork } from "./TestnetBar";
 
 export const TELEGRAM_SUPPORT_LINK = "https://t.me/tonverifier";
 
 export function Footer() {
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
   const navigate = useNavigatePreserveQuery();
+  const switchNetwork = useSwitchNetwork();
 
   return (
     <FooterWrapper>
@@ -85,6 +87,16 @@ export function Footer() {
           <FooterLink target="_blank" href={TELEGRAM_SUPPORT_LINK}>
             <Typography variant="body2">Support</Typography>
           </FooterLink>
+          {!window.isTestnet && (
+            <Typography
+              onClick={() => {
+                switchNetwork();
+              }}
+              sx={{ ml: 2, cursor: "pointer" }}
+              variant="body2">
+              Switch to Testnet
+            </Typography>
+          )}
         </FooterTextBoxRight>
       </CredentialsWrapper>
     </FooterWrapper>

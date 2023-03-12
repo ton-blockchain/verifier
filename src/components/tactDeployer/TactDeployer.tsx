@@ -22,10 +22,10 @@ import { useFileStore } from "../../lib/useFileStore";
 import { usePreload } from "../../lib/useResetState";
 import { CustomValueInput } from "./TactDeployer.styled";
 import { useNavigatePreserveQuery } from "../../lib/useNavigatePreserveQuery";
-
-const IPFS_GW = "https://tact-deployer.infura-ipfs.io";
+import { TestnetBar } from "../TestnetBar";
 
 async function fetchFromIpfs(hash: string) {
+  const IPFS_GW = `https://tact-deployer${window.isTestnet ? "-testnet" : ""}.infura-ipfs.io`;
   return fetch(`${IPFS_GW}/ipfs/${hash}`);
 }
 
@@ -290,6 +290,7 @@ export function TactDeployer() {
 
   return (
     <Box>
+      {window.isTestnet && <TestnetBar />}
       <TopBar />
       <ContentBox px={headerSpacings ? "20px" : 0}>
         {isLoading && (

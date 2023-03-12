@@ -34,7 +34,7 @@ export function TopBar() {
       <TopBarContent mb={5}>
         <LinkWrapper>
           <img src={icon} width={30} height={30} alt="App icon" />
-          <AppLogo>TACT DEPLOYER{window.isTestnet ? " Testnet" : ""}</AppLogo>
+          <AppLogo>TACT DEPLOYER</AppLogo>
         </LinkWrapper>
         <ContentColumn>
           <CenteringBox mr={isSmallScreen ? 0 : 2}>
