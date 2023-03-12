@@ -3,7 +3,7 @@ import { getClient } from "../../lib/getClient";
 import { useSendTXN } from "../../lib/useSendTxn";
 import { useWalletConnect } from "../../lib/useWalletConnect";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Box, CircularProgress, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import contractIcon from "../../assets/contract.svg";
@@ -21,10 +21,11 @@ import { getProofIpfsLink } from "../../lib/useLoadContractProof";
 import { useFileStore } from "../../lib/useFileStore";
 import { usePreload } from "../../lib/useResetState";
 import { CustomValueInput } from "./TactDeployer.styled";
-
-const IPFS_GW = "https://tact-deployer.infura-ipfs.io";
+import { useNavigatePreserveQuery } from "../../lib/useNavigatePreserveQuery";
+import { TestnetBar } from "../TestnetBar";
 
 async function fetchFromIpfs(hash: string) {
+  const IPFS_GW = `https://tact-deployer${window.isTestnet ? "-testnet" : ""}.infura-ipfs.io`;
   return fetch(`${IPFS_GW}/ipfs/${hash}`);
 }
 
@@ -133,7 +134,7 @@ function DeployBlock() {
   const { data, error } = useTactDeployer({ workchain: 0 });
   const { sendTXN, status } = useDeployContract(value, data?.stateInit, data?.address);
   const { markPreloaded } = usePreload();
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
   const file = useFileStore();
 
   let statusText: string | JSX.Element = "";
@@ -289,6 +290,7 @@ export function TactDeployer() {
 
   return (
     <Box>
+      {window.isTestnet && <TestnetBar />}
       <TopBar />
       <ContentBox px={headerSpacings ? "20px" : 0}>
         {isLoading && (

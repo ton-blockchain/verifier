@@ -1,9 +1,10 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Address } from "ton";
 import { useEffect } from "react";
+import { useNavigatePreserveQuery } from "./useNavigatePreserveQuery";
 
 function useContractAddress() {
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
   const { contractAddress } = useParams();
   const isAddressValid = validateAddress(contractAddress);
   const verifiedAddress = isAddressValid ? Address.parse(contractAddress!) : null;

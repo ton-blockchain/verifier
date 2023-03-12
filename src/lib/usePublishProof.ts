@@ -46,7 +46,7 @@ export function usePublishProof() {
   return {
     sendTXN: () => {
       sendTXN(
-        Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY),
+        Address.parse(window.verifierRegistryAddress),
         import.meta.env.DEV ? toNano(0.1) : toNano(0.5),
         Cell.fromBoc(Buffer.from(submitSourcesData!.result.msgCell!))[0],
       );

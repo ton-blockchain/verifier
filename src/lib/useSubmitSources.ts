@@ -35,7 +35,9 @@ function jsonToBlob(json: Record<string, any>): Blob {
   });
 }
 
-export const backends: string[] = import.meta.env.VITE_BACKEND_URL!.split(",");
+export const backends: string[] = window.isTestnet
+  ? import.meta.env.VITE_BACKEND_URL_TESTNET!.split(",")
+  : import.meta.env.VITE_BACKEND_URL!.split(",");
 
 const useSubmitSourcesStatusStore = create<{
   status: string | null;
@@ -56,9 +58,7 @@ export function useSubmitSources() {
   const { clear, setStatus, status } = useSubmitSourcesStatusStore();
   const { data: verifierRegistryData } = useLoadVerifierRegistryInfo();
 
-  const verifierRegistryConfig = verifierRegistryData?.find(
-    (v) => v.name === import.meta.env.VITE_VERIFIER_ID,
-  );
+  const verifierRegistryConfig = verifierRegistryData?.find((v) => v.name === window.verifierId);
 
   const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;

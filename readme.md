@@ -17,10 +17,10 @@ This app is deployed via github actions on github pages for this repository.
 
 ### Environment variables
 
-- `VITE_VERIFIER_REGISTRY` - the address of the verifier registry contract to interact with when sending the signed message received from backend
+- `VITE_VERIFIER_REGISTRY` / `VITE_VERIFIER_REGISTRY_TESTNET` - the address of the verifier registry contract to interact with when sending the signed message received from backend
 - `VITE_VERIFIER_ID` - id of the verifier registered with the verifier registry
-- `VITE_SOURCES_REGISTRY` - sources registry to fetch data from
-- `VITE_BACKEND_URL` - urls for backend (split by comma)
+- `VITE_SOURCES_REGISTRY` / `VITE_SOURCES_REGISTRY_TESTNET` - sources registry to fetch data from
+- `VITE_BACKEND_URL` / `VITE_BACKEND_URL_TESTNET` - urls for backend (split by comma)
 
 ## Running
 

@@ -20,7 +20,7 @@ export type VerifierConfig = {
 };
 
 export function useLoadVerifierRegistryInfo() {
-  const address = Address.parse(import.meta.env.VITE_VERIFIER_REGISTRY);
+  const address = Address.parse(window.verifierRegistryAddress);
   return useQuery(["verifierRegistry", address], async () => {
     const tc = await getClient();
     const verifierConfig = await makeGetCall(

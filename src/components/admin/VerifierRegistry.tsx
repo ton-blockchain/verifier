@@ -105,7 +105,7 @@ function UpdateVerifier({ verifier }: { verifier: VerifierConfig }) {
               const val = JSON.parse(value) as VerifierConfig;
 
               requestTXN(
-                import.meta.env.VITE_VERIFIER_REGISTRY,
+                window.verifierRegistryAddress,
                 toNano(0.01),
                 updateVerifier({
                   id: sha256BN(val.name),
@@ -141,7 +141,7 @@ export function VerifierRegistry() {
         }}>
         <h1>Verifier Registry</h1>
       </div>
-      <InfoPiece label="Address" data={import.meta.env.VITE_VERIFIER_REGISTRY} />
+      <InfoPiece label="Address" data={window.verifierRegistryAddress} />
       <>
         {isLoading && "Loading..."}
         {data?.map((v) => {

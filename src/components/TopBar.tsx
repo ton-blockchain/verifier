@@ -1,7 +1,7 @@
 import icon from "../assets/icon.svg";
 import { WalletConnect } from "./WalletConnect";
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import github from "../assets/github-dark.svg";
 import { AddressInput } from "../components/AddressInput";
 import { CenteringBox } from "./Common.styled";
@@ -19,11 +19,12 @@ import {
 import { IconButton, useMediaQuery, useTheme } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { MobileMenu } from "./MobileMenu";
+import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
 
 export function TopBar() {
   const { pathname } = useLocation();
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [showExpanded, setShowExpanded] = useState(pathname.length === 1);
@@ -50,7 +51,8 @@ export function TopBar() {
           <LinkWrapper onClick={() => navigate("/")}>
             <img src={icon} width={30} height={30} alt="App icon" />
             <AppLogo>
-              TON VERIFIER <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
+              TON VERIFIER
+              <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
             </AppLogo>
           </LinkWrapper>
           <ContentColumn>

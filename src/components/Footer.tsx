@@ -20,14 +20,16 @@ import github from "../assets/github-footer.svg";
 import githubHovered from "../assets/github-hover.svg";
 import { HoverableIcon } from "./HoverableIcon";
 import icon from "../assets/icon.svg";
-import { useNavigate } from "react-router-dom";
 import { CenteringBox } from "./Common.styled";
+import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
+import { useSwitchNetwork } from "./TestnetBar";
 
 export const TELEGRAM_SUPPORT_LINK = "https://t.me/tonverifier";
 
 export function Footer() {
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
-  const navigate = useNavigate();
+  const navigate = useNavigatePreserveQuery();
+  const switchNetwork = useSwitchNetwork();
 
   return (
     <FooterWrapper>
@@ -85,6 +87,16 @@ export function Footer() {
           <FooterLink target="_blank" href={TELEGRAM_SUPPORT_LINK}>
             <Typography variant="body2">Support</Typography>
           </FooterLink>
+          {!window.isTestnet && (
+            <Typography
+              onClick={() => {
+                switchNetwork();
+              }}
+              sx={{ ml: 2, cursor: "pointer" }}
+              variant="body2">
+              Switch to Testnet
+            </Typography>
+          )}
         </FooterTextBoxRight>
       </CredentialsWrapper>
     </FooterWrapper>
