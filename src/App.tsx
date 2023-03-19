@@ -22,7 +22,7 @@ import { CenteringBox } from "./components/Common.styled";
 import { useAddressHistory } from "./lib/useAddressHistory";
 import { useWalletConnect } from "./lib/useWalletConnect";
 import { LatestVerifiedContracts } from "./components/LatestVerifiedContracts";
-import { useInitializeGetters } from "./lib/getter/useGetters";
+import { useInitializeCodeParsing } from "./lib/codeParsing/useInitializeCodeParsing";
 import { TestnetBar } from "./components/TestnetBar";
 
 export const ContentBox = styled(Box)({
@@ -69,7 +69,7 @@ function App() {
 
   useAddressHistory();
   useResetState();
-  useInitializeGetters();
+  useInitializeCodeParsing();
 
   useEffect(() => {
     window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });

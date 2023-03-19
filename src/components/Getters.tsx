@@ -12,9 +12,9 @@ import {
   CustomGetterInput,
 } from "./Getters.styled";
 import { Box, IconButton, Skeleton, Table, TableBody, TableRow } from "@mui/material";
-import { useGetters, StateGetter, Parameter } from "../lib/getter/useGetters";
-import { CustomStateGetter, useCustomGetter } from "../lib/getter/useCustomGetter";
-import { GetterResponseValue, useQueryGetter } from "../lib/getter/useQueryGetter";
+import { useGetters, StateGetter, Parameter } from "../lib/codeParsing/getters/useGetters";
+import { CustomStateGetter, useCustomGetter } from "../lib/codeParsing/getters/useCustomGetter";
+import { GetterResponseValue, useQueryGetter } from "../lib/codeParsing/getters/useQueryGetter";
 import { AppButton } from "./AppButton";
 import { AppNotification, NotificationType } from "./AppNotification";
 import { useState } from "react";

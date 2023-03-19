@@ -13,7 +13,8 @@ import copy from "../assets/copy.svg";
 import { downloadSources } from "../lib/downloadSources";
 import useNotification from "../lib/useNotification";
 import { Getters } from "./Getters";
-import { useGetters } from "../lib/getter/useGetters";
+import { useGetters } from "../lib/codeParsing/getters/useGetters";
+import { useExitCodes } from "../lib/codeParsing/exitCodes/useExitCodes";
 
 enum CODE {
   DISASSEMBLED,
@@ -75,6 +76,7 @@ function ContractSourceCode() {
   }, [contractProof?.hasOnchainProof]);
 
   const { getters } = useGetters();
+  const { exitCodes } = useExitCodes();
 
   return (
     <Box
@@ -95,6 +97,10 @@ function ContractSourceCode() {
               Code
             </TitleText>
           </CenteringBox>
+          {exitCodes.map((e) => (
+            <div>{e},</div>
+          ))}
+
           {value === 0 && (
             <Box
               sx={{
@@ -119,6 +125,8 @@ function ContractSourceCode() {
           )}
         </TitleWrapper>
       </TitleBox>
+      {/* TODO not parsing EQAOQdwdw8kGftJCSFgOErM1mBjYPe4DBPq8-AhF6vr9si5N correctly b/c of consts */}
+      {exitCodes?.length > 0 && <Box sx={{ ml: 4 }}>Exit codes: {exitCodes.join(",")}</Box>}
       <ContentBox p={3}>
         <SourceCodeTabs value={value} onChange={handleChange}>
           <Tab
