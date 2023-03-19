@@ -1,5 +1,6 @@
 import { isWebAssemblySupported } from "../../utils/generalUtils";
 import { sendAnalyticsEvent, AnalyticsAction } from "../googleAnalytics";
+import { parseExitCodes } from "./exitCodeParser";
 import { initParser, createParser } from "./parser";
 
 type GetterParameter = {
@@ -20,7 +21,7 @@ export async function parseGetters(code: string): Promise<Getter[]> {
 
   sendAnalyticsEvent(AnalyticsAction.GETTER_PARSE_START);
 
-  await initParser("./tree-sitter.wasm", "./tree-sitter-func.wasm");
+  await initParser("./tree-sitter-func.wasm");
   const p = createParser();
   const parsed = p.parse(code);
 

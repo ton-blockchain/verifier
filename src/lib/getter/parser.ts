@@ -2,16 +2,19 @@ import Parser from "web-tree-sitter";
 
 let language: Parser.Language;
 
-export const initParser = async (treeSitterUri: string, langUri: string) => {
+export const initParser = async (langUri: Buffer | string) => {
   if (language) {
     return;
   }
   const options: object | undefined = {
-    locateFile() {
-      return treeSitterUri;
-    },
+    // locateFile() {
+    //   return treeSitterUri;
+    // },
+    // buffer: treeSitterUri,
   };
-  await Parser.init(options);
+
+  await Parser.init();
+
   language = await Parser.Language.load(langUri);
 };
 
