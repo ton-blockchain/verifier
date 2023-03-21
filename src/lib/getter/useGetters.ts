@@ -54,6 +54,7 @@ const _useGetters = create(
                 value: "",
                 possibleTypes,
                 selectedTypeIdx: 0,
+                _id: 0,
 
                 toggleNextType: () => {
                   set((state) => {
