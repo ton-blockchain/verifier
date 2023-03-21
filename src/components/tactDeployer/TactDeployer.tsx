@@ -24,6 +24,10 @@ import { CustomValueInput } from "./TactDeployer.styled";
 import { useNavigatePreserveQuery } from "../../lib/useNavigatePreserveQuery";
 import { TestnetBar } from "../TestnetBar";
 
+const deployableTraitInitMessage = Cell.fromBoc(
+  Buffer.from("te6cckEBAQEADgAAGJRqmLYAAAAAAAAAAOnNeQ0=", "base64"),
+)[0];
+
 async function fetchFromIpfs(hash: string) {
   const IPFS_GW = `https://tact-deployer${window.isTestnet ? "-testnet" : ""}.infura-ipfs.io`;
   return fetch(`${IPFS_GW}/ipfs/${hash}`);
@@ -81,7 +85,7 @@ function useDeployContract(value: string, stateInit?: StateInit, address?: Addre
   return {
     sendTXN: () => {
       if (!address) return;
-      sendTXN(address, toNano(value), undefined, stateInit);
+      sendTXN(address, toNano(value), deployableTraitInitMessage, stateInit);
     },
     status: data.status,
     clearTXN,
