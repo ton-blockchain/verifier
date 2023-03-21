@@ -6,7 +6,7 @@ export type CustomStateGetter = StateGetter & {
   parameters: CustomParameter[];
   setName: (val: string) => void;
   addParameter: () => void;
-  removeParameter: () => void;
+  removeParameter: (paramId: number) => void;
   clear: () => void;
 };
 
@@ -32,8 +32,11 @@ export const _useCustomGetter = create(
           _id,
           possibleTypes: ["int", "slice", "address"],
           selectedTypeIdx: 0,
-          setValue: (val) =>
-            (state.parameters.find((p: CustomParameter) => p._id === _id)!.value = val),
+          setValue: (val) => {
+            set((state) => {
+              state.parameters.find((p: CustomParameter) => p._id === _id)!.value = val;
+            });
+          },
           setName: (val: string) => {
             set((state) => {
               state.parameters.find((p: CustomParameter) => p._id === _id)!.name = val;
@@ -59,9 +62,11 @@ export const _useCustomGetter = create(
       });
     },
     returnTypes: [],
-    removeParameter: () => {
+    removeParameter: (paramId: number) => {
       set((state) => {
-        state.parameters.pop();
+        state.parameters = state.parameters.filter(
+          (param) => param._id !== paramId,
+        ) as CustomParameter[];
       });
     },
     clear: () => {

@@ -9,6 +9,7 @@ import { useCustomGetter } from "./useCustomGetter";
 type ParameterType = "address" | "cell" | "slice" | "int";
 
 export type Parameter = {
+  _id: number;
   name: string;
   value: string;
   possibleTypes: ParameterType[]; // TODO add more
@@ -23,6 +24,7 @@ export type StateGetter = {
   name: string;
   parameters: Parameter[];
   returnTypes: string[];
+  removeParameter?: (paramId: number) => void;
 };
 
 const parameterByName = (getters: StateGetter[], getterName: string, parameterName: string) =>

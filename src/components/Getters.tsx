@@ -20,10 +20,17 @@ import { AppNotification, NotificationType } from "./AppNotification";
 import { useState } from "react";
 import copy from "../assets/copy.svg";
 import useNotification from "../lib/useNotification";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-function GetterParameterComponent({ parameter }: { parameter: Parameter }) {
+function GetterParameterComponent({
+  parameter,
+  removeParameter,
+}: {
+  parameter: Parameter;
+  removeParameter?: (paramId: number) => void;
+}) {
   return (
-    <FlexBoxColumn sx={{ gap: 1 }}>
+    <FlexBoxColumn sx={{ gap: 1, position: "relative" }}>
       <FlexBoxColumn sx={{ gap: 0.5, flexDirection: "row" }}>
         <Box>{parameter.name}</Box>
         <TypeChip
@@ -39,6 +46,17 @@ function GetterParameterComponent({ parameter }: { parameter: Parameter }) {
           parameter.setValue(e.target.value);
         }}
       />
+      {removeParameter && (
+        <Box sx={{ position: "absolute", right: 1, top: 26 }}>
+          <IconButton
+            sx={{ padding: 0.9 }}
+            onClick={() => {
+              removeParameter(parameter._id);
+            }}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      )}
     </FlexBoxColumn>
   );
 }
@@ -50,8 +68,12 @@ function Request({ getter }: { getter: StateGetter }) {
         <b>Request</b>
       </Box>
       <FlexBoxColumn sx={{ gap: 2 }}>
-        {getter.parameters.map((p, i) => (
-          <GetterParameterComponent key={p.name} parameter={p} />
+        {getter.parameters.map((p) => (
+          <GetterParameterComponent
+            key={p._id}
+            parameter={p}
+            removeParameter={getter.removeParameter}
+          />
         ))}
         {(getter.parameters.length ?? 0) === 0 && <Box sx={{ color: "#949597" }}>(No params)</Box>}
       </FlexBoxColumn>
@@ -138,6 +160,7 @@ function Response({
 
 function ParsedGetterComponent({ getter }: { getter: StateGetter }) {
   const { data, isLoading, mutate, error } = useQueryGetter(getter);
+  const disabled = !!getter.parameters.find((param) => !param.value);
 
   return (
     <GetterBox>
@@ -152,6 +175,7 @@ function ParsedGetterComponent({ getter }: { getter: StateGetter }) {
         </Box>
         <Box>
           <AppButton
+            disabled={disabled}
             fontSize={12}
             fontWeight={800}
             textColor="#fff"
@@ -185,6 +209,7 @@ function ParsedGetterComponent({ getter }: { getter: StateGetter }) {
 
 function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
   const { data, isLoading, mutate, error } = useQueryGetter(getter);
+  const disabled = !!getter.parameters.find((param) => !param.value) || !getter.name;
 
   return (
     <GetterBox>
@@ -197,6 +222,7 @@ function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
         </Box>
         <Box>
           <AppButton
+            disabled={disabled}
             fontSize={12}
             fontWeight={800}
             textColor="#fff"
@@ -213,7 +239,7 @@ function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
       </TitleBox>
       <ContentBox sx={{ padding: "10px 20px", gap: 2 }}>
         <Request getter={getter} />
-        <div style={{ width: 300, display: "flex", gap: 10 }}>
+        <Box sx={{ button: { margin: 0 } }}>
           <AppButton
             fontSize={12}
             fontWeight={700}
@@ -225,18 +251,7 @@ function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
             }}>
             Add parameter
           </AppButton>
-          <AppButton
-            fontSize={12}
-            fontWeight={700}
-            height={32}
-            textColor="#50A7EA"
-            transparent
-            onClick={() => {
-              getter.removeParameter();
-            }}>
-            Remove parameter
-          </AppButton>
-        </div>
+        </Box>
         <Response returnTypes={getter.returnTypes} values={data ?? []} isLoading={isLoading} />
         {!!error && (
           <AppNotification

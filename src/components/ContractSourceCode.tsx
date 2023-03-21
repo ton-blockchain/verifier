@@ -14,6 +14,7 @@ import { downloadSources } from "../lib/downloadSources";
 import useNotification from "../lib/useNotification";
 import { Getters } from "./Getters";
 import { useGetters } from "../lib/getter/useGetters";
+import { useParams } from "react-router-dom";
 
 enum CODE {
   DISASSEMBLED,
@@ -50,10 +51,11 @@ const SourceCodeTabs = styled(Tabs)({
 
 function ContractSourceCode() {
   const { data: contractProof } = useLoadContractProof();
-  const [value, setValue] = useState<number | undefined>(undefined);
+  const [value, setValue] = useState<number>(0);
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
   const modifiedCodeBlock = useMediaQuery("(max-width: 600px)");
   const { showNotification } = useNotification();
+  const { tab } = useParams();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -73,6 +75,10 @@ function ContractSourceCode() {
   useEffect(() => {
     setValue(!!contractProof?.hasOnchainProof ? 0 : 1);
   }, [contractProof?.hasOnchainProof]);
+
+  useEffect(() => {
+    tab?.length && setValue(tab === "getters" ? 2 : 1);
+  }, []);
 
   const { getters } = useGetters();
 

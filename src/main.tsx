@@ -27,7 +27,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/interact" element={<ContractInteract />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/tactDeployer/:ipfsHash" element={<TactDeployer />} />
-            <Route path="/:contractAddress" element={<App />} />
+            <Route path="/:contractAddress/:tab?" element={<App />} />
             <Route path="/" element={<App />} />
           </Routes>
         </BrowserRouter>
