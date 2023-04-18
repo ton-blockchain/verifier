@@ -82,7 +82,11 @@ function App() {
   const { data: funcVersions } = useFuncVersions();
   useEffect(() => {
     if ((funcVersions?.length ?? 0) > 0) {
-      setCompilerSettings({ funcVersion: funcVersions[0] });
+      setCompilerSettings({
+        funcVersion: funcVersions![0],
+        commandLine: "",
+        overrideCommandLine: null,
+      });
     }
   }, [funcVersions]);
 
