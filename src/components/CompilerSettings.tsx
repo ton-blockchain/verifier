@@ -11,6 +11,7 @@ import {
 import undo from "../assets/undo.svg";
 import { useSubmitSources } from "../lib/useSubmitSources";
 import { FuncCompilerVersion } from "@ton-community/contract-verifier-sdk";
+import { useFuncVersions } from "../lib/useFuncVersions";
 
 function CompilerSettings() {
   const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler, setCompiler } =
@@ -20,6 +21,8 @@ function CompilerSettings() {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const canPublish = !!data?.result?.msgCell;
+
+  const { data: funcVersions } = useFuncVersions();
 
   return (
     <Box mt={4}>
@@ -58,10 +61,11 @@ function CompilerSettings() {
                   onChange={(e) => {
                     setFuncCliVersion(e.target.value as FuncCompilerVersion);
                   }}>
-                  <MenuItem value={"0.4.1"}>0.4.1</MenuItem>
-                  <MenuItem value={"0.4.0"}>0.4.0</MenuItem>
-                  <MenuItem value={"0.3.0"}>0.3.0</MenuItem>
-                  <MenuItem value={"0.2.0"}>0.2.0</MenuItem>
+                  {funcVersions?.map((version) => (
+                    <MenuItem key={version} value={version}>
+                      {version}
+                    </MenuItem>
+                  ))}
                 </CompilerSelect>
               </CompilerFormControl>
             </CenteringBox>

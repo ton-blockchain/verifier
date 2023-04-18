@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import create from "zustand";
+import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { useFileStore } from "./useFileStore";
 import { FuncCompilerVersion } from "@ton-community/contract-verifier-sdk";

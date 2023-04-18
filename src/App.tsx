@@ -24,6 +24,8 @@ import { useWalletConnect } from "./lib/useWalletConnect";
 import { LatestVerifiedContracts } from "./components/LatestVerifiedContracts";
 import { useInitializeGetters } from "./lib/getter/useGetters";
 import { TestnetBar } from "./components/TestnetBar";
+import { useFuncVersions } from "./lib/useFuncVersions";
+import { useCompilerSettingsStore } from "./lib/useCompilerSettingsStore";
 
 export const ContentBox = styled(Box)({
   maxWidth: 1160,
@@ -74,6 +76,15 @@ function App() {
   useEffect(() => {
     window.scrollTo({ behavior: "auto", top: scrollToRef.current?.["offsetTop"] });
   }, [window.location.pathname]);
+
+  // Initialize func version
+  const { setCompilerSettings } = useCompilerSettingsStore(); // TODO IN PROG
+  const { data: funcVersions } = useFuncVersions();
+  useEffect(() => {
+    if ((funcVersions?.length ?? 0) > 0) {
+      setCompilerSettings({ funcVersion: funcVersions[0] });
+    }
+  }, [funcVersions]);
 
   return (
     <Box
