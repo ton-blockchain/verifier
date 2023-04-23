@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import create from "zustand";
+import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { useFileStore } from "./useFileStore";
 import { FuncCompilerVersion } from "@ton-community/contract-verifier-sdk";
@@ -30,7 +30,7 @@ const _useCompilerSettingsStore = create(
   immer<State & DerivedState & Actions>((set, get) => ({
     // State
     compiler: "func" as Compiler,
-    compilerSettings: { funcVersion: "0.4.1", commandLine: "" } as UserProvidedFuncCompileSettings,
+    compilerSettings: { funcVersion: "", commandLine: "" } as UserProvidedFuncCompileSettings,
 
     // Derived
 

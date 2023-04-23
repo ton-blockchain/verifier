@@ -27,6 +27,17 @@ This app is deployed via github actions on github pages for this repository.
 - `npm install`
 - `npm run dev`
 
+## Appendix: Adding new FunC versions
+
+1. Add the wasm binding in package json, as such:
+
+```
+"func-js-bin-0.4.3": "npm:@ton-community/func-js-bin@^0.4.3",
+```
+
+2. Add the version to https://github.com/ton-community/contract-verifier-config
+3. Redeploy backend https://github.com/ton-community/contract-verifier-backend
+
 ## License
 
 MIT
