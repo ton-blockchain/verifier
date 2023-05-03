@@ -42,9 +42,7 @@ export function Footer() {
         <CenteringBox>
           <LinkWrapper sx={{ color: "#000" }} onClick={() => navigate("/")}>
             <img src={icon} alt="App icon" width={30} height={30} />
-            <AppLogo>
-              TON VERIFIER <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
-            </AppLogo>
+            <AppLogo>TON VERIFIER</AppLogo>
           </LinkWrapper>
         </CenteringBox>
         <SocialsContent>
