@@ -44,9 +44,7 @@ export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
         </Box>
         <LinkWrapper onClick={() => navigate("/")}>
           <img src={icon} width={30} height={30} alt="App icon" />
-          <AppLogo>
-            TON VERIFIER <span style={{ fontWeight: 700, fontSize: 14 }}>Beta</span>
-          </AppLogo>
+          <AppLogo>TON VERIFIER</AppLogo>
         </LinkWrapper>
       </Box>
     </Drawer>
