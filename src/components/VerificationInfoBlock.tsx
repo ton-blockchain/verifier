@@ -62,7 +62,8 @@ const verificationRules: Rule[] = [
   },
   {
     icon: alert,
-    description: "Variable names and function names may differ from original source code.",
+    description:
+      "Variable/function names may not reflect actual usage. compiler may remove unused code.",
   },
   {
     icon: binary,
