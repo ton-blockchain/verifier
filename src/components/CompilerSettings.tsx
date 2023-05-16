@@ -10,19 +10,32 @@ import {
 } from "./CompilerSetting.styled";
 import undo from "../assets/undo.svg";
 import { useSubmitSources } from "../lib/useSubmitSources";
-import { FuncCompilerVersion } from "@ton-community/contract-verifier-sdk";
-import { useFuncVersions } from "../lib/useFuncVersions";
+import {
+  FuncCompilerVersion,
+  TactCliCompileSettings,
+  TactVersion,
+} from "@ton-community/contract-verifier-sdk";
+import { useRemoteConfig } from "../lib/useRemoteConfig";
+import { tactVersionToLink } from "../utils/linkUtils";
 
 function CompilerSettings() {
-  const { compilerSettings, setOverrideCommandLine, setFuncCliVersion, compiler, setCompiler } =
-    useCompilerSettingsStore();
+  const {
+    compilerSettings,
+    setOverrideCommandLine,
+    setFuncCliVersion,
+    setTactCliVersion,
+    compiler,
+    setCompiler,
+  } = useCompilerSettingsStore();
   const { data } = useSubmitSources();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const canPublish = !!data?.result?.msgCell;
 
-  const { data: funcVersions } = useFuncVersions();
+  const {
+    data: { funcVersions, tactVersions },
+  } = useRemoteConfig();
 
   return (
     <Box mt={4}>
@@ -101,6 +114,26 @@ function CompilerSettings() {
                 </IconButton>
               )}
             </Box>
+          </>
+        )}
+        {compiler === "tact" && (
+          <>
+            <CenteringBox
+              mb={isSmallScreen ? 1 : 0}
+              sx={{ width: isSmallScreen ? "100%" : "inherit" }}>
+              <CompilerFormControl disabled={canPublish}>
+                <CompilerLabel>Version</CompilerLabel>
+                <CompilerSelect
+                  value={(compilerSettings as TactCliCompileSettings).tactVersion}
+                  disabled>
+                  {tactVersions?.map((version) => (
+                    <MenuItem key={version} value={version}>
+                      {version}
+                    </MenuItem>
+                  ))}
+                </CompilerSelect>
+              </CompilerFormControl>
+            </CenteringBox>
           </>
         )}
       </CenteringBox>
