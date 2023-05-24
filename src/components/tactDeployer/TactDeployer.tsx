@@ -1,7 +1,6 @@
 import { Address, Cell, StateInit, toNano, contractAddress } from "ton";
 import { getClient } from "../../lib/getClient";
 import { useSendTXN } from "../../lib/useSendTxn";
-import { useWalletConnect } from "../../lib/useWalletConnect";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -285,11 +284,7 @@ export function TactDeployer() {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
-  const { restoreConnection } = useWalletConnect();
 
-  useEffect(() => {
-    restoreConnection();
-  }, []);
   const { data, error, isLoading } = useTactDeployer({ workchain: 0 });
 
   return (

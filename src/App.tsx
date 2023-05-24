@@ -20,7 +20,6 @@ import { NotificationTitle } from "./components/CompileOutput";
 import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 import { CenteringBox } from "./components/Common.styled";
 import { useAddressHistory } from "./lib/useAddressHistory";
-import { useWalletConnect } from "./lib/useWalletConnect";
 import { LatestVerifiedContracts } from "./components/LatestVerifiedContracts";
 import { useInitializeGetters } from "./lib/getter/useGetters";
 import { TestnetBar } from "./components/TestnetBar";
@@ -63,11 +62,6 @@ function App() {
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const showSkeleton = !error && isLoading && contractAddress;
-  const { restoreConnection } = useWalletConnect();
-
-  useEffect(() => {
-    restoreConnection();
-  }, []);
 
   useAddressHistory();
   useResetState();

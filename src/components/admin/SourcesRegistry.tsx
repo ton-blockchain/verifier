@@ -3,12 +3,12 @@ import { makeGetCall } from "../../lib/makeGetCall";
 import { getClient } from "../../lib/getClient";
 import { Address, beginCell, Cell, fromNano, toNano } from "ton";
 import { useQuery } from "@tanstack/react-query";
-import { useWalletConnect } from "../../lib/useWalletConnect";
 import Button from "../../components/Button";
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import BN from "bn.js";
 import { getAdmin } from "../../lib/getAdmin";
+import { useRequestTXN } from "../../hooks";
 
 function useLoadSourcesRegistryInfo() {
   const address = Address.parse(window.sourcesRegistryAddress);
@@ -80,7 +80,7 @@ function ActionDialog({
     setOpen(false);
   };
 
-  const { requestTXN } = useWalletConnect();
+  const requestTXN = useRequestTXN();
 
   return (
     <>

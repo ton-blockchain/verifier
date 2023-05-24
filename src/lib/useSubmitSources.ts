@@ -5,10 +5,10 @@ import { useCustomMutation } from "./useCustomMutation";
 import { Cell } from "ton";
 import { useContractAddress } from "./useContractAddress";
 import { FuncCompilerSettings } from "@ton-community/contract-verifier-sdk";
-import { useWalletConnect } from "./useWalletConnect";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
 import create from "zustand";
 import { useLoadVerifierRegistryInfo } from "./useLoadVerifierRegistryInfo";
+import { useTonAddress } from "@tonconnect/ui-react";
 
 export function randomFromArray<T>(arr: T[]) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -54,7 +54,7 @@ export function useSubmitSources() {
   const { data: contractInfo } = useLoadContractInfo();
   const { hasFiles, files } = useFileStore();
   const { compiler, compilerSettings } = useCompilerSettingsStore();
-  const { walletAddress } = useWalletConnect();
+  const walletAddress = useTonAddress();
   const { clear, setStatus, status } = useSubmitSourcesStatusStore();
   const { data: verifierRegistryData } = useLoadVerifierRegistryInfo();
 

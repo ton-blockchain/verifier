@@ -1,5 +1,5 @@
 import React from "react";
-import { Drawer, IconButton } from "@mui/material";
+import { Drawer, IconButton, styled } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Box } from "@mui/system";
 import { WalletConnect } from "./WalletConnect";
@@ -8,6 +8,7 @@ import github from "../assets/github-dark.svg";
 import { AppLogo, GitLogo, LinkWrapper } from "./TopBar.styled";
 import icon from "../assets/icon.svg";
 import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
+import { TonConnectButton } from "@tonconnect/ui-react";
 
 interface MobileMenuProps {
   closeMenu?: () => void;
@@ -34,9 +35,9 @@ export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
         <Box
           pt={2}
           sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <Box sx={{ width: "150px" }}>
-            <WalletConnect />
-          </Box>
+          <div style={{ maxWidth: "250px" }} onClick={closeMenu}>
+            <StyledTonConnectButton />
+          </div>
           <LinkWrapper href={githubLink} target="_blank">
             <img src={github} alt="Github icon" width={20} height={20} />
             <GitLogo>GitHub</GitLogo>
@@ -50,3 +51,15 @@ export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
     </Drawer>
   );
 }
+
+const StyledTonConnectButton = styled(TonConnectButton)(({ theme }) => ({
+  button: {
+    background: theme.palette.primary.main,
+    "*": { color: "white" },
+    svg: {
+      "*": {
+        stroke: "white",
+      },
+    },
+  },
+}));
