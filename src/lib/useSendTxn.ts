@@ -1,8 +1,9 @@
+import { SendTransactionRequest, useTonConnectUI } from "@tonconnect/ui-react";
 import BN from "bn.js";
 import { useEffect } from "react";
 import { Address, Cell, StateInit } from "ton";
 import create from "zustand";
-import { useWalletConnect } from "./useWalletConnect";
+import { useRequestTXN } from "../hooks";
 
 export type TXNStatus =
   | "initial"
@@ -28,8 +29,9 @@ TODOs
 1. Support a broader API - tonkeeper / ton-connection
 2. Ensure connection exists
 */
+
 export function useSendTXN(key: string, monitorSuccess: (count: number) => Promise<TXNStatus>) {
-  const { requestTXN } = useWalletConnect();
+  const requestTXN = useRequestTXN();
   const { updateTxn, txns } = useTxnMonitors();
 
   useEffect(() => {

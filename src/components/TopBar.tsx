@@ -16,10 +16,11 @@ import {
   TopBarHeading,
   TopBarWrapper,
 } from "./TopBar.styled";
-import { IconButton, useMediaQuery, useTheme } from "@mui/material";
+import { IconButton, styled, useMediaQuery, useTheme } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { MobileMenu } from "./MobileMenu";
 import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
+import { TonConnectButton } from "@tonconnect/ui-react";
 
 export function TopBar() {
   const { pathname } = useLocation();
@@ -54,7 +55,7 @@ export function TopBar() {
           </LinkWrapper>
           <ContentColumn>
             <CenteringBox mr={2}>
-              <WalletConnect />
+              <StyledTonConnectButton />
             </CenteringBox>
             <LinkWrapper href={githubLink} target="_blank">
               <img src={github} alt="Github icon" width={20} height={20} />
@@ -73,3 +74,15 @@ export function TopBar() {
     </TopBarWrapper>
   );
 }
+
+const StyledTonConnectButton = styled(TonConnectButton)(({ theme }) => ({
+  button: {
+    background: theme.palette.primary.main,
+    "*": { color: "white" },
+    svg: {
+      "*": {
+        stroke: "white",
+      },
+    },
+  },
+}));

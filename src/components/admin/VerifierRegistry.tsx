@@ -4,9 +4,9 @@ import BN from "bn.js";
 import { Cell, beginDict, beginCell, toNano } from "ton";
 import { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
-import { useWalletConnect } from "../../lib/useWalletConnect";
 import Button from "../Button";
 import { toSha256Buffer } from "../../lib/useLoadContractProof";
+import { useRequestTXN } from "../../hooks";
 
 export const OperationCodes = {
   removeVerifier: 0x19fa5637,
@@ -52,7 +52,7 @@ function updateVerifier(params: {
 
 function UpdateVerifier({ verifier }: { verifier: VerifierConfig }) {
   const [open, setOpen] = useState(false);
-  const { requestTXN } = useWalletConnect();
+  const requestTXN = useRequestTXN();
   const { data, isLoading } = useLoadVerifierRegistryInfo();
 
   const [value, setValue] = useState(
