@@ -8,7 +8,7 @@ import github from "../assets/github-dark.svg";
 import { AppLogo, GitLogo, LinkWrapper } from "./TopBar.styled";
 import icon from "../assets/icon.svg";
 import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
-import { TonConnectButton } from "@tonconnect/ui-react";
+import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
 
 interface MobileMenuProps {
   closeMenu?: () => void;
@@ -17,6 +17,7 @@ interface MobileMenuProps {
 
 export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
   const navigate = useNavigatePreserveQuery();
+  const address = useTonAddress();
 
   return (
     <Drawer anchor="left" open={showMenu} onClose={closeMenu}>
@@ -35,7 +36,7 @@ export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
         <Box
           pt={2}
           sx={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <div style={{ maxWidth: "250px" }} onClick={closeMenu}>
+          <div style={{ maxWidth: "250px" }} onClick={address ? () => {} : closeMenu}>
             <StyledTonConnectButton />
           </div>
           <LinkWrapper href={githubLink} target="_blank">
