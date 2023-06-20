@@ -2,7 +2,6 @@ import React from "react";
 import { Drawer, IconButton, styled } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Box } from "@mui/system";
-import { WalletConnect } from "./WalletConnect";
 import { githubLink } from "../const";
 import github from "../assets/github-dark.svg";
 import { AppLogo, GitLogo, LinkWrapper } from "./TopBar.styled";

@@ -1,5 +1,4 @@
 import icon from "../assets/icon.svg";
-import { WalletConnect } from "./WalletConnect";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import github from "../assets/github-dark.svg";
@@ -75,7 +74,7 @@ export function TopBar() {
   );
 }
 
-const StyledTonConnectButton = styled(TonConnectButton)(({ theme }) => ({
+export const StyledTonConnectButton = styled(TonConnectButton)(({ theme }) => ({
   button: {
     background: theme.palette.primary.main,
     "*": { color: "white" },
