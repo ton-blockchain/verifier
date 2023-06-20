@@ -20,11 +20,10 @@ import { NotificationTitle } from "./components/CompileOutput";
 import { VerificationInfoBlock } from "./components/VerificationInfoBlock";
 import { CenteringBox } from "./components/Common.styled";
 import { useAddressHistory } from "./lib/useAddressHistory";
-import { useWalletConnect } from "./lib/useWalletConnect";
 import { LatestVerifiedContracts } from "./components/LatestVerifiedContracts";
 import { useInitializeGetters } from "./lib/getter/useGetters";
 import { TestnetBar } from "./components/TestnetBar";
-import { useFuncVersions } from "./lib/useFuncVersions";
+import { useRemoteConfig } from "./lib/useRemoteConfig";
 import { useCompilerSettingsStore } from "./lib/useCompilerSettingsStore";
 
 export const ContentBox = styled(Box)({
@@ -63,11 +62,6 @@ function App() {
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const showSkeleton = !error && isLoading && contractAddress;
-  const { restoreConnection } = useWalletConnect();
-
-  useEffect(() => {
-    restoreConnection();
-  }, []);
 
   useAddressHistory();
   useResetState();
@@ -78,15 +72,13 @@ function App() {
   }, [window.location.pathname]);
 
   // Initialize func version
-  const { setCompilerSettings } = useCompilerSettingsStore(); // TODO IN PROG
-  const { data: funcVersions } = useFuncVersions();
+  const { initialize } = useCompilerSettingsStore(); // TODO IN PROG
+  const {
+    data: { funcVersions },
+  } = useRemoteConfig();
   useEffect(() => {
     if ((funcVersions?.length ?? 0) > 0) {
-      setCompilerSettings({
-        funcVersion: funcVersions![0],
-        commandLine: "",
-        overrideCommandLine: null,
-      });
+      initialize(funcVersions![0]);
     }
   }, [funcVersions]);
 

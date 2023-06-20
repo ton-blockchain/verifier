@@ -11,6 +11,7 @@ import { theme } from "./theme";
 import { Admin } from "./components/admin/Admin";
 import { initGA } from "./lib/googleAnalytics";
 import { TactDeployer } from "./components/tactDeployer/TactDeployer";
+import { TonConnectUIProvider } from "@tonconnect/ui-react";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
@@ -22,15 +23,17 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <SnackbarProvider maxSnack={3}>
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <Routes>
-            <Route path="/interact" element={<ContractInteract />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/tactDeployer/:ipfsHash" element={<TactDeployer />} />
-            <Route path="/:contractAddress" element={<App />} />
-            <Route path="/" element={<App />} />
-          </Routes>
-        </BrowserRouter>
+        <TonConnectUIProvider manifestUrl="https://tonverifier.live/tonconnect-manifest.json">
+          <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <Routes>
+              <Route path="/interact" element={<ContractInteract />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/tactDeployer/:ipfsHash" element={<TactDeployer />} />
+              <Route path="/:contractAddress" element={<App />} />
+              <Route path="/" element={<App />} />
+            </Routes>
+          </BrowserRouter>
+        </TonConnectUIProvider>
       </QueryClientProvider>
     </ThemeProvider>
   </SnackbarProvider>,

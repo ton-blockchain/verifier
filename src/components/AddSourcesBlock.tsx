@@ -8,18 +8,18 @@ import CompilerSettings from "./CompilerSettings";
 import { CompileOutput } from "./CompileOutput";
 import { Box, styled } from "@mui/system";
 import { AppButton } from "./AppButton";
-import { useWalletConnect } from "../lib/useWalletConnect";
 import { WalletConnect } from "./WalletConnect";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { CircularProgress, Fade } from "@mui/material";
 import { AppNotification, NotificationType } from "./AppNotification";
+import { useTonAddress } from "@tonconnect/ui-react";
 
 const ContentBox = styled(Box)({
   padding: "15px 24px",
 });
 
 export function AddSourcesBlock() {
-  const { walletAddress } = useWalletConnect();
+  const walletAddress = useTonAddress();
   const { hasFiles } = useFileStore();
   const { step, proceedToPublish, toggleSection, currentSection } = usePublishStore();
   const { mutate, data, error, isLoading, compileStatus } = useSubmitSources();

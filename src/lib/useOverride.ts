@@ -2,13 +2,13 @@ import { useSearchParams } from "react-router-dom";
 import { Address } from "ton";
 import { getAdmin } from "./getAdmin";
 import { getClient } from "./getClient";
-import { useWalletConnect } from "./useWalletConnect";
 import { useEffect, useState } from "react";
 import { useContractAddress } from "./useContractAddress";
+import { useTonAddress } from "@tonconnect/ui-react";
 
 export function useOverride() {
   const { contractAddress } = useContractAddress();
-  const { walletAddress } = useWalletConnect();
+  const walletAddress = useTonAddress();
   const [urlParams] = useSearchParams();
   const [canOverride, setCanOverride] = useState(false);
 
