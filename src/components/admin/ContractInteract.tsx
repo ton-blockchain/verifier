@@ -2,7 +2,7 @@ import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { Address, beginCell, Builder } from "ton";
 import Spacer from "../Spacer";
-import { WalletConnect } from "../WalletConnect";
+import { StyledTonConnectButton } from "../TopBar";
 
 function CellBuilder() {
   const [state, setState] = useState<{
@@ -86,7 +86,7 @@ function ContractInteract() {
         maxWidth: 1100,
         padding: 40,
       }}>
-      <WalletConnect />
+      <StyledTonConnectButton />
       <Spacer space={35} />
       <TextField required id="outlined-required" label="Contract address" fullWidth />
       <TextField required id="outlined-required" label="Value" fullWidth type={"number"} />

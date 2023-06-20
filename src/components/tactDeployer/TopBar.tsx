@@ -4,8 +4,8 @@ import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { CenteringBox } from "../Common.styled";
 import { githubLink } from "../../const";
 import { TopBarContent, LinkWrapper, AppLogo, ContentColumn, GitLogo } from "../TopBar.styled";
-import { WalletConnect } from "../WalletConnect";
 import { styled } from "@mui/material/styles";
+import { StyledTonConnectButton } from "../TopBar";
 
 interface TopBarWrapperProps {
   isMobile: boolean;
@@ -38,7 +38,7 @@ export function TopBar() {
         </LinkWrapper>
         <ContentColumn>
           <CenteringBox mr={isSmallScreen ? 0 : 2}>
-            <WalletConnect />
+            <StyledTonConnectButton />
           </CenteringBox>
           {!isSmallScreen && (
             <LinkWrapper href={githubLink} target="_blank">
