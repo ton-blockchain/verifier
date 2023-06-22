@@ -5,7 +5,7 @@ import { CenteringBox } from "../Common.styled";
 import { githubLink } from "../../const";
 import { TopBarContent, LinkWrapper, AppLogo, ContentColumn, GitLogo } from "../TopBar.styled";
 import { styled } from "@mui/material/styles";
-import { StyledTonConnectButton } from "../TopBar";
+import { StyledTonConnectButton } from "../../styles";
 
 interface TopBarWrapperProps {
   isMobile: boolean;

@@ -4,7 +4,7 @@ import SourcesRegistry from "./SourcesRegistry";
 import { VerifierRegistry } from "./VerifierRegistry";
 import { FlexBoxRow } from "../Getters.styled";
 import { Footer } from "../Footer";
-import { StyledTonConnectButton } from "../TopBar";
+import ConnectButton from "../ConnectButton";
 
 export function Admin() {
   return (
@@ -16,7 +16,7 @@ export function Admin() {
           px: 4,
         }}>
         <h1>Admin</h1>
-        <StyledTonConnectButton />
+        <ConnectButton />
       </FlexBoxRow>
       <SourcesRegistry />
       <VerifierRegistry />
