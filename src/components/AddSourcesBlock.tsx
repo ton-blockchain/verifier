@@ -11,7 +11,7 @@ import { AppButton } from "./AppButton";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { CircularProgress, Fade } from "@mui/material";
 import { useTonAddress } from "@tonconnect/ui-react";
-import { StyledTonConnectButton } from "./TopBar";
+import ConnectButton from "./ConnectButton";
 
 const ContentBox = styled(Box)({
   padding: "15px 24px",
@@ -48,7 +48,7 @@ export function AddSourcesBlock() {
               {hasFiles() && (
                 <CenteringBox sx={{ justifyContent: "center" }} mt={3} mb="9px">
                   {!walletAddress ? (
-                    <StyledTonConnectButton />
+                    <ConnectButton />
                   ) : !data?.result?.msgCell ? (
                     <AppButton
                       disabled={!hasFiles()}

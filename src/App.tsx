@@ -158,7 +158,7 @@ function App() {
           </OverflowingBox>
         )}
         {!isLoading && proofData?.hasOnchainProof && <VerificationInfoBlock />}
-        {proofData && (!proofData.hasOnchainProof || canOverride) && (
+        {true && (
           <>
             <AddSourcesBlock />
             {hasFiles() && <PublishProof />}
