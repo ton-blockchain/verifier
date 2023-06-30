@@ -45,8 +45,8 @@ function useTactDeployer({ workchain }: { workchain: 0 | -1 }) {
       .then((buf) => Cell.fromBoc(Buffer.from(buf))[0]);
 
     const codeCell = Cell.fromBoc(Buffer.from(pkg.code, "base64"))[0];
-    const address = contractAddress({ workchain, initialCode: codeCell, initialData: dataCell });
-    const stateInit = new StateInit({ code: codeCell, data: dataCell });
+    const address = contractAddress(workchain, { code: codeCell, data: dataCell });
+    const stateInit = { code: codeCell, data: dataCell };
 
     const dataCellHash = dataCell.hash().toString("base64");
     const codeCellHash = codeCell.hash().toString("base64");
@@ -115,7 +115,7 @@ export function ContractBlock() {
     });
     dataRows.push({
       title: "Workchain",
-      value: workchainForAddress(data.address.toFriendly()),
+      value: workchainForAddress(data.address.toString()),
     });
   }
 
@@ -212,7 +212,7 @@ function DeployBlock() {
         hoverBackground="#156cc2"
         onClick={() => {
           markPreloaded();
-          navigate("/" + data!.address.toFriendly());
+          navigate("/" + data!.address.toString());
           file.addFiles([
             new File([JSON.stringify(data!.pkg)], data!.pkg.name + ".pkg", { type: "text/plain" }),
           ]);
@@ -257,7 +257,7 @@ function DeployBlock() {
                 <NotificationTitle sx={{ marginBottom: 0 }}>
                   <Box sx={{ fontWeight: 600 }}>Contract Address</Box>
                   <Box sx={{ fontSize: 18, fontWeight: 700, wordBreak: "break-all" }}>
-                    {data?.address.toFriendly()}
+                    {data?.address.toString()}
                   </Box>
                 </NotificationTitle>
               </CenteringBox>

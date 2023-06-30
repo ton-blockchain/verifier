@@ -9,7 +9,7 @@ function useContractAddress() {
   const isAddressValid = validateAddress(contractAddress);
   const verifiedAddress = isAddressValid ? Address.parse(contractAddress!) : null;
 
-  const verifiedAddressStr = verifiedAddress?.toFriendly() ?? null;
+  const verifiedAddressStr = verifiedAddress?.toString() ?? null;
   const verifiedAddresssHex = verifiedAddress?.toString() ?? null;
 
   useEffect(() => {

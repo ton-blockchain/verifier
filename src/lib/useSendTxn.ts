@@ -1,5 +1,4 @@
 import { SendTransactionRequest, useTonConnectUI } from "@tonconnect/ui-react";
-import BN from "bn.js";
 import { useEffect } from "react";
 import { Address, Cell, StateInit } from "ton";
 import create from "zustand";
@@ -41,9 +40,9 @@ export function useSendTXN(key: string, monitorSuccess: (count: number) => Promi
   }, []);
 
   return {
-    sendTXN: async (to: Address, value: BN, message?: Cell, stateInit?: StateInit) => {
+    sendTXN: async (to: Address, value: bigint, message?: Cell, stateInit?: StateInit) => {
       updateTxn(key, "pending");
-      const status = await requestTXN(to.toFriendly(), value, message, stateInit);
+      const status = await requestTXN(to.toString(), value, message, stateInit);
 
       let i = 1;
 

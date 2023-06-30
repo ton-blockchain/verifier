@@ -1,34 +1,23 @@
 import InfoPiece from "../../components/InfoPiece";
-import { makeGetCall } from "../../lib/makeGetCall";
 import { getClient } from "../../lib/getClient";
 import { Address, beginCell, Cell, fromNano, toNano } from "ton";
 import { useQuery } from "@tanstack/react-query";
 import Button from "../../components/Button";
 import React from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
-import BN from "bn.js";
 import { getAdmin } from "../../lib/getAdmin";
 import { useRequestTXN } from "../../hooks";
+import { SourcesRegistry as SourcesRegistryContract } from "../../lib/wrappers/sources-registry";
 
 function useLoadSourcesRegistryInfo() {
   const address = Address.parse(window.sourcesRegistryAddress);
   return useQuery(["sourcesRegistry", address], async () => {
     const tc = await getClient();
     const admin = await getAdmin(address, tc);
-    const verifierRegistry = await makeGetCall(
-      address,
-      "get_verifier_registry_address",
-      [],
-      (s) => (s[0] as Cell).beginParse().readAddress()!.toFriendly(),
-      tc,
-    );
-    const deploymentCosts = await makeGetCall(
-      address,
-      "get_deployment_costs",
-      [],
-      (s) => [fromNano(s[0] as BN), fromNano(s[1] as BN)],
-      tc,
-    );
+    const contract = tc.open(SourcesRegistryContract.createFromAddress(address));
+
+    const verifierRegistry = (await contract.getVerifierRegistryAddress()).toString();
+    const deploymentCosts = await contract.getDeploymentCosts();
 
     const codeCellHash = Cell.fromBoc((await tc.getContractState(address)).code as Buffer)[0]
       .hash()
@@ -55,7 +44,7 @@ function changeAdmin(newAdmin: Address): Cell {
   return beginCell().storeUint(3004, 32).storeUint(0, 64).storeAddress(newAdmin).endCell();
 }
 
-function setDeploymentCosts(minTon: BN, maxTon: BN): Cell {
+function setDeploymentCosts(minTon: bigint, maxTon: bigint): Cell {
   return beginCell()
     .storeUint(6007, 32)
     .storeUint(0, 64)
@@ -112,7 +101,7 @@ function ActionDialog({
           <Button
             text={"DOIT"}
             onClick={() => {
-              requestTXN(address.toFriendly(), toNano(0.01), action(value));
+              requestTXN(address.toString(), toNano(0.01), action(value));
             }}
           />
         </DialogActions>
@@ -130,11 +119,11 @@ function SourcesRegistry() {
       {isLoading && <div>Loading...</div>}
       {data && (
         <>
-          <InfoPiece label="Address" data={data.address.toFriendly()} />
-          <InfoPiece label="Admin" data={data.admin} />
+          <InfoPiece label="Address" data={data.address.toString()} />
+          <InfoPiece label="Admin" data={data.admin!} />
           <InfoPiece label="Verifier Reg." data={data.verifierRegistry} />
-          <InfoPiece label="Min Ton" data={data.deploymentCosts[0]} />
-          <InfoPiece label="Max Ton" data={data.deploymentCosts[1]} />
+          <InfoPiece label="Min Ton" data={data.deploymentCosts.min} />
+          <InfoPiece label="Max Ton" data={data.deploymentCosts.max} />
           <InfoPiece label="Code hash" data={data.codeCellHash} />
           <div
             style={{

@@ -199,7 +199,7 @@ export function useSubmitSources() {
       );
 
       const s = Cell.fromBoc(Buffer.from(result.msgCell))[0].beginParse();
-      queryId = s.readUint(64);
+      queryId = s.loadUint(64);
     }
 
     return {
