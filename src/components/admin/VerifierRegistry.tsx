@@ -117,7 +117,7 @@ function UpdateVerifier({ verifier }: { verifier: Verifier }) {
 
               requestTXN(
                 window.verifierRegistryAddress,
-                toNano(0.01),
+                toNano("0.01"),
                 updateVerifier({
                   id: sha256BN(val.name),
                   quorum: val.quorum,

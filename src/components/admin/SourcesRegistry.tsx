@@ -101,7 +101,7 @@ function ActionDialog({
           <Button
             text={"DOIT"}
             onClick={() => {
-              requestTXN(address.toString(), toNano(0.01), action(value));
+              requestTXN(address.toString(), toNano("0.01"), action(value));
             }}
           />
         </DialogActions>
