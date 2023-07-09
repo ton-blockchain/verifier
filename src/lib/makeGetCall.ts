@@ -13,7 +13,7 @@ function _prepareParams(params: any[] = []) {
   const paramsTuple = new TupleBuilder();
   params.forEach((p) => {
     if (p instanceof Cell) {
-      paramsTuple.writeCell(p);
+      paramsTuple.writeSlice(p);
     } else if (typeof p === "bigint") {
       paramsTuple.writeNumber(p);
     }
@@ -29,18 +29,25 @@ function _parseGetMethodCall(stack: TupleReader): GetResponseValue[] {
   while (stack.remaining) {
     const item = stack.pop();
     switch (item.type) {
-      case "int":
+      case "int": {
         parsedItems.push((item as TupleItemInt).value);
-      case "cell":
+        break;
+      }
+      case "cell": {
         parsedItems.push((item as TupleItemCell).cell);
-      case "tuple":
+        break;
+      }
+      case "tuple": {
         if ((item as Tuple).items.length === 0) {
           parsedItems.push(null);
         } else {
           throw new Error("list parsing not supported");
         }
-      default:
+        break;
+      }
+      default: {
         throw new Error(`unknown type: ${item.type}`);
+      }
     }
   }
   return parsedItems;
