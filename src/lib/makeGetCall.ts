@@ -16,8 +16,9 @@ function _prepareParams(params: any[] = []) {
       paramsTuple.writeSlice(p);
     } else if (typeof p === "bigint") {
       paramsTuple.writeNumber(p);
+    } else {
+      throw new Error("unknown type!");
     }
-    throw new Error("unknown type!");
   });
   return paramsTuple.build();
 }
