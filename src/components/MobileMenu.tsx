@@ -7,8 +7,7 @@ import github from "../assets/github-dark.svg";
 import { AppLogo, GitLogo, LinkWrapper } from "./TopBar.styled";
 import icon from "../assets/icon.svg";
 import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
-import { useTonAddress } from "@tonconnect/ui-react";
-import { StyledTonConnectButton } from "../styles";
+import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
 
 interface MobileMenuProps {
   closeMenu?: () => void;
@@ -52,3 +51,15 @@ export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
     </Drawer>
   );
 }
+
+const StyledTonConnectButton = styled(TonConnectButton)(({ theme }) => ({
+  button: {
+    background: theme.palette.primary.main,
+    "*": { color: "white" },
+    svg: {
+      "*": {
+        stroke: "white",
+      },
+    },
+  },
+}));

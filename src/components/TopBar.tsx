@@ -19,11 +19,10 @@ import { IconButton, styled, useMediaQuery, useTheme } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { MobileMenu } from "./MobileMenu";
 import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
-import { StyledTonConnectButton } from "../styles";
+import { TonConnectButton } from "@tonconnect/ui-react";
 
 export function TopBar() {
   const { pathname } = useLocation();
-
   const theme = useTheme();
   const navigate = useNavigatePreserveQuery();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
@@ -74,3 +73,15 @@ export function TopBar() {
     </TopBarWrapper>
   );
 }
+
+export const StyledTonConnectButton = styled(TonConnectButton)(({ theme }) => ({
+  button: {
+    background: theme.palette.primary.main,
+    "*": { color: "white" },
+    svg: {
+      "*": {
+        stroke: "white",
+      },
+    },
+  },
+}));
