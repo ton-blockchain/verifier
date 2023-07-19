@@ -3,7 +3,7 @@ import { Address, beginCell } from "ton";
 export const isValidAddress = (address: string, errorText?: string) => {
   try {
     const result = Address.parse(address);
-    if (result && result.toFriendly() === zeroAddress().toFriendly()) {
+    if (result && result.equals(zeroAddress())) {
       return false;
     }
     return true;
@@ -20,5 +20,5 @@ export function zeroAddress(): Address {
     .storeUint(0, 256)
     .endCell()
     .beginParse()
-    .readAddress() as Address;
+    .loadAddress();
 }

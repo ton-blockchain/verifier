@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import BN from "bn.js";
 import { Address, Cell, fromNano } from "ton";
 import { getClient } from "../getClient";
 import { sendAnalyticsEvent, AnalyticsAction } from "../googleAnalytics";
@@ -30,7 +29,7 @@ export function useQueryGetter(getter: StateGetter) {
         const type = param.possibleTypes[param.selectedTypeIdx];
         switch (type) {
           case "int":
-            return new BN(param.value);
+            return BigInt(param.value);
           case "address":
             return beginCell().storeAddress(Address.parse(param.value)).endCell();
           default:
@@ -42,10 +41,10 @@ export function useQueryGetter(getter: StateGetter) {
           const possibleRepresentations: { type: PossibleRepresentation; value: string }[] = [];
           if (value instanceof Cell) {
             try {
-              if (value.beginParse().remaining === 267) {
+              if (value.beginParse().remainingBits === 267) {
                 possibleRepresentations.push({
                   type: "address",
-                  value: value.beginParse().readAddress()!.toFriendly(),
+                  value: value.beginParse().loadAddress()!.toString(),
                 });
               }
             } catch (e) {
@@ -56,14 +55,14 @@ export function useQueryGetter(getter: StateGetter) {
               type: "base64",
               value: value.toBoc().toString("base64"),
             });
-            possibleRepresentations.push({ type: "boc", value: value.toDebugString() });
-          } else if (value instanceof BN) {
+            possibleRepresentations.push({ type: "boc", value: value.toString() });
+          } else if (typeof value === "bigint") {
             possibleRepresentations.push({ type: "int", value: value.toString() });
             possibleRepresentations.push({ type: "coins", value: fromNano(value) });
-            possibleRepresentations.push({ type: "hex", value: value.toString("hex") });
+            possibleRepresentations.push({ type: "hex", value: value.toString(16) });
             possibleRepresentations.push({
               type: "base64",
-              value: Buffer.from(value.toString("hex"), "hex").toString("base64"),
+              value: Buffer.from(value.toString(16), "hex").toString("base64"),
             });
           } else {
             possibleRepresentations.push({ type: "raw", value: String(value) });
