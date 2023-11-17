@@ -8,11 +8,10 @@ import CompilerSettings from "./CompilerSettings";
 import { CompileOutput } from "./CompileOutput";
 import { Box, styled } from "@mui/system";
 import { AppButton } from "./AppButton";
-import { WalletConnect } from "./WalletConnect";
 import { SECTIONS, STEPS, usePublishStore } from "../lib/usePublishSteps";
 import { CircularProgress, Fade } from "@mui/material";
-import { AppNotification, NotificationType } from "./AppNotification";
 import { useTonAddress } from "@tonconnect/ui-react";
+import ConnectButton from "./ConnectButton";
 
 const ContentBox = styled(Box)({
   padding: "15px 24px",
@@ -49,7 +48,7 @@ export function AddSourcesBlock() {
               {hasFiles() && (
                 <CenteringBox sx={{ justifyContent: "center" }} mt={3} mb="9px">
                   {!walletAddress ? (
-                    <WalletConnect />
+                    <ConnectButton />
                   ) : !data?.result?.msgCell ? (
                     <AppButton
                       disabled={!hasFiles()}

@@ -1,20 +1,20 @@
 import { SendTransactionRequest, useTonConnectUI } from "@tonconnect/ui-react";
-import BN from "bn.js";
-import { Cell, StateInit } from "ton";
+import { Cell, StateInit, beginCell, storeStateInit } from "ton";
 
 export const useRequestTXN = () => {
   const [tonConnection] = useTonConnectUI();
   return async (
     to: string,
-    value: BN,
+    value: bigint,
     message?: Cell,
     stateInit?: StateInit,
   ): Promise<"issued" | "rejected"> => {
     try {
       let cell;
       if (stateInit) {
-        cell = new Cell();
-        stateInit.writeTo(cell);
+        const builder = beginCell();
+        storeStateInit(stateInit)(builder);
+        cell = builder.asCell();
       }
 
       const tx: SendTransactionRequest = {

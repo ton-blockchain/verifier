@@ -1,38 +1,57 @@
-import { useQuery } from "@tanstack/react-query";
-import { Address, Cell, TonClient } from "ton";
-import BN from "bn.js";
+import {
+  Address,
+  Cell,
+  TonClient,
+  TupleBuilder,
+  TupleItemCell,
+  TupleReader,
+  Tuple,
+  TupleItemInt,
+} from "ton";
 
 function _prepareParams(params: any[] = []) {
-  return params.map((p) => {
+  const paramsTuple = new TupleBuilder();
+  params.forEach((p) => {
     if (p instanceof Cell) {
-      return ["tvm.Slice", p.toBoc({ idx: false }).toString("base64")];
-    } else if (p instanceof BN) {
-      return ["num", p.toString(10)];
+      paramsTuple.writeSlice(p);
+    } else if (typeof p === "bigint") {
+      paramsTuple.writeNumber(p);
+    } else {
+      throw new Error("unknown type!");
     }
-
-    throw new Error("unknown type!");
   });
+  return paramsTuple.build();
 }
 
-type GetResponseValue = Cell | BN | null;
+type GetResponseValue = Cell | bigint | null;
 
-function _parseGetMethodCall(stack: [["num" | "cell" | "list", any]]): GetResponseValue[] {
-  return stack.map(([type, val]) => {
-    switch (type) {
-      case "num":
-        return new BN(val.replace("0x", ""), "hex");
-      case "cell":
-        return Cell.fromBoc(Buffer.from(val.bytes, "base64"))[0];
-      case "list":
-        if (val.elements.length === 0) {
-          return null;
+function _parseGetMethodCall(stack: TupleReader): GetResponseValue[] {
+  const parsedItems: GetResponseValue[] = [];
+  while (stack.remaining) {
+    const item = stack.pop();
+    switch (item.type) {
+      case "int": {
+        parsedItems.push((item as TupleItemInt).value);
+        break;
+      }
+      case "cell": {
+        parsedItems.push((item as TupleItemCell).cell);
+        break;
+      }
+      case "tuple": {
+        if ((item as Tuple).items.length === 0) {
+          parsedItems.push(null);
         } else {
           throw new Error("list parsing not supported");
         }
-      default:
-        throw new Error(`unknown type: ${type}, val: ${JSON.stringify(val)}`);
+        break;
+      }
+      default: {
+        throw new Error(`unknown type: ${item.type}`);
+      }
     }
-  });
+  }
+  return parsedItems;
 }
 
 export async function makeGetCall<T>(
@@ -42,7 +61,6 @@ export async function makeGetCall<T>(
   parser: (stack: GetResponseValue[]) => T,
   tonClient: TonClient,
 ) {
-  const { stack } = await tonClient.callGetMethod(address!, name, _prepareParams(params));
-
-  return parser(_parseGetMethodCall(stack as [["num" | "cell", any]]));
+  const { stack } = await tonClient.runMethod(address!, name, _prepareParams(params));
+  return parser(_parseGetMethodCall(stack));
 }

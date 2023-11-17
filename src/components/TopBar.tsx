@@ -1,5 +1,4 @@
 import icon from "../assets/icon.svg";
-import { WalletConnect } from "./WalletConnect";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import github from "../assets/github-dark.svg";
@@ -20,10 +19,11 @@ import { IconButton, styled, useMediaQuery, useTheme } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { MobileMenu } from "./MobileMenu";
 import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
-import { TonConnectButton } from "@tonconnect/ui-react";
+import { StyledTonConnectButton } from "../styles";
 
 export function TopBar() {
   const { pathname } = useLocation();
+
   const theme = useTheme();
   const navigate = useNavigatePreserveQuery();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
@@ -74,15 +74,3 @@ export function TopBar() {
     </TopBarWrapper>
   );
 }
-
-const StyledTonConnectButton = styled(TonConnectButton)(({ theme }) => ({
-  button: {
-    background: theme.palette.primary.main,
-    "*": { color: "white" },
-    svg: {
-      "*": {
-        stroke: "white",
-      },
-    },
-  },
-}));

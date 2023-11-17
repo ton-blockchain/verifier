@@ -1,12 +1,13 @@
 import InfoPiece from "../InfoPiece";
-import { useLoadVerifierRegistryInfo, VerifierConfig } from "../../lib/useLoadVerifierRegistryInfo";
-import BN from "bn.js";
-import { Cell, beginDict, beginCell, toNano } from "ton";
+import { useLoadVerifierRegistryInfo } from "../../lib/useLoadVerifierRegistryInfo";
+import { Dictionary, beginCell, toNano, DictionaryValue, Slice } from "ton";
+import { toBigIntBE } from "bigint-buffer";
 import { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
 import Button from "../Button";
 import { toSha256Buffer } from "../../lib/useLoadContractProof";
 import { useRequestTXN } from "../../hooks";
+import { Verifier } from "../../lib/wrappers/verifier-registry";
 
 export const OperationCodes = {
   removeVerifier: 0x19fa5637,
@@ -15,7 +16,7 @@ export const OperationCodes = {
 };
 
 function sha256BN(name: string) {
-  return new BN(toSha256Buffer(name));
+  return toBigIntBE(toSha256Buffer(name));
 }
 
 function ip2num(ip: string) {
@@ -23,34 +24,44 @@ function ip2num(ip: string) {
   return ((+d[0] * 256 + +d[1]) * 256 + +d[2]) * 256 + +d[3];
 }
 
-function updateVerifier(params: {
-  queryId?: number;
-  id: BN;
-  quorum: number;
-  endpoints: Map<BN, number>;
-  name: string;
-  marketingUrl: string;
-}): Cell {
-  let msgBody = new Cell();
-  msgBody.bits.writeUint(OperationCodes.updateVerifier, 32);
-  msgBody.bits.writeUint(params.queryId || 0, 64);
-  msgBody.bits.writeUint(params.id, 256);
-  msgBody.bits.writeUint(params.quorum, 8);
-
-  let e = beginDict(256);
-  params.endpoints.forEach(function (val: number, key: BN) {
-    e.storeCell(key, beginCell().storeUint(val, 32).endCell());
-  });
-
-  msgBody.bits.writeBit(true);
-  msgBody.refs.push(e.endCell());
-  msgBody.refs.push(beginCell().storeBuffer(Buffer.from(params.name)).endCell());
-  msgBody.refs.push(beginCell().storeBuffer(Buffer.from(params.marketingUrl)).endCell());
-
-  return msgBody;
+function createSliceValue(): DictionaryValue<Slice> {
+  return {
+    serialize: (src, buidler) => {
+      buidler.storeSlice(src);
+    },
+    parse: (src) => {
+      return src;
+    },
+  };
 }
 
-function UpdateVerifier({ verifier }: { verifier: VerifierConfig }) {
+function updateVerifier(params: {
+  queryId?: number;
+  id: bigint;
+  quorum: number;
+  endpoints: Map<bigint, number>;
+  name: string;
+  marketingUrl: string;
+}) {
+  let msgBody = beginCell();
+  msgBody.storeUint(OperationCodes.updateVerifier, 32);
+  msgBody.storeUint(params.queryId || 0, 64);
+  msgBody.storeUint(params.id, 256);
+  msgBody.storeUint(params.quorum, 8);
+
+  let e = Dictionary.empty(Dictionary.Keys.BigUint(256), createSliceValue());
+  params.endpoints.forEach(function (val: number, key: bigint) {
+    e.set(key, beginCell().storeUint(val, 32).endCell().beginParse());
+  });
+
+  msgBody.storeDict(e);
+  msgBody.storeRef(beginCell().storeBuffer(Buffer.from(params.name)).endCell());
+  msgBody.storeRef(beginCell().storeBuffer(Buffer.from(params.marketingUrl)).endCell());
+
+  return msgBody.endCell();
+}
+
+function UpdateVerifier({ verifier }: { verifier: Verifier }) {
   const [open, setOpen] = useState(false);
   const requestTXN = useRequestTXN();
   const { data, isLoading } = useLoadVerifierRegistryInfo();
@@ -102,17 +113,17 @@ function UpdateVerifier({ verifier }: { verifier: VerifierConfig }) {
           <Button
             text={"DOIT"}
             onClick={() => {
-              const val = JSON.parse(value) as VerifierConfig;
+              const val = JSON.parse(value) as Verifier;
 
               requestTXN(
                 window.verifierRegistryAddress,
-                toNano(0.01),
+                toNano("0.01"),
                 updateVerifier({
                   id: sha256BN(val.name),
                   quorum: val.quorum,
-                  endpoints: new Map<BN, number>(
+                  endpoints: new Map<bigint, number>(
                     Object.entries(val.pubKeyEndpoints).map(([pubKey, ip]) => [
-                      new BN(Buffer.from(pubKey, "base64")),
+                      toBigIntBE(Buffer.from(pubKey, "base64")),
                       ip2num(ip),
                     ]),
                   ),
@@ -151,7 +162,7 @@ export function VerifierRegistry() {
                 key={v.name}
                 style={{ background: "#00000011", padding: "2px 20px", marginTop: 10 }}>
                 <h3>{v.name}</h3>
-                <InfoPiece label="Admin" data={v.admin} />
+                <InfoPiece label="Admin" data={v.admin.toString()} />
                 <InfoPiece label="Quorum" data={String(v.quorum)} />
                 <InfoPiece label="Url" data={v.url} />
                 <br />

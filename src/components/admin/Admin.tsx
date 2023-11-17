@@ -1,11 +1,10 @@
 import { Box } from "@mui/material";
 import { TestnetBar } from "../TestnetBar";
-import { WalletConnect } from "../WalletConnect";
 import SourcesRegistry from "./SourcesRegistry";
 import { VerifierRegistry } from "./VerifierRegistry";
 import { FlexBoxRow } from "../Getters.styled";
 import { Footer } from "../Footer";
-import { useEffect } from "react";
+import ConnectButton from "../ConnectButton";
 
 export function Admin() {
   return (
@@ -17,7 +16,7 @@ export function Admin() {
           px: 4,
         }}>
         <h1>Admin</h1>
-        <WalletConnect />
+        <ConnectButton />
       </FlexBoxRow>
       <SourcesRegistry />
       <VerifierRegistry />
