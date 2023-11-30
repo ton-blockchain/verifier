@@ -120,7 +120,7 @@ const examples = [
 
 function exportExamples() {
   const mapExample = ([name, address, comment]: any) =>
-    `[https://tonverifier.live/${address}]\t\t// ${name} ${comment ?? ""}`;
+    `[https://verifier.ton.org/${address}]\t\t// ${name} ${comment ?? ""}`;
 
   const content = ["# Verified Examples"];
 
