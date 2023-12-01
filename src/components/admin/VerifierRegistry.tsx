@@ -1,6 +1,6 @@
 import InfoPiece from "../InfoPiece";
 import { useLoadVerifierRegistryInfo } from "../../lib/useLoadVerifierRegistryInfo";
-import { Dictionary, beginCell, toNano, DictionaryValue, Slice } from "ton";
+import { Dictionary, beginCell, toNano, DictionaryValue, Slice, Address } from "ton";
 import { toBigIntBE } from "bigint-buffer";
 import { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
@@ -64,7 +64,6 @@ function updateVerifier(params: {
 function UpdateVerifier({ verifier }: { verifier: Verifier }) {
   const [open, setOpen] = useState(false);
   const requestTXN = useRequestTXN();
-  const { data, isLoading } = useLoadVerifierRegistryInfo();
 
   const [value, setValue] = useState(
     JSON.stringify(
@@ -111,7 +110,7 @@ function UpdateVerifier({ verifier }: { verifier: Verifier }) {
         </DialogContent>
         <DialogActions>
           <Button
-            text={"DOIT"}
+            text={"Send TXN"}
             onClick={() => {
               const val = JSON.parse(value) as Verifier;
 
@@ -141,6 +140,7 @@ function UpdateVerifier({ verifier }: { verifier: Verifier }) {
 
 export function VerifierRegistry() {
   const { data, isLoading } = useLoadVerifierRegistryInfo();
+  const requestTXN = useRequestTXN();
 
   return (
     <div style={{ padding: "20px 40px", background: "#00000011" }}>
@@ -176,6 +176,7 @@ export function VerifierRegistry() {
           );
         })}
       </>
+      <div />
     </div>
   );
 }

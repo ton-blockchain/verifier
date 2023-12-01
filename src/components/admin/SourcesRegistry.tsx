@@ -8,6 +8,7 @@ import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@m
 import { getAdmin } from "../../lib/getAdmin";
 import { useRequestTXN } from "../../hooks";
 import { SourcesRegistry as SourcesRegistryContract } from "../../lib/wrappers/sources-registry";
+import { useTonConnectUI } from "@tonconnect/ui-react";
 
 function useLoadSourcesRegistryInfo() {
   const address = Address.parse(window.sourcesRegistryAddress);
@@ -99,7 +100,7 @@ function ActionDialog({
         <DialogActions>
           <Button text={"Cancel"} onClick={handleClose} />
           <Button
-            text={"DOIT"}
+            text={"Confirm"}
             onClick={() => {
               requestTXN(address.toString(), toNano("0.01"), action(value));
             }}
@@ -112,6 +113,7 @@ function ActionDialog({
 
 function SourcesRegistry() {
   const { data, isLoading } = useLoadSourcesRegistryInfo();
+  const [tonConnection] = useTonConnectUI();
 
   return (
     <div style={{ padding: "20px 40px" }}>

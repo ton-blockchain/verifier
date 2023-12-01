@@ -1,3 +1,5 @@
+import { toBufferBE } from "bigint-buffer";
+import BN from "bn.js";
 import {
   Address,
   beginCell,
@@ -35,6 +37,11 @@ export type CollectionMintItemInput = {
   ownerAddress: Address;
   content: string;
 };
+
+function num2ip(num: bigint) {
+  let d = toBufferBE(num, 4);
+  return [d[0].toString(), d[1].toString(), d[2].toString(), d[3].toString()].join(".");
+}
 
 function createSliceValue(): DictionaryValue<Slice> {
   return {
@@ -112,13 +119,18 @@ export class VerifierRegistry implements Contract {
     return Array.from(d.values()).map((v) => {
       const admin = v.loadAddress()!;
       const quorom = v.loadUint(8);
-      const pubKeyEndpoints = v.loadDict(Dictionary.Keys.BigUint(256), Dictionary.Values.Uint(32));
+      const pubKeyEndpoints = v.loadDict(
+        Dictionary.Keys.BigUint(256),
+        Dictionary.Values.BigUint(32),
+      );
 
       return {
         admin: admin,
         quorum: quorom,
-        pubKeyEndpoints: new Map<bigint, number>(
-          Array.from(pubKeyEndpoints).map(([k, v]) => [k, v]),
+        pubKeyEndpoints: Object.fromEntries(
+          Array.from(pubKeyEndpoints).map(([k, v]) => {
+            return [toBufferBE(k, 32).toString("base64"), num2ip(v)];
+          }),
         ),
         name: v.loadRef().beginParse().loadStringTail(),
         url: v.loadRef().beginParse().loadStringTail(),
