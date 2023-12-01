@@ -23,7 +23,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <SnackbarProvider maxSnack={3}>
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>
-        <TonConnectUIProvider manifestUrl="https://tonverifier.live/tonconnect-manifest.json">
+        <TonConnectUIProvider manifestUrl="https://verifier.ton.org/tonconnect-manifest.json">
           <BrowserRouter basename={import.meta.env.BASE_URL}>
             <Routes>
               <Route path="/interact" element={<ContractInteract />} />
