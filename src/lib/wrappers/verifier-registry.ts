@@ -1,5 +1,4 @@
 import { toBufferBE } from "bigint-buffer";
-import BN from "bn.js";
 import {
   Address,
   beginCell,
@@ -116,6 +115,7 @@ export class VerifierRegistry implements Contract {
     const c = item.beginParse();
     const d = c.loadDict(Dictionary.Keys.BigUint(256), createSliceValue());
 
+    // @ts-ignore
     return Array.from(d.values()).map((v) => {
       const admin = v.loadAddress()!;
       const quorom = v.loadUint(8);
