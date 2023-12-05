@@ -43,6 +43,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-ga4": "^1.4.1",
+    "react-hook-form": "^7.48.2",
     "react-qr-code": "^2.0.8",
     "react-router-dom": "^6.4.2",
     "source-map-explorer": "^2.5.3",
