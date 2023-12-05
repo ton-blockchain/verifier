@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { TestnetBar } from "../TestnetBar";
 import SourcesRegistry from "./SourcesRegistry";
 import { VerifierRegistry } from "./VerifierRegistry";
@@ -10,14 +10,10 @@ export function Admin() {
   return (
     <div>
       {window.isTestnet && <TestnetBar />}
-      <FlexBoxRow
-        sx={{
-          gap: 30,
-          px: 4,
-        }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center" p={4}>
         <h1>Admin</h1>
         <StyledTonConnectButton />
-      </FlexBoxRow>
+      </Stack>
       <SourcesRegistry />
       <VerifierRegistry />
       <Footer />

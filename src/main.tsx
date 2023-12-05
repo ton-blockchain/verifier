@@ -9,7 +9,6 @@ import { SnackbarProvider } from "notistack";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 import { Admin } from "./components/admin/Admin";
-import { Admin as AdminNew } from "./components/admin-new/Admin";
 import { initGA } from "./lib/googleAnalytics";
 import { TactDeployer } from "./components/tactDeployer/TactDeployer";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
@@ -29,7 +28,6 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Routes>
               <Route path="/interact" element={<ContractInteract />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="/admin-new" element={<AdminNew />} />
               <Route path="/tactDeployer/:ipfsHash" element={<TactDeployer />} />
               <Route path="/:contractAddress" element={<App />} />
               <Route path="/" element={<App />} />

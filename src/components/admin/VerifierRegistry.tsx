@@ -2,12 +2,27 @@ import InfoPiece from "../InfoPiece";
 import { useLoadVerifierRegistryInfo } from "../../lib/useLoadVerifierRegistryInfo";
 import { Dictionary, beginCell, toNano, DictionaryValue, Slice, Address } from "ton";
 import { toBigIntBE } from "bigint-buffer";
-import { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, TextField, DialogActions } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField as MuiTextField,
+  DialogActions,
+  Stack,
+  Grid,
+  Typography,
+  Divider,
+  Box,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 import Button from "../Button";
 import { toSha256Buffer } from "../../lib/useLoadContractProof";
 import { useRequestTXN } from "../../hooks";
 import { Verifier } from "../../lib/wrappers/verifier-registry";
+import { useFieldArray, useForm } from "react-hook-form";
+import { TextField } from "./form/TextField";
 
 export const OperationCodes = {
   removeVerifier: 0x19fa5637,
@@ -34,6 +49,13 @@ function createSliceValue(): DictionaryValue<Slice> {
     },
   };
 }
+
+type VerifierRegistryForm = {
+  quorum: string;
+  name: string;
+  url: string;
+  pubKeyEndpoints: { pubKey: string; ip: string }[];
+};
 
 function updateVerifier(params: {
   queryId?: number;
@@ -92,9 +114,9 @@ function UpdateVerifier({ verifier }: { verifier: Verifier }) {
         onClose={() => {
           setOpen(false);
         }}>
-        <DialogTitle>{"s"}</DialogTitle>
+        <DialogTitle>Update Verifier</DialogTitle>
         <DialogContent sx={{ width: 1000 }}>
-          <TextField
+          <MuiTextField
             multiline
             autoFocus
             margin="dense"
@@ -138,45 +160,159 @@ function UpdateVerifier({ verifier }: { verifier: Verifier }) {
   );
 }
 
+function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altColor: boolean }) {
+  const requestTXN = useRequestTXN();
+
+  const defaultPubKeyEndpoints = useMemo(
+    () =>
+      Object.entries(verifier.pubKeyEndpoints).map(([pubKey, ip]) => ({
+        pubKey,
+        ip,
+      })),
+    [verifier.pubKeyEndpoints],
+  );
+
+  const form = useForm<VerifierRegistryForm>({
+    defaultValues: {
+      quorum: verifier.quorum.toString() || "",
+      name: verifier.name || "",
+      url: verifier.url || "",
+      pubKeyEndpoints: defaultPubKeyEndpoints || [],
+    },
+  });
+
+  async function onSubmit(values: VerifierRegistryForm) {
+    console.log(values);
+
+    // validate values
+    if (!values.name) {
+      form.setError("name", { message: "Name is required" });
+      return;
+    }
+
+    if (!values.url) {
+      form.setError("url", { message: "Url is required" });
+      return;
+    }
+
+    if (!values.quorum) {
+      form.setError("quorum", { message: "Quorum is required" });
+      return;
+    }
+
+    if (!values.pubKeyEndpoints) {
+      form.setError("pubKeyEndpoints", { message: "PubKeyEndpoints is required" });
+      return;
+    }
+
+    try {
+      const result = await requestTXN(
+        window.verifierRegistryAddress,
+        toNano("0.01"),
+        updateVerifier({
+          id: sha256BN(values.name),
+          quorum: Number(values.quorum),
+          endpoints: new Map<bigint, number>(
+            values.pubKeyEndpoints.map(({ pubKey, ip }) => [
+              toBigIntBE(Buffer.from(pubKey, "base64")),
+              ip2num(ip),
+            ]),
+          ),
+          name: values.name,
+          marketingUrl: values.url,
+        }),
+      );
+      if (result === "rejected") {
+        form.setError("root", { message: `Failed to update config of ${values.name}` });
+      }
+    } catch (err) {
+      let errMessage = `Failed to update config of ${values.name}`;
+
+      if ("message" in (err as Error)) {
+        errMessage = (err as Error).message;
+      }
+
+      form.setError("root", { message: errMessage });
+    }
+  }
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "pubKeyEndpoints",
+  });
+
+  return (
+    <form id={verifier.admin.toString()} onSubmit={form.handleSubmit(onSubmit)}>
+      <Stack
+        spacing={4}
+        px={4}
+        py={6}
+        style={{ backgroundColor: altColor ? "#eeeeef" : "transparent" }}>
+        {!form.formState.isValid && (
+          <Alert severity="error">
+            {Object.entries(form.formState.errors).map(([key, value]) => {
+              return <div key={key}>{value.message}</div>;
+            })}
+          </Alert>
+        )}
+        <h3 style={{ margin: 0 }}>{form.getValues("name")}</h3>
+        <InfoPiece label="Admin" data={verifier.admin.toString()} />
+        <TextField label="Url" name="url" control={form.control} />
+        <TextField label="Quorum" name="quorum" control={form.control} />
+        <Stack spacing={2} alignItems="flex-start">
+          <Stack direction="row" spacing={4} alignItems="center">
+            <h4>Public Key Endpoints</h4>
+            <Button
+              size="small"
+              text="Add"
+              onClick={() => {
+                append({ pubKey: "", ip: "" });
+              }}
+            />
+          </Stack>
+          {fields.map((field, index) => (
+            <Grid key={field.id} container alignItems="center" gap={2} wrap="nowrap">
+              <Grid item xs={6}>
+                <TextField
+                  label={`PubKey-${index}`}
+                  name={`pubKeyEndpoints.${index}.pubKey`}
+                  control={form.control}
+                />
+              </Grid>
+              <Grid item xs={5}>
+                <TextField
+                  label={`IP-${index}`}
+                  name={`pubKeyEndpoints.${index}.ip`}
+                  control={form.control}
+                />
+              </Grid>
+              <Grid item xs={1}>
+                <Button text="Remove" onClick={() => remove(index)} />
+              </Grid>
+            </Grid>
+          ))}
+        </Stack>
+        <Button text="Update config" type="submit" disabled={!form.formState.isDirty} />
+      </Stack>
+    </form>
+  );
+}
+
 export function VerifierRegistry() {
   const { data, isLoading } = useLoadVerifierRegistryInfo();
   const requestTXN = useRequestTXN();
 
   return (
-    <div style={{ padding: "20px 40px", background: "#00000011" }}>
-      <div
-        style={{
-          display: "flex",
-          gap: 30,
-          alignItems: "center",
-        }}>
-        <h1>Verifier Registry</h1>
-      </div>
+    <Stack spacing={4} p={4}>
+      <h1>Verifier Registry</h1>
       <InfoPiece label="Address" data={window.verifierRegistryAddress} />
-      <>
+      {isLoading && <CircularProgress />}
+      <Stack>
         {isLoading && "Loading..."}
-        {data?.map((v) => {
-          return (
-            <>
-              <div
-                key={v.name}
-                style={{ background: "#00000011", padding: "2px 20px", marginTop: 10 }}>
-                <h3>{v.name}</h3>
-                <InfoPiece label="Admin" data={v.admin.toString()} />
-                <InfoPiece label="Quorum" data={String(v.quorum)} />
-                <InfoPiece label="Url" data={v.url} />
-                <br />
-                <div>Public Key Endpoints</div>
-                {Object.entries(v.pubKeyEndpoints).map(([k, v2]) => {
-                  return <InfoPiece key={k} label={k} data={`${v2}`} />;
-                })}
-              </div>
-              <UpdateVerifier verifier={v} />
-            </>
-          );
+        {data?.map((v, index) => {
+          return <VerifierRegsitryForm verifier={v} altColor={index % 2 !== 1} />;
         })}
-      </>
-      <div />
-    </div>
+      </Stack>
+    </Stack>
   );
 }
