@@ -1,39 +1,13 @@
 import InfoPiece from "../InfoPiece";
-import { getClient } from "../../lib/getClient";
 import { Address, beginCell, Cell, toNano } from "ton";
-import { useQuery } from "@tanstack/react-query";
 import Button from "../Button";
 import { useEffect, useState } from "react";
 import { Stack, Box, Snackbar, Alert, CircularProgress } from "@mui/material";
-import { getAdmin } from "../../lib/getAdmin";
-import { SourcesRegistry as SourcesRegistryContract } from "../../lib/wrappers/sources-registry";
 import { useTonConnectUI } from "@tonconnect/ui-react";
 import { useForm } from "react-hook-form";
 import { TextField } from "./form/TextField";
 import { useRequestTXN } from "../../hooks";
-
-function useLoadSourcesRegistryInfo() {
-  const address = Address.parse(window.sourcesRegistryAddress);
-  return useQuery(["sourcesRegistry", address], async () => {
-    const tc = await getClient();
-    const admin = await getAdmin(address, tc);
-    const contract = tc.open(SourcesRegistryContract.createFromAddress(address));
-
-    const verifierRegistry = (await contract.getVerifierRegistryAddress()).toString();
-    const deploymentCosts = await contract.getDeploymentCosts();
-
-    const codeCellHash = Cell.fromBoc((await tc.getContractState(address)).code as Buffer)[0]
-      .hash()
-      .toString("base64");
-    return {
-      admin,
-      verifierRegistry,
-      codeCellHash,
-      address,
-      deploymentCosts,
-    };
-  });
-}
+import { useLoadSourcesRegistryInfo } from "../../lib/useLoadSourcesRegistryInfo";
 
 // TODO: combine into a single cell
 function changeVerifierRegistry(newVerifierRegistry: Address): Cell {

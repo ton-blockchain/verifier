@@ -2,27 +2,16 @@ import InfoPiece from "../InfoPiece";
 import { useLoadVerifierRegistryInfo } from "../../lib/useLoadVerifierRegistryInfo";
 import { Dictionary, beginCell, toNano, DictionaryValue, Slice, Address } from "ton";
 import { toBigIntBE } from "bigint-buffer";
-import { useEffect, useMemo, useState } from "react";
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  TextField as MuiTextField,
-  DialogActions,
-  Stack,
-  Grid,
-  Typography,
-  Divider,
-  Box,
-  CircularProgress,
-  Alert,
-} from "@mui/material";
+import { useMemo } from "react";
+import { Stack, Grid, CircularProgress, Alert } from "@mui/material";
 import Button from "../Button";
 import { toSha256Buffer } from "../../lib/useLoadContractProof";
 import { useRequestTXN } from "../../hooks";
 import { Verifier } from "../../lib/wrappers/verifier-registry";
 import { useFieldArray, useForm } from "react-hook-form";
 import { TextField } from "./form/TextField";
+import { useTonConnectUI } from "@tonconnect/ui-react";
+import { useLoadSourcesRegistryInfo } from "../../lib/useLoadSourcesRegistryInfo";
 
 export const OperationCodes = {
   removeVerifier: 0x19fa5637,
@@ -83,85 +72,25 @@ function updateVerifier(params: {
   return msgBody.endCell();
 }
 
-function UpdateVerifier({ verifier }: { verifier: Verifier }) {
-  const [open, setOpen] = useState(false);
-  const requestTXN = useRequestTXN();
-
-  const [value, setValue] = useState(
-    JSON.stringify(
-      {
-        quorum: verifier.quorum,
-        pubKeyEndpoints: verifier.pubKeyEndpoints,
-        name: verifier.name,
-        url: verifier.url,
-      },
-      null,
-      3,
-    ),
-  );
-
-  return (
-    <>
-      <Button
-        style={{ marginTop: 8 }}
-        text={"Update config"}
-        onClick={() => {
-          setOpen(true);
-        }}
-      />
-      <Dialog
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}>
-        <DialogTitle>Update Verifier</DialogTitle>
-        <DialogContent sx={{ width: 1000 }}>
-          <MuiTextField
-            multiline
-            autoFocus
-            margin="dense"
-            id="name"
-            label="JSON"
-            fullWidth
-            variant="standard"
-            value={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            text={"Send TXN"}
-            onClick={() => {
-              const val = JSON.parse(value) as Verifier;
-
-              requestTXN(
-                window.verifierRegistryAddress,
-                toNano("0.01"),
-                updateVerifier({
-                  id: sha256BN(val.name),
-                  quorum: val.quorum,
-                  endpoints: new Map<bigint, number>(
-                    Object.entries(val.pubKeyEndpoints).map(([pubKey, ip]) => [
-                      toBigIntBE(Buffer.from(pubKey, "base64")),
-                      ip2num(ip),
-                    ]),
-                  ),
-                  name: val.name,
-                  marketingUrl: val.url,
-                }),
-              );
-            }}
-          />
-        </DialogActions>
-      </Dialog>
-    </>
-  );
+function removeVerifier(params: { queryId?: number; id: bigint }) {
+  let msgBody = beginCell();
+  msgBody.storeUint(OperationCodes.removeVerifier, 32);
+  msgBody.storeUint(params.queryId || 0, 64);
+  msgBody.storeUint(params.id, 256);
+  return msgBody.endCell();
 }
 
-function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altColor: boolean }) {
+function VerifierRegsitryForm({
+  verifier,
+  altColor,
+  isNew,
+}: {
+  verifier: Verifier;
+  altColor: boolean;
+  isNew: boolean;
+}) {
   const requestTXN = useRequestTXN();
+  const { data: sourcesRegistry } = useLoadSourcesRegistryInfo();
 
   const defaultPubKeyEndpoints = useMemo(
     () =>
@@ -179,6 +108,7 @@ function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altC
       url: verifier.url || "",
       pubKeyEndpoints: defaultPubKeyEndpoints || [],
     },
+    mode: "onChange",
   });
 
   async function onSubmit(values: VerifierRegistryForm) {
@@ -195,15 +125,15 @@ function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altC
       return;
     }
 
-    if (!values.quorum) {
-      form.setError("quorum", { message: "Quorum is required" });
+    if (!values.quorum || Number(values.quorum) < 1) {
+      form.setError("quorum", { message: "Quorum is required and should be at least 1" });
       return;
     }
 
     try {
       const result = await requestTXN(
-        window.verifierRegistryAddress,
-        toNano("0.01"),
+        sourcesRegistry?.verifierRegistry ?? "",
+        toNano(isNew ? "1000" : "0.01"),
         updateVerifier({
           id: sha256BN(values.name),
           quorum: Number(values.quorum),
@@ -250,8 +180,23 @@ function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altC
             })}
           </Alert>
         )}
-        <h3 style={{ margin: 0 }}>{form.getValues("name")}</h3>
+        <Stack flexDirection={"row"} alignItems={"center"} gap={2}>
+          <h3 style={{ margin: 0 }}>{isNew ? "Add Verifier" : form.getValues("name")}</h3>
+          {!isNew && (
+            <Button
+              text="Remove"
+              onClick={() => {
+                requestTXN(
+                  sourcesRegistry!.verifierRegistry,
+                  toNano("0.01"),
+                  removeVerifier({ id: sha256BN(form.getValues("name")) }),
+                );
+              }}
+            />
+          )}
+        </Stack>
         <InfoPiece label="Admin" data={verifier.admin.toString()} />
+        {isNew && <TextField label="Name" name="name" control={form.control} />}
         <TextField label="Url" name="url" control={form.control} />
         <TextField label="Quorum" name="quorum" control={form.control} />
         <Stack spacing={2} alignItems="flex-start">
@@ -287,7 +232,11 @@ function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altC
             </Grid>
           ))}
         </Stack>
-        <Button text="Update config" type="submit" disabled={!form.formState.isDirty} />
+        <Button
+          text={isNew ? "Add verifier" : "Update config"}
+          type="submit"
+          disabled={!form.formState.isDirty}
+        />
       </Stack>
     </form>
   );
@@ -295,19 +244,33 @@ function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altC
 
 export function VerifierRegistry() {
   const { data, isLoading } = useLoadVerifierRegistryInfo();
-  const requestTXN = useRequestTXN();
+  const { data: sourcesRegistry } = useLoadSourcesRegistryInfo();
+  const [tonConnectUI] = useTonConnectUI();
 
   return (
     <Stack spacing={4} p={4}>
       <h1>Verifier Registry</h1>
-      <InfoPiece label="Address" data={window.verifierRegistryAddress} />
+      <InfoPiece label="Address" data={sourcesRegistry?.verifierRegistry ?? ""} />
       {isLoading && <CircularProgress />}
       <Stack>
         {isLoading && "Loading..."}
         {data?.map((v, index) => {
-          return <VerifierRegsitryForm verifier={v} altColor={index % 2 !== 1} />;
+          return <VerifierRegsitryForm verifier={v} altColor={index % 2 !== 1} isNew={false} />;
         })}
       </Stack>
+      {tonConnectUI.account?.address && (
+        <VerifierRegsitryForm
+          isNew={true}
+          altColor={true}
+          verifier={{
+            admin: Address.parse(tonConnectUI.account?.address),
+            name: "",
+            quorum: 0,
+            url: "",
+            pubKeyEndpoints: new Map<bigint, number>(),
+          }}
+        />
+      )}
     </Stack>
   );
 }

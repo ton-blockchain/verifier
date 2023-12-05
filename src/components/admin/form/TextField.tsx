@@ -11,15 +11,14 @@ export function TextField({ label, name, control }: TextFieldProps) {
     <Controller
       name={name}
       control={control}
-      render={({ field: { onChange, value }, fieldState: { error } }) => (
+      render={({ field, fieldState: { error } }) => (
         <MuiTextField
           helperText={error ? error.message : null}
           error={!!error}
-          onChange={onChange}
-          value={value}
           fullWidth
           label={label}
           variant="outlined"
+          {...field}
         />
       )}></Controller>
   );
