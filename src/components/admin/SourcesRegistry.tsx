@@ -69,8 +69,6 @@ function SourcesRegistry() {
   });
 
   async function onAdminSubmit(values: AdminForm) {
-    console.log(values);
-
     if (!data?.address) {
       throw new Error("no address");
     }
@@ -94,8 +92,6 @@ function SourcesRegistry() {
     }
   }
   async function onVerifierRegistrySubmit(values: VerifierRegistryForm) {
-    console.log(values);
-
     if (!data?.address) {
       throw new Error("no address");
     }
@@ -122,8 +118,6 @@ function SourcesRegistry() {
   }
 
   async function onDeploymentCostsSubmit(values: DeploymentCostsForm) {
-    console.log(values);
-
     if (!data?.address) {
       throw new Error("no address");
     }

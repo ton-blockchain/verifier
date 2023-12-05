@@ -112,8 +112,6 @@ function VerifierRegsitryForm({
   });
 
   async function onSubmit(values: VerifierRegistryForm) {
-    console.log(values);
-
     // validate values
     if (!values.name) {
       form.setError("name", { message: "Name is required" });
