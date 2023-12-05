@@ -12,14 +12,10 @@ import {
   Slice,
 } from "ton-core";
 
-export type RegistryData = {
-  verifiers: Map<bigint, Verifier>;
-};
-
 export type Verifier = {
   admin: Address;
   quorum: number;
-  pubKeyEndpoints: Map<bigint, number>;
+  pubKeyEndpoints: Record<string, string>;
   name: string;
   url: string;
 };
@@ -115,7 +111,6 @@ export class VerifierRegistry implements Contract {
     const c = item.beginParse();
     const d = c.loadDict(Dictionary.Keys.BigUint(256), createSliceValue());
 
-    // @ts-ignore
     return Array.from(d.values()).map((v) => {
       const admin = v.loadAddress()!;
       const quorom = v.loadUint(8);

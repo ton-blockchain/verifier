@@ -265,7 +265,7 @@ export function VerifierRegistry() {
             name: "",
             quorum: 0,
             url: "",
-            pubKeyEndpoints: new Map<bigint, number>(),
+            pubKeyEndpoints: {},
           }}
         />
       )}
