@@ -244,7 +244,7 @@ function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altC
   return (
     <form id={verifier.admin.toString()} onSubmit={form.handleSubmit(onSubmit)}>
       <Stack
-        spacing={2}
+        spacing={4}
         px={4}
         py={6}
         style={{ backgroundColor: altColor ? "#eeeeef" : "transparent" }}>
@@ -255,8 +255,8 @@ function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altC
             })}
           </Alert>
         )}
-        <TextField label="Name" name="name" control={form.control} />
-        <MuiTextField disabled label="Admin" value={verifier.admin.toString()} />
+        <h3 style={{ margin: 0 }}>{form.getValues("name")}</h3>
+        <InfoPiece label="Admin" data={verifier.admin.toString()} />
         <TextField label="Url" name="url" control={form.control} />
         <TextField label="Quorum" name="quorum" control={form.control} />
         <Stack spacing={2} alignItems="flex-start">
