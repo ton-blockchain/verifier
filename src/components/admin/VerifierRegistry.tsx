@@ -200,11 +200,6 @@ function VerifierRegsitryForm({ verifier, altColor }: { verifier: Verifier; altC
       return;
     }
 
-    if (!values.pubKeyEndpoints) {
-      form.setError("pubKeyEndpoints", { message: "PubKeyEndpoints is required" });
-      return;
-    }
-
     try {
       const result = await requestTXN(
         window.verifierRegistryAddress,
