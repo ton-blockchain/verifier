@@ -142,12 +142,10 @@ function App() {
           </OverflowingBox>
         )}
 
-        {!isLoading && (
-          <ContractDataBox isMobile={isSmallScreen}>
-            <ContractBlock />
-            {proofData?.hasOnchainProof && <CompilerBlock />}
-          </ContractDataBox>
-        )}
+        <ContractDataBox isMobile={isSmallScreen}>
+          <ContractBlock />
+          {proofData?.hasOnchainProof && <CompilerBlock />}
+        </ContractDataBox>
         {showSkeleton && (
           <OverflowingBox sx={{ padding: "30px 24px 24px 24px" }} mb={3}>
             <CenteringBox mb={3}>
