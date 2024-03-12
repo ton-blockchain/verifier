@@ -62,7 +62,7 @@ export function useSubmitSources() {
 
   const mutation = useCustomMutation(["submitSources"], async () => {
     if (!contractAddress) return;
-    if (!contractInfo?.codeCellHash.base64) return;
+    if (!contractInfo?.codeCellToCompileBase64) return;
     if (!hasFiles()) return;
     if (!verifierRegistryConfig) return;
     if (!walletAddress) {
@@ -90,7 +90,7 @@ export function useSubmitSources() {
         compiler,
         compilerSettings,
         knownContractAddress: contractAddress,
-        knownContractHash: contractInfo.codeCellHash.base64,
+        knownContractHash: contractInfo.codeCellToCompileBase64,
         sources: files.map((u) => ({
           includeInCommand: u.includeInCommand,
           isEntrypoint: u.isEntrypoint,
