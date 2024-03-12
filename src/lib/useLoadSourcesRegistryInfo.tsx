@@ -19,7 +19,7 @@ export function useLoadSourcesRegistryInfo() {
       .toString("base64");
     return {
       admin,
-      verifierRegistry: "EQD7WBTcloW5GwYdOIk6UM6nDSaRXg_jDDA6mKIhcvyCRV6Q",
+      verifierRegistry,
       codeCellHash,
       address,
       deploymentCosts,
