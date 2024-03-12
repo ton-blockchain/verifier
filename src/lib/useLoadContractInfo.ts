@@ -1,4 +1,4 @@
-import { Address, fromNano, Cell } from "ton";
+import { Address, fromNano, Cell, CellType, BitReader } from "ton";
 import { useQuery } from "@tanstack/react-query";
 
 import { fromCode } from "tvm-disassembler";
@@ -9,6 +9,16 @@ type CellHash = {
   base64: string;
   hex: string;
 };
+
+export function tryLoadLibraryCodeCellHash(exoticCodeCell: Cell) {
+  if (exoticCodeCell.isExotic && exoticCodeCell.type == CellType.Library) {
+    const br = new BitReader(exoticCodeCell.bits);
+    br.loadBits(8);
+    return Buffer.from(br.loadBits(br.remaining).toString(), "hex").toString("base64");
+  }
+
+  return null;
+}
 
 export function useLoadContractInfo() {
   const { contractAddress } = useContractAddress();
@@ -24,11 +34,18 @@ export function useLoadContractInfo() {
 
     const b = await client.getBalance(_address);
 
+    const libraryHash = tryLoadLibraryCodeCellHash(codeCell);
+
     let decompiled;
-    try {
-      decompiled = fromCode(codeCell);
-    } catch (e) {
-      decompiled = e?.toString();
+
+    if (libraryHash) {
+      decompiled = "Library contract\nLibrary code cell hash: " + libraryHash;
+    } else {
+      try {
+        decompiled = fromCode(codeCell);
+      } catch (e) {
+        decompiled = e?.toString();
+      }
     }
 
     const codeCellHash = codeCell.hash();
