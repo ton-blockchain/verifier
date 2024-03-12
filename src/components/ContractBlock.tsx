@@ -39,6 +39,11 @@ export function ContractBlock() {
     data?.dataCellHash.hex,
   );
 
+  const [displayLibraryHash, toggleDisplayLibraryHash] = useToggle(
+    data?.libraryHash.base64,
+    data?.libraryHash.hex,
+  );
+
   if (data) {
     dataRows.push({
       title: "Address",
@@ -72,6 +77,23 @@ export function ContractBlock() {
       },
       tooltip: true,
     });
+
+    if (data?.libraryHash.base64) {
+      dataRows.push({
+        title: "Library Code Cell Hash",
+        value: displayLibraryHash ?? "",
+        showIcon: true,
+        onClick: () => {
+          toggleDisplayLibraryHash();
+        },
+        tooltip: true,
+      });
+      dataRows.push({
+        title: "",
+        value: "",
+        showIcon: true,
+      });
+    }
   }
 
   return (

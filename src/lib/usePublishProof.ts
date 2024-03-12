@@ -13,7 +13,7 @@ export function usePublishProof() {
   const { data: sourcesRegistryData } = useLoadSourcesRegistryInfo();
 
   const { sendTXN, data, clearTXN } = useSendTXN("publishProof", async (count: number) => {
-    const ipfsLink = await getProofIpfsLink(contractInfo!.codeCellHash.base64);
+    const ipfsLink = await getProofIpfsLink(contractInfo!.codeCellToCompileBase64);
 
     if (count > 20) {
       return "error";
