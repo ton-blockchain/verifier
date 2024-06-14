@@ -48,29 +48,28 @@ export async function parseGetters(code: string): Promise<Getter[]> {
 
   const getters = parsed.rootNode.children.filter(
     (c) =>
-      c.type === "function_definition" &&
-      c.children.find((n) => n.type === "specifiers_list")?.text.includes("method_id"),
+      c.type === "function_definition" && (
+        // v0.4.x: `method_id` specifier
+        c.children.find((n) => n.type === "specifiers_list")?.text.includes("method_id") ||
+        // since v0.5.0: `get` on the left
+        c.children.find((n) => n.type === "pre_specifiers_list")?.text.includes("get")
+      ),
   );
 
-  const gettersParsed = getters.map((f) => {
-    const returnTypes = f.children[0].children
-      .filter((c) => !c.type.match(/[,()]/)) // TODO types are slice, primitive_type, ",", "(", ")"
-      .map((c) => c.text);
-
-    const name = f.children.find((n) => n.type === "function_name")!.text;
-
-    const parameters = f.children
-      .find((n) => n.type === "parameter_list")!
-      .children.filter((c) => c.type === "parameter_declaration")
-      .map((c) => ({
-        type: c.child(0)!.text,
-        name: c.child(1)!.text,
-      }));
-
+  const gettersParsed = getters.map((f: Parser.SyntaxNode) => {
     return {
-      returnTypes,
-      name,
-      parameters,
+      returnTypes: f
+        .childForFieldName("return_type")!
+        .children.filter((c) => !c.type.match(/[,()]/)) // TODO types are slice, primitive_type, ",", "(", ")"
+        .map((c) => c.text),
+      name: f.childForFieldName("name")!.text,
+      parameters: f
+        .childForFieldName("arguments")!
+        .children.filter((c) => c.type === "parameter_declaration")
+        .map((c) => ({
+          type: c.child(0)!.text,
+          name: c.child(1)!.text,
+        })),
     };
   });
 
