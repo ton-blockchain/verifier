@@ -25,8 +25,24 @@ export type StateGetter = {
   returnTypes: string[];
 };
 
-const parameterByName = (getters: StateGetter[], getterName: string, parameterName: string) =>
-  getters.find((_g) => _g.name === getterName)!.parameters.find((_p) => _p.name === parameterName)!;
+const parameterByName = (
+  getters: StateGetter[],
+  getterName: string,
+  parameterName: string,
+): Parameter => {
+  // loop for getter names collision
+  for (const getter of getters) {
+    if (getter.name !== getterName) continue;
+
+    for (const param of getter.parameters) {
+      if (param.name === parameterName) {
+        return param;
+      }
+    }
+  }
+
+  throw new Error("Malfrormed getter state: parameter not found");
+};
 
 type GetterState = {
   getters: StateGetter[];
