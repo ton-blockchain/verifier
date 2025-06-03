@@ -41,7 +41,7 @@ const parameterByName = (
     }
   }
 
-  throw new Error("Malfrormed getter state: parameter not found");
+  throw new Error("Malformed getter state: parameter not found");
 };
 
 type GetterState = {
