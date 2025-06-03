@@ -9,6 +9,7 @@ import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
 import create from "zustand";
 import { useLoadVerifierRegistryInfo } from "./useLoadVerifierRegistryInfo";
 import { useTonAddress } from "@tonconnect/ui-react";
+import { useRemoteConfig } from "./useRemoteConfig";
 
 export function randomFromArray<T>(arr: T[]) {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -35,9 +36,7 @@ function jsonToBlob(json: Record<string, any>): Blob {
   });
 }
 
-export const backends: string[] = window.isTestnet
-  ? import.meta.env.VITE_BACKEND_URL_TESTNET!.split(",")
-  : import.meta.env.VITE_BACKEND_URL!.split(",");
+const isTestnet = window.isTestnet;
 
 const useSubmitSourcesStatusStore = create<{
   status: string | null;
@@ -49,6 +48,22 @@ const useSubmitSourcesStatusStore = create<{
   clear: () => set({ status: null }),
 }));
 
+export function useBackends() {
+  const { data: remoteConfig } = useRemoteConfig();
+
+  let backends: string[] = [];
+
+  if (!!import.meta.env.VITE_BACKEND_URL_OVERRIDE) {
+    backends = import.meta.env.VITE_BACKEND_URL_OVERRIDE.split(",");
+  } else if (isTestnet) {
+    backends = remoteConfig.backendsTestnet;
+  } else {
+    backends = remoteConfig.backends;
+  }
+
+  return backends;
+}
+
 export function useSubmitSources() {
   const { contractAddress } = useContractAddress();
   const { data: contractInfo } = useLoadContractInfo();
@@ -57,6 +72,7 @@ export function useSubmitSources() {
   const walletAddress = useTonAddress();
   const { clear, setStatus, status } = useSubmitSourcesStatusStore();
   const { data: verifierRegistryData } = useLoadVerifierRegistryInfo();
+  const backends = useBackends();
 
   const verifierRegistryConfig = verifierRegistryData?.find((v) => v.name === window.verifierId);
 
@@ -68,6 +84,7 @@ export function useSubmitSources() {
     if (!walletAddress) {
       throw new Error("Wallet is not connected");
     }
+    if (backends.length === 0) return;
 
     clear();
 
