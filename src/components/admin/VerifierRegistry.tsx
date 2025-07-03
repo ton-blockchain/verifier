@@ -1,7 +1,7 @@
 import InfoPiece from "../InfoPiece";
 import { useLoadVerifierRegistryInfo } from "../../lib/useLoadVerifierRegistryInfo";
 import { Dictionary, beginCell, toNano, DictionaryValue, Slice, Address } from "ton";
-import { toBigIntBE } from "bigint-buffer";
+import { toBigIntBE } from "../../lib/utils/bigint-utils";
 import { useMemo } from "react";
 import { Stack, Grid, CircularProgress, Alert } from "@mui/material";
 import Button from "../Button";
