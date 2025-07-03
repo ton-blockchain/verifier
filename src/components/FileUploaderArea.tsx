@@ -64,18 +64,32 @@ export function FileUploaderArea() {
             <TitleText>Add sources</TitleText>
           </CenteringBox>
           {hasFiles() && step !== STEPS.PUBLISH && (
-            <div {...getRootProps()}>
-              <AppButton
-                fontSize={12}
-                fontWeight={700}
-                hoverBackground="#e3e3e3"
-                background="#F8F8F8"
-                height={44}
-                width={159}>
-                <img src={upload} alt="Sources icon" width={19} height={19} />
-                Upload source
-              </AppButton>
-            </div>
+            <CenteringBox sx={{ gap: 1 }}>
+              <label htmlFor="fileUpload" style={{ cursor: "pointer" }}>
+                <AppButton
+                  fontSize={12}
+                  fontWeight={700}
+                  hoverBackground="#e3e3e3"
+                  background="#F8F8F8"
+                  height={44}
+                  width={159}>
+                  <img src={upload} alt="Sources icon" width={19} height={19} />
+                  Upload directory
+                </AppButton>
+              </label>
+              <label htmlFor="individualFileUpload" style={{ cursor: "pointer" }}>
+                <AppButton
+                  fontSize={12}
+                  fontWeight={700}
+                  hoverBackground="#e3e3e3"
+                  background="#F8F8F8"
+                  height={44}
+                  width={149}>
+                  <img src={upload} alt="Sources icon" width={19} height={19} />
+                  Upload files
+                </AppButton>
+              </label>
+            </CenteringBox>
           )}
         </CenteringBox>
       </TitleBox>
@@ -88,14 +102,18 @@ export function FileUploaderArea() {
           }}>
           {!hasFiles() && (
             <FilesDropzone {...getRootProps()}>
-              Drop sources ({acceptedFileExtensions.map((ext) => `.${ext}`).join(", ")}) here
+              Drop directories or files ({acceptedFileExtensions.map((ext) => `.${ext}`).join(", ")}
+              ) here
             </FilesDropzone>
           )}
         </Box>
 
         <input
-          {...getInputProps()}
-          // onChange={onUploadFiles}
+          onChange={(e) => {
+            if (e.target.files) {
+              addFiles(Array.from(e.target.files));
+            }
+          }}
           onClick={(e) => {
             // @ts-ignore
             e.target.value = "";
@@ -104,9 +122,20 @@ export function FileUploaderArea() {
           id="fileUpload"
           type="file"
           multiple
-          accept={acceptedFileExtensions.join(",")}
-          // ref={inputRef}
-          // @ts-ignore
+          {...({ webkitdirectory: "" } as any)}
+          accept={acceptedFileExtensions.map((ext) => `.${ext}`).join(",")}
+        />
+        <input
+          {...getInputProps()}
+          onClick={(e) => {
+            // @ts-ignore
+            e.target.value = "";
+          }}
+          style={{ display: "none" }}
+          id="individualFileUpload"
+          type="file"
+          multiple
+          accept={acceptedFileExtensions.map((ext) => `.${ext}`).join(",")}
         />
       </Box>
     </>
