@@ -1,4 +1,4 @@
-import { toBufferBE } from "bigint-buffer";
+import { toBufferBE } from "../utils/bigint-utils";
 import {
   Address,
   beginCell,
@@ -50,7 +50,10 @@ function createSliceValue(): DictionaryValue<Slice> {
 }
 
 export class VerifierRegistry implements Contract {
-  constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {}
+  constructor(
+    readonly address: Address,
+    readonly init?: { code: Cell; data: Cell },
+  ) {}
 
   static createFromAddress(address: Address) {
     return new VerifierRegistry(address);

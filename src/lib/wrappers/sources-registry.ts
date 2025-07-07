@@ -9,7 +9,7 @@ import {
   SendMode,
 } from "ton-core";
 
-import { toBigIntBE } from "bigint-buffer";
+import { toBigIntBE } from "../utils/bigint-utils";
 import { Sha256 } from "@aws-crypto/sha256-js";
 
 export const toSha256Buffer = (s: string) => {
@@ -19,7 +19,10 @@ export const toSha256Buffer = (s: string) => {
 };
 
 export class SourcesRegistry implements Contract {
-  constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {}
+  constructor(
+    readonly address: Address,
+    readonly init?: { code: Cell; data: Cell },
+  ) {}
 
   static createFromAddress(address: Address) {
     return new SourcesRegistry(address);

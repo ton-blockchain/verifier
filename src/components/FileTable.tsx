@@ -41,9 +41,9 @@ function Cells({
   isDragging: boolean;
   isHover: boolean;
 }) {
-  const fileName = file.fileObj.name;
+  const fileId = file.fileId;
   const { attributes, listeners } = useSortable({
-    id: fileName,
+    id: fileId,
   });
   const theme = useTheme();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
@@ -74,16 +74,17 @@ function Cells({
           disabled={canPublish}
           value={file.folder}
           onBlur={(e) => {
-            setDirectory(fileName, trimDirectory(e.target.value));
+            setDirectory(fileId, trimDirectory(e.target.value));
           }}
           onChange={(e) => {
-            setDirectory(fileName, e.target.value);
+            setDirectory(fileId, e.target.value);
           }}></DirectoryBox>
       </BorderLessCell>
       <BorderLessCell sx={{ paddingLeft: headerSpacings ? 2 : 0 }}>
         <CenteringBox
           sx={{ flexDirection: "column", justifyContent: "center", alignItems: "flex-start" }}>
           <Typography sx={{ fontSize: 14 }}>{file.fileObj.name}</Typography>
+          <Typography sx={{ fontSize: 11, color: "#9E9E9E" }}>{file.relativePath}</Typography>
           <Typography sx={{ fontSize: 12, color: "#C1C1C1" }}>{file.fileObj.size} bytes</Typography>
         </CenteringBox>
       </BorderLessCell>
@@ -92,7 +93,7 @@ function Cells({
           disabled={canPublish}
           checked={file.includeInCommand}
           onChange={(e) => {
-            setInclueInCommand(fileName, e.target.checked);
+            setInclueInCommand(fileId, e.target.checked);
           }}
         />
       </BorderLessCell>
@@ -105,7 +106,7 @@ function Cells({
             marginRight: 1,
           }}
           onClick={() => {
-            removeFile(fileName);
+            removeFile(fileId);
           }}>
           <img src={deleteIcon} alt="Delete icon" width={18} height={18} />
         </IconButton>
@@ -115,14 +116,14 @@ function Cells({
 }
 
 function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
-  const fileName = file.fileObj.name;
+  const fileId = file.fileId;
   const { hoverRef, isHover } = useHover();
   const { data } = useSubmitSources();
 
   const canPublish = !!data?.result?.msgCell;
 
   const { setNodeRef, transform, transition, isDragging } = useSortable({
-    id: fileName,
+    id: fileId,
   });
 
   const style = {
@@ -147,7 +148,7 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
           background: "#FAFAFA",
         },
       }}
-      key={fileName}
+      key={fileId}
       ref={(r) => {
         setNodeRef(r);
         hoverRef.current = r;
@@ -244,10 +245,10 @@ export function FileTable() {
           <TableBody>
             <SortableContext
               disabled={canPublish}
-              items={files.map((file) => file.fileObj.name)}
+              items={files.map((file) => file.fileId)}
               strategy={verticalListSortingStrategy}>
               {files.map((file, i) => {
-                return <SortableRow file={file} pos={i + 1} key={file.fileObj.name} />;
+                return <SortableRow file={file} pos={i + 1} key={file.fileId} />;
               })}
             </SortableContext>
           </TableBody>

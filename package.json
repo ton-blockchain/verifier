@@ -25,7 +25,6 @@
     "@ton-community/contract-verifier-sdk": "1.4.0",
     "@ton-community/func-js": "^0.3.0",
     "@tonconnect/ui-react": "^1.0.0-beta.6",
-    "bigint-buffer": "^1.1.5",
     "buffer": "^6.0.3",
     "file-saver": "^2.0.5",
     "func-js-bin-0.2.0": "npm:@ton-community/func-js-bin@^0.2.0",
@@ -59,9 +58,12 @@
     "@types/node": "^18.11.4",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@vitejs/plugin-react": "^2.1.0",
+    "@vitejs/plugin-react": "^4.6.0",
     "husky": "^8.0.0",
     "typescript": "^4.6.4",
-    "vite": "^3.1.0"
+    "vite": "^6.3.5"
+  },
+  "overrides": {
+    "axios": "^1.10.0"
   }
 }
