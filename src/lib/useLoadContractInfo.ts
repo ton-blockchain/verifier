@@ -1,7 +1,8 @@
-import { Address, fromNano, Cell, CellType, BitReader, beginCell, BitString } from "ton";
+import { Address, fromNano, CellType } from "ton";
 import { useQuery } from "@tanstack/react-query";
+import { Cell, BitReader } from "@ton/core";
 
-import { fromCode } from "tvm-disassembler";
+import { disassembleRoot, AssemblyWriter } from "@tact-lang/opcode";
 import { getClient } from "./getClient";
 import { useContractAddress } from "./useContractAddress";
 
@@ -42,7 +43,8 @@ export function useLoadContractInfo() {
       decompiled = "Library contract";
     } else {
       try {
-        decompiled = fromCode(codeCell);
+        const program = disassembleRoot(codeCell, { computeRefs: true });
+        decompiled = AssemblyWriter.write(program, { withoutHeader: true });
       } catch (e) {
         decompiled = e?.toString();
       }
