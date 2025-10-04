@@ -54,7 +54,7 @@ export function Footer() {
           <HoverableIcon
             iconUrl={github}
             hoveredIconUrl={githubHovered}
-            link="https://github.com/orbs-network/ton-contract-verifier"
+            link="https://github.com/ton-blockchain/verifier"
           />
         </SocialsContent>
       </SocialsWrapper>
