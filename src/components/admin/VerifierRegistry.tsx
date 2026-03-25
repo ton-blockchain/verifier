@@ -47,7 +47,7 @@ type VerifierRegistryForm = {
 };
 
 function updateVerifier(params: {
-  queryId?: number;
+  queryId?: bigint;
   id: bigint;
   quorum: number;
   endpoints: Map<bigint, number>;
@@ -56,7 +56,7 @@ function updateVerifier(params: {
 }) {
   let msgBody = beginCell();
   msgBody.storeUint(OperationCodes.updateVerifier, 32);
-  msgBody.storeUint(params.queryId || 0, 64);
+  msgBody.storeUint(params.queryId || 0n, 64);
   msgBody.storeUint(params.id, 256);
   msgBody.storeUint(params.quorum, 8);
 
@@ -72,10 +72,10 @@ function updateVerifier(params: {
   return msgBody.endCell();
 }
 
-function removeVerifier(params: { queryId?: number; id: bigint }) {
+function removeVerifier(params: { queryId?: bigint; id: bigint }) {
   let msgBody = beginCell();
   msgBody.storeUint(OperationCodes.removeVerifier, 32);
-  msgBody.storeUint(params.queryId || 0, 64);
+  msgBody.storeUint(params.queryId || 0n, 64);
   msgBody.storeUint(params.id, 256);
   return msgBody.endCell();
 }
