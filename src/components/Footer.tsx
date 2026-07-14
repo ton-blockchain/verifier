@@ -22,6 +22,7 @@ import icon from "../assets/icon.svg";
 import { CenteringBox } from "./Common.styled";
 import { useIsTestnet, useSwitchNetwork } from "./TestnetBar";
 import { useLocation } from "react-router-dom";
+import { githubLink } from "../const";
 
 export const TELEGRAM_SUPPORT_LINK = "https://t.me/tonverifier";
 
@@ -56,11 +57,7 @@ export function Footer() {
             hoveredIconUrl={telegramHovered}
             link={TELEGRAM_SUPPORT_LINK}
           />
-          <HoverableIcon
-            iconUrl={github}
-            hoveredIconUrl={githubHovered}
-            link="https://github.com/ton-blockchain/verifier"
-          />
+          <HoverableIcon iconUrl={github} hoveredIconUrl={githubHovered} link={githubLink} />
         </SocialsContent>
       </SocialsWrapper>
       <Separator />
