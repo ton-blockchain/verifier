@@ -1,6 +1,6 @@
 import { useCallback } from "react";
-import { validateAddress } from "./useContractAddress";
 import useNotification from "./useNotification";
+import { Address } from "@ton/ton";
 import create from "zustand";
 import { useNavigatePreserveQuery } from "./useNavigatePreserveQuery";
 
@@ -27,17 +27,24 @@ export function useAddressInput() {
     setValue("");
   }, []);
 
-  const onSubmit = () => {
-    let isAddressValid = validateAddress(value);
-    if (!isAddressValid) {
-      showNotification("Invalid address", "error");
-      return;
-    }
-
+  const navigateToAddress = (address: string, isTestnet: boolean) => {
     setValue("");
     setActive(false);
+    navigate({ pathname: `/${value}`, search: (isTestnet && "testnet") || "" });
+  };
 
-    navigate(`/${value}`);
+  const onSubmit = () => {
+    try {
+      const address = Address.parseFriendly(value);
+      navigateToAddress(value, address.isTestOnly);
+    } catch (errParseFriendly) {
+      try {
+        const _ = Address.parseRaw(value);
+        navigateToAddress(value, false);
+      } catch (errParseRaw) {
+        showNotification(`Invalid address: ${errParseFriendly} / ${errParseRaw}`, "error");
+      }
+    }
   };
 
   return {

@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { useContractAddress } from "../useContractAddress";
-import { useLoadContractProof } from "../useLoadContractProof";
 import { Getter, parseGetters } from "./getterParser";
-import { useCustomGetter } from "./useCustomGetter";
 
 type ParameterType = "address" | "cell" | "slice" | "int";
 
@@ -25,19 +22,28 @@ export type StateGetter = {
   returnTypes: string[];
 };
 
-const parameterByName = (getters: StateGetter[], getterName: string, parameterName: string) =>
-  getters.find((_g) => _g.name === getterName)!.parameters.find((_p) => _p.name === parameterName)!;
+const parameterByName = (
+  getters: Record<string, StateGetter[]>,
+  key: string,
+  getterName: string,
+  parameterName: string,
+) => {
+  return getters[key]
+    ?.find((_g) => _g.name === getterName)
+    ?.parameters.find((_p) => _p.name === parameterName)!;
+};
 
 type GetterState = {
-  getters: StateGetter[];
-  setGetters: (getters: Getter[]) => void;
+  gettersByKey: Record<string, StateGetter[]>;
+  setGetters: (key: string, getters: Getter[]) => void;
+  clearForKey: (key: string) => void;
 };
 
 const _useGetters = create(
   immer<GetterState>((set, get) => ({
-    getters: [],
+    gettersByKey: {},
 
-    setGetters: (getters: Getter[]) => {
+    setGetters: (key, getters) => {
       set((state) => {
         const stateGetters: StateGetter[] = getters.map((g) => {
           return {
@@ -55,25 +61,25 @@ const _useGetters = create(
 
                 toggleNextType: () => {
                   set((state) => {
-                    const param = parameterByName(state.getters, g.name, p.name);
+                    const param = parameterByName(state.gettersByKey, key, g.name, p.name);
                     param.selectedTypeIdx =
                       (param.selectedTypeIdx + 1) % param.possibleTypes.length;
                   });
                 },
 
                 type: () => {
-                  const param = parameterByName(get().getters, g.name, p.name);
+                  const param = parameterByName(get().gettersByKey, key, g.name, p.name);
                   return param.possibleTypes[param.selectedTypeIdx];
                 },
 
                 originalType: () => {
-                  const param = parameterByName(get().getters, g.name, p.name);
+                  const param = parameterByName(get().gettersByKey, key, g.name, p.name);
                   return param.possibleTypes[0];
                 },
 
                 setValue: (value: string) => {
                   set((state) => {
-                    const param = parameterByName(state.getters, g.name, p.name);
+                    const param = parameterByName(state.gettersByKey, key, g.name, p.name);
                     param.value = value;
                   });
                 },
@@ -83,39 +89,42 @@ const _useGetters = create(
           };
         });
 
-        state.getters = stateGetters;
+        state.gettersByKey[key] = stateGetters;
+      });
+    },
+
+    clearForKey: (key) => {
+      set((state) => {
+        delete state.gettersByKey[key];
       });
     },
   })),
 );
 
-export function useGetters() {
-  const { getters } = _useGetters();
+export function useGetters(key: string | null) {
+  const getters = _useGetters((state) => (key ? (state.gettersByKey[key] ?? []) : [])) ?? [];
   return { getters };
 }
 
-export function useInitializeGetters() {
-  const { data } = useLoadContractProof();
-
-  const { setGetters } = _useGetters();
-  const { clear } = useCustomGetter();
-
-  const { contractAddress } = useContractAddress();
+export function useSyncGetters(key: string | null, files?: { name: string; content: string }[]) {
+  const { setGetters, clearForKey } = _useGetters();
 
   useEffect(() => {
-    setGetters([]);
-    clear();
-  }, [contractAddress]);
-
-  useEffect(() => {
+    if (!key) return;
+    if (!files?.length) {
+      clearForKey(key);
+      return;
+    }
     (async () => {
-      const _getterConfig = [];
-      for (const f of data?.files ?? []) {
-        if (!f.name.match(/\.(fc|func)/)) continue;
-        _getterConfig.push(...(await parseGetters(f.content)));
+      const parsed: Getter[] = [];
+      for (const f of files) {
+        if (!f.name.match(/\.(fc|func)$/)) continue;
+        parsed.push(...(await parseGetters(f.content)));
       }
-      setGetters(_getterConfig);
-      clear();
+      setGetters(key, parsed);
     })();
-  }, [data?.files]);
+    return () => {
+      clearForKey(key);
+    };
+  }, [key, files]);
 }

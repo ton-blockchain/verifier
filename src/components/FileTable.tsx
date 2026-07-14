@@ -35,11 +35,13 @@ function Cells({
   file,
   pos,
   isHover,
+  canPublish,
 }: {
   file: FileToUpload;
   pos: number;
   isDragging: boolean;
   isHover: boolean;
+  canPublish: boolean;
 }) {
   const fileName = file.fileObj.name;
   const { attributes, listeners } = useSortable({
@@ -49,10 +51,6 @@ function Cells({
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
 
   const { setInclueInCommand, setDirectory, removeFile } = useFileStore();
-
-  const { data } = useSubmitSources();
-
-  const canPublish = !!data?.result?.msgCell;
 
   return (
     <>
@@ -114,12 +112,17 @@ function Cells({
   );
 }
 
-function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
+function SortableRow({
+  file,
+  pos,
+  canPublish,
+}: {
+  file: FileToUpload;
+  pos: number;
+  canPublish: boolean;
+}) {
   const fileName = file.fileObj.name;
   const { hoverRef, isHover } = useHover();
-  const { data } = useSubmitSources();
-
-  const canPublish = !!data?.result?.msgCell;
 
   const { setNodeRef, transform, transition, isDragging } = useSortable({
     id: fileName,
@@ -133,7 +136,7 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
   if (canPublish) {
     return (
       <TableRow sx={{ height: 60 }}>
-        <Cells file={file} pos={pos} isDragging={false} isHover={false} />
+        <Cells file={file} pos={pos} isDragging={false} isHover={false} canPublish={canPublish} />
       </TableRow>
     );
   }
@@ -153,18 +156,22 @@ function SortableRow({ file, pos }: { file: FileToUpload; pos: number }) {
         hoverRef.current = r;
       }}
       style={style}>
-      <Cells file={file} pos={pos} isDragging={isDragging} isHover={isHover} />
+      <Cells
+        file={file}
+        pos={pos}
+        isDragging={isDragging}
+        isHover={isHover}
+        canPublish={canPublish}
+      />
     </TableRow>
   );
 }
 
-export function FileTable() {
+export function FileTable({ canPublish }: { canPublish: boolean }) {
   const { files, reorderFiles } = useFileStore();
-  const { data } = useSubmitSources();
 
   const theme = useTheme();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
-  const canPublish = !!data?.result?.msgCell;
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
@@ -247,7 +254,14 @@ export function FileTable() {
               items={files.map((file) => file.fileObj.name)}
               strategy={verticalListSortingStrategy}>
               {files.map((file, i) => {
-                return <SortableRow file={file} pos={i + 1} key={file.fileObj.name} />;
+                return (
+                  <SortableRow
+                    file={file}
+                    pos={i + 1}
+                    key={file.fileObj.name}
+                    canPublish={canPublish}
+                  />
+                );
               })}
             </SortableContext>
           </TableBody>

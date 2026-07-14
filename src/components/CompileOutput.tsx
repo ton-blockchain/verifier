@@ -1,4 +1,4 @@
-import { useSubmitSources } from "../lib/useSubmitSources";
+import { DEFAULT_VERIFIER, useSubmitSources } from "../lib/useSubmitSources";
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
 import { Box } from "@mui/system";
 import { AppNotification, NotificationType } from "./AppNotification";
@@ -52,8 +52,16 @@ export const ErrorRowValue = styled(DataRowValue)({
   fontWeight: 400,
 });
 
-export function CompileOutput() {
-  const { data: submitSourcesData, error } = useSubmitSources();
+type CompileOutputProps = {
+  contractAddress: string;
+  verifier?: string;
+};
+
+export function CompileOutput({
+  contractAddress,
+  verifier = DEFAULT_VERIFIER,
+}: CompileOutputProps) {
+  const { data: submitSourcesData, error } = useSubmitSources(contractAddress, verifier);
   const { data: contractInfoData } = useLoadContractInfo();
 
   const compileResult = submitSourcesData?.result?.compileResult;

@@ -7,7 +7,7 @@ import {
   TupleReader,
   Tuple,
   TupleItemInt,
-} from "ton";
+} from "@ton/ton";
 
 function _prepareParams(params: any[] = []) {
   const paramsTuple = new TupleBuilder();

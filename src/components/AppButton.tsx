@@ -7,44 +7,69 @@ interface StyledButtonProps {
   transparent?: boolean;
   background?: string;
   hoverBackground?: string;
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
   textColor?: string;
 }
 
-const StyledButton = styled(Button)((props: StyledButtonProps) => ({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  gap: 8,
-  padding: "0px 16px",
-  margin: "auto",
-  maxWidth: 160,
-  width: props.width || "100%",
-  height: props.height || "100%",
-  fontSize: props.fontSize || 14,
-  fontWeight: props.fontWeight || 400,
-  boxShadow: "none",
-  borderRadius: 40,
-  border: props.transparent ? "1px solid #50A7EA" : "",
-  background: props.background || "inherit",
-  whiteSpace: "nowrap",
-  textTransform: "none",
-  color: props.textColor || "#000",
-  "&:hover": {
-    background: props.hoverBackground || "inherit",
-  },
-  "& img": {
-    maxWidth: 22,
-  },
-  "&:disabled": {
-    background: "#D9D9D9",
-  },
-  [theme.breakpoints.down(900)]: {
-    padding: 0,
-    minWidth: 25,
-  },
-}));
+const customButtonProps = [
+  "fontSize",
+  "fontWeight",
+  "transparent",
+  "background",
+  "hoverBackground",
+  "width",
+  "height",
+  "textColor",
+];
+
+const StyledButton = styled(Button, {
+  shouldForwardProp: (prop) => !customButtonProps.includes(prop as string),
+})<StyledButtonProps>(
+  ({
+    theme,
+    width,
+    height,
+    fontSize = 14,
+    fontWeight = 400,
+    transparent,
+    background,
+    hoverBackground,
+    textColor,
+  }) => ({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+    padding: "0px 16px",
+    margin: "auto",
+    maxWidth: 160,
+    width: width || "100%",
+    height: height || "100%",
+    fontSize,
+    fontWeight,
+    boxShadow: "none",
+    borderRadius: 40,
+    border: transparent ? "1px solid #50A7EA" : "",
+    background: background || "inherit",
+    whiteSpace: "nowrap",
+    textTransform: "none",
+    color: textColor || "#000",
+    "&:hover": {
+      background: hoverBackground || "inherit",
+    },
+    "& img": {
+      maxWidth: 22,
+    },
+    "&:disabled": {
+      background: "#D9D9D9",
+    },
+    [theme.breakpoints.down(900)]: {
+      padding: 0,
+      minWidth: 25,
+    },
+  }),
+);
 
 interface AppButtonProps extends StyledButtonProps {
   children: ReactNode;

@@ -13,7 +13,7 @@ import TableBody from "@mui/material/TableBody";
 
 export function VerificationProofTable() {
   const {
-    data: contractProofData,
+    data: contractProofMap,
     isLoading: isLoadingProof,
     error: errorProof,
   } = useLoadContractProof();
@@ -26,7 +26,12 @@ export function VerificationProofTable() {
 
   // TODO this supports a single verifier Id for now.
   // when we wish to support multiple verifiers, load contract proof would have to address that
-  const verifierConfig = verifierRegistryInfo?.find((v) => v.name === window.verifierId);
+  const verifierEntry = Object.entries(verifierRegistryInfo ?? {}).find(
+    ([, v]) => v.name === "verifier.ton.org",
+  );
+  const verifierConfig = verifierEntry?.[1];
+  const verifierId = verifierEntry?.[0];
+  const proofForVerifier = verifierId ? contractProofMap?.get(verifierId) : undefined;
 
   const onCopy = useCallback(async (value: string) => {
     navigator.clipboard.writeText(value);
@@ -52,7 +57,7 @@ export function VerificationProofTable() {
             </>
           ) : (
             verifierConfig &&
-            contractProofData &&
+            proofForVerifier &&
             Object.entries(verifierConfig.pubKeyEndpoints).map(([pubKey, endpoint]) => {
               return (
                 <VerificationProofPopupTableDataRow
@@ -60,7 +65,7 @@ export function VerificationProofTable() {
                   pubKey={pubKey}
                   onCopy={onCopy}
                   url={verifierConfig.url}
-                  date={contractProofData?.verificationDate?.toLocaleDateString() || ""}
+                  date={proofForVerifier?.verificationDate?.toLocaleDateString() || ""}
                   endpoint={endpoint}
                   name={verifierConfig.name}
                 />
@@ -70,7 +75,7 @@ export function VerificationProofTable() {
         </TableBody>
       </PopupTable>
       {(!!errorProof || !!errorVerifierRegistry) &&
-        `${errorProof} ${errorVerifierRegistry} (App notification)`}
+        `${errorProof ?? ""} ${errorVerifierRegistry ?? ""} (App notification)`}
     </Box>
   );
 }

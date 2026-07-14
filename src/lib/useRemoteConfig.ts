@@ -4,12 +4,18 @@ import { useState } from "react";
 const configURL =
   "https://raw.githubusercontent.com/ton-community/contract-verifier-config/main/config.json";
 
+type RemoteConfig = {
+  funcVersions: string[];
+  tactVersions: string[];
+  tolkVersions: string[];
+};
+
 export function useRemoteConfig() {
   const [enabled, setEnabled] = useState(true);
 
-  return useQuery(
-    ["remoteConfig"],
-    async () => {
+  return useQuery<RemoteConfig>({
+    queryKey: ["remoteConfig"],
+    queryFn: async () => {
       const { funcVersions, tactVersions, tolkVersions } = await (await fetch(configURL)).json();
 
       setEnabled(false);
@@ -20,6 +26,7 @@ export function useRemoteConfig() {
         tolkVersions: tolkVersions as string[],
       };
     },
-    { enabled, initialData: { funcVersions: [], tactVersions: [], tolkVersions: [] } },
-  );
+    enabled,
+    initialData: { funcVersions: [], tactVersions: [], tolkVersions: [] },
+  });
 }

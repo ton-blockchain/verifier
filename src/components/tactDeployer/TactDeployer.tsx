@@ -1,15 +1,15 @@
-import { Address, Cell, StateInit, toNano, contractAddress } from "ton";
-import { getClient } from "../../lib/getClient";
+import { Address, Cell, contractAddress, StateInit, toNano } from "@ton/ton";
+import { useClient, useSourcesRegistryAddress } from "../../lib/useClient";
 import { useSendTXN } from "../../lib/useSendTxn";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Box, CircularProgress, Skeleton, useMediaQuery, useTheme } from "@mui/material";
 import contractIcon from "../../assets/contract.svg";
-import { ContentBox, ContractDataBox } from "../../App";
+import { ContentBox, ContractDataBox } from "../Layout";
 import { DataBlock, DataRowItem } from "../DataBlock";
 import { AppNotification, NotificationType } from "../AppNotification";
-import { DataBox, CenteringBox, IconBox, TitleText } from "../Common.styled";
+import { CenteringBox, DataBox, IconBox, TitleText } from "../Common.styled";
 import { NotificationTitle } from "../CompileOutput";
 import { TopBar } from "./TopBar";
 import { Footer } from "../Footer";
@@ -18,60 +18,116 @@ import { AppButton } from "../AppButton";
 import { workchainForAddress } from "../../lib/workchainForAddress";
 import { getProofIpfsLink } from "../../lib/useLoadContractProof";
 import { useFileStore } from "../../lib/useFileStore";
-import { usePreload } from "../../lib/useResetState";
+import { usePreload } from "../../lib/usePreload";
 import { CustomValueInput } from "./TactDeployer.styled";
 import { useNavigatePreserveQuery } from "../../lib/useNavigatePreserveQuery";
-import { TestnetBar } from "../TestnetBar";
+import { TestnetBar, useIsTestnet } from "../TestnetBar";
+import { fetchIpfsContent } from "../../lib/fetchIpfsContent";
 
 const deployableTraitInitMessage = Cell.fromBoc(
   Buffer.from("te6cckEBAQEADgAAGJRqmLYAAAAAAAAAAOnNeQ0=", "base64"),
 )[0];
 
-async function fetchFromIpfs(hash: string) {
-  const IPFS_GW = `https://tact-deployer${window.isTestnet ? "-testnet" : ""}.infura-ipfs.io`;
-  return fetch(`${IPFS_GW}/ipfs/${hash}`);
+class IpfsNotFoundError extends Error {
+  constructor(hash: string) {
+    super(`Tact package could not be found in IPFS (hash: ${hash})`);
+    this.name = "IpfsNotFoundError";
+  }
 }
 
-function useTactDeployer({ workchain }: { workchain: 0 | -1 }) {
+class IpfsServerError extends Error {
+  constructor(hash: string, status: number) {
+    super(`IPFS server error ${status} for hash: ${hash}`);
+    this.name = "IpfsServerError";
+  }
+}
+
+async function fetchFromIpfs(hash: string) {
+  const { response } = await fetchIpfsContent(hash);
+
+  if (!response.ok) {
+    // For 4xx errors (client errors like 404), throw a specific error
+    if (response.status >= 400 && response.status < 500) {
+      throw new IpfsNotFoundError(hash);
+    }
+    // For 5xx errors (server errors), throw a different error that can be retried
+    throw new IpfsServerError(hash, response.status);
+  }
+
+  return response;
+}
+
+function useTactDeployer({
+  workchain,
+  verifier = "verifier.ton.org",
+}: {
+  workchain: 0 | -1;
+  verifier?: string;
+}) {
   const { ipfsHash } = useParams();
+  const tc = useClient();
+  const sourcesRegistryAddress = useSourcesRegistryAddress();
+  const isTestnet = useIsTestnet();
 
-  const { data, error, isLoading } = useQuery(["tactDeploy", ipfsHash], async () => {
-    if (!ipfsHash) return null;
-    const tc = await getClient();
-    const content = await fetchFromIpfs(ipfsHash).then((res) => res.json());
-    const pkg = await fetchFromIpfs(content.pkg).then((res) => res.json());
-    const dataCell = await fetchFromIpfs(content.dataCell)
-      .then((res) => res.arrayBuffer())
-      .then((buf) => Cell.fromBoc(Buffer.from(buf))[0]);
+  const { data, error, isLoading } = useQuery({
+    enabled: !!tc && !!ipfsHash,
+    queryKey: ["tactDeploy", ipfsHash, isTestnet],
+    queryFn: async () => {
+      if (!ipfsHash || !tc) return null;
+      const content = await fetchFromIpfs(ipfsHash).then((res) => res.json());
+      const pkgPromise = await fetchFromIpfs(content.pkg.replace("ipfs://", "")).then((res) =>
+        res.json(),
+      );
+      const dataCellPromise = await fetchFromIpfs(content.dataCell.replace("ipfs://", ""))
+        .then((res) => res.arrayBuffer())
+        .then((buf) => Cell.fromBoc(Buffer.from(buf))[0]);
 
-    const codeCell = Cell.fromBoc(Buffer.from(pkg.code, "base64"))[0];
-    const address = contractAddress(workchain, { code: codeCell, data: dataCell });
-    const stateInit = { code: codeCell, data: dataCell };
+      const [pkg, dataCell] = [await pkgPromise, await dataCellPromise];
 
-    const dataCellHash = dataCell.hash().toString("base64");
-    const codeCellHash = codeCell.hash().toString("base64");
+      const codeCell = Cell.fromBoc(Buffer.from(pkg.code, "base64"))[0];
+      const address = contractAddress(workchain, { code: codeCell, data: dataCell });
+      const stateInit = { code: codeCell, data: dataCell };
 
-    const isDeployed = await tc.isContractDeployed(address);
-    const hasProof = isDeployed && (await getProofIpfsLink(codeCellHash));
+      const dataCellHash = dataCell.hash().toString("base64");
+      const codeCellHash = codeCell.hash().toString("base64");
 
-    return {
-      address,
-      stateInit,
-      pkg,
-      codeCellHash,
-      dataCellHash,
-      isDeployed,
-      hasProof,
-    };
+      const isDeployed = await tc.isContractDeployed(address);
+      const hasProof =
+        isDeployed &&
+        (await getProofIpfsLink(codeCellHash, verifier, isTestnet, {
+          tonClient: tc,
+          sourcesRegistry: sourcesRegistryAddress,
+        }));
+
+      return {
+        address,
+        stateInit,
+        pkg,
+        codeCellHash,
+        dataCellHash,
+        isDeployed,
+        hasProof,
+      };
+    },
+    retry: (failureCount, error) => {
+      // Don't retry for 4xx errors (not found, etc.)
+      if (error instanceof IpfsNotFoundError) {
+        return false;
+      }
+      // Retry up to 2 times for server errors
+      return failureCount < 2;
+    },
+    retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   });
 
   return { data, error, isLoading };
 }
 
 function useDeployContract(value: string, stateInit?: StateInit, address?: Address) {
+  const tc = useClient();
   const { sendTXN, data, clearTXN } = useSendTXN("deployContract", async (count: number) => {
+    if (!tc) throw new Error("No client");
     if (!address) throw new Error("No address");
-    const tc = await getClient();
 
     // TODO move to generic function
     if (count > 20) {
@@ -84,7 +140,12 @@ function useDeployContract(value: string, stateInit?: StateInit, address?: Addre
   return {
     sendTXN: () => {
       if (!address) return;
-      sendTXN(address, toNano(value), deployableTraitInitMessage, stateInit);
+      sendTXN({
+        to: address,
+        value: toNano(value),
+        message: deployableTraitInitMessage,
+        stateInit,
+      });
     },
     status: data.status,
     clearTXN,
@@ -92,34 +153,33 @@ function useDeployContract(value: string, stateInit?: StateInit, address?: Addre
 }
 
 export function ContractBlock() {
-  const dataRows: DataRowItem[] = [];
+  const { data, error, isLoading } = useTactDeployer({ workchain: 0 });
 
-  const { data, error } = useTactDeployer({ workchain: 0 });
-
-  if (data) {
-    dataRows.push({
-      title: "Name",
-      value: data.pkg.name,
-    });
-    dataRows.push({
-      title: "Compiler",
-      value: `Tact ${data.pkg.compiler.version}`,
-    });
-    dataRows.push({
-      title: "Code Hash",
-      value: data.codeCellHash,
-    });
-    dataRows.push({
-      title: "Data Hash",
-      value: data.dataCellHash,
-    });
-    dataRows.push({
-      title: "Workchain",
-      value: workchainForAddress(data.address.toString()),
-    });
-  }
-
-  const isLoading = false;
+  const dataRows = useMemo<DataRowItem[]>(() => {
+    if (!data) return [];
+    return [
+      {
+        title: "Name",
+        value: data.pkg.name,
+      },
+      {
+        title: "Compiler",
+        value: `Tact ${data.pkg.compiler.version}`,
+      },
+      {
+        title: "Code Hash",
+        value: data.codeCellHash,
+      },
+      {
+        title: "Data Hash",
+        value: data.dataCellHash,
+      },
+      {
+        title: "Workchain",
+        value: workchainForAddress(data.address.toString()),
+      },
+    ];
+  }, [data]);
 
   return (
     <DataBlock
@@ -143,7 +203,15 @@ function DeployBlock() {
   let statusText: string | JSX.Element = "";
 
   if (error) {
-    statusText = error.toString();
+    if (error instanceof IpfsNotFoundError) {
+      statusText =
+        "The requested Tact package could not be found in IPFS. Please verify the package hash.";
+    } else if (error instanceof IpfsServerError) {
+      statusText =
+        "Failed to fetch the Tact package from IPFS due to a server error. Please try again later.";
+    } else {
+      statusText = `Error loading Tact package: ${error instanceof Error ? error.message : String(error)}`;
+    }
   } else if (data?.isDeployed) {
     statusText = (
       <div>
@@ -286,26 +354,55 @@ export function TactDeployer() {
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
 
   const { data, error, isLoading } = useTactDeployer({ workchain: 0 });
+  const isTestnet = useIsTestnet();
+
+  let errorMessage = "";
+  if (error) {
+    if (error instanceof IpfsNotFoundError) {
+      errorMessage =
+        "The requested Tact package could not be found in IPFS. Please verify the package hash.";
+    } else if (error instanceof IpfsServerError) {
+      errorMessage =
+        "Failed to fetch the Tact package from IPFS due to a server error. Please try again later.";
+    } else {
+      errorMessage = `Error loading Tact package: ${error instanceof Error ? error.message : String(error)}`;
+    }
+  }
 
   return (
     <Box>
-      {window.isTestnet && <TestnetBar />}
+      {isTestnet && <TestnetBar />}
       <TopBar />
       <ContentBox px={headerSpacings ? "20px" : 0}>
-        {isLoading && (
-          <FlexBoxColumn sx={{ marginTop: 3 }}>
-            <Skeleton height={330} variant="rounded" sx={{ marginBottom: 3 }} />
-            <Skeleton height={280} variant="rounded" />
-          </FlexBoxColumn>
-        )}
-        {!isLoading && (
-          <>
-            <ContractDataBox isMobile={isSmallScreen}>
-              <ContractBlock />
-            </ContractDataBox>
-            <DeployBlock />
-          </>
-        )}
+        <>
+          {isLoading && (
+            <FlexBoxColumn sx={{ marginTop: 3 }}>
+              <Skeleton height={330} variant="rounded" sx={{ marginBottom: 3 }} />
+              <Skeleton height={280} variant="rounded" />
+            </FlexBoxColumn>
+          )}
+          {!isLoading && error && (
+            <FlexBoxColumn sx={{ marginTop: 3 }}>
+              <AppNotification
+                type={NotificationType.ERROR}
+                title={<>Error</>}
+                notificationBody={
+                  <CenteringBox sx={{ overflow: "auto", maxHeight: 300 }}>
+                    <NotificationTitle sx={{ marginBottom: 0 }}>{errorMessage}</NotificationTitle>
+                  </CenteringBox>
+                }
+              />
+            </FlexBoxColumn>
+          )}
+          {!isLoading && !error && (
+            <>
+              <ContractDataBox isMobile={isSmallScreen}>
+                <ContractBlock />
+              </ContractDataBox>
+              <DeployBlock />
+            </>
+          )}
+        </>
       </ContentBox>
       )
       <Footer />

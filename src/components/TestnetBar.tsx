@@ -13,6 +13,11 @@ export function useSwitchNetwork() {
   };
 }
 
+export function useIsTestnet() {
+  const [params] = useSearchParams();
+  return params.has("testnet");
+}
+
 export function TestnetBar() {
   const switchNetwork = useSwitchNetwork();
   return (

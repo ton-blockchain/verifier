@@ -4,11 +4,11 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Box } from "@mui/system";
 import { githubLink } from "../const";
 import github from "../assets/github-dark.svg";
-import { AppLogo, GitLogo, LinkWrapper } from "./TopBar.styled";
+import { AppLogo, GitLogo, LinkWrapper, RouterLinkWrapper } from "./TopBar.styled";
 import icon from "../assets/icon.svg";
-import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
 import { useTonAddress } from "@tonconnect/ui-react";
 import { StyledTonConnectButton } from "../styles";
+import { useLocation } from "react-router-dom";
 
 interface MobileMenuProps {
   closeMenu?: () => void;
@@ -16,8 +16,13 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
-  const navigate = useNavigatePreserveQuery();
   const address = useTonAddress();
+  const location = useLocation();
+  const homeLink = {
+    pathname: "/",
+    search: location.search,
+    hash: location.hash,
+  };
 
   return (
     <Drawer anchor="left" open={showMenu} onClose={closeMenu}>
@@ -44,10 +49,10 @@ export function MobileMenu({ closeMenu, showMenu }: MobileMenuProps) {
             <GitLogo>GitHub</GitLogo>
           </LinkWrapper>
         </Box>
-        <LinkWrapper onClick={() => navigate("/")}>
+        <RouterLinkWrapper to={homeLink} onClick={closeMenu}>
           <img src={icon} width={30} height={30} alt="App icon" />
           <AppLogo>TON VERIFIER</AppLogo>
-        </LinkWrapper>
+        </RouterLinkWrapper>
       </Box>
     </Drawer>
   );

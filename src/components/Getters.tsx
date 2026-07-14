@@ -137,7 +137,7 @@ function Response({
 }
 
 function ParsedGetterComponent({ getter }: { getter: StateGetter }) {
-  const { data, isLoading, mutate, error } = useQueryGetter(getter);
+  const { data, isPending, mutate, error } = useQueryGetter(getter);
 
   return (
     <GetterBox>
@@ -168,7 +168,7 @@ function ParsedGetterComponent({ getter }: { getter: StateGetter }) {
       </TitleBox>
       <ContentBox sx={{ padding: "10px 20px", gap: 2 }}>
         <Request getter={getter} />
-        <Response returnTypes={getter.returnTypes} values={data ?? []} isLoading={isLoading} />
+        <Response returnTypes={getter.returnTypes} values={data ?? []} isLoading={isPending} />
         {!!error && (
           <AppNotification
             noBottomMargin
@@ -184,7 +184,7 @@ function ParsedGetterComponent({ getter }: { getter: StateGetter }) {
 }
 
 function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
-  const { data, isLoading, mutate, error } = useQueryGetter(getter);
+  const { data, isPending, mutate, error } = useQueryGetter(getter);
 
   return (
     <GetterBox>
@@ -237,7 +237,7 @@ function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
             Remove parameter
           </AppButton>
         </div>
-        <Response returnTypes={getter.returnTypes} values={data ?? []} isLoading={isLoading} />
+        <Response returnTypes={getter.returnTypes} values={data ?? []} isLoading={isPending} />
         {!!error && (
           <AppNotification
             noBottomMargin
@@ -252,8 +252,8 @@ function CustomGetterComponent({ getter }: { getter: CustomStateGetter }) {
   );
 }
 
-export function Getters() {
-  const { getters } = useGetters();
+export function Getters({ getterKey }: { getterKey: string }) {
+  const { getters } = useGetters(getterKey);
   const customGetter = useCustomGetter();
 
   return (

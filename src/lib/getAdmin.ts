@@ -1,4 +1,4 @@
-import { Address, Cell, TonClient } from "ton";
+import { Address, Cell, TonClient } from "@ton/ton";
 import { SourcesRegistry as SourcesRegistryContract } from "./wrappers/sources-registry";
 
 export async function getAdmin(sourcesRegistry: Address, tonClient: TonClient) {
