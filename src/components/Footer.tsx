@@ -59,7 +59,7 @@ export function Footer() {
           <HoverableIcon
             iconUrl={github}
             hoveredIconUrl={githubHovered}
-            link="https://github.com/ton-studio/verifier"
+            link="https://github.com/ton-blockchain/verifier"
           />
         </SocialsContent>
       </SocialsWrapper>
@@ -68,18 +68,6 @@ export function Footer() {
         <FooterTextBoxLeft>
           <Typography variant="body2">© 2026</Typography>
         </FooterTextBoxLeft>
-        <ContributedWrapper>
-          <CenteringBox sx={{ gap: 0.1 }}>
-            Contributed with
-            <CenteringBox mx={0.4}>
-              <img src={heart} alt="Heart" width={12} height={12} />
-            </CenteringBox>
-            by
-            <FooterLink sx={{ color: "#5E75E8" }} target="_blank" href="https://tonstudio.io/">
-              TON Studio
-            </FooterLink>
-          </CenteringBox>
-        </ContributedWrapper>
         <FooterTextBoxRight>
           <FooterLink target="_blank" href={TELEGRAM_SUPPORT_LINK}>
             <Typography variant="body2">Support</Typography>
