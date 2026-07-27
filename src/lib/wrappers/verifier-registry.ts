@@ -10,7 +10,7 @@ import {
   Dictionary,
   DictionaryValue,
   Slice,
-} from "ton-core";
+} from "@ton/core";
 
 export type Verifier = {
   admin: Address;
@@ -19,6 +19,8 @@ export type Verifier = {
   name: string;
   url: string;
 };
+
+export type VerifierWithId = Verifier & { id: string };
 
 export const OperationCodes = {
   removeVerifier: 0x19fa5637,
@@ -50,7 +52,10 @@ function createSliceValue(): DictionaryValue<Slice> {
 }
 
 export class VerifierRegistry implements Contract {
-  constructor(readonly address: Address, readonly init?: { code: Cell; data: Cell }) {}
+  constructor(
+    readonly address: Address,
+    readonly init?: { code: Cell; data: Cell },
+  ) {}
 
   static createFromAddress(address: Address) {
     return new VerifierRegistry(address);
@@ -105,21 +110,31 @@ export class VerifierRegistry implements Contract {
     return num;
   }
 
-  async getVerifiers(provider: ContractProvider): Promise<Verifier[]> {
+  async getVerifiers(provider: ContractProvider): Promise<Record<string, VerifierWithId>> {
     let res = await provider.get("get_verifiers", []);
     const item = res.stack.readCell();
     const c = item.beginParse();
     const d = c.loadDict(Dictionary.Keys.BigUint(256), createSliceValue());
 
-    return Array.from(d.values()).map((v) => {
-      const admin = v.loadAddress()!;
-      const quorom = v.loadUint(8);
-      const pubKeyEndpoints = v.loadDict(
+    return Array.from(d).reduce<Record<string, VerifierWithId>>((acc, [id, slice]) => {
+      const admin = slice.loadAddress()!;
+      const quorom = slice.loadUint(8);
+      const pubKeyEndpoints = slice.loadDict(
         Dictionary.Keys.BigUint(256),
         Dictionary.Values.BigUint(32),
       );
 
-      return {
+      // NOTE: no name in lists of contracts, no source code for orbs contracts
+      // const name = slice.loadRef().beginParse().loadStringTail();
+      //
+      // if (name.includes('orbs')) {
+      //   return acc
+      // }
+
+      const verifierId = `0x${id.toString(16).padStart(64, "0")}`;
+
+      acc[verifierId] = {
+        id: verifierId,
         admin: admin,
         quorum: quorom,
         pubKeyEndpoints: Object.fromEntries(
@@ -127,9 +142,10 @@ export class VerifierRegistry implements Contract {
             return [toBufferBE(k, 32).toString("base64"), num2ip(v)];
           }),
         ),
-        name: v.loadRef().beginParse().loadStringTail(),
-        url: v.loadRef().beginParse().loadStringTail(),
+        name: slice.loadRef().beginParse().loadStringTail(),
+        url: slice.loadRef().beginParse().loadStringTail(),
       };
-    });
+      return acc;
+    }, {});
   }
 }

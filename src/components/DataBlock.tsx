@@ -8,13 +8,14 @@ import {
   DataRow,
   DataRowsBox,
   DataRowTitle,
+  DataRowTitleXL,
   DataRowValue,
   IconsWrapper,
 } from "./DataBlock.styled";
 
 export interface DataRowItem {
   title: string;
-  value?: string;
+  value?: React.ReactNode | string;
   showIcon?: boolean;
   color?: string;
   customLink?: string;
@@ -29,10 +30,11 @@ interface DataBlockProps {
   icon: string;
   dataRows: DataRowItem[];
   isLoading?: boolean;
+  longerTitle?: boolean;
 }
 
 const renderRowValue = (
-  value?: string,
+  value?: React.ReactNode,
   customLink?: string,
   withTooltip?: boolean,
   subtitle?: string,
@@ -61,15 +63,28 @@ const renderRowValue = (
       <>{children}</>
     );
 
-  return (
-    <WrappingTooltip>
+  const content = (
+    <>
       <WrappingLink>{value ?? "-"}</WrappingLink>
-      <Box sx={{ fontSize: 12, opacity: 0.8 }}>{subtitle ?? ""}</Box>
-    </WrappingTooltip>
+      {subtitle && (
+        <Box component="span" sx={{ fontSize: 12, opacity: 0.8, display: "inline-block" }}>
+          {subtitle}
+        </Box>
+      )}
+    </>
   );
+
+  return <WrappingTooltip>{content}</WrappingTooltip>;
 };
 
-export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading }: DataBlockProps) {
+export function DataBlock({
+  isFlexibleWrapper,
+  icon,
+  title,
+  dataRows,
+  isLoading,
+  longerTitle,
+}: DataBlockProps) {
   const Wrapper = isFlexibleWrapper ? DataFlexibleBox : DataBox;
   const { showNotification } = useNotification();
   const isExtraSmallScreen = useMediaQuery("(max-width: 500px)");
@@ -95,13 +110,17 @@ export function DataBlock({ isFlexibleWrapper, icon, title, dataRows, isLoading 
                 isExtraSmallScreen={isExtraSmallScreen}
                 key={title}
                 isShrinked={!isFlexibleWrapper}>
-                <DataRowTitle>{title}</DataRowTitle>
+                {longerTitle ? (
+                  <DataRowTitleXL>{title}</DataRowTitleXL>
+                ) : (
+                  <DataRowTitle>{title}</DataRowTitle>
+                )}
                 <DataRowValue sx={{ cursor: !!onClick ? "pointer" : "initial" }} onClick={onClick}>
                   {renderRowValue(value, customLink, tooltip, subtitle)}
                 </DataRowValue>
                 {showIcon && (
                   <IconsWrapper>
-                    {value && (
+                    {value && typeof value === "string" && (
                       <IconButton sx={{ padding: 0 }} onClick={() => onCopy(value)}>
                         <img src={copy} alt="Copy icon" width={15} height={15} />
                       </IconButton>

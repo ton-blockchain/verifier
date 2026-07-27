@@ -1,6 +1,5 @@
-import { SendTransactionRequest, useTonConnectUI } from "@tonconnect/ui-react";
 import { useEffect } from "react";
-import { Address, Cell, StateInit } from "ton";
+import { Address, Cell, StateInit } from "@ton/ton";
 import create from "zustand";
 import { useRequestTXN } from "../hooks";
 
@@ -12,6 +11,13 @@ export type TXNStatus =
   | "error"
   | "expired"
   | "success";
+
+export type SendTxnMessage = {
+  to: Address;
+  value: bigint;
+  message?: Cell;
+  stateInit?: StateInit;
+};
 
 const useTxnMonitors = create<{
   txns: Record<string, TXNStatus>;
@@ -40,9 +46,18 @@ export function useSendTXN(key: string, monitorSuccess: (count: number) => Promi
   }, []);
 
   return {
-    sendTXN: async (to: Address, value: bigint, message?: Cell, stateInit?: StateInit) => {
+    sendTXN: async (messages: SendTxnMessage | SendTxnMessage[]) => {
+      const normalized = Array.isArray(messages) ? messages : [messages];
+      if (!normalized.length) return;
       updateTxn(key, "pending");
-      const status = await requestTXN(to.toString(), value, message, stateInit);
+      const status = await requestTXN(
+        normalized.map((msg) => ({
+          to: msg.to.toString(),
+          value: msg.value,
+          message: msg.message,
+          stateInit: msg.stateInit,
+        })),
+      );
 
       let i = 1;
 

@@ -1,25 +1,49 @@
-import { Cell, Address, toNano } from "ton";
-import { useSubmitSources } from "./useSubmitSources";
+import { Cell, Address, toNano } from "@ton/ton";
 import { getProofIpfsLink } from "./useLoadContractProof";
 import { useLoadContractInfo } from "./useLoadContractInfo";
 import { useSendTXN } from "./useSendTxn";
 import { AnalyticsAction, sendAnalyticsEvent } from "./googleAnalytics";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLoadSourcesRegistryInfo } from "./useLoadSourcesRegistryInfo";
+import { useIsTestnet } from "../components/TestnetBar";
+import { useClient, useSourcesRegistryAddress } from "./useClient";
+
+type PublishPayload = {
+  verifier: string;
+  msgCell: Buffer;
+};
 
 export function usePublishProof() {
-  const { data: submitSourcesData } = useSubmitSources();
   const { data: contractInfo } = useLoadContractInfo();
   const { data: sourcesRegistryData } = useLoadSourcesRegistryInfo();
+  const isTestnet = useIsTestnet();
+  const [verifiersInFlight, setVerifiersInFlight] = useState<string[]>([]);
+  const tonClient = useClient();
+  const fallbackSourcesRegistry = useSourcesRegistryAddress();
+  const sourcesRegistryAddress = sourcesRegistryData?.address ?? fallbackSourcesRegistry;
 
   const { sendTXN, data, clearTXN } = useSendTXN("publishProof", async (count: number) => {
-    const ipfsLink = await getProofIpfsLink(contractInfo!.codeCellToCompileBase64);
+    if (!contractInfo?.codeCellToCompileBase64) {
+      return "error";
+    }
+    if (verifiersInFlight.length === 0) {
+      return "initial";
+    }
 
     if (count > 20) {
       return "error";
     }
 
-    return !!ipfsLink ? "success" : "issued";
+    const proofs = await Promise.all(
+      verifiersInFlight.map((verifier) =>
+        getProofIpfsLink(contractInfo.codeCellToCompileBase64, verifier, isTestnet, {
+          tonClient,
+          sourcesRegistry: sourcesRegistryAddress,
+        }),
+      ),
+    );
+
+    return proofs.every(Boolean) ? "success" : "issued";
   });
 
   useEffect(() => {
@@ -46,14 +70,23 @@ export function usePublishProof() {
   }, [data.status]);
 
   return {
-    sendTXN: () => {
+    sendProofs: (payloads: PublishPayload[]) => {
+      if (!sourcesRegistryData || payloads.length === 0) return;
+      setVerifiersInFlight(payloads.map((p) => p.verifier));
+      const to = Address.parse(sourcesRegistryData.verifierRegistry);
+      const value = import.meta.env.DEV ? toNano("0.1") : toNano("0.5");
       sendTXN(
-        Address.parse(sourcesRegistryData!.verifierRegistry),
-        import.meta.env.DEV ? toNano("0.1") : toNano("0.5"),
-        Cell.fromBoc(Buffer.from(submitSourcesData!.result.msgCell!))[0],
+        payloads.map((payload) => ({
+          to,
+          value,
+          message: Cell.fromBoc(Buffer.from(payload.msgCell))[0],
+        })),
       );
     },
     status: data.status,
-    clearTXN,
+    clearTXN: () => {
+      setVerifiersInFlight([]);
+      clearTXN();
+    },
   };
 }
