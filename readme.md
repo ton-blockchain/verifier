@@ -32,7 +32,7 @@ This app is deployed via github actions on github pages for this repository.
 
 ```
 "func-js-bin-0.4.3": "npm:@ton-community/func-js-bin@^0.4.3",
-```
+73a6769389118aaecd59adb8b6d224ea7e8011c6```
 
 2. Add the version to https://github.com/ton-community/contract-verifier-config
 3. Redeploy backend https://github.com/ton-community/contract-verifier-backend
