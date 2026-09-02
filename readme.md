@@ -9,7 +9,7 @@ This repo is a part of the following:
 1. [contract-verifier-contracts](https://github.com/ton-community/contract-verifier-contracts) - Sources registry contracts which stores an on-chain proof per code cell hash.
 2. [contract-verifier-backend](https://github.com/ton-community/contract-verifier-backend) - Backend for compiling FunC and returning a signature over a message containing the resulting code cell hash.
 3. [contract-verifier-sdk](https://github.com/ton-community/contract-verifier-sdk) - A UI component to fetch and display sources from Ton blockchain and IPFS, including FunC code highlighting.
-4. contract-verifier (this repo) - A UI app to interact with the backend, contracts and publish an on-chain proof.
+4. contract-verifier (this repo) - A UI app to interact with the backend, contracts 73a6769389118aaecd59adb8b6d224ea7e8011c6and publish an on-chain proof.
 
 ## Deployment
 
@@ -32,7 +32,7 @@ This app is deployed via github actions on github pages for this repository.
 
 ```
 "func-js-bin-0.4.3": "npm:@ton-community/func-js-bin@^0.4.3",
-```
+73a6769389118aaecd59adb8b6d224ea7e8011c6```
 
 2. Add the version to https://github.com/ton-community/contract-verifier-config
 3. Redeploy backend https://github.com/ton-community/contract-verifier-backend
