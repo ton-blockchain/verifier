@@ -2,11 +2,7 @@ import { useEffect } from "react";
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { useFileStore } from "./useFileStore";
-import {
-  FuncCompilerVersion,
-  TactVersion,
-  TolkVersion,
-} from "@ton-community/contract-verifier-sdk";
+import { FuncCompilerVersion, TactVersion, TolkVersion } from "../types/compiler";
 import { PackageFileFormat } from "@tact-lang/compiler";
 import { useRemoteConfig } from "./useRemoteConfig";
 

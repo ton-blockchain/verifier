@@ -3,10 +3,10 @@ import { useContractAddress } from "../lib/useContractAddress";
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
 import contractIcon from "../assets/contract.svg";
 import { DataBlock, DataRowItem } from "./DataBlock";
-import { useLoadContractProof } from "../lib/useLoadContractProof";
 import { workchainForAddress } from "../lib/workchainForAddress";
 import { formatBalance } from "../utils/numberUtils";
 import { useEffect } from "react";
+import { SkeletonBox } from "./SkeletonBox";
 
 function useToggle<T>(valA: T, valB: T): [T, () => void] {
   const [state, setState] = useState(valA);
@@ -25,9 +25,7 @@ function useToggle<T>(valA: T, valB: T): [T, () => void] {
 
 export function ContractBlock() {
   const { contractAddress, contractAddressHex } = useContractAddress();
-  const { data, isLoading } = useLoadContractInfo();
-  const { data: proofData } = useLoadContractProof();
-  const dataRows: DataRowItem[] = [];
+  const { data, isLoading, error } = useLoadContractInfo();
 
   const [displayAddress, toggleDisplayAddress] = useToggle(contractAddress, contractAddressHex);
   const [displayCodeCellHash, toggleDisplayCodeCellHash] = useToggle(
@@ -44,56 +42,92 @@ export function ContractBlock() {
     data?.libraryHash.hex,
   );
 
-  if (data) {
-    dataRows.push({
-      title: "Address",
-      value: displayAddress ?? "",
-      showIcon: true,
-      onClick: () => {
-        toggleDisplayAddress();
-      },
-      tooltip: true,
-      subtitle: workchainForAddress(contractAddress || ""),
-    });
-    dataRows.push({
-      title: "Balance",
-      value: `${formatBalance.format(parseFloat(data.balance))} TON`,
-    });
-    dataRows.push({
-      title: "Code Hash",
-      value: displayCodeCellHash ?? "",
-      showIcon: true,
-      onClick: () => {
-        toggleDisplayCodeCellHash();
-      },
-      tooltip: true,
-    });
-    dataRows.push({
-      title: "Data Hash",
-      value: displayDataCellHash ?? "",
-      showIcon: true,
-      onClick: () => {
-        toggleDisplayDataCellHash();
-      },
-      tooltip: true,
-    });
-
-    if (data?.libraryHash.base64) {
-      dataRows.push({
-        title: "Library Code Cell Hash",
-        value: displayLibraryHash ?? "",
+  const dataRows = React.useMemo(() => {
+    if (error) {
+      {
+        return [
+          {
+            title: "Error",
+            value: String(error),
+          },
+        ];
+      }
+    }
+    let rows: DataRowItem[] = [
+      {
+        title: "Address",
+        value: displayAddress ?? "",
         showIcon: true,
         onClick: () => {
-          toggleDisplayLibraryHash();
+          toggleDisplayAddress();
         },
         tooltip: true,
+        subtitle: workchainForAddress(contractAddress || ""),
+      },
+    ];
+
+    if (!data) {
+      rows.push({
+        title: "State",
+        value: "uninitialized",
       });
-      dataRows.push({
-        title: "",
-        value: "",
-        showIcon: true,
-      });
+      return rows;
     }
+
+    rows = [
+      ...rows,
+      {
+        title: "Balance",
+        value: `${formatBalance.format(parseFloat(data.balance))} TON`,
+      },
+      {
+        title: "Code Hash",
+        value: displayCodeCellHash ?? "",
+        showIcon: true,
+        onClick: () => {
+          toggleDisplayCodeCellHash();
+        },
+        tooltip: true,
+      },
+      {
+        title: "Data Hash",
+        value: displayDataCellHash ?? "",
+        showIcon: true,
+        onClick: () => {
+          toggleDisplayDataCellHash();
+        },
+        tooltip: true,
+      },
+    ];
+
+    if (data?.libraryHash.base64) {
+      rows = [
+        ...rows,
+        {
+          title: "Library Code Cell Hash",
+          value: displayLibraryHash ?? "",
+          showIcon: true,
+          onClick: () => {
+            toggleDisplayLibraryHash();
+          },
+          tooltip: true,
+        },
+      ];
+    }
+
+    return rows;
+  }, [
+    data,
+    error,
+    displayAddress,
+    displayCodeCellHash,
+    displayDataCellHash,
+    displayLibraryHash,
+    contractAddress,
+  ]);
+
+  if (isLoading) {
+    return <SkeletonBox content={false} />;
   }
 
   return (
@@ -102,7 +136,7 @@ export function ContractBlock() {
       icon={contractIcon}
       dataRows={dataRows}
       isLoading={isLoading}
-      isFlexibleWrapper={!!proofData?.hasOnchainProof}
+      isFlexibleWrapper
     />
   );
 }

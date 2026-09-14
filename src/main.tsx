@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import App from "./App";
+import ContractPage from "./pages/ContractPage";
 import ContractInteract from "./components/admin/ContractInteract";
 import "./index.css";
 import { SnackbarProvider } from "notistack";
@@ -12,6 +12,7 @@ import { Admin } from "./components/admin/Admin";
 import { initGA } from "./lib/googleAnalytics";
 import { TactDeployer } from "./components/tactDeployer/TactDeployer";
 import { TonConnectUIProvider } from "@tonconnect/ui-react";
+import HomePage from "./pages/HomePage";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
@@ -29,8 +30,8 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
               <Route path="/interact" element={<ContractInteract />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/tactDeployer/:ipfsHash" element={<TactDeployer />} />
-              <Route path="/:contractAddress" element={<App />} />
-              <Route path="/" element={<App />} />
+              <Route path="/:contractAddress" element={<ContractPage />} />
+              <Route path="/" element={<HomePage />} />
             </Routes>
           </BrowserRouter>
         </TonConnectUIProvider>

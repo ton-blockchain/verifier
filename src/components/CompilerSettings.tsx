@@ -16,11 +16,11 @@ import {
   TactVersion,
   TolkCliCompileSettings,
   TolkVersion,
-} from "@ton-community/contract-verifier-sdk";
+} from "../types/compiler";
 import { useRemoteConfig } from "../lib/useRemoteConfig";
 import { tactVersionToLink } from "../utils/linkUtils";
 
-function CompilerSettings() {
+function CompilerSettings({ canPublish }: { canPublish: boolean }) {
   const {
     compilerSettings,
     setOverrideCommandLine,
@@ -30,15 +30,13 @@ function CompilerSettings() {
     compiler,
     setCompiler,
   } = useCompilerSettingsStore();
-  const { data } = useSubmitSources();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
-  const canPublish = !!data?.result?.msgCell;
-
-  const {
-    data: { funcVersions, tactVersions, tolkVersions },
-  } = useRemoteConfig();
+  const { data: remoteConfig } = useRemoteConfig();
+  const funcVersions = remoteConfig?.funcVersions ?? [];
+  const tactVersions = remoteConfig?.tactVersions ?? [];
+  const tolkVersions = remoteConfig?.tolkVersions ?? [];
 
   return (
     <Box mt={4}>

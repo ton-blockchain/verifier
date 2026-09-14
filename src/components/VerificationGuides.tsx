@@ -13,7 +13,11 @@ import {
 import { CommandEllipsisLabel, CommandLabel, PopupLink } from "./VerificationProofPopup.styled";
 import { downloadJson } from "../utils/jsonUtils";
 import { githubLink } from "../const";
-import { useLoadContractProof } from "../lib/useLoadContractProof";
+import {
+  findProofByVerifierName,
+  getFirstAvailableProof,
+  useLoadContractProof,
+} from "../lib/useLoadContractProof";
 import { AppButton } from "./AppButton";
 import { isOnLocalHost } from "../utils/generalUtils";
 import { CenteringBox } from "./Common.styled";
@@ -21,9 +25,14 @@ import { NotificationTitle, SuccessTitle } from "./CompileOutput";
 import { useInBrowserCompilation, VerificationResults } from "../lib/useInBrowserCompilation";
 import { AppNotification, NotificationType } from "./AppNotification";
 import like from "../assets/like.svg";
+import { useLoadVerifierRegistryInfo } from "../lib/useLoadVerifierRegistryInfo";
 
 export function ManualVerificationGuide() {
-  const { data: contractProofData } = useLoadContractProof();
+  const { data: proofs } = useLoadContractProof();
+  const { data: verifierRegistry } = useLoadVerifierRegistryInfo();
+  const contractProofData =
+    findProofByVerifierName(proofs, verifierRegistry, "verifier.ton.org") ??
+    getFirstAvailableProof(proofs);
 
   return (
     <List sx={{ padding: 0, marginTop: 2 }}>
@@ -88,25 +97,28 @@ export function InBrowserVerificationGuide() {
 
   return (
     <Box p={2}>
-      <Typography sx={{ fontSize: 14 }}>
-      You are not required to rely on third-party validators. You can now verify this contract by yourself by having your browser download the sources and compile them locally in-browser using{" "}
+      <Typography sx={{ fontSize: 14, marginBottom: 2 }}>
+        You are not required to rely on third-party validators. You can now verify this contract by
+        yourself by having your browser download the sources and compile them locally in-browser
+        using{" "}
         <Link
           sx={{ textDecoration: "none" }}
           href={"https://github.com/ton-community/func-js"}
           target="_blank">
           WASM
-        </Link>.
+        </Link>
+        .
         {!isOnLocalHost() && (
           <CenteringBox mt={1} sx={{ overflow: "auto", maxHeight: 300 }}>
             <NotificationTitle sx={{ margin: 0 }}>
-            The web page you're looking at is{" "}
+              The web page you're looking at is{" "}
               <Link
                 sx={{ textDecoration: "none" }}
                 href="https://github.com/ton-community/contract-verifier"
                 target="_blank">
                 open source
               </Link>
-              ,  you can also fork or run it locally if you wish to have absolute control.
+              , you can also fork or run it locally if you wish to have absolute control.
             </NotificationTitle>
           </CenteringBox>
         )}
@@ -127,7 +139,7 @@ export function InBrowserVerificationGuide() {
               width={144}
               background="#1976d2"
               hoverBackground="#156cc2">
-              Verify
+              Verify locally
             </AppButton>
           </Box>
         </Tooltip>
@@ -151,7 +163,7 @@ export function InBrowserVerificationGuide() {
               }}
             />
           )}
-          Verify
+          Verify locally
         </AppButton>
       )}
       {error && (
@@ -200,7 +212,7 @@ export function InBrowserVerificationGuide() {
               </CenteringBox>
               <SuccessTitle>
                 {" "}
-                <b>Great!</b> Compile output hash matches this on-chain contract
+                <b>Great!</b> In-browser compiler output hash matches this on-chain contract
               </SuccessTitle>
             </CenteringBox>
           }

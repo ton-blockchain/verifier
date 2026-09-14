@@ -10,6 +10,7 @@ import {
   ContentColumn,
   GitLogo,
   LinkWrapper,
+  RouterLinkWrapper,
   SearchWrapper,
   TopBarContent,
   TopBarHeading,
@@ -18,18 +19,23 @@ import {
 import { IconButton, styled, useMediaQuery, useTheme } from "@mui/material";
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import { MobileMenu } from "./MobileMenu";
-import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
 import { StyledTonConnectButton } from "../styles";
 
 export function TopBar() {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { pathname } = location;
 
   const theme = useTheme();
-  const navigate = useNavigatePreserveQuery();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [showExpanded, setShowExpanded] = useState(pathname.length === 1);
   const [showMenu, setShowMenu] = useState(false);
+
+  const homeLink = {
+    pathname: "/",
+    search: location.search,
+    hash: location.hash,
+  };
 
   useEffect(() => {
     setShowExpanded(pathname.length === 1);
@@ -49,10 +55,10 @@ export function TopBar() {
       )}
       {!isSmallScreen && (
         <TopBarContent mb={5}>
-          <LinkWrapper onClick={() => navigate("/")}>
+          <RouterLinkWrapper to={homeLink}>
             <img src={icon} width={30} height={30} alt="App icon" />
             <AppLogo>TON VERIFIER</AppLogo>
-          </LinkWrapper>
+          </RouterLinkWrapper>
           <ContentColumn>
             <CenteringBox mr={2}>
               <StyledTonConnectButton />

@@ -7,17 +7,19 @@ interface IconProps {
   disabled?: boolean;
 }
 
-const Icon = styled(Box)((props: IconProps) => ({ theme }) => ({
+const Icon = styled(Box, {
+  shouldForwardProp: (prop) => !["iconUrl", "hoveredIconUrl", "disabled"].includes(prop as string),
+})<IconProps>(({ theme, iconUrl, hoveredIconUrl, disabled }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
   width: theme.spacing(3),
   height: theme.spacing(3),
-  background: `url(${props.iconUrl})`,
+  background: `url(${iconUrl})`,
   "&:hover": {
     transitionDuration: ".25s",
-    background: `url(${props.disabled ? props.iconUrl : props.hoveredIconUrl})`,
-    cursor: props.disabled ? "cursor" : "pointer",
+    background: `url(${disabled ? iconUrl : hoveredIconUrl})`,
+    cursor: disabled ? "default" : "pointer",
   },
 }));
 

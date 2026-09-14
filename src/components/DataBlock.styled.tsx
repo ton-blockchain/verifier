@@ -11,30 +11,33 @@ interface DataRowProps {
   isExtraSmallScreen?: boolean;
 }
 
-const DataRowsBox = styled(Box)((props: DataRowProps) => ({
-  display: props.isShrinked && !props.isExtraSmallScreen ? "flex" : "inherit",
-  flexWrap: props.isShrinked && !props.isExtraSmallScreen ? "wrap" : "inherit",
-  columnGap: props.isShrinked && !props.isExtraSmallScreen ? 30 : "",
-  padding: props.isShrinked && !props.isExtraSmallScreen ? "0 30px" : "",
+const dataRowCustomProps = ["isShrinked", "isExtraSmallScreen"];
+
+const shouldForwardDataRowProp = (prop: PropertyKey) =>
+  !dataRowCustomProps.includes(prop as string);
+
+const DataRowsBox = styled(Box, {
+  shouldForwardProp: shouldForwardDataRowProp,
+})<DataRowProps>(({ isShrinked, isExtraSmallScreen }) => ({
+  display: isShrinked && !isExtraSmallScreen ? "flex" : "inherit",
+  flexWrap: isShrinked && !isExtraSmallScreen ? "wrap" : "inherit",
+  columnGap: isShrinked && !isExtraSmallScreen ? 30 : "",
+  padding: isShrinked && !isExtraSmallScreen ? "0 30px" : "",
   "&>*:last-child": {
-    borderBottom: props.isShrinked ? "" : "none !important",
+    borderBottom: isShrinked ? "" : "none !important",
   },
   "&:last-child": {
     marginBottom: 3,
   },
 }));
 
-const DataRow = styled(CenteringBox)((props: DataRowProps) => ({
-  boxSizing: props.isShrinked ? "border-box" : "inherit",
-  flex: props.isShrinked ? "40%" : "inherit",
+const DataRow = styled(CenteringBox, {
+  shouldForwardProp: shouldForwardDataRowProp,
+})<DataRowProps>(({ isShrinked, isExtraSmallScreen }) => ({
+  boxSizing: isShrinked ? "border-box" : "inherit",
+  flex: isShrinked ? "40%" : "inherit",
   width:
-    props.isShrinked && !props.isExtraSmallScreen
-      ? 0
-      : !props.isShrinked
-      ? ""
-      : props.isExtraSmallScreen
-      ? "100%"
-      : "",
+    isShrinked && !isExtraSmallScreen ? 0 : !isShrinked ? "" : isExtraSmallScreen ? "100%" : "",
   minHeight: 38,
   padding: "10px 24px",
   transition: "background .15s",
@@ -45,6 +48,13 @@ const DataRowTitle = styled(Typography)({
   fontSize: 14,
   color: "#000",
   minWidth: 90,
+  fontWeight: 800,
+});
+
+const DataRowTitleXL = styled(Typography)({
+  fontSize: 14,
+  color: "#000",
+  minWidth: 120,
   fontWeight: 800,
 });
 
@@ -60,4 +70,12 @@ const IconsWrapper = styled(CenteringBox)({
   justifyContent: "flex-end",
 });
 
-export { DataRow, DataRowValue, DataRowTitle, DataRowsBox, DataFlexibleBox, IconsWrapper };
+export {
+  DataRow,
+  DataRowValue,
+  DataRowTitleXL,
+  DataRowTitle,
+  DataRowsBox,
+  DataFlexibleBox,
+  IconsWrapper,
+};

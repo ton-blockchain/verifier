@@ -10,7 +10,7 @@ const _HintItem = styled("li")({
   marginBottom: 10,
 });
 
-function hintToElem(hint: Hints, compileResult: CompileResult | undefined) {
+function hintToElem(hint: Hints) {
   switch (hint) {
     case Hints.ENTRYPOINT_MISSING:
       return "There usually should be at least one file containing an entrypoint (recv_internal, main)";
@@ -45,6 +45,5 @@ function hintToElem(hint: Hints, compileResult: CompileResult | undefined) {
 }
 
 export const HintItem = ({ hint }: { hint: Hints }) => {
-  const { data: submitSourcesData } = useSubmitSources();
-  return <_HintItem>{hintToElem(hint, submitSourcesData?.result.compileResult)}</_HintItem>;
+  return <_HintItem>{hintToElem(hint)}</_HintItem>;
 };

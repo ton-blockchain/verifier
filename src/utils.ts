@@ -1,4 +1,4 @@
-import { Address, beginCell } from "ton";
+import { Address, beginCell } from "@ton/ton";
 
 export const isValidAddress = (address: string, errorText?: string) => {
   try {

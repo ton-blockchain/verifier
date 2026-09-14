@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { Address } from "ton";
+import { Address } from "@ton/ton";
 import { useEffect } from "react";
 import { useNavigatePreserveQuery } from "./useNavigatePreserveQuery";
 

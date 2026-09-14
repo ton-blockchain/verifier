@@ -1,12 +1,8 @@
 import { useLoadContractInfo } from "../lib/useLoadContractInfo";
-import hljs from "highlight.js/lib/core";
-// @ts-ignore
-import hljsDefine from "highlightjs-func";
 import React, { useEffect, useRef } from "react";
 import "highlight.js/styles/atom-one-light.css";
 import { useMediaQuery, useTheme } from "@mui/material";
-
-hljsDefine(hljs);
+import { highlightElement } from "../lib/highlight";
 
 interface DisassembledSourceCodeProps {
   button: React.ReactNode;
@@ -16,11 +12,13 @@ export function DisassembledSourceCode({ button }: DisassembledSourceCodeProps) 
   const { data: contractInfo } = useLoadContractInfo();
   const theme = useTheme();
   const headerSpacings = useMediaQuery(theme.breakpoints.down("lg"));
-  const ref = useRef<any>(null);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    hljs.highlightElement(ref.current);
-  }, [contractInfo?.decompiled, ref.current]);
+    if (ref.current) {
+      highlightElement(ref.current);
+    }
+  }, [contractInfo?.decompiled]);
 
   return (
     <pre

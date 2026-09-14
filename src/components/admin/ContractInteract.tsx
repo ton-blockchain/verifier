@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
-import { Address, beginCell, Builder } from "ton";
+import { Address, beginCell, Builder } from "@ton/ton";
 import ConnectButton from "../ConnectButton";
 import Spacer from "../Spacer";
 

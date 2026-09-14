@@ -1,4 +1,4 @@
-import { useLoadContractProof } from "../lib/useLoadContractProof";
+import { hasAnyOnchainProof, useLoadContractProof } from "../lib/useLoadContractProof";
 import { useLoadVerifierRegistryInfo } from "../lib/useLoadVerifierRegistryInfo";
 import { Box, Skeleton, Tab, Tabs } from "@mui/material";
 import { PopupTableTitle, PopupWrapper } from "./VerificationProofPopup.styled";
@@ -9,10 +9,11 @@ import { InBrowserVerificationGuide, ManualVerificationGuide } from "./Verificat
 export function VerificationProof() {
   const { data: contractProofData, isLoading } = useLoadContractProof();
   const { isLoading: isLoadingVerifierRegistry } = useLoadVerifierRegistryInfo();
+  const hasProof = hasAnyOnchainProof(contractProofData);
 
   return (
     <Box sx={{ width: "100%" }}>
-      {contractProofData && !isLoadingVerifierRegistry && (
+      {hasProof && !isLoadingVerifierRegistry && (
         <PopupWrapper pt={3} pb={1}>
           <PopupTableTitle>Verify manually</PopupTableTitle>
           <VerificationPanel />

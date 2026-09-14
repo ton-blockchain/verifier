@@ -10,10 +10,9 @@ import {
   SocialsContent,
   SocialsWrapper,
 } from "./Footer.styled";
-import { AppLogo, LinkWrapper } from "./TopBar.styled";
+import { AppLogo, LinkWrapper, RouterLinkWrapper } from "./TopBar.styled";
 import { Typography, useMediaQuery } from "@mui/material";
 import heart from "../assets/heart.svg";
-import orbsLogo from "../assets/orbs.svg";
 import telegram from "../assets/telegram.svg";
 import telegramHovered from "../assets/telegram-hover.svg";
 import github from "../assets/github-footer.svg";
@@ -21,15 +20,22 @@ import githubHovered from "../assets/github-hover.svg";
 import { HoverableIcon } from "./HoverableIcon";
 import icon from "../assets/icon.svg";
 import { CenteringBox } from "./Common.styled";
-import { useNavigatePreserveQuery } from "../lib/useNavigatePreserveQuery";
-import { useSwitchNetwork } from "./TestnetBar";
+import { useIsTestnet, useSwitchNetwork } from "./TestnetBar";
+import { useLocation } from "react-router-dom";
+import { githubLink } from "../const";
 
 export const TELEGRAM_SUPPORT_LINK = "https://t.me/tonverifier";
 
 export function Footer() {
   const isExtraSmallScreen = useMediaQuery("(max-width: 450px)");
-  const navigate = useNavigatePreserveQuery();
   const switchNetwork = useSwitchNetwork();
+  const isTestnet = useIsTestnet();
+  const location = useLocation();
+  const homeLink = {
+    pathname: "/",
+    search: location.search,
+    hash: location.hash,
+  };
 
   return (
     <FooterWrapper>
@@ -40,10 +46,10 @@ export function Footer() {
           alignItems: isExtraSmallScreen ? "center" : "inherit",
         }}>
         <CenteringBox>
-          <LinkWrapper sx={{ color: "#000" }} onClick={() => navigate("/")}>
+          <RouterLinkWrapper to={homeLink} style={{ color: "#000" }}>
             <img src={icon} alt="App icon" width={30} height={30} />
             <AppLogo>TON VERIFIER</AppLogo>
-          </LinkWrapper>
+          </RouterLinkWrapper>
         </CenteringBox>
         <SocialsContent>
           <HoverableIcon
@@ -51,41 +57,19 @@ export function Footer() {
             hoveredIconUrl={telegramHovered}
             link={TELEGRAM_SUPPORT_LINK}
           />
-          <HoverableIcon
-            iconUrl={github}
-            hoveredIconUrl={githubHovered}
-            link="https://github.com/orbs-network/ton-contract-verifier"
-          />
+          <HoverableIcon iconUrl={github} hoveredIconUrl={githubHovered} link={githubLink} />
         </SocialsContent>
       </SocialsWrapper>
       <Separator />
       <CredentialsWrapper>
         <FooterTextBoxLeft>
-          <Typography variant="body2">© 2023</Typography>
+          <Typography variant="body2">© 2026</Typography>
         </FooterTextBoxLeft>
-        <ContributedWrapper>
-          <CenteringBox sx={{ gap: 0.1 }}>
-            Contributed with
-            <CenteringBox mx={0.4}>
-              <img src={heart} alt="Heart" width={12} height={12} />
-            </CenteringBox>
-            by
-            <CenteringBox mx={0.4}>
-              <img src={orbsLogo} alt="Orbs logo" width={12} height={12} />
-            </CenteringBox>
-            <FooterLink
-              sx={{ color: "#5E75E8" }}
-              target="_blank"
-              href="https://orbs.com/powered-by">
-              Orbs
-            </FooterLink>
-          </CenteringBox>
-        </ContributedWrapper>
         <FooterTextBoxRight>
           <FooterLink target="_blank" href={TELEGRAM_SUPPORT_LINK}>
             <Typography variant="body2">Support</Typography>
           </FooterLink>
-          {!window.isTestnet && (
+          {!isTestnet && (
             <Typography
               onClick={() => {
                 switchNetwork();

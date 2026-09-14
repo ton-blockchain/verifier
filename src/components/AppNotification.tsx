@@ -16,7 +16,12 @@ interface NotificationBoxProps {
   noTopMargin?: boolean;
 }
 
-const NotificationBox = styled(Box)((props: NotificationBoxProps) => ({
+const NotificationBox = styled(Box, {
+  shouldForwardProp: (prop) =>
+    !["singleLine", "noBottomMargin", "noTopMargin", "borderColor", "backgroundColor"].includes(
+      prop as string,
+    ),
+})((props: NotificationBoxProps) => ({
   padding: `${props.singleLine ? 0 : 15}px 25px`,
   marginBottom: props.noBottomMargin ? 0 : 24,
   marginTop: props.noTopMargin ? 0 : 24,
